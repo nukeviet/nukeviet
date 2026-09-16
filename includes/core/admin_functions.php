@@ -546,7 +546,7 @@ function nv_server_config_change($array_config)
         $config_contents .= "  RewriteRule ^.* - [L,R=404]\n";
         $config_contents .= "  RewriteCond %{REQUEST_URI} ^/(admin)/.*/.*$ [NC]\n";
         $config_contents .= "  RewriteRule ^.* - [L,R=404]\n";
-        $config_contents .= "  RewriteCond %{REQUEST_URI} ^/(install/(css|images)|modules|themes|assets|data/config|data/tmp|uploads)/.*\.((j|a)spx?|(p|s)html|cgi|inc|ini|php|pl|py|sh|sql\.gz|tpl|xml)($|\?|\/) [NC]\n";
+        $config_contents .= "  RewriteCond %{REQUEST_URI} ^/(install/(css|images)|modules|themes|assets|data/config|data/tmp|uploads)/.*\.((j|a)spx?|(p|s)html|cgi|inc|ini|php[0-9]?|phtml|phar|pl|py|sh|sql\.gz|tpl|xml)($|\?|\/|\.) [NC]\n";
         $config_contents .= "  RewriteRule ^.* - [L,R=404]\n";
         $config_contents .= "</IfModule>\n\n";
         $config_contents .= "ErrorDocument 400 /error.php?code=400&nvDisableRewriteCheck=1\n";

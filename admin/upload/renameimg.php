@@ -28,7 +28,7 @@ if (empty($file) or !nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
 }
 
 $newname = htmlspecialchars(trim($nv_Request->get_string('newname', 'post')), ENT_QUOTES);
-$newname = nv_string_to_filename(basename($newname));
+$newname = nv_string_to_filename(basename($newname), false);
 
 if (empty($newname)) {
     exit('ERROR_' . $lang_module['rename_noname']);
