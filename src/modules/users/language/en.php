@@ -1029,3 +1029,4 @@ $lang_module['merge_field_link'] = 'Link';
 $lang_module['mf_send_newvalue'] = 'Send new value via email';
 $lang_module['mf_label'] = 'Label';
 $lang_module['mf_deadline'] = 'Expiration time';
+$lang_module['answer_failed_many'] = 'You have answered the security question incorrectly too many times. Please verify again to continue';

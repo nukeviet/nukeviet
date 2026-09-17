@@ -1029,3 +1029,4 @@ $lang_module['merge_field_link'] = 'Lien';
 $lang_module['mf_send_newvalue'] = 'Envoyer une nouvelle valeur par e-mail';
 $lang_module['mf_label'] = 'Étiquette';
 $lang_module['mf_deadline'] = 'Date d\'expiration';
+$lang_module['answer_failed_many'] = 'Vous avez répondu incorrectement à la question de sécurité trop de fois. Veuillez vous vérifier à nouveau pour continuer';

@@ -483,59 +483,39 @@ function user_lostpass($data)
  */
 function user_lostactivelink($data, $question)
 {
-    global $module_info, $global_config, $nv_Lang, $module_name, $module_captcha, $op;
+    global $module_info, $global_config, $nv_Lang, $module_name, $op;
 
-    $xtpl = new XTemplate('lostactivelink.tpl', get_module_tpl_dir('lostactivelink.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('DATA', $data);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('lostactivelink.tpl'));
 
-    if ($data['step'] == 2) {
-        $xtpl->assign('FORM2_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostactivelink');
-        $xtpl->assign('QUESTION', $question);
-        $xtpl->parse('main.step2');
-    } else {
-        $xtpl->assign('FORM1_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostactivelink');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    // Controller chỉ gán nv_seccode khi module có dùng captcha
+    $tpl->assign('DATA', array_merge(['nv_seccode' => ''], $data));
+    $tpl->assign('QUESTION', $question);
 
-        $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
+    // Thuộc tính captcha gắn lên form bước 1
+    $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
+    $gfx_chk = (!empty($array_gfx_chk) and in_array('m', $array_gfx_chk, true)) ? 1 : 0;
+    $tpl->assign('CAPTCHA_ATTRS', $gfx_chk ? nv_captcha_form_attrs('nv_seccode') : '');
 
-        if (!empty($array_gfx_chk) and in_array('m', $array_gfx_chk, true)) {
-            if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-                $xtpl->parse('main.step1.recaptcha3');
-            } elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-                $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-                $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
-                $xtpl->parse('main.step1.recaptcha');
-            } elseif ($module_captcha == 'turnstile') {
-                $xtpl->parse('main.step1.turnstile');
-            } elseif ($module_captcha == 'captcha') {
-                $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
-                $xtpl->parse('main.step1.captcha');
-            }
-        }
-
-        $xtpl->parse('main.step1');
-    }
-
+    // Các liên kết chức năng khác cuối form
     $_lis = \NukeViet\Module\users\Shared\Navs::getNavs($module_info['funcs']);
     $_alias = $module_info['alias'];
+    $navs = [];
     foreach ($_lis as $_li) {
         if ($_li['func_name'] == $op) {
             continue;
         }
 
-        $href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
-        $li = [
-            'href' => $href,
+        $navs[] = [
+            'href' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']],
             'title' => $_li['func_name'] == 'main' ? $module_info['custom_title'] : $_li['func_custom_name']
         ];
-        $xtpl->assign('NAVBAR', $li);
-        $xtpl->parse('main.navbar');
     }
+    $tpl->assign('NAVS', $navs);
 
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('lostactivelink.tpl');
 }
 
 /**

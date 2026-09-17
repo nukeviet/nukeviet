@@ -51,7 +51,7 @@ $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_c
 $gfx_chk = (!empty($array_gfx_chk) and in_array('m', $array_gfx_chk, true)) ? 1 : 0;
 
 $data = [];
-$data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
+$data['checkss'] = csrf_create($csrf_key);
 $data['userField'] = $nv_Request->get_title('userField', 'post', '', 100);
 $data['answer'] = $nv_Request->get_title('answer', 'post', '', 255);
 $data['send'] = $nv_Request->get_bool('send', 'post', false);
@@ -67,8 +67,9 @@ if ($module_captcha == 'recaptcha') {
     $data['nv_seccode'] = $data['nv_seccode2'] = $nv_Request->get_title('nv_seccode', 'post', '');
 }
 
-$checkss = $nv_Request->get_title('checkss', 'post', '');
-$seccode = $nv_Request->get_string('lostactivelink_seccode', 'session', '');
+$is_submit = csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key);
+// Session lưu md5(mã captcha đã tin cậy)|userid, chỉ dùng lại được cho đúng tài khoản đó
+[$seccode, $seccode_userid] = array_pad(explode('|', $nv_Request->get_string('lostactivelink_seccode', 'session', ''), 2), 2, '');
 $step = 1;
 $error = $question = '';
 
@@ -80,14 +81,19 @@ if ($data['autosubmit']) {
     }
 
     // Bỏ qua kiểm tra mã xác nhận, trả lời câu hỏi bí mật nếu đã xác thực thành công mật khẩu
-    $checkss = $data['checkss'];
+    $is_submit = true;
     unset($data['nv_seccode']);
     $gfx_chk = false;
     $data['userField'] = $sessinfo['email'];
 }
 
-if ($checkss == $data['checkss']) {
-    $check_seccode = ($gfx_chk and isset($data['nv_seccode'])) ? ((!empty($seccode) and md5($data['nv_seccode2']) == $seccode) or nv_capcha_txt($data['nv_seccode'], $module_captcha)) : true;
+if ($is_submit) {
+    $check_seccode = true;
+    $captcha_reused = false;
+    if ($gfx_chk and isset($data['nv_seccode'])) {
+        $captcha_reused = (!empty($seccode) and hash_equals($seccode, md5($data['nv_seccode2'])));
+        $check_seccode = ($captcha_reused or nv_capcha_txt($data['nv_seccode'], $module_captcha));
+    }
     if ($check_seccode) {
         if (!empty($data['userField'])) {
             $check_email = nv_check_valid_email($data['userField'], true);
@@ -112,10 +118,17 @@ if ($checkss == $data['checkss']) {
                 $stmt->execute();
                 $row = $stmt->fetch();
 
-                if (!empty($row)) {
+                if (!empty($row) and $captcha_reused and $seccode_userid !== (string) $row['userid']) {
+                    // Mã captcha tin cậy của tài khoản khác không được dùng lại
+                    $step = 1;
+                    $nv_Request->unset_request('lostactivelink_seccode', 'session');
+                    $error = $nv_Lang->getGlobal('securitycodeincorrect');
+                } elseif (!empty($row)) {
                     $step = 2;
-                    if (empty($seccode) and !$data['autosubmit']) {
-                        $nv_Request->set_Session('lostactivelink_seccode', md5($data['nv_seccode']));
+                    if ($gfx_chk and isset($data['nv_seccode']) and !$captcha_reused) {
+                        // Captcha vừa xác thực mới thì lưu lại và đếm lại số lần trả lời sai từ đầu
+                        $nv_Request->set_Session('lostactivelink_seccode', md5($data['nv_seccode']) . '|' . $row['userid']);
+                        $nv_Request->set_Session('lostactivelink_answer_failed', 0);
                     }
                     $question = $row['question'];
 
@@ -148,7 +161,7 @@ if ($checkss == $data['checkss']) {
                     }
 
                     if ($data['send'] or !$is_question_require) {
-                        if ($data['answer'] == $row['answer'] or !$is_question_require) {
+                        if (!$is_question_require or hash_equals((string) $row['answer'], $data['answer'])) {
                             $nv_Request->unset_request('lostactivelink_seccode', 'session');
 
                             // 10 phút gửi email kích hoạt 1 lần
@@ -206,6 +219,19 @@ if ($checkss == $data['checkss']) {
                             // Pass bước 1 thì lưu mã xác nhận lại thành 1 dạng để kiểm tra session
                             $data['nv_seccode'] = $data['nv_seccode2'];
                             $error = $nv_Lang->getModule('answer_failed');
+
+                            // Có captcha thì sai đủ 5 lần phải xác thực lại từ bước 1
+                            if ($gfx_chk and isset($data['nv_seccode2'])) {
+                                $answer_failed = $nv_Request->get_int('lostactivelink_answer_failed', 'session', 0) + 1;
+                                if ($answer_failed >= 5) {
+                                    $step = 1;
+                                    $nv_Request->unset_request('lostactivelink_seccode', 'session');
+                                    $nv_Request->set_Session('lostactivelink_answer_failed', 0);
+                                    $error = $nv_Lang->getModule('answer_failed_many');
+                                } else {
+                                    $nv_Request->set_Session('lostactivelink_answer_failed', $answer_failed);
+                                }
+                            }
                         }
                     }
                 } else {
@@ -224,6 +250,10 @@ if ($checkss == $data['checkss']) {
         $nv_Request->unset_request('lostactivelink_seccode', 'session');
         $error = $nv_Lang->getGlobal('securitycodeincorrect');
     }
+} elseif ($nv_Request->isset_request('checkss', 'post')) {
+    // Mã CSRF không hợp lệ hoặc hết hạn thì quay về bước 1
+    $nv_Request->unset_request('lostactivelink_seccode', 'session');
+    $error = $nv_Lang->getGlobal('error_checkss');
 }
 
 if ($step == 2) {

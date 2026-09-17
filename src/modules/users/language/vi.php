@@ -1029,3 +1029,4 @@ $lang_module['merge_field_link'] = 'Liên kết';
 $lang_module['mf_send_newvalue'] = 'Gửi giá trị mới qua mail';
 $lang_module['mf_label'] = 'Nhãn';
 $lang_module['mf_deadline'] = 'Thời điểm hết hạn';
+$lang_module['answer_failed_many'] = 'Bạn đã trả lời sai câu hỏi bảo mật quá nhiều lần. Vui lòng xác thực lại để tiếp tục';
