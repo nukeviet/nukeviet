@@ -310,14 +310,14 @@ function nv_groups_list_pub2($edit_userid)
 }
 
 $array_data = [];
-// checkss khớp với modules/two-step-verification/funcs/main.php thay đổi cần cập nhật
-$array_data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $user_info['userid']);
+// Key CSRF khớp với modules/two-step-verification/funcs/main.php thay đổi cần cập nhật
+$array_data['checkss'] = csrf_create($csrf_key);
 $array_data['checkss_avatar'] = csrf_create($g_csrf_key['avatar']);
 $array_data['awaitinginfo'] = [];
 $array_data['editcensor'] = $global_users_config['active_editinfo_censor'];
 $array_data['confirmed_pass'] = is_verified_password('passkey');
 
-$checkss = $nv_Request->get_title('checkss', 'post', '');
+$checkss_valid = csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key);
 $nv_redirect = $sso_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
@@ -381,7 +381,7 @@ if ($array_data['editcensor'] and !defined('ACCESS_EDITUS')) {
 if ((int) $row['safemode'] > 0) {
     $type = $nv_Request->get_title('type', 'post', '');
 
-    if ($checkss == $array_data['checkss'] and $type == 'safe_deactivate') {
+    if ($checkss_valid and $type == 'safe_deactivate') {
         $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 
         if (!empty($row['password']) and !$crypt->validate_password($nv_password, $row['password'])) {
@@ -679,7 +679,7 @@ if (in_array('passkey', $types, true) and $array_data['confirmed_pass']) {
 }
 
 // Basic
-if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
+if ($checkss_valid and $array_data['type'] == 'basic') {
     $array_data['first_name'] = isset($array_field_config['first_name']) ? $nv_Request->get_title('first_name', 'post', '', 255) : $row['first_name'];
     $array_data['last_name'] = isset($array_field_config['last_name']) ? $nv_Request->get_title('last_name', 'post', '', 255) : $row['last_name'];
     $array_data['gender'] = isset($array_field_config['gender']) ? nv_substr($nv_Request->get_title('gender', 'post', ''), 0, 1) : $row['gender'];
@@ -767,9 +767,9 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
             'mess' => $nv_Lang->getModule('editinfo_ok')
         ]);
     }
-} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'avatar') {
+} elseif ($checkss_valid and $array_data['type'] == 'avatar') {
     // Avatar
-} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'langinterface') {
+} elseif ($checkss_valid and $array_data['type'] == 'langinterface') {
     $langinterface = $nv_Request->get_title('langinterface', 'post', '');
     if (!empty($langinterface) and (!preg_match('/^[a-z]{2}$/', $langinterface) or !file_exists(NV_ROOTDIR . '/includes/language/' . $langinterface . '/global.php'))) {
         $langinterface = '';
@@ -788,7 +788,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'redirect' => nv_url_rewrite($page_url . '/langinterface', true),
         'mess' => $nv_Lang->getModule('editinfo_ok')
     ]);
-} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'username') {
+} elseif ($checkss_valid and $array_data['type'] == 'username') {
     // Username
     $nv_username = $nv_Request->get_title('username', 'post', '', $global_config['nv_unickmax']);
     $nv_password = $nv_Request->get_title('password', 'post', '');
@@ -848,7 +848,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'redirect' => nv_url_rewrite($page_url . '/username', true),
         'mess' => $mess
     ]);
-} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'email') {
+} elseif ($checkss_valid and $array_data['type'] == 'email') {
     // Email
     $nv_email = nv_strtolower($nv_Request->get_title('email', 'post', '', 100));
     $nv_password = $nv_Request->get_title('password', 'post', '');
@@ -1013,7 +1013,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
             'mess' => $mess
         ]);
     }
-} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'password') {
+} elseif ($checkss_valid and $array_data['type'] == 'password') {
     // Password
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
     $new_password = $nv_Request->get_title('new_password', 'post', '');
@@ -1098,9 +1098,9 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'redirect' => nv_url_rewrite($page_url . '/basic', true),
         'mess' => $mess
     ]);
-} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'passkey' and $array_data['confirmed_pass']) {
+} elseif ($checkss_valid and $array_data['type'] == 'passkey' and $array_data['confirmed_pass']) {
     require NV_ROOTDIR . '/modules/' . $module_file . '/edit/passkey.php';
-} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'question') {
+} elseif ($checkss_valid and $array_data['type'] == 'question') {
     // Question
     $array_data['question'] = isset($array_field_config['question']) ? $nv_Request->get_title('question', 'post', '', 255) : $row['question'];
     $array_data['answer'] = isset($array_field_config['answer']) ? $nv_Request->get_title('answer', 'post', '', 255) : $row['answer'];
@@ -1139,7 +1139,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'input' => 'ok',
         'mess' => $nv_Lang->getModule('change_question_ok')
     ]);
-} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'openid') {
+} elseif ($checkss_valid and $array_data['type'] == 'openid') {
     // OpeniD Del
     $openid_del = $nv_Request->get_typed_array('openid_del', 'post', 'title', '');
     $openid_del = array_filter($openid_del);
@@ -1193,7 +1193,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'redirect' => nv_url_rewrite($page_url . '/openid', true),
         'mess' => $nv_Lang->getModule('openid_deleted')
     ]);
-} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
+} elseif ($checkss_valid and $array_data['type'] == 'group') {
     // Groups
     $in_groups = $nv_Request->get_typed_array('in_groups', 'post', 'int');
 
@@ -1304,7 +1304,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'redirect' => nv_url_rewrite($page_url . '/group', true),
         'mess' => $nv_Lang->getModule('in_group_ok')
     ]);
-} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'others') {
+} elseif ($checkss_valid and $array_data['type'] == 'others') {
     // Others
     $query_field = $valid_field = [];
     $userid = $edit_userid;
@@ -1375,7 +1375,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
             'mess' => $nv_Lang->getModule('editinfo_ok')
         ]);
     }
-} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'safemode') {
+} elseif ($checkss_valid and $array_data['type'] == 'safemode') {
     // Bat safemode
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
     if (empty($nv_password) or !$crypt->validate_password($nv_password, $row['password'])) {

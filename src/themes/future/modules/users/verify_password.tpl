@@ -19,7 +19,7 @@
                     placeholder="{$LANG->getGlobal('password')}" aria-label="{$LANG->getGlobal('password')}"
                     minlength="3" data-valid data-error-type="tooltip"
                 >
-                <i class="z-10 text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                <i class="text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
             </div>
             <div class="d-grid">
                 <button type="submit" class="btn btn-primary">

@@ -31,7 +31,7 @@
                         data-error-mess="{$LANG->getGlobal('username_empty')}"
                         data-valid data-error-type="tooltip"
                     >
-                    <i class="z-10 text-center fa-fw fa-solid fa-user position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                    <i class="text-center fa-fw fa-solid fa-user position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
                 </div>
             </div>
             <div class="mb-3 position-relative">
@@ -42,7 +42,7 @@
                         data-error-mess="{$LANG->getGlobal('password_empty')}"
                         data-valid data-error-type="tooltip"
                     >
-                    <i class="z-10 text-center fa-fw fa-solid fa-lock position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                    <i class="text-center fa-fw fa-solid fa-lock position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
                 </div>
             </div>
             <div class="mb-3 d-flex gap-2">
@@ -71,7 +71,7 @@
                             data-valid data-error-type="tooltip"
                             data-error-mess="{$LANG->getGlobal('2teplogin_totppin_placeholder')}"
                         >
-                        <i class="z-10 text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                        <i class="text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
                     </div>
                 </div>
                 <div class="text-center mb-3">
@@ -88,7 +88,7 @@
                             data-valid data-error-type="tooltip"
                             data-error-mess="{$LANG->getGlobal('2teplogin_code_placeholder')}"
                         >
-                        <i class="z-10 text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                        <i class="text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
                     </div>
                 </div>
                 <div class="text-center mb-3">

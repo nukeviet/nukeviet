@@ -16,7 +16,7 @@
                     placeholder="{$LANG->getModule('username_or_email')}" aria-label="{$LANG->getModule('username_or_email')}"
                     minlength="3" data-valid data-error-type="tooltip"
                 >
-                <i class="z-10 text-center fa-fw fa-solid fa-user position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                <i class="text-center fa-fw fa-solid fa-user position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
             </div>
         </div>
 
@@ -28,7 +28,7 @@
                     data-valid data-error-type="tooltip"
                     data-error-mess="{$LANG->getModule('answer_empty')}"
                 >
-                <i class="z-10 text-center fa-fw fa-solid fa-pen-to-square position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                <i class="text-center fa-fw fa-solid fa-pen-to-square position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
             </div>
         </div>
 
@@ -40,7 +40,7 @@
                     data-pattern="/^[a-zA-Z0-9]{literal}{10}{/literal}$/" data-valid data-error-type="tooltip"
                     data-error-mess="{$LANG->getModule('lostpass_active_error')}"
                 >
-                <i class="z-10 text-center fa-fw fa-solid fa-shield-halved position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                <i class="text-center fa-fw fa-solid fa-shield-halved position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
             </div>
         </div>
 
@@ -52,7 +52,7 @@
                     data-pattern="{$PASSWORD_PATTERN}" data-valid data-error-type="tooltip"
                     data-error-mess="{$PASSWORD_RULE}"
                 >
-                <i class="z-10 text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                <i class="text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
             </div>
             <div class="mb-3 position-relative">
                 <input type="password" autocomplete="new-password" class="form-control ps-with-fw-icon" name="re_password" maxlength="{$GCONFIG.nv_upassmax}" value=""
@@ -60,7 +60,7 @@
                     data-valid data-error-type="tooltip" data-valid-callback="userLostpassRepassCheck"
                     data-error-mess="{$LANG->getGlobal('passwordsincorrect')}"
                 >
-                <i class="z-10 text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                <i class="text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
             </div>
         </div>
 

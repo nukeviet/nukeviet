@@ -72,7 +72,7 @@ $(function() {
         $.ajax({
             type: 'POST',
             cache: false,
-            url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + btn.data('module') + '&' + nv_fc_variable + '=logout&nocache=' + new Date().getTime(),
+            url: btn.data('url') || (nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + btn.data('module') + '&' + nv_fc_variable + '=logout&nocache=' + new Date().getTime()),
             data: 'nv_ajax_login=1',
             dataType: 'html',
             success: function(res) {

@@ -29058,6 +29058,10 @@ textarea.form-control-lg {
   --bs-btn-border-color: #e7e8ea;
 }
 
+.input-group-password {
+  isolation: isolate;
+}
+
 [data-bs-theme=dark] {
   color-scheme: dark;
 }

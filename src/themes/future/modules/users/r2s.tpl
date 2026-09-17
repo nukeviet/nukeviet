@@ -21,7 +21,7 @@
                             placeholder="{$LANG->getModule('remove_2step_email')}" aria-label="{$LANG->getModule('remove_2step_email')}"
                             data-valid data-error-type="tooltip"
                         >
-                        <i class="z-10 text-center fa-fw fa-solid fa-envelope position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                        <i class="text-center fa-fw fa-solid fa-envelope position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
                     </div>
                     {if not empty($DATA.question)}
                     <div class="mb-3">
@@ -33,7 +33,7 @@
                             data-valid data-error-type="tooltip"
                             data-error-mess="{$LANG->getModule('answer_empty')}"
                         >
-                        <i class="z-10 text-center fa-fw fa-solid fa-shield position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                        <i class="text-center fa-fw fa-solid fa-shield position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
                     </div>
                     {/if}
                 </div>
@@ -46,7 +46,7 @@
                             data-valid data-error-type="tooltip"
                             data-error-mess="{$LANG->getModule('verifykey_empty')}"
                         >
-                        <i class="z-10 text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                        <i class="text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
                     </div>
                 </div>
 

@@ -1614,20 +1614,20 @@ function safe_deactivate($data)
  */
 function theme_changePass($pass_timeout, $pass_empty, $checkss)
 {
-    global $module_info, $module_name, $nv_Lang, $global_config;
+    global $module_name, $nv_Lang, $global_config;
 
-    $xtpl = new XTemplate('changepass.tpl', get_module_tpl_dir('changepass.tpl'));
-    $xtpl->assign('CHANGEPASS_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/password');
-    $xtpl->assign('URL_LOGOUT', defined('NV_IS_ADMIN') ? 'nv_admin_logout' : 'bt_logout');
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('LOGO', NV_BASE_SITEURL . $global_config['site_logo']);
-    $xtpl->assign('SITE_NAME', $global_config['site_name']);
-    $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
-    $xtpl->assign('PASS_MINLENGTH', $global_config['nv_upassmin']);
-    $xtpl->assign('CHECKSS', $checkss);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('changepass.tpl'));
 
-    $xtpl->assign('CHANGEPASS_INFO', $pass_timeout ? $nv_Lang->getModule('pass_reset3_info', floor($global_config['pass_timeout'] / 86400)) : $nv_Lang->getModule('pass_reset1_info'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('CHECKSS', $checkss);
+    $tpl->assign('PASS_EMPTY', $pass_empty);
+    $tpl->assign('LOGOUT_TOGGLE', defined('NV_IS_ADMIN') ? 'nv_admin_logout' : 'bt_logout');
+    // Dùng URL đã rewrite để index.php nhận ra trang logout khi đang bắt buộc đổi mật khẩu
+    $tpl->assign('LOGOUT_URL', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=logout', true));
+    $tpl->assign('CHANGEPASS_INFO', $pass_timeout ? $nv_Lang->getModule('pass_reset3_info', floor($global_config['pass_timeout'] / 86400)) : $nv_Lang->getModule('pass_reset1_info'));
 
     $password_rule = empty($global_config['nv_upass_type']) ? $nv_Lang->getGlobal('password_rule_nolimit', $global_config['nv_upassmin'], $global_config['nv_upassmax']) : $nv_Lang->getGlobal('password_rule_limit', $nv_Lang->getGlobal('upass_type_' . $global_config['nv_upass_type']), $global_config['nv_upassmin'], $global_config['nv_upassmax']);
     $password_pattern = '/^';
@@ -1642,16 +1642,10 @@ function theme_changePass($pass_timeout, $pass_empty, $checkss)
     }
     $password_pattern .= '(.){' . $global_config['nv_upassmin'] . ',' . $global_config['nv_upassmax'] . '}$/';
 
-    $xtpl->assign('PASSWORD_PATTERN', $password_pattern);
-    $xtpl->assign('PASSWORD_RULE', $password_rule);
+    $tpl->assign('PASSWORD_PATTERN', $password_pattern);
+    $tpl->assign('PASSWORD_RULE', $password_rule);
 
-    if (!$pass_empty) {
-        $xtpl->parse('main.is_old_pass');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('changepass.tpl');
 }
 
 /**

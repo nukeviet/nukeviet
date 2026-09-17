@@ -25,7 +25,7 @@
                     data-valid data-error-type="tooltip"
                     data-error-mess="{$LANG->getModule('answer_empty')}"
                 >
-                <i class="z-10 text-center fa-fw fa-solid fa-pen-to-square position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                <i class="text-center fa-fw fa-solid fa-pen-to-square position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
             </div>
             <div class="d-grid">
                 <button type="submit" class="btn btn-primary">
@@ -48,7 +48,7 @@
                     placeholder="{$LANG->getModule('username_or_email')}" aria-label="{$LANG->getModule('username_or_email')}"
                     minlength="3" data-valid data-error-type="tooltip"
                 >
-                <i class="z-10 text-center fa-fw fa-solid fa-user position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                <i class="text-center fa-fw fa-solid fa-user position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
             </div>
             <div class="d-grid">
                 <button type="submit" class="btn btn-primary">

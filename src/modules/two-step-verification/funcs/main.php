@@ -28,8 +28,8 @@ if (empty($user_info['active2step']) and in_array((int) $global_config['two_step
 }
 
 $array_data = [];
-// checkss khớp với modules/users/funcs/editinfo.php thay đổi cần cập nhật
-$array_data['checkss'] = md5(NV_CHECK_SESSION . '_' . NV_BRIDGE_USER_MODULE . '_editinfo_' . $user_info['userid']);
+// Form gửi tới users/editinfo nên key CSRF dựng theo $csrf_key của editinfo, thay đổi cần cập nhật modules/users/funcs/editinfo.php
+$array_data['checkss'] = csrf_create($user_info['userid'] . '_' . NV_BRIDGE_USER_MODULE . '_editinfo');
 $array_data['form_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . NV_BRIDGE_USER_MODULE . '&amp;' . NV_OP_VARIABLE . '=editinfo/passkey';
 $array_data['page_url'] = $page_url;
 $array_data['show_type'] = $nv_Request->get_title('type', 'get', '');

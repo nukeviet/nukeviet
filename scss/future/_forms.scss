@@ -20,6 +20,11 @@
   --#{$prefix}btn-border-color: #{$border-color};
 }
 
+// Giữ z-index của input, nút con mắt bên trong nhóm, không đè lên icon và tooltip lỗi nằm ngoài
+.input-group-password {
+  isolation: isolate;
+}
+
 @if $enable-dark-mode {
   @include color-mode(dark, true) {
     color-scheme: dark;

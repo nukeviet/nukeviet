@@ -14,7 +14,7 @@
                                name="password" maxlength="100" minlength="1" autocomplete="off"
                                data-valid data-error-type="tooltip"
                                data-error-mess="">
-                        <i class="z-10 text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+                        <i class="text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
                     </div>
                 </div>
                 <div class="text-center">
