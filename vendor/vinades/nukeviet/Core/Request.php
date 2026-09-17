@@ -163,6 +163,11 @@ class Request
     protected $htmlContentAttributes = ['srcdoc'];
 
     /**
+     * Các tags cho phép theo cấu hình, dùng để lọc nội dung HTML trong attribute (VD: srcdoc)
+     */
+    private $allowedHtmlTags = [];
+
+    /**
      * Các attr bị cấm, sẽ bị lọc bỏ.
      * - Tất cả các arrt bắt đầu bằng on
      * - Các attr bên dưới
@@ -251,6 +256,7 @@ class Request
     {
         if (isset($config['allowed_html_tags']) and is_array($config['allowed_html_tags'])) {
             $this->disabletags = array_diff($this->disabletags, $config['allowed_html_tags']);
+            $this->allowedHtmlTags = array_values(array_filter(array_map('strtolower', array_map('trim', $config['allowed_html_tags']))));
         }
         if (!empty($config['allow_request_mods'])) {
             if (!is_array($config['allow_request_mods'])) {
@@ -821,6 +827,11 @@ class Request
                     if (!$htmlValid) {
                         $isvalid = false;
                     }
+
+                    // Lọc tiếp thẻ html trong attribute
+                    if (!empty($this->allowedHtmlTags)) {
+                        $filteredHtml = strip_tags($filteredHtml, '<' . implode('><', $this->allowedHtmlTags) . '>');
+                    }
                     $attrSubSet[1] = htmlspecialchars($filteredHtml, ENT_QUOTES | ENT_HTML5, 'UTF-8');
                     $newSet[] = $attrSubSet[0] . '=[@{' . $attrSubSet[1] . '}@]';
                     continue;
@@ -925,6 +936,14 @@ class Request
      */
     private function filterTags($source, &$isvalid = true)
     {
+        /*
+         * Mã hóa toàn bộ [ ] trong dữ liệu đầu vào để không thể tạo ra các chuỗi đánh dấu nội bộ
+         * {@[ ]@} [@{ }@], kể cả khi ghép với chuỗi đánh dấu do hàm này sinh ra.
+         * Nếu không, cuối hàm chúng bị chuyển thành < > " mà không qua bước lọc
+         * (VD: srcdoc="{@&#91;img src=x onerror=alert(1)&#93;@}" sau khi giải mã entity)
+         */
+        $source = str_replace(['[', ']'], ['&#91;', '&#93;'], $source);
+
         $checkInvalid = 0;
         $source = preg_replace('/\<\s*s\s*c\s*r\s*i\s*p\s*t([^\>]*)\>(.*)\<\s*\/\s*s\s*c\s*r\s*i\s*p\s*t\s*\>/isU', '', $source, -1, $checkInvalid);
         if ($checkInvalid > 0) {
