@@ -80,9 +80,21 @@ $tpl->assign('CHECKSS', csrf_create($csrf_key));
 
 ### 3.4 Giá trị mặc định (tránh Undefined array key)
 
+Chỉ thêm giá trị mặc định khi nguồn dữ liệu thật sự có thể thiếu key. Trước khi bọc `array_merge`, đọc lại chỗ dựng mảng:
+
+- Mảng là row lấy thẳng từ CSDL, kết quả hàm ngoài, hoặc có key chỉ gán trong một nhánh `if` → cần mặc định.
+- Controller gán đủ mọi key vô điều kiện → assign thẳng, không bọc thêm.
+
 ```php
+// Nguồn có thể thiếu key - thêm mặc định
 $item = array_merge(['id' => 0, 'title' => '', 'status' => 0], $item ?? []);
 $tpl->assign('ITEM', $item);
+
+// Controller đã gán $data['checkss'] và $data['question'] vô điều kiện
+// Sai - mặc định thừa, lại che mất lỗi nếu sau này controller quên gán key:
+$tpl->assign('DATA', array_merge(['checkss' => '', 'question' => ''], $data));
+// Đúng:
+$tpl->assign('DATA', $data);
 ```
 
 ### 3.5 Register modifier (chỉ khi template dùng)
@@ -627,7 +639,7 @@ $(function() {
 - [ ] Xóa `new XTemplate(...)` và toàn bộ `$xtpl->*`
 - [ ] Chuyển loop parse thành collect array
 - [ ] Assign đủ: `LANG` (dùng `$nv_Lang`), `MODULE_NAME`, `OP`, `CHECKSS`
-- [ ] Tất cả biến assign có giá trị mặc định (tránh undefined key)
+- [ ] Biến assign chỉ thêm giá trị mặc định khi nguồn thật sự có thể thiếu key - đã đọc chỗ dựng mảng để xác nhận, không bọc `array_merge` theo phản xạ
 - [ ] Register modifier nếu template dùng
 - [ ] `$tpl->fetch('filename.tpl')` (setTemplateDir đã trỏ đúng thư mục)
 - [ ] Không tạo chuỗi `checked="checked"` / `selected="selected"` từ PHP
