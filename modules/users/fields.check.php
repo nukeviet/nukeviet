@@ -14,7 +14,7 @@ if (!defined('NV_MAINFILE')) {
 }
 
 // Gọi global biến này vì có thể file này include từ trong hàm
-global $op;
+global $op, $global_config;
 
 if (empty($query_field)) {
     $query_field = [];
@@ -139,7 +139,8 @@ foreach ($array_field_config as $row_f) {
                     }
                 }
             } elseif ($row_f['match_type'] == 'callback') {
-                if (function_exists($row_f['func_callback'])) {
+                $allowed_callbacks = (isset($global_config['user_field_callbacks']) and is_array($global_config['user_field_callbacks'])) ? $global_config['user_field_callbacks'] : [];
+                if (in_array($row_f['func_callback'], $allowed_callbacks, true) and function_exists($row_f['func_callback'])) {
                     if (!call_user_func($row_f['func_callback'], $value)) {
                         nv_jsonOutput([
                             'status' => 'error',
@@ -180,7 +181,8 @@ foreach ($array_field_config as $row_f) {
                     ]);
                 }
             } elseif ($row_f['match_type'] == 'callback') {
-                if (function_exists($row_f['func_callback'])) {
+                $allowed_callbacks = (isset($global_config['user_field_callbacks']) and is_array($global_config['user_field_callbacks'])) ? $global_config['user_field_callbacks'] : [];
+                if (in_array($row_f['func_callback'], $allowed_callbacks, true) and function_exists($row_f['func_callback'])) {
                     if (!call_user_func($row_f['func_callback'], $value)) {
                         nv_jsonOutput([
                             'status' => 'error',
