@@ -361,7 +361,7 @@ function fieldError(array $row, string $mess, bool $prefix_title = true): array
  */
 function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field)
 {
-    global $array_field_config, $nv_Lang, $global_users_config, $module_upload;
+    global $array_field_config, $nv_Lang, $global_users_config, $module_upload, $global_config;
 
     if (empty($array_field_config)) {
         $array_field_config = get_other_fields(nv_get_users_field_config());
@@ -442,7 +442,8 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                         }
                     }
                 } elseif ($row_f['match_type'] == 'callback') {
-                    if (!function_exists($row_f['func_callback'])) {
+                    $allowed_callbacks = (isset($global_config['user_field_callbacks']) and is_array($global_config['user_field_callbacks'])) ? $global_config['user_field_callbacks'] : [];
+                    if (!in_array($row_f['func_callback'], $allowed_callbacks, true) or !function_exists($row_f['func_callback'])) {
                         // Lỗi lập trình, không phải lỗi nhập liệu nên giữ nguyên văn
                         return fieldError($row_f, 'error function not exists ' . $row_f['func_callback'], false);
                     }
@@ -467,7 +468,8 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                         return fieldError($row_f, $parts['rule']);
                     }
                 } elseif ($row_f['match_type'] == 'callback') {
-                    if (!function_exists($row_f['func_callback'])) {
+                    $allowed_callbacks = (isset($global_config['user_field_callbacks']) and is_array($global_config['user_field_callbacks'])) ? $global_config['user_field_callbacks'] : [];
+                    if (!in_array($row_f['func_callback'], $allowed_callbacks, true) or !function_exists($row_f['func_callback'])) {
                         // Lỗi lập trình, không phải lỗi nhập liệu nên giữ nguyên văn
                         return fieldError($row_f, 'error function not exists ' . $row_f['func_callback'], false);
                     }
