@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 5.0.00
+- Fix reflected XSS via double URL decoding of search keyword in news module. Thanks Thế from GitHub @Pbat6
 - Fix stored XSS via internal marker injection in iframe srcdoc. Thanks Thế from GitHub @Pbat6
 - Fix RCE via image upload bypass chain. Thanks CAN QUANG HIEU from GitHub @canhieu
 - Fix a security vulnerability in the SVG file upload. Thanks Nguyễn Huy Hoàng from GitHub @hoanggxyuuki
