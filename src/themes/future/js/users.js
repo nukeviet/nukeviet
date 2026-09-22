@@ -637,6 +637,70 @@ $(function() {
         });
     });
 
+    // Hiện form tắt chế độ an toàn
+    $(document).off('click.users', '[data-toggle="usersSafeDeactivateShow"]').on('click.users', '[data-toggle="usersSafeDeactivateShow"]', function(e) {
+        e.preventDefault();
+        const page = $(this).closest('[data-area="usersSafeMode"]');
+        $('[data-area="safeActiveInfo"]', page).addClass('d-none');
+        $('[data-area="safeDeactivate"]', page).removeClass('d-none');
+    });
+
+    // Gửi lại mã xác minh chế độ an toàn
+    $(document).off('click.users', '[data-toggle="usersSafeKeySend"]').on('click.users', '[data-toggle="usersSafeKeySend"]', function(e) {
+        e.preventDefault();
+        const btn = $(this);
+        const icon = $('i', btn);
+        const form = btn.closest('form');
+        const info = $('[data-area="info"]', form);
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+
+        const orig = icon.data('icon');
+        const formData = new FormData(form[0]);
+        formData.append('resend', 1);
+        icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+        btn.prop('disabled', true);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            cache: false,
+            success: function(res) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                if (res.status != 'ok') {
+                    btn.prop('disabled', false);
+                    if (res.input) {
+                        const ipt = $('[name="' + res.input + '"]:visible', form);
+                        if (ipt.length > 0) {
+                            nv_validate_show(ipt.first(), res.mess, 'tooltip');
+                            ipt.first().focus();
+                            return;
+                        }
+                    }
+                    return nukeviet.toast(res.mess, 'error');
+                }
+
+                // Hiện thông báo đã gửi mã, sau đó trả lại nội dung mặc định
+                info.html(res.mess).removeClass('alert-info').addClass('alert-success');
+                setTimeout(() => {
+                    info.html(info.data('default')).removeClass('alert-success').addClass('alert-info');
+                    btn.prop('disabled', false);
+                }, 6000);
+            },
+            error: function(xhr, text, err) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                btn.prop('disabled', false);
+                nukeviet.toast(err || text, 'error');
+                console.log(xhr, text, err);
+            }
+        });
+    });
+
     // Xử lý cho form đăng ký tài khoản
     /**
      * Hiển thị lịch chọn ngày cho một trường

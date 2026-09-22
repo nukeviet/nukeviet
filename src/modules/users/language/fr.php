@@ -267,6 +267,7 @@ $lang_module['safe_mode'] = 'Mode sans échec';
 $lang_module['safe_activate'] = 'Activer le mode sans échec';
 $lang_module['safe_deactivate'] = 'Désactiver le mode sans échec';
 $lang_module['safe_key'] = 'Code de certifier';
+$lang_module['safe_key_invalid'] = 'Veuillez saisir le code de vérification de 32 caractères';
 $lang_module['safe_resendkey'] = 'Renvoyer un code de certifier';
 $lang_module['safe_send_ok'] = 'Code de certifier en mode sans échec a été envoyé dans votre email. Ce fait peut être ré-effectuer après %1$d minutes.';
 $lang_module['safe_activate_info'] = 'Le mode sans échec va vous aider d\'éviter les modifications des infos de compte. Quand vous activez le mode sans échec, le système va envoyer dans votre mail un code e certifier. Celui là est utilisé pour désactiver le mode sans échec. Ce code ne peut être utilisé que entre les 2 fois de activer; désactiver. Ce code est inutilisable après que vous désactivez ce mode.';

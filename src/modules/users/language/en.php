@@ -267,6 +267,7 @@ $lang_module['safe_mode'] = 'Safe mode';
 $lang_module['safe_activate'] = 'Turn on safe mode';
 $lang_module['safe_deactivate'] = 'Turn off safe mode';
 $lang_module['safe_key'] = 'Verification code';
+$lang_module['safe_key_invalid'] = 'Please enter the 32-character verification code';
 $lang_module['safe_resendkey'] = 'Resend verification code';
 $lang_module['safe_send_ok'] = 'Verifykey safety regime has been sent to your email. This operation can be performed again %1$d minute.';
 $lang_module['safe_activate_info'] = '<p><strong>Safe mode is off at current!</strong></p><p>- Unless you need to edit your account information, you should turn this mode on. It will help you avoid unwanted changes.</p><p>- When you activate the safe mode, the system will send a verifykey to your email box. Use that verifykey turn off safe mode later. The verifykey is valid between on and off only. After you turn off safe mode, this verifykey will be worthless.</p><p>- To enable safe mode, you follow these steps:</p><p>1.Declare your login password<br />2.Click on the button Send verifykey<br />3.Check mail notification verifykey and scripting key to verify that the box below<br />4.Click on the Accept button.</p>';

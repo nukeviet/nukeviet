@@ -267,6 +267,7 @@ $lang_module['safe_mode'] = 'Chế độ an toàn';
 $lang_module['safe_activate'] = 'Bật chế độ an toàn';
 $lang_module['safe_deactivate'] = 'Tắt chế độ an toàn';
 $lang_module['safe_key'] = 'Mã xác minh';
+$lang_module['safe_key_invalid'] = 'Vui lòng nhập mã xác minh gồm 32 ký tự';
 $lang_module['safe_resendkey'] = 'Gửi lại mã xác minh';
 $lang_module['safe_send_ok'] = 'Mã xác minh chế độ an toàn đã được gửi đến email của bạn. Thao tác này có thể được thực hiện lại sau %1$d phút.';
 $lang_module['safe_activate_info'] = '<p><strong>Chế độ an toàn đang ở trạng thái tắt!</strong></p><p>- Nếu không có nhu cầu chỉnh sửa thông tin tài khoản, bạn nên bật chế độ này. Nó sẽ giúp cho bạn tránh được những thay đổi ngoài ý muốn.</p><p>- Khi bạn kích hoạt chế độ an toàn, hệ thống sẽ gửi đến email của bạn một mã xác minh. Mã xác minh này cũng được dùng để tắt chế độ an toàn. Nó có hiệu lực trong khoảng thời gian giữa hai lần bật - tắt. Sau khi bạn tắt chế độ an toàn, mã xác minh này sẽ vô giá trị.</p><p>- Để bật chế độ an toàn, bạn hãy thực hiện theo các bước sau:</p><p>1.Khai báo lại mật khẩu đăng nhập<br />2.Click vào nút Gửi mã xác minh<br />3.Kiểm tra mail thông báo Mã xác minh và chép mã đó vào ô Mã xác minh dưới đây<br />4.Click vào nút Chấp nhận.</p>';

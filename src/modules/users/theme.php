@@ -1571,39 +1571,32 @@ function safe_deactivate($data)
 {
     global $module_info, $module_name, $nv_Lang, $global_config, $op, $nv_redirect;
 
-    $xtpl = new XTemplate('safe.tpl', get_module_tpl_dir('safe.tpl'));
-    $xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
-    $xtpl->assign('PASS_MINLENGTH', $global_config['nv_upassmin']);
-    $xtpl->assign('DATA', $data);
-    $xtpl->assign('NV_REDIRECT', $nv_redirect);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('safe.tpl'));
 
-    if ($data['safeshow']) {
-        $xtpl->assign('SHOW1', ' style="display:none"');
-    } else {
-        $xtpl->assign('SHOW2', ' style="display:none"');
-    }
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('DATA', $data);
+    $tpl->assign('NV_REDIRECT', $nv_redirect);
 
+    // Các liên kết chức năng khác cuối trang
     $_lis = \NukeViet\Module\users\Shared\Navs::getNavs($module_info['funcs']);
     $_alias = $module_info['alias'];
+    $navs = [];
     foreach ($_lis as $_li) {
         if ($_li['func_name'] == $op) {
             continue;
         }
 
-        $href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
-        $li = [
-            'href' => $href,
+        $navs[] = [
+            'href' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']],
             'title' => $_li['func_name'] == 'main' ? $nv_Lang->getModule('user_info') : $_li['func_custom_name']
         ];
-        $xtpl->assign('NAVBAR', $li);
-        $xtpl->parse('main.navbar');
     }
+    $tpl->assign('NAVS', $navs);
 
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    return $tpl->fetch('safe.tpl');
 }
 
 /**
