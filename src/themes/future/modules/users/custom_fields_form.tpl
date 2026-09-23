@@ -4,7 +4,7 @@
         <label class="form-label" for="nvcf-{$field.field}">{$field.title}{if $field.required} <span class="text-danger">*</span>{/if}</label>
         <input type="text" class="form-control {$field.class}"
             placeholder="{$field.title}" value="{$field.value}"
-            name="custom_fields[{$field.field}]" id="nvcf-{$field.field}"
+            name="custom_fields[{$field.field}]" id="nvcf-{$field.field}" autocomplete="off"
             {if $field.field_type == 'number'}
                 inputmode="{if $field.number_type == 2}decimal{else}numeric{/if}"
                 {if $field.min_length < $field.max_length} data-min-value="{$field.min_length}" data-max-value="{$field.max_length}"{/if}
@@ -27,7 +27,7 @@
         <div class="input-group">
             <input type="text" class="form-control {$field.class}"
                 placeholder="{$field.title}" value="{$field.value}"
-                name="custom_fields[{$field.field}]" id="nvcf-{$field.field}"
+                name="custom_fields[{$field.field}]" id="nvcf-{$field.field}" autocomplete="off"
                 data-provide="datepicker" data-valid data-error-type="feedback"
                 {if not $field.required} data-allowed-empty="1"{/if}
                 {if $field.min_date} data-min-date="{$field.min_date}" data-max-date="{$field.max_date}"{/if}
@@ -41,7 +41,7 @@
     {elseif $field.field_type == 'select'}
     <div class="col-md-6">
         <label class="form-label" for="nvcf-{$field.field}">{$field.title}{if $field.required} <span class="text-danger">*</span>{/if}</label>
-        <select name="custom_fields[{$field.field}]" class="form-select {$field.class}" id="nvcf-{$field.field}"
+        <select name="custom_fields[{$field.field}]" class="form-select {$field.class}" id="nvcf-{$field.field}" autocomplete="off"
             data-valid data-error-type="feedback"
             {if not $field.required} data-allowed-empty="1"{/if}
             data-error-mess="{$field.errmess}"
@@ -57,7 +57,7 @@
     <div class="col-12">
         <label class="form-label" for="nvcf-{$field.field}">{$field.title}{if $field.required} <span class="text-danger">*</span>{/if}</label>
         <textarea class="form-control {$field.class}" placeholder="{$field.title}"
-            name="custom_fields[{$field.field}]" id="nvcf-{$field.field}" rows="3"
+            name="custom_fields[{$field.field}]" id="nvcf-{$field.field}" autocomplete="off" rows="3"
             {if $field.min_length} minlength="{$field.min_length}"{/if}
             {if $field.max_length} maxlength="{$field.max_length}"{/if}
             data-valid data-error-type="feedback"
@@ -117,7 +117,7 @@
     {elseif $field.field_type == 'multiselect'}
     <div class="col-12">
         <label class="form-label" for="nvcf-{$field.field}">{$field.title}{if $field.required} <span class="text-danger">*</span>{/if}</label>
-        <select name="custom_fields[{$field.field}][]" multiple class="form-select {$field.class}" id="nvcf-{$field.field}"
+        <select name="custom_fields[{$field.field}][]" multiple class="form-select {$field.class}" id="nvcf-{$field.field}" autocomplete="off"
             data-valid data-error-type="feedback"
             {if not $field.required} data-allowed-empty="1"{/if}
             data-error-mess="{$field.errmess}"
@@ -139,9 +139,20 @@
         >
             <div class="d-flex align-items-center justify-content-between mb-2">
                 <label class="form-label mb-0" for="ipt_uploadfile_{$field.field}">{$field.title}{if $field.required} <span class="text-danger">*</span>{/if}</label>
-                <button type="button" class="btn btn-secondary btn-sm" id="ipt_uploadfile_{$field.field}" data-toggle="addfilebtn" data-modal="uploadfile_{$field.field}"><i class="fa-solid fa-upload"></i> {$LANG->getModule('addfile')}</button>
+                <button type="button" class="btn btn-secondary btn-sm{if not empty($field.addfile_hidden)} d-none{/if}" id="ipt_uploadfile_{$field.field}" data-toggle="addfilebtn" data-modal="uploadfile_{$field.field}"><i class="fa-solid fa-upload"></i> {$LANG->getModule('addfile')}</button>
             </div>
-            <ul class="list-unstyled items mb-0"></ul>
+            <ul class="list-unstyled items mb-0">
+                {* Tệp đã tải lên trước đó, chỉ có khi sửa thông tin *}
+                {if not empty($field.files)}
+                {foreach from=$field.files item=file}
+                <li class="mt-1">
+                    <input type="checkbox" name="custom_fields[{$field.field}][]" value="{$file.key}" class="{$field.class}" checked aria-label="{$file.value}">
+                    <a href="{$file.url}" target="_blank" rel="noopener">{$file.value}</a>
+                    (<a href="#" data-toggle="usersFileDel">{$LANG->getGlobal('delete')}</a>)
+                </li>
+                {/foreach}
+                {/if}
+            </ul>
             <div class="modal fade uploadfile" tabindex="-1" id="uploadfile_{$field.field}" data-url="{$field.url_module}" data-field="{$field.field}" data-csrf="{$field.csrf}" data-accept="{$field.fileaccept}" data-maxsize="{$field.filemaxsize}" data-ext-error="{$LANG->getModule('addfile_ext_error')}" data-size-error="{$LANG->getModule('addfile_size_error')}" data-size-error2="{$LANG->getModule('addfile_size_error2')}" data-delete="{$LANG->getGlobal('delete')}">
                 <div class="modal-dialog">
                     <div class="modal-content">

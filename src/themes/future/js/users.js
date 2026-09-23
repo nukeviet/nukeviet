@@ -734,7 +734,8 @@ $(function() {
         }
         el.datepicker('show');
     }
-    const regForm = $('form[data-form="userRegister"]');
+    // Form sửa thông tin tài khoản dùng chung câu hỏi gợi ý, lịch chọn ngày với form đăng ký
+    const regForm = $('form[data-form="userRegister"], form[data-form="usersEditinfo"]');
     regForm.each(function() {
         const form = $(this);
         if (form.data('initialized')) {
@@ -795,8 +796,8 @@ $(function() {
     });
 
     // Thêm file cho trường dữ liệu kiểu file
-    $(document).off('click.users', '[data-form="userRegister"] [data-toggle="addfilebtn"]')
-    .on('click.users', '[data-form="userRegister"] [data-toggle="addfilebtn"]', function() {
+    const addFileSelector = '[data-form="userRegister"] [data-toggle="addfilebtn"], [data-form="usersEditinfo"] [data-toggle="addfilebtn"]';
+    $(document).off('click.users', addFileSelector).on('click.users', addFileSelector, function() {
         const btn = $(this);
         const filelist = btn.closest('.filelist');
         const maxnum = parseInt(filelist.data('maxnum')) || 0;
@@ -904,6 +905,150 @@ $(function() {
 
         updateFileInput();
         bsModal.show();
+    });
+
+    // Gỡ tệp đã tải lên trước đó khỏi trường dữ liệu, máy chủ tự xóa tệp khi lưu
+    $(document).off('click.users', '[data-toggle="usersFileDel"]').on('click.users', '[data-toggle="usersFileDel"]', function(e) {
+        e.preventDefault();
+        const filelist = $(this).closest('.filelist');
+        const maxnum = parseInt(filelist.data('maxnum')) || 0;
+        const btn = $('[data-toggle="addfilebtn"]', filelist);
+
+        $(this).closest('li').remove();
+        if (!maxnum || $('[name^="custom_fields"]', filelist).length < maxnum) {
+            btn.removeClass('d-none').show();
+        }
+    });
+
+    // Màn hình nhỏ: chọn tab xong thì đổi tên trên nút và thu gọn danh sách tab
+    $('[data-area="usersEditinfoNav"]').each(function() {
+        if ($(this).data('event-inited')) {
+            return;
+        }
+        $(this).data('event-inited', true);
+
+        const nav = $(this);
+        const toggler = $('[data-toggle="usersEditinfoNavToggle"]');
+        const label = $('[data-area="usersEditinfoNavCurrent"]', toggler);
+        $('[data-bs-toggle="pill"]', nav).on('shown.bs.tab', function() {
+            label.text($(this).text().trim());
+            // Màn hình lớn nút bị ẩn, danh sách luôn hiển thị nên không thu gọn
+            if (nav.hasClass('show') && toggler.is(':visible')) {
+                bootstrap.Collapse.getOrCreateInstance(nav[0], {
+                    toggle: false
+                }).hide();
+            }
+        });
+        // Đổi chiều mũi tên theo trạng thái đóng mở
+        nav.on('show.bs.collapse hide.bs.collapse', function(e) {
+            $('.fa-chevron-down, .fa-chevron-up', toggler).toggleClass('fa-chevron-down', e.type === 'hide').toggleClass('fa-chevron-up', e.type === 'show');
+        });
+    });
+
+    // Tài khoản chưa có mật khẩu, chuyển sang tab đổi mật khẩu
+    $(document).off('click.users', '[data-toggle="usersEditinfoAddPass"]').on('click.users', '[data-toggle="usersEditinfoAddPass"]', function(e) {
+        e.preventDefault();
+        const tab = document.getElementById('usersEditinfoTab-password');
+        tab && tab.click();
+    });
+
+    // Tự mở khung đổi ảnh đại diện khi được yêu cầu từ trang khác
+    $('[data-toggle="changeAvatar"][data-direct-change="1"]').each(function() {
+        if ($(this).data('event-inited')) {
+            return;
+        }
+        $(this).data('event-inited', true);
+        this.click();
+    });
+
+    // Xóa ảnh đại diện ở trang sửa thông tin tài khoản
+    $(document).off('click.users', '[data-toggle="usersAvatarDelete"]').on('click.users', '[data-toggle="usersAvatarDelete"]', function(e) {
+        e.preventDefault();
+        const btn = $(this);
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner') || (typeof nv_safemode !== 'undefined' && nv_safemode)) {
+            return;
+        }
+
+        const orig = icon.data('icon');
+        icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+        $.ajax({
+            type: 'POST',
+            cache: false,
+            url: btn.data('url'),
+            data: {
+                checkss: btn.data('checkss'),
+                del: 1
+            },
+            dataType: 'json',
+            success: function(res) {
+                if (res.status != 'ok') {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                    return nukeviet.toast(res.mess, 'error');
+                }
+                location.reload();
+            },
+            error: function(xhr, text, err) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                nukeviet.toast(err || text, 'error');
+                console.log(xhr, text, err);
+            }
+        });
+    });
+
+    // Gửi mã xác minh đến email mới ở trang sửa thông tin tài khoản
+    $(document).off('click.users', '[data-toggle="usersEmailKeySend"]').on('click.users', '[data-toggle="usersEmailKeySend"]', function(e) {
+        e.preventDefault();
+        const btn = $(this);
+        const icon = $('i', btn);
+        const form = btn.closest('form');
+        const info = $('[data-area="info"]', form);
+        if (icon.is('.fa-spinner') || !nv_precheck_form(form)) {
+            return;
+        }
+
+        const orig = icon.data('icon');
+        const formData = new FormData(form[0]);
+        formData.append('vsend', 1);
+        icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+        btn.prop('disabled', true);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            cache: false,
+            success: function(res) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                btn.prop('disabled', false);
+
+                // Máy chủ báo kết quả gửi mã (đã gửi hoặc phải chờ gửi lại) qua ô mã xác minh,
+                // hiện ở vùng thông báo thay vì báo lỗi ô nhập
+                if (res.input == 'verifykey') {
+                    info.html(res.mess);
+                    $('[name="verifykey"]', form).focus();
+                    return;
+                }
+                if (res.input) {
+                    const ipt = $('[name="' + res.input + '"]', form);
+                    if (ipt.length > 0) {
+                        nv_validate_show(ipt.first(), res.mess, 'feedback');
+                        ipt.first().focus();
+                        return;
+                    }
+                }
+                nukeviet.toast(res.mess, res.status == 'error' ? 'error' : 'success');
+            },
+            error: function(xhr, text, err) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                btn.prop('disabled', false);
+                nukeviet.toast(err || text, 'error');
+                console.log(xhr, text, err);
+            }
+        });
     });
 
     // Quản trị xóa tài khoản ngay tại trang chi tiết thành viên
