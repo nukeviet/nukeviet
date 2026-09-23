@@ -1508,6 +1508,89 @@ $(function() {
             delloginall: 1
         });
     });
+
+    // Xóa tài khoản: tích xác nhận đã đọc kỹ mới cho phép gửi yêu cầu
+    $(document).off('change.users', '[data-toggle="usersDelConfirm"]').on('change.users', '[data-toggle="usersDelConfirm"]', function() {
+        const page = $(this).closest('[data-area="usersDataDeletion"]');
+        $('[data-area="usersDelSubmit"]', page).prop('disabled', !$(this).is(':checked'));
+    });
+
+    /**
+     * Đếm ngược thời gian được gửi lại mã xác minh xóa tài khoản
+     *
+     * @param {JQuery} page
+     */
+    const dataDeletionCountdown = (page) => {
+        const timer = $('[data-area="usersDelTimer"]', page);
+        const remain = $('[data-area="usersDelTimeRemain"]', page);
+
+        clearTimeout(page.data('countdown'));
+        const tick = () => {
+            let timeRemain = parseInt(remain.text(), 10) || 0;
+            if (timeRemain > 0) {
+                remain.text(--timeRemain);
+                page.data('countdown', setTimeout(tick, 1000));
+                return;
+            }
+            timer.addClass('d-none');
+            $('[data-toggle="usersDelResendCode"]', page).removeClass('d-none');
+        };
+        tick();
+    };
+
+    // Chạy đồng hồ đếm ngược khi vào trang nhập mã xác minh
+    $('[data-area="usersDataDeletion"]').each(function() {
+        if ($(this).data('event-inited')) {
+            return;
+        }
+        $(this).data('event-inited', true);
+
+        const page = $(this);
+        const timer = $('[data-area="usersDelTimer"]', page);
+        if (timer.length && !timer.is('.d-none')) {
+            dataDeletionCountdown(page);
+        }
+    });
+
+    // Gửi lại mã xác minh xóa tài khoản
+    $(document).off('click.users', '[data-toggle="usersDelResendCode"]').on('click.users', '[data-toggle="usersDelResendCode"]', function(e) {
+        e.preventDefault();
+
+        const btn = $(this);
+        const page = btn.closest('[data-area="usersDataDeletion"]');
+        const loader = $('[data-area="usersDelResendLoader"]', page);
+
+        btn.addClass('d-none');
+        loader.removeClass('d-none');
+        $.ajax({
+            url: page.attr('action'),
+            type: 'POST',
+            data: {
+                checkss: page.data('checkss'),
+                resend_code: 1
+            },
+            dataType: 'json',
+            cache: false,
+            success: function(res) {
+                loader.addClass('d-none');
+                if (res.status != 'ok') {
+                    btn.removeClass('d-none');
+                    return nukeviet.toast(res.mess, 'error');
+                }
+
+                nukeviet.toast(res.mess, 'success');
+                $('[data-area="usersDelTimeRemain"]', page).text('120');
+                $('[data-area="usersDelTimer"]', page).removeClass('d-none');
+                dataDeletionCountdown(page);
+            },
+            error: function(xhr, text, err) {
+                loader.addClass('d-none');
+                btn.removeClass('d-none');
+                nukeviet.toast(err || text, 'error');
+                console.log(xhr, text, err);
+            }
+        });
+    });
 });
 
 /**
