@@ -104,7 +104,7 @@
             <h4>{LANG.thanks_list_member_other_version}:</h4>
             <div class="version">
                 <h5>{LANG.thanks_other_version} 4.6.02</h5>
-                    <a target="_blank" href="https://github.com/vinades">VINADES.,JSC (15 commits)</a>
+                    <a target="_blank" href="https://github.com/vinades">VINADES.,JSC (17 commits)</a>
                 <h5>{LANG.thanks_other_version} 4.6.01</h5>
                     <a target="_blank" href="https://github.com/vinades">VINADES.,JSC (30 commits)</a>
                 <h5>{LANG.thanks_other_version} 4.6.00</h5>
