@@ -1,23 +1,23 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.6.02
-- Fix reflected XSS via double URL decoding of search keyword in news module. Thanks Thế from GitHub @Pbat6
+- Fix reflected XSS via double URL decoding of search keyword in news module (CVE-2026-94599). Thanks Thế from GitHub @Pbat6
 - DOMPurify v3.4.15
-- Fix stored XSS via internal marker injection in iframe srcdoc. Thanks Thế from GitHub @Pbat6
-- Fix RCE via image upload bypass chain. Thanks CAN QUANG HIEU from GitHub @canhieu
-- Fix a security vulnerability in the SVG file upload. Thanks Nguyễn Huy Hoàng from GitHub @hoanggxyuuki
+- Fix stored XSS via internal marker injection in iframe srcdoc (CVE-2026-94598). Thanks Thế from GitHub @Pbat6
+- Fix RCE via image upload bypass chain (CVE-2026-94597). Thanks CAN QUANG HIEU from GitHub @canhieu
+- Fix a security vulnerability in the SVG file upload (CVE-2026-94567). Thanks Nguyễn Huy Hoàng from GitHub @hoanggxyuuki
 - Fix SSRF vulnerabilities in the upload functions, the Image class, and sitemap ping. Thanks canhieu from GitHub @canhieu.
 - Fix dangerous functions accessible via the GET method. Thanks archnexus707 from GitHub @archnexus707
 - Fix a security vulnerability in the module language write functionality. Thanks phuongmai1212 from GitHub @phuongmai1212 and AuQuangDuc from GitHub @AuQuangDuc
 
 NUKEVIET 4.6.01
-- Fix XSS in class Request. Thanks mrlihd from GitHub @mrlihd
+- Fix XSS in class Request (CVE-2026-94565). Thanks mrlihd from GitHub @mrlihd
 - Select2 v4.1.0, DOMPurify v3.4.13.
 - guzzlehttp/guzzle v7.15.2
-- Fix numeric-entity leading-zero bypass in Request XSS sanitizer. Thanks Mai Đăng Khoa from GitHub @dkoazw
-- Restrict users custom field callback to prevent RCE. Thanks Nguyễn Hồng Giáp from GitHub @PinkArmor
-- Fix pre-auth SSRF via spoofed Host header in set_ini_file server info request. Thanks prat1kz from GitHub @prat1kz
-- Fix arbitrary file write via S/MIME certificate CN in SMTP settings. Thanks Jace from GitHub @manus-use
+- Fix numeric-entity leading-zero bypass in Request XSS sanitizer (CVE-2026-94564). Thanks Mai Đăng Khoa from GitHub @dkoazw
+- Restrict users custom field callback to prevent RCE (CVE-2026-94562). Thanks Nguyễn Hồng Giáp from GitHub @PinkArmor
+- Fix pre-auth SSRF via spoofed Host header in set_ini_file server info request (CVE-2026-94561, CVE-2026-94566). Thanks prat1kz from GitHub @prat1kz
+- Fix arbitrary file write via S/MIME certificate CN in SMTP settings (CVE-2026-94563). Thanks Jace from GitHub @manus-use
 - Fix a permission issue when changing comment status
 - Prevent SSRF DNS rebinding in Files\Upload URL import
 
