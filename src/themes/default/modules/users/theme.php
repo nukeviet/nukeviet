@@ -1612,7 +1612,7 @@ function user_info_exit($info, $error = false)
  */
 function openid_account_confirm($gfx_chk, $attribs, $user)
 {
-    global $nv_Lang, $module_info, $module_name, $module_captcha, $nv_redirect, $global_config, $page_title;
+    global $nv_Lang, $module_info, $module_name, $module_captcha, $nv_redirect, $global_config, $page_title, $csrf_key;
 
     $xtpl = new XTemplate('confirm.tpl', get_module_tpl_dir('confirm.tpl'));
 
@@ -1621,6 +1621,7 @@ function openid_account_confirm($gfx_chk, $attribs, $user)
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('PAGETITLE', $page_title);
+    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
     $xtpl->assign('OPENID_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
 
     if ($gfx_chk) {

@@ -586,6 +586,13 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
              */
             if (!empty($nv_row['password']) and (empty($global_users_config['auto_assign_oauthuser']) or $email_untrusted)) {
                 if ($nv_Request->isset_request('openid_account_confirm', 'post')) {
+                    if (!csrf_check($nv_Request->get_string('checkss', 'post', ''), $csrf_key)) {
+                        opidr_login([
+                            'status' => 'error',
+                            'mess' => $nv_Lang->getGlobal('error_checkss')
+                        ]);
+                    }
+
                     $password = $nv_Request->get_string('password', 'post', '');
 
                     unset($nv_seccode);

@@ -1092,7 +1092,7 @@ function user_info_exit($info, $error = false)
 }
 
 /**
- * openid_account_confirm()
+ * Giao diện nhập mật khẩu xác nhận khi login Oauth mà có email trùng
  *
  * @param bool  $gfx_chk
  * @param array $attribs
@@ -1101,41 +1101,21 @@ function user_info_exit($info, $error = false)
  */
 function openid_account_confirm($gfx_chk, $attribs, $user)
 {
-    global $nv_Lang, $module_info, $module_name, $module_captcha, $nv_redirect, $global_config, $page_title;
+    global $nv_Lang, $module_name, $nv_redirect, $page_title, $csrf_key;
 
-    $xtpl = new XTemplate('confirm.tpl', get_module_tpl_dir('confirm.tpl'));
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('confirm.tpl'));
 
-    $nv_Lang->setModule('openid_confirm_info', $nv_Lang->getModule('openid_confirm_info', ucwords($attribs['server']), $attribs['contact/email']));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('PAGE_TITLE', $page_title);
+    $tpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
+    $tpl->assign('INFO', $nv_Lang->getModule('openid_confirm_info', ucwords($attribs['server']), nv_htmlspecialchars($attribs['contact/email'])));
+    $tpl->assign('CAPTCHA_ATTRS', $gfx_chk ? nv_captcha_form_attrs('nv_seccode') : '');
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
+    $tpl->assign('NV_REDIRECT', $nv_redirect);
 
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('PAGETITLE', $page_title);
-    $xtpl->assign('OPENID_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
-
-    if ($gfx_chk) {
-        // Nếu dùng reCaptcha v3
-        if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-            $xtpl->parse('main.recaptcha3');
-        }
-        // Nếu dùng reCaptcha v2
-        elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-            $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-            $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
-            $xtpl->parse('main.recaptcha');
-        } elseif ($module_captcha == 'captcha') {
-            $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
-            $xtpl->parse('main.captcha');
-        }
-    }
-
-    if (!empty($nv_redirect)) {
-        $xtpl->assign('REDIRECT', $nv_redirect);
-        $xtpl->parse('main.redirect');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('confirm.tpl');
 }
 
 /**
