@@ -907,15 +907,11 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
  */
 function openid_callback($openid_info)
 {
-    $xtpl = new XTemplate('openid_callback.tpl', get_module_tpl_dir('openid_callback.tpl'));
-    $xtpl->assign('OPIDRESULT', $openid_info);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('openid_callback.tpl'));
+    $tpl->assign('OPIDRESULT', $openid_info);
 
-    if ($openid_info['status'] == 'success') {
-        $xtpl->parse('main.success');
-    }
-
-    $xtpl->parse('main');
-    return $xtpl->text('main');
+    return $tpl->fetch('openid_callback.tpl');
 }
 
 /**

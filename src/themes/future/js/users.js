@@ -1120,6 +1120,40 @@ $(function() {
         });
     });
 
+    // Kết quả xác thực OAuth: gửi về cửa sổ mẹ nếu mở dạng popup, ngược lại xử lý ngay tại trang
+    $('[data-toggle="usersOpenidCallback"]').each(function() {
+        if ($(this).data('event-inited')) {
+            return;
+        }
+        $(this).data('event-inited', true);
+
+        const ctn = $(this);
+        const redirect = ctn.attr('data-redirect');
+        const result = ctn.attr('data-result');
+        let message = ctn.attr('data-message');
+        if (result == 'success') {
+            message += '<span class="load-bar"></span>';
+        }
+
+        if (window.opener && !window.opener.closed) {
+            window.opener.postMessage({
+                type: 'oauthLoginCallback',
+                redirect: redirect,
+                result: result,
+                message: message,
+                statusClass: 'nv-info ' + result
+            }, ctn.attr('data-origin'));
+            window.close();
+        } else if (result != 'success') {
+            nukeviet.toast({ message: message }, result);
+            setTimeout(() => {
+                window.location.href = redirect;
+            }, 5000);
+        } else {
+            window.location.href = redirect;
+        }
+    });
+
     // Quản trị xóa tài khoản ngay tại trang chi tiết thành viên
     $('body').off('click', '[data-toggle="admindeluser"]')
     .on('click', '[data-toggle="admindeluser"]', function(e) {
