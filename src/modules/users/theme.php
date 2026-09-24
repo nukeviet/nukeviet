@@ -332,83 +332,64 @@ function user_openid_login($attribs, $op_process)
 {
     global $global_config, $nv_Lang, $module_name, $nv_redirect, $page_title;
 
-    $xtpl = new XTemplate('openid_login.tpl', get_module_tpl_dir('openid_login.tpl'));
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('openid_login.tpl'));
 
-    $reg_username = '';
-    $reg_email = '';
+    $reg = [
+        'username' => '',
+        'email' => ''
+    ];
     if (!empty($attribs['contact/email'])) {
-        $reg_email = $attribs['contact/email'];
-        $reg_username = create_username_from_email($reg_email);
+        $reg['email'] = $attribs['contact/email'];
+        $reg['username'] = create_username_from_email($reg['email']);
     }
-    $xtpl->assign('USER_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
-    $xtpl->assign('USER_NAME', $reg_username);
-    $xtpl->assign('USER_EMAIL', $reg_email);
-    $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);
-    $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
-    $xtpl->assign('PASS_MINLENGTH', $global_config['nv_upassmin']);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('PAGETITLE', $page_title);
 
-    $op_process_count = count($op_process);
+    // Danh sách cách xử lý để người dùng chọn khi có nhiều hơn một
     $first = array_key_first($op_process);
-    if ($op_process_count > 1) {
+    $actions = [];
+    if (count($op_process) > 1) {
         foreach ($op_process as $process => $val) {
-            $xtpl->assign('ACTION', [
+            $actions[] = [
                 'key' => $process,
                 'name' => $nv_Lang->getModule('openid_processing_' . $process)
-            ]);
-            $xtpl->parse('main.choose_action.option');
+            ];
         }
-        $xtpl->parse('main.choose_action');
-
         $info = $nv_Lang->getModule('openid_note');
     } else {
         $info = $nv_Lang->getModule('openid_' . $first . '_note');
     }
-    if (empty($reg_email) and str_contains($global_config['openid_processing'], 'auto') and !in_array('auto', $op_process, true) and !empty($global_config['allowuserreg'])) {
+    if (empty($reg['email']) and str_contains($global_config['openid_processing'], 'auto') and !in_array('auto', $op_process, true) and !empty($global_config['allowuserreg'])) {
         $info = $nv_Lang->getModule('openid_without_email_note') . ' ' . $info;
     }
 
-    $xtpl->assign('INFO', $info . ':');
-
-    $xtpl->assign('REDIRECT', $nv_redirect);
-
-    if (isset($op_process['connect'])) {
-        if ($first != 'connect') {
-            $xtpl->parse('main.userlogin.isHide');
-        }
-        if (!empty($nv_redirect)) {
-            $xtpl->parse('main.userlogin.redirect');
-        }
-        $xtpl->parse('main.userlogin');
+    $password_rule = empty($global_config['nv_upass_type']) ? $nv_Lang->getGlobal('password_rule_nolimit', $global_config['nv_upassmin'], $global_config['nv_upassmax']) : $nv_Lang->getGlobal('password_rule_limit', $nv_Lang->getGlobal('upass_type_' . $global_config['nv_upass_type']), $global_config['nv_upassmin'], $global_config['nv_upassmax']);
+    $password_pattern = '/^';
+    if ($global_config['nv_upass_type'] == 1) {
+        $password_pattern .= "(?=.*[a-zA-Z])(?=.*\d)";
+    } elseif ($global_config['nv_upass_type'] == 2) {
+        $password_pattern .= "(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W\_])";
+    } elseif ($global_config['nv_upass_type'] == 3) {
+        $password_pattern .= "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)";
+    } elseif ($global_config['nv_upass_type'] == 4) {
+        $password_pattern .= "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_])";
     }
+    $password_pattern .= '(.){' . $global_config['nv_upassmin'] . ',' . $global_config['nv_upassmax'] . '}$/';
 
-    if (isset($op_process['create'])) {
-        if ($first != 'create') {
-            $xtpl->parse('main.allowuserreg.isHide');
-        }
-        if (!empty($nv_redirect)) {
-            $xtpl->parse('main.allowuserreg.redirect');
-        }
-        if (!empty($reg_email)) {
-            $xtpl->parse('main.allowuserreg.readonly');
-        } else {
-            $xtpl->parse('main.allowuserreg.email_verify');
-        }
-        $xtpl->parse('main.allowuserreg');
-    }
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('PAGE_TITLE', $page_title);
+    $tpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
+    $tpl->assign('REG', $reg);
+    $tpl->assign('INFO', $info . ':');
+    $tpl->assign('ACTIONS', $actions);
+    $tpl->assign('FIRST', $first);
+    $tpl->assign('OP_PROCESS', $op_process);
+    $tpl->assign('NV_REDIRECT', $nv_redirect);
+    $tpl->assign('PASSWORD_PATTERN', $password_pattern);
+    $tpl->assign('PASSWORD_RULE', $password_rule);
 
-    if (isset($op_process['auto'])) {
-        if (!empty($nv_redirect)) {
-            $xtpl->parse('main.auto.redirect');
-        }
-        $xtpl->parse('main.auto');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('openid_login.tpl');
 }
 
 /**

@@ -416,6 +416,22 @@ function nv_precheck_form(form) {
     return _focus_error(form);
 }
 
+// Nhận kết quả đăng nhập Oauth từ cửa sổ popup
+window.addEventListener('message', function(event) {
+    if (event.origin !== location.origin) {
+        return;
+    }
+    const data = event.data;
+    if (data && data.type === 'oauthLoginCallback') {
+        $('#openidResult')
+            .attr('data-redirect', data.redirect)
+            .attr('data-result', data.result)
+            .html(data.message)
+            .addClass(data.statusClass);
+        $('#openidBt').trigger('click');
+    }
+});
+
 $(function() {
     // Đồng hồ
     const sClock = $('#site-digital-clock');

@@ -1051,6 +1051,75 @@ $(function() {
         });
     });
 
+    // Chọn cách xử lý tài khoản bên thứ ba chưa gắn với tài khoản nào
+    $(document).off('change.users', '[data-toggle="usersOpenidChooseAction"]').on('change.users', '[data-toggle="usersOpenidChooseAction"]', function() {
+        const ctn = $(this).closest('[data-toggle="usersOpenid"]');
+        const action = $(this).val();
+        const connect = $('[data-area="usersOpenidConnect"]', ctn);
+        const create = $('[data-area="usersOpenidCreate"]', ctn);
+
+        if (action == 'connect') {
+            create.addClass('d-none');
+            connect.removeClass('d-none');
+        } else if (action == 'create') {
+            connect.addClass('d-none');
+            create.removeClass('d-none');
+        } else if (action == 'auto') {
+            connect.add(create).addClass('d-none');
+            $('[data-area="usersOpenidAuto"] form', ctn).trigger('submit');
+        }
+    });
+
+    // Gửi mã xác minh đến email khai báo khi tạo tài khoản mới từ tài khoản bên thứ ba
+    $(document).off('click.users', '[data-toggle="usersOpenidKeySend"]').on('click.users', '[data-toggle="usersOpenidKeySend"]', function(e) {
+        e.preventDefault();
+        const btn = $(this);
+        const icon = $('i', btn);
+        const form = btn.closest('form');
+        const email = $('[name="reg_email"]', form);
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+
+        nv_validate_reset(email);
+        if (!nv_mailfilter.test(trim(email.val()))) {
+            nv_validate_show(email, email.data('error-mess'));
+            email.focus();
+            return;
+        }
+
+        const orig = icon.data('icon');
+        icon.removeClass(orig).addClass('fa-spinner fa-spin-pulse');
+        btn.prop('disabled', true);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: {
+                verify_send: 1,
+                reg_email: trim(email.val())
+            },
+            dataType: 'json',
+            cache: false,
+            success: function(res) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                btn.prop('disabled', false);
+                if (res.status == 'error') {
+                    nukeviet.toast(res.mess, 'error');
+                    return;
+                }
+                nukeviet.toast(res.mess, 'success');
+                $('[name="verify_code"]', form).focus();
+            },
+            error: function(xhr, text, err) {
+                icon.removeClass('fa-spinner fa-spin-pulse').addClass(orig);
+                btn.prop('disabled', false);
+                nukeviet.toast(err || text, 'error');
+                console.log(xhr, text, err);
+            }
+        });
+    });
+
     // Quản trị xóa tài khoản ngay tại trang chi tiết thành viên
     $('body').off('click', '[data-toggle="admindeluser"]')
     .on('click', '[data-toggle="admindeluser"]', function(e) {
@@ -1632,6 +1701,18 @@ function userLostpassStep(form, step, info) {
  */
 function userLostpassRepassCheck(val, ipt) {
     return val === $('[name="new_password"]', ipt.closest('form')).val();
+}
+
+/**
+ * Kiểm tra nhập lại mật khẩu trùng với mật khẩu khi tạo tài khoản mới từ tài khoản bên thứ ba
+ * Được gọi qua data-valid-callback của form đăng ký trong trang đăng nhập OpenID
+ *
+ * @param {String} val
+ * @param {JQuery} ipt
+ * @returns {Boolean}
+ */
+function userOpenidRepassCheck(val, ipt) {
+    return val === $('[name="reg_password"]', ipt.closest('form')).val();
 }
 
 /**
