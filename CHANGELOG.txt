@@ -1,5 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.6.03
+- Fix stored XSS via HTML entity decoding of banner content in banners block. Thanks Thế from GitHub @Pbat6
+
 NUKEVIET 4.6.02
 - Fix reflected XSS via double URL decoding of search keyword in news module (CVE-2026-94599). Thanks Thế from GitHub @Pbat6
 - DOMPurify v3.4.15
