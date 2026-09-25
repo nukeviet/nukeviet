@@ -101,3 +101,6 @@ $lang_module['select_menu_block'] = 'Sélectionner le bloc de menu';
 $lang_module['module_display'] = 'Les modules sont affichés';
 $lang_module['menu_note_auto'] = 'Remarque: Ce bloc obtient automatiquement le menu';
 $lang_module['title_length'] = 'Longueur du titre';
+$lang_module['title_length_note'] = '0 équivaut à une longueur de titre illimitée';
+$lang_module['show_home'] = 'Afficher le bouton d\'accueil';
+$lang_module['show_icon'] = 'Afficher l\'icône si disponible';

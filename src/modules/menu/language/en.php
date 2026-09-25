@@ -101,3 +101,6 @@ $lang_module['select_menu_block'] = 'Select menu block';
 $lang_module['module_display'] = 'Modules are displayed';
 $lang_module['menu_note_auto'] = 'Note: This block gets the menu automatically';
 $lang_module['title_length'] = 'Title length';
+$lang_module['title_length_note'] = '0 means no character limit';
+$lang_module['show_home'] = 'Show home button';
+$lang_module['show_icon'] = 'Show icon if available';
