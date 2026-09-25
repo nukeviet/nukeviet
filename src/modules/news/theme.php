@@ -1372,234 +1372,126 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
 }
 
 /**
- * content_refresh()
+ * Trang thông báo rồi tự động chuyển hướng
  *
- * @param mixed $data
+ * @param array $data Có các khóa content, urlrefresh
  * @return string
  */
 function content_refresh($data)
 {
-    global $module_info;
+    global $module_name, $nv_Lang;
 
-    $xtpl = new XTemplate('content.tpl', get_module_tpl_dir('content.tpl'));
-    $xtpl->assign('DATA', $data);
-    $xtpl->parse('mainrefresh');
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('content_refresh.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('DATA', $data);
 
-    return $xtpl->text('mainrefresh');
+    return $tpl->fetch('content_refresh.tpl');
 }
 
 /**
- * edit_author_info()
+ * Form sửa thông tin tác giả
  *
- * @param mixed $data
- * @param mixed $base_url
+ * @param array $data Thông tin tác giả
+ * @param string $base_url
  * @return string
  */
 function edit_author_info($data, $base_url)
 {
-    global $module_name, $csrf_key, $op;
+    global $module_name, $nv_Lang, $csrf_key, $op;
 
-    $xtpl = new XTemplate('content.tpl', get_module_tpl_dir('content.tpl'));
-    $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;author_info=1');
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('BASE_URL', $base_url);
-    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
     $data['description_br2nl'] = !empty($data['description']) ? nv_htmlspecialchars(nv_br2nl($data['description'])) : '';
-    $xtpl->assign('DATA', $data);
-    $xtpl->parse('author_info');
 
-    return $xtpl->text('author_info');
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('content_author_info.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;author_info=1');
+    $tpl->assign('BASE_URL', $base_url);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
+    $tpl->assign('DATA', $data);
+
+    return $tpl->fetch('content_author_info.tpl');
 }
 
 /**
- * content_add()
+ * Form thêm, sửa bài viết của thành viên
  *
- * @param mixed $rowcontent
- * @param mixed $htmlbodyhtml
- * @param mixed $catidList
- * @param mixed $topicList
- * @param mixed $post_status
- * @param mixed $layouts
- * @param mixed $base_url
+ * @param array $rowcontent
+ * @param string $htmlbodyhtml
+ * @param array $catidList
+ * @param array $topicList
+ * @param array $post_status
+ * @param array $layouts
+ * @param string $base_url
  * @return string
  */
 function content_add($rowcontent, $htmlbodyhtml, $catidList, $topicList, $post_status, $layouts, $base_url)
 {
-    global $global_config, $module_name, $module_info, $module_config, $nv_Lang, $module_captcha, $csrf_key;
+    global $global_config, $module_name, $module_config, $nv_Lang, $csrf_key;
 
-    $xtpl = new XTemplate('content.tpl', get_module_tpl_dir('content.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('BASE_URL', $base_url);
-    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
-    $xtpl->assign('ADD_OR_UPDATE', $rowcontent['id'] ? $nv_Lang->getModule('update_content') : $nv_Lang->getModule('add_content'));
-    $xtpl->assign('OP', $module_info['alias']['content']);
-    $xtpl->assign('DATA', $rowcontent);
-    $xtpl->assign('HTMLBODYTEXT', $htmlbodyhtml);
-    $xtpl->assign('LANG_EXTERNAL_AUTHOR', defined('NV_IS_USER') ? $nv_Lang->getModule('external_author') : $nv_Lang->getModule('author'));
-    $xtpl->assign('CONTENT_URL', $base_url . '&amp;contentid=' . $rowcontent['id']);
-
-    if (defined('NV_IS_USER')) {
-        if ($rowcontent['id']) {
-            $xtpl->parse('main.if_user.add_content');
-        }
-        $xtpl->parse('main.if_user');
+    // Danh sách chuyên mục
+    $array_catid_in_row = array_map('intval', explode(',', $rowcontent['listcatid']));
+    $cats = [];
+    foreach ($catidList as $value) {
+        $value['checked'] = in_array($value['catid'], $array_catid_in_row, true);
+        $cats[] = $value;
     }
 
-    // Nếu dùng reCaptcha v3
-    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-        $xtpl->parse('main.recaptcha3');
-    }
-    // Nếu dùng reCaptcha v2
-    elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
-        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-        $xtpl->parse('main.recaptcha');
-    } elseif ($module_captcha == 'turnstile') {
-        $xtpl->parse('main.turnstile');
-    } elseif ($module_captcha == 'captcha') {
-        $xtpl->parse('main.captcha');
-    }
-
-    if ($module_config[$module_name]['frontend_edit_alias'] == 1 and $rowcontent['id'] == 0) {
-        $xtpl->parse('main.alias');
-    }
-
-    // Lua chon Layout
+    // Danh sách layout được chọn
+    $layout_funcs = [];
     if ($module_config[$module_name]['frontend_edit_layout'] == 1) {
         foreach ($layouts as $value) {
-            $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
-            $xtpl->assign('LAYOUT_FUNC', [
-                'key' => $value,
-                'selected' => ($rowcontent['layout_func'] == $value) ? ' selected="selected"' : ''
-            ]);
-            $xtpl->parse('main.layout_func.loop');
+            $layout_funcs[] = preg_replace($global_config['check_op_layout'], '\\1', $value);
         }
-        $xtpl->parse('main.layout_func');
     }
 
-    $array_catid_in_row = explode(',', $rowcontent['listcatid']);
-    $array_catid_in_row = array_map('intval', $array_catid_in_row);
-    foreach ($catidList as $value) {
-        $xtitle_i = '';
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('content_form.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('MCONFIG', $module_config[$module_name]);
+    $tpl->assign('BASE_URL', $base_url);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
+    $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('fcode'));
+    $tpl->assign('DATA', $rowcontent);
+    $tpl->assign('HTMLBODYTEXT', $htmlbodyhtml);
+    $tpl->assign('CATS', $cats);
+    $tpl->assign('TOPICS', $topicList);
+    $tpl->assign('LAYOUTS', $layout_funcs);
+    $tpl->assign('POST_STATUS', $post_status);
 
-        if ($value['lev'] > 0) {
-            for ($i = 1; $i <= $value['lev']; ++$i) {
-                $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-            }
-        }
-
-        $array_temp = [];
-        $array_temp['value'] = $value['catid'];
-        $array_temp['title'] = $xtitle_i . $value['title'];
-        $array_temp['checked'] = (in_array($value['catid'], $array_catid_in_row, true)) ? ' checked="checked"' : '';
-
-        $xtpl->assign('DATACATID', $array_temp);
-        $xtpl->parse('main.catid');
-    }
-
-    foreach ($topicList as $topicid_i => $title_i) {
-        $array_temp = [];
-        $array_temp['value'] = $topicid_i;
-        $array_temp['title'] = $title_i;
-        $array_temp['selected'] = ($topicid_i == $rowcontent['topicid']) ? ' selected="selected"' : '';
-        $xtpl->assign('DATATOPIC', $array_temp);
-        $xtpl->parse('main.topic');
-    }
-
-    if (!empty($rowcontent['internal_authors'])) {
-        foreach ($rowcontent['internal_authors'] as $internal_authors) {
-            $xtpl->assign('ITEM', $internal_authors);
-            $xtpl->parse('main.internal_author.item');
-        }
-        $xtpl->parse('main.internal_author');
-    }
-
-    if (!empty($global_config['data_warning']) or !empty($global_config['antispam_warning'])) {
-        if (!empty($global_config['data_warning'])) {
-            $xtpl->assign('DATA_USAGE_CONFIRM', !empty($global_config['data_warning_content']) ? $global_config['data_warning_content'] : $nv_Lang->getGlobal('data_warning_content'));
-            $xtpl->parse('main.confirm.data_sending');
-        }
-
-        if (!empty($global_config['antispam_warning'])) {
-            $xtpl->assign('ANTISPAM_CONFIRM', !empty($global_config['antispam_warning_content']) ? $global_config['antispam_warning_content'] : $nv_Lang->getGlobal('antispam_warning_content'));
-            $xtpl->parse('main.confirm.antispam');
-        }
-        $xtpl->parse('main.confirm');
-    }
-
-    foreach ($post_status as $key) {
-        $xtpl->assign('SAVE_STATUS', [
-            'val' => $key,
-            'sel' => $rowcontent['status'] == $key ? ' selected="selected"' : '',
-            'name' => $nv_Lang->getModule('action_' . $key)
-        ]);
-        $xtpl->parse('main.save_status');
-    }
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('content_form.tpl');
 }
 
 /**
- * content_list()
+ * Danh sách bài viết của thành viên
  *
- * @param mixed $articles
- * @param mixed $my_author_detail
- * @param mixed $base_url
- * @param mixed $generate_page
+ * @param array $articles
+ * @param array $my_author_detail
+ * @param string $base_url
+ * @param string $generate_page
  * @return string
  */
 function content_list($articles, $my_author_detail, $base_url, $generate_page)
 {
-    global $module_name, $module_config, $csrf_key;
+    global $module_name, $module_config, $nv_Lang, $csrf_key;
 
-    $xtpl = new XTemplate('content.tpl', get_module_tpl_dir('content.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('LANG_GLOBAL', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('BASE_URL', $base_url);
-    $xtpl->assign('AUTHOR_PAGE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $my_author_detail['alias']);
-    $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
-    $xtpl->assign('CHECKSS', csrf_create($csrf_key));
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('content_list.tpl'));
+    $tpl->registerPlugin('modifier', 'dnumber', 'nv_number_format');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('BASE_URL', $base_url);
+    $tpl->assign('AUTHOR_PAGE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $my_author_detail['alias']);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
+    $tpl->assign('ARTICLES', $articles);
+    $tpl->assign('GENERATE_PAGE', $generate_page);
 
-    foreach ($articles as $array_row_i) {
-        $xtpl->assign('CONTENT', $array_row_i);
-        if (!empty($array_row_i['status_note'])) {
-            $xtpl->parse('your_articles.news.status_note');
-        }
-        if ($array_row_i['status'] != 1 and !defined('NV_IS_MODADMIN')) {
-            $xtpl->parse('your_articles.news.title_text');
-        } else {
-            $xtpl->parse('your_articles.news.title_link');
-        }
+    $imgratio = round(($module_config[$module_name]['homewidth'] / ($module_config[$module_name]['homeheight'] ?: $module_config[$module_name]['homewidth'])) * 100, 2);
+    $tpl->assign('IMGRATIO', $imgratio);
 
-        if ($array_row_i['is_edit_content'] || $array_row_i['is_del_content']) {
-            if ($array_row_i['is_edit_content']) {
-                $xtpl->assign('EDITLINK', $base_url . '&amp;contentid=' . $array_row_i['id']);
-                $xtpl->parse('your_articles.news.adminlink.edit');
-            }
-            if ($array_row_i['is_del_content']) {
-                $xtpl->assign('DELLINK', $base_url . '&amp;contentid=' . $array_row_i['id'] . '&amp;delcontent=1');
-                $xtpl->parse('your_articles.news.adminlink.del');
-            }
-            $xtpl->parse('your_articles.news.adminlink');
-        }
-
-        if ($array_row_i['imghome'] != '') {
-            $xtpl->assign('HOMEIMG1', $array_row_i['imghome']);
-            $xtpl->assign('HOMEIMGALT1', !empty($array_row_i['homeimgalt']) ? $array_row_i['homeimgalt'] : $array_row_i['title']);
-            $xtpl->parse('your_articles.news.image');
-        }
-
-        $xtpl->parse('your_articles.news');
-    }
-
-    if (!empty($generate_page)) {
-        $xtpl->assign('GENERATE_PAGE', $generate_page);
-        $xtpl->parse('your_articles.generate_page');
-    }
-
-    $xtpl->parse('your_articles');
-
-    return $xtpl->text('your_articles');
+    return $tpl->fetch('content_list.tpl');
 }

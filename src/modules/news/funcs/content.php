@@ -152,7 +152,8 @@ if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) 
             nv_jsonOutput([
                 'status' => 'OK',
                 'input' => '',
-                'mess' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op, true)
+                'mess' => $nv_Lang->getGlobal('save_success'),
+                'redirect' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true)
             ]);
         } else {
             nv_jsonOutput([
@@ -173,8 +174,11 @@ if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) 
 
 // Tạo alias (AJAX)
 if ($nv_Request->isset_request('get_alias', 'post')) {
-    $title = $nv_Request->get_title('get_alias', 'post', '');
-    $alias = change_alias($title);
+    $alias = '';
+    if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
+        $title = $nv_Request->get_title('get_alias', 'post', '');
+        $alias = change_alias($title);
+    }
 
     include NV_ROOTDIR . '/includes/header.php';
     echo $alias;
@@ -344,13 +348,18 @@ if ($nv_Request->isset_request('contentid', 'get')) {
 
     $selectthemes = (!empty($site_mods[$module_name]['theme'])) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
     $layouts = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout']);
-    $error = '';
 
     if ($nv_Request->isset_request('save', 'post')) {
+        $error = '';
+        $error_input = '';
         $rowcontent['status'] = $nv_Request->get_int('status', 'post', 0);
 
         if (!in_array($rowcontent['status'], $post_status, true)) {
-            nv_redirect_location($base_url);
+            nv_jsonOutput([
+                'status' => 'error',
+                'input' => 'status',
+                'mess' => $nv_Lang->getModule('action_not_allowed')
+            ]);
         }
 
         unset($fcode);
@@ -409,16 +418,21 @@ if ($nv_Request->isset_request('contentid', 'get')) {
             $error = $nv_Lang->getGlobal('error_checkss');
         } elseif (empty($rowcontent['title'])) {
             $error = $nv_Lang->getModule('error_title');
+            $error_input = 'title';
         } elseif (empty($rowcontent['listcatid'])) {
             $error = $nv_Lang->getModule('error_cat');
+            $error_input = 'catids[]';
         } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '') {
             $error = $nv_Lang->getModule('error_bodytext');
+            $error_input = 'bodyhtml';
         } elseif (isset($fcode) and !nv_capcha_txt($fcode, $module_captcha)) {
             $error = ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : (($module_captcha == 'turnstile') ? $nv_Lang->getGlobal('securitycodeincorrect2') : $nv_Lang->getGlobal('securitycodeincorrect'));
         } elseif ($data_permission_confirm === 0) {
             $error = $nv_Lang->getGlobal('data_warning_error');
+            $error_input = 'data_permission_confirm';
         } elseif ($antispam_confirm === 0) {
             $error = $nv_Lang->getGlobal('antispam_warning_error');
+            $error_input = 'antispam_confirm';
         } else {
             $rowcontent['catid'] = in_array((int) $rowcontent['catid'], $catids, true) ? $rowcontent['catid'] : $catids[0];
             $rowcontent['sourceid'] = 0;
@@ -565,41 +579,45 @@ if ($nv_Request->isset_request('contentid', 'get')) {
             }
         }
 
-        if (empty($error)) {
-            // Lưu log thay đổi trạng thái bài viết
-            Logs::saveLogStatusPost($rowcontent['id'], $rowcontent['status']);
-
-            $data = [];
-            if (defined('NV_IS_USER')) {
-                $data['urlrefresh'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-
-                if ($rowcontent['status'] == 1) {
-                    $data['content'] = $nv_Lang->getModule('save_content_ok');
-                    $nv_Cache->delMod($module_name);
-                } elseif ($rowcontent['status'] == 4) {
-                    $data['content'] = $nv_Lang->getModule('save_draft_ok');
-                } else {
-                    $data['content'] = $nv_Lang->getModule('save_content_waite');
-                }
-            } elseif ($rowcontent['status'] == 1) {
-                $catid = $catids[0];
-                $data['urlrefresh'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $rowcontent['alias'] . '-' . $contentid;
-                $data['content'] = $nv_Lang->getModule('save_content_view_page');
-                $nv_Cache->delMod($module_name);
-            } else {
-                $data['urlrefresh'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
-                $data['content'] = $nv_Lang->getModule('save_content_waite_home');
-            }
-
-            $data['urlrefresh'] = nv_url_rewrite($data['urlrefresh'], true);
-            $contents = content_refresh($data);
-
-            $canonicalUrl = getCanonicalUrl($page_url);
-
-            include NV_ROOTDIR . '/includes/header.php';
-            echo nv_site_theme($contents);
-            include NV_ROOTDIR . '/includes/footer.php';
+        if (!empty($error)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'input' => $error_input,
+                'mess' => $error
+            ]);
         }
+
+        // Lưu log thay đổi trạng thái bài viết
+        Logs::saveLogStatusPost($rowcontent['id'], $rowcontent['status']);
+
+        if (defined('NV_IS_USER')) {
+            $redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+
+            if ($rowcontent['status'] == 1) {
+                $mess = $nv_Lang->getModule('save_content_ok');
+                $nv_Cache->delMod($module_name);
+            } elseif ($rowcontent['status'] == 4) {
+                $mess = $nv_Lang->getModule('save_draft_ok');
+            } else {
+                $mess = $nv_Lang->getModule('save_content_waite');
+            }
+        } elseif ($rowcontent['status'] == 1) {
+            $catid = $catids[0];
+            $redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $rowcontent['alias'] . '-' . $contentid;
+            $mess = $nv_Lang->getModule('save_content_view_page');
+            $nv_Cache->delMod($module_name);
+        } else {
+            $redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+            $mess = $nv_Lang->getModule('save_content_waite_home');
+        }
+
+        // Mess cần là plain text
+        nv_jsonOutput([
+            'status' => 'OK',
+            'input' => '',
+            'mess' => preg_replace('/\s*<br\s*\/?>\s*/i', ' ', $mess),
+            'redirect' => nv_url_rewrite($redirect, true)
+        ]);
     }
 
     $rowcontent['internal_authors'] = [];
@@ -633,22 +651,7 @@ if ($nv_Request->isset_request('contentid', 'get')) {
         $htmlbodyhtml .= '<textarea class="textareaform" name="bodyhtml" id="bodyhtml" cols="60" rows="15">' . $rowcontent['bodyhtml'] . '</textarea>';
     }
 
-    if (!empty($error)) {
-        $my_head .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . ">\n";
-        $my_head .= "   alert('" . $error . "')\n";
-        $my_head .= "</script>\n";
-    }
-
     $contents = content_add($rowcontent, $htmlbodyhtml, $catidList, $topicList, $post_status, $layouts, $base_url);
-
-    if (empty($rowcontent['alias'])) {
-        $contents .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . ">\n";
-        $contents .= '$("#idtitle").change(function () {
-        get_alias("' . $module_info['alias']['content'] . '");
-        });';
-        $contents .= "</script>\n";
-    }
-
     $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';

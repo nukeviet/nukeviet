@@ -54,4 +54,84 @@ $(function() {
             });
         });
     });
+
+    // Thành viên xóa bài viết của mình
+    $('body').on('click', '[data-toggle="newsContentDel"]', function(e) {
+        e.preventDefault();
+
+        const btn = $(this);
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+
+        nukeviet.confirm(nv_is_del_confirm[0], () => {
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                type: 'POST',
+                cache: false,
+                url: btn.data('url'),
+                data: {
+                    checkss: btn.data('checkss')
+                },
+                dataType: 'json',
+                success: function(respon) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    if (respon.status == 'OK') {
+                        location.reload();
+                        return;
+                    }
+                    nukeviet.toast(respon.mess || nv_is_del_confirm[2], 'error');
+                },
+                error: function(xhr, text, err) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    nukeviet.toast(err || text, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        });
+    });
+
+    // Lấy liên kết tĩnh của bài viết từ tiêu đề
+    const newsContentAlias = (btn) => {
+        const form = btn.closest('form');
+        const icon = $('i', btn);
+        const title = strip_tags(trim($('[name="title"]', form).val()));
+        if (title == '' || icon.is('.fa-spin')) {
+            return;
+        }
+
+        icon.addClass('fa-spin');
+        $.ajax({
+            type: 'POST',
+            cache: false,
+            url: btn.data('url'),
+            data: {
+                get_alias: title,
+                checkss: $('[name="checkss"]', form).val()
+            },
+            dataType: 'text',
+            success: function(res) {
+                icon.removeClass('fa-spin');
+                $('[name="alias"]', form).val(trim(res));
+            },
+            error: function(xhr, text, err) {
+                icon.removeClass('fa-spin');
+                nukeviet.toast(err || text, 'error');
+                console.log(xhr, text, err);
+            }
+        });
+    };
+    $('body').on('click', '[data-toggle="newsContentAlias"]', function(e) {
+        e.preventDefault();
+        newsContentAlias($(this));
+    });
+
+    // Tự lấy liên kết tĩnh khi đổi tiêu đề nếu ô liên kết tĩnh được phép nhập
+    $('body').on('change', '[data-form="newsContent"] [name="title"]', function() {
+        const btn = $('[data-toggle="newsContentAlias"]', $(this).closest('form'));
+        if (btn.length) {
+            newsContentAlias(btn);
+        }
+    });
 });

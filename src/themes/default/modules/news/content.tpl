@@ -71,7 +71,7 @@ $(function() {
                             $("[name=" + b.input + "]", form).focus()
                         }
                     } else {
-                        window.location.href = b.mess
+                        window.location.href = b.redirect
                     }
                 }
             })
@@ -142,7 +142,7 @@ $(function() {
 </div>
 <!-- END: if_user -->
 <h2 class="text-center">{ADD_OR_UPDATE}</h2>
-<form action="{CONTENT_URL}" method="post"<!-- BEGIN: captcha --> data-captcha="fcode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 --><!-- BEGIN: turnstile --> data-turnstile="1"<!-- END: turnstile -->>
+<form action="{CONTENT_URL}" method="post" data-toggle="newsContentSubmit"<!-- BEGIN: captcha --> data-captcha="fcode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 --><!-- BEGIN: turnstile --> data-turnstile="1"<!-- END: turnstile -->>
     <div class="form-horizontal">
         <div class="form-group">
             <label class="col-sm-8 control-label text-normal">{LANG.name} <span class="txtrequired">(*)</span>:</label>
@@ -155,7 +155,7 @@ $(function() {
         <div class="form-group">
             <label class="col-sm-8 control-label text-normal">{LANG.alias}:</label>
             <div class="col-sm-16">
-                <input type="text" class="form-control pull-left" name="alias" id="idalias" value="{DATA.alias}" maxlength="255" style="width: 94%;" />
+                <input type="text" class="form-control pull-left" name="alias" id="idalias" value="{DATA.alias}" maxlength="255" style="width: 94%;" data-auto-alias="{OP}" />
                 <em class="fa fa-refresh pull-right" style="cursor: pointer; vertical-align: middle; margin: 9px 0 0 4px" data-toggle="get_alias" data-op="{OP}"></em>
             </div>
         </div>

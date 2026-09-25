@@ -91,8 +91,9 @@ function nv_del_content(id, checkss, base_adminurl, detail) {
 
 function get_alias(op) {
     var title = strip_tags(document.getElementById('idtitle').value);
+    var checkss = $('#idtitle').closest('form').find('[name=checkss]').val() || '';
     if (title != '') {
-        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + op + '&nocache=' + new Date().getTime(), 'get_alias=' + encodeURIComponent(title), function(res) {
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + op + '&nocache=' + new Date().getTime(), 'get_alias=' + encodeURIComponent(title) + '&checkss=' + encodeURIComponent(checkss), function(res) {
             if (res != "") {
                 document.getElementById('idalias').value = res;
             } else {
@@ -333,6 +334,56 @@ $(document).ready(function() {
     $('[data-toggle="get_alias"][data-op]').on('click', function(e) {
         e.preventDefault();
         get_alias($(this).data('op'));
+    });
+
+    // Tự lấy liên kết tĩnh khi đổi tiêu đề nếu ô liên kết tĩnh được phép nhập
+    $('body').on('change', '#idtitle', function() {
+        const alias = $('#idalias[data-auto-alias]');
+        if (alias.length) {
+            get_alias(alias.data('auto-alias'));
+        }
+    });
+
+    // Thành viên gửi bài viết
+    $('body').on('submit', '[data-toggle=newsContentSubmit]', function(e) {
+        e.preventDefault();
+
+        const form = this;
+        const data = new FormData(form);
+        const setDisabled = (disabled) => {
+            $('input,button,select,textarea', form).prop('disabled', disabled);
+        };
+
+        $('.has-error', form).removeClass('has-error');
+        setDisabled(true);
+        $.ajax({
+            type: 'POST',
+            cache: false,
+            url: $(form).attr('action'),
+            data: data,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function(res) {
+                alert(res.mess);
+                if (res.status == 'OK') {
+                    window.location.href = res.redirect;
+                    return;
+                }
+                setDisabled(false);
+                formChangeCaptcha(form);
+                if (res.input) {
+                    const ipt = $('[name="' + res.input + '"]', form);
+                    ipt.closest('.form-group').addClass('has-error');
+                    ipt.filter(':visible').first().focus();
+                }
+            },
+            error: function(xhr, text, err) {
+                setDisabled(false);
+                alert(err || text);
+                console.log(xhr, text, err);
+            }
+        });
     });
 
     // Send mail form submit
