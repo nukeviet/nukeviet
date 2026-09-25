@@ -77,12 +77,14 @@ $action_account = $nv_Request->get_int('action_account', 'post', 0);
 $action_account = (isset($array_action_account[$action_account])) ? $action_account : 0;
 $_csrf_key = $csrf_key . '_' . $admin_id;
 
-if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
-    nv_jsonOutput([
-        'status' => 'error',
-        'mess' => $nv_Lang->getGlobal('error_checkss')
-    ]);
-} else {
+if ($nv_Request->isset_request('go_del', 'post')) {
+    if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('error_checkss')
+        ]);
+    }
+
     $respon = [
         'status' => 'error',
         'mess' => '',
@@ -198,8 +200,8 @@ if (!csrf_check($nv_Request->get_string('checkss', 'post'), $_csrf_key)) {
             $stmt->bindValue(':userid', $admin_id, PDO::PARAM_INT);
             $stmt->execute();
             $credential_ids = [];
-            while ($row = $stmt->fetch()) {
-                $credential_ids[] = $row['id'];
+            while ($credential = $stmt->fetch()) {
+                $credential_ids[] = $credential['id'];
             }
             $stmt->closeCursor();
 
