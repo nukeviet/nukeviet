@@ -13,6 +13,14 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-if (substr($_SERVER['HTTP_HOST'], 0, 4) === 'www.') {
-    nv_redirect_location('http' . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 's' : '') . '://' . substr($_SERVER['HTTP_HOST'], 4) . $_SERVER['REQUEST_URI']);
+/**
+ * Plugin chuyển hướng từ www sang non-www
+ * Chỉ chuyển hướng khi domain không www cũng nằm trong danh sách domain hợp lệ
+ */
+if (substr(NV_SERVER_NAME, 0, 4) === 'www.') {
+    $_non_www_host = substr(NV_SERVER_NAME, 4);
+    if (in_array($_non_www_host, $global_config['my_domains'], true)) {
+        nv_redirect_location(NV_SERVER_PROTOCOL . '://' . $_non_www_host . NV_SERVER_PORT . $_SERVER['REQUEST_URI']);
+    }
+    unset($_non_www_host);
 }
