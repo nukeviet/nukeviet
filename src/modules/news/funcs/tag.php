@@ -73,7 +73,7 @@ if (!empty($row)) {
         $db->query($query);
     }
 
-    $db->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
+    $db->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
         ->order($order_articles_by . ' DESC')
         ->limit($per_page)
         ->offset(($page - 1) * $per_page);
@@ -87,6 +87,7 @@ if (!empty($row)) {
 
         $end_publtime = $item['publtime'];
 
+        $item['newday'] = $global_array_cat[$item['catid']]['newday'];
         $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
         $item_array[] = $item;
     }
@@ -103,6 +104,7 @@ if (!empty($row)) {
             ->limit($st_links);
         $result = $db->query($db->sql());
         while ($item = $result->fetch()) {
+            $item['newday'] = $global_array_cat[$item['catid']]['newday'];
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
             $item_array_other[] = $item;
         }

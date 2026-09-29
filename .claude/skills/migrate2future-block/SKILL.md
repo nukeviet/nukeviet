@@ -181,6 +181,7 @@ Tuân thủ Smarty/Bootstrap 5. Các điểm cụ thể cho block:
 - Biến nội bộ tpl viết **thường**: `{$item}`, `{$contact}`, `{$icon}`
 - Language: `{$LANG->getModule('key')}` / `{$LANG->getGlobal('key')}`
 - Bootstrap 5: `list-unstyled`, `d-flex`, `gap-2`, `fw-semibold`, `mb-1`, `flex-shrink-0`
+- Ảnh: không dùng `img-thumbnail`, thay bằng `img-fluid rounded`
 - **Không dùng thẻ heading `<h1>`–`<h6>` trong block** — block được nhúng vào sidebar/footer, heading làm rối cấu trúc SEO của trang. Thay bằng class tương đương: `<div class="h6 ...">`, `<p class="h5 ...">`, v.v.
 - **Không viết `<script>` inline trong template** — nếu block cần JS tương tác, gọi `addition_module_assets($module, 'js')` trong PHP shared block rồi viết JS vào `src/themes/future/js/{module_file}.js`. Dùng `data-*` attribute trên HTML element làm hook để JS ngoài bắt sự kiện (không dùng ID hardcode phụ thuộc vào `{$MODULE}`).
 
@@ -329,6 +330,7 @@ Báo cáo:
 - [ ] Bootstrap 5: `list-unstyled`, `d-flex`, `gap-2`, `flex-shrink-0`, `fa-fw`
 - [ ] Không có thẻ `<h1>`–`<h6>` — thay bằng `<div class="h1">` … `<div class="h6">`
 - [ ] Không còn class Bootstrap 3 (`col-xs-*`, `pull-right`, `hidden`, ...)
+- [ ] Ảnh không dùng `img-thumbnail`, dùng `img-fluid rounded`
 - [ ] Không có `<script>` inline — JS tương tác nằm trong `src/themes/future/js/{module_file}.js`, hook qua `data-*` attribute; PHP gọi `addition_module_assets($module, 'js')`
 
 **Config function (nếu có):**

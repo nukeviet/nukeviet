@@ -81,6 +81,7 @@ if (!empty($alias)) {
 
         $weight_publtime = ($order_articles) ? $item['weight'] : $item['publtime'];
 
+        $item['newday'] = $global_array_cat[$item['catid']]['newday'];
         $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
         $topic_array[] = $item;
     }
@@ -98,6 +99,7 @@ if (!empty($alias)) {
 
         $result = $db->query($db->sql());
         while ($item = $result->fetch()) {
+            $item['newday'] = $global_array_cat[$item['catid']]['newday'];
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
             $topic_other_array[] = $item;
         }

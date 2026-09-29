@@ -98,6 +98,7 @@ Tuân thủ toàn bộ quy tắc trong `docs/knowledge/xtemplate-to-smarty.md` (
 - Language: `{$LANG->getModule('key')}` / `{$LANG->getGlobal('key')}`
 - Icons: `fa-solid fa-*` (Font Awesome 6), không `fa fa-*`
 - Bootstrap 5: `float-end`, `d-none`, `ms-auto` — không dùng class BS3 (`pull-right`, `hidden`, `col-xs-*`)
+- **Ảnh**: không dùng `img-thumbnail`, thay bằng `img-fluid rounded` (VD: `class="img-fluid rounded fw-150 me-2 mb-1 float-start"`)
 - **Grid columns**: theme `future` dùng Bootstrap 5 **12 cột** (không phải 24 cột như `default`). Khi chuyển từ `default`, chia đôi số cột: `col-xs-24` → `col-12`, `col-xs-12` → `col-6`, `col-md-12` (trong 24-col) → `col-md-6`, `col-md-10` → `col-md-5`, `col-md-6` (24-col) → `col-md-3`, v.v.
 - **Modifier Smarty** thường dùng trong frontend (cần `registerPlugin` trong PHP):
   - `{$timestamp|ddate}` → `nv_date_format()`
@@ -272,6 +273,7 @@ Báo cáo:
 **Template:**
 - [ ] Không còn XTemplate syntax (`<!-- BEGIN: -->`, `{VAR}` không có `$`)
 - [ ] Không còn class Bootstrap 3 (`col-xs-*`, `pull-right`, `panel`, `hidden`, ...)
+- [ ] Ảnh không dùng `img-thumbnail`, dùng `img-fluid rounded`
 - [ ] Columns đã chuyển từ 24-col sang 12-col BS5: `col-xs-24` → `col-12`, `col-xs-12` → `col-6`, `col-md-12` (24-col) → `col-md-6`, v.v. (chia đôi số cột)
 - [ ] Tất cả hằng dùng `{$smarty.const.*}`
 - [ ] Icons dùng Font Awesome 6 (`fa-solid fa-*`)

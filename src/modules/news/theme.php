@@ -969,7 +969,7 @@ function no_permission()
 }
 
 /**
- * topic_theme()
+ * Giao diện bài viết trong dòng sự kiện
  *
  * @param array  $topic_array
  * @param array  $topic_other_array
@@ -981,77 +981,16 @@ function no_permission()
  */
 function topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image)
 {
-    global $module_info, $module_name, $module_config, $topicid, $home;
-
-    $xtpl = new XTemplate('topic.tpl', get_module_tpl_dir('topic.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('TOPPIC_TITLE', $page_title);
-    $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
-    if (!empty($description)) {
-        $xtpl->assign('TOPPIC_DESCRIPTION', $description);
-        if (!empty($topic_image)) {
-            $xtpl->assign('HOMEIMG1', $topic_image);
-            $xtpl->parse('main.topicdescription.image');
-        }
-        $xtpl->parse('main.topicdescription');
-    } elseif (!$home) {
-        $xtpl->assign('PAGE_TITLE', nv_html_page_title(false));
-        $xtpl->parse('main.h1');
-    }
-
-    if (!empty($topic_array)) {
-        foreach ($topic_array as $topic_array_i) {
-            if (!empty($topic_array_i['external_link'])) {
-                $topic_array_i['target_blank'] = 'target="_blank"';
-            }
-
-            $xtpl->assign('TOPIC', $topic_array_i);
-            $xtpl->assign('TIME', date('H:i', $topic_array_i['publtime']));
-            $xtpl->assign('DATE', date('d/m/Y', $topic_array_i['publtime']));
-
-            if (!empty($topic_array_i['imghome'])) {
-                $xtpl->parse('main.topic.homethumb');
-            }
-
-            if ($topicid and defined('NV_IS_MODADMIN')) {
-                $adminlink = trim(nv_link_edit_page($topic_array_i) . ' ' . nv_link_delete_page($topic_array_i));
-                if (!empty($adminlink)) {
-                    $xtpl->assign('ADMINLINK', $adminlink);
-                    $xtpl->parse('main.topic.adminlink');
-                }
-            }
-            $xtpl->parse('main.topic.h2');
-            $xtpl->parse('main.topic');
-        }
-    }
-
-    if (!empty($topic_other_array)) {
-        foreach ($topic_other_array as $topic_other_array_i) {
-            $topic_other_array_i['publtime'] = nv_datetime_format($topic_other_array_i['publtime']);
-
-            if ($topic_other_array_i['external_link']) {
-                $topic_other_array_i['target_blank'] = 'target="_blank"';
-            }
-
-            $xtpl->assign('TOPIC_OTHER', $topic_other_array_i);
-            $xtpl->parse('main.other.loop');
-        }
-
-        $xtpl->parse('main.other');
-    }
-
-    if (!empty($generate_page)) {
-        $xtpl->assign('GENERATE_PAGE', $generate_page);
-        $xtpl->parse('main.generate_page');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return list_articles_theme([
+        'title' => $page_title,
+        'image' => $topic_image,
+        'description' => $description,
+        'list_title' => ''
+    ], $topic_array, $topic_other_array, $generate_page);
 }
 
 /**
- * author_theme()
+ * Giao diện bài viết của tác giả
  *
  * @param array  $author_info
  * @param array  $topic_array
@@ -1061,71 +1000,51 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
  */
 function author_theme($author_info, $topic_array, $topic_other_array, $generate_page)
 {
-    global $module_info, $module_name, $module_config, $page_title, $nv_Lang;
+    global $page_title, $nv_Lang;
 
-    $xtpl = new XTemplate('topic.tpl', get_module_tpl_dir('topic.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('TOPPIC_TITLE', $page_title);
-    $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
-    $xtpl->assign('AUTHOR_LIST_TITLE', $nv_Lang->getModule('list_articles_by_author', $author_info['pseudonym']));
-    $xtpl->parse('main.author_list_title');
-    if (!empty($author_info['description'])) {
-        $xtpl->assign('TOPPIC_DESCRIPTION', $author_info['description']);
-        if (!empty($author_info['image'])) {
-            $xtpl->assign('HOMEIMG1', $author_info['image']);
-            $xtpl->parse('main.topicdescription.image');
-        }
-        $xtpl->parse('main.topicdescription');
-    }
-    if (!empty($topic_array)) {
-        foreach ($topic_array as $topic_array_i) {
-            if (!empty($topic_array_i['external_link'])) {
-                $topic_array_i['target_blank'] = 'target="_blank"';
-            }
+    // Thông số image, description, pseudonym có thể có hoặc không (nếu là guest)
+    return list_articles_theme([
+        'title' => $page_title,
+        'image' => $author_info['image'] ?? '',
+        'description' => $author_info['description'] ?? '',
+        'list_title' => $author_info['is_guest'] ? '' : $nv_Lang->getModule('list_articles_by_author', $author_info['pseudonym'])
+    ], $topic_array, $topic_other_array, $generate_page);
+}
 
-            $xtpl->assign('TOPIC', $topic_array_i);
-            $xtpl->assign('TIME', date('H:i', $topic_array_i['publtime']));
-            $xtpl->assign('DATE', date('d/m/Y', $topic_array_i['publtime']));
+/**
+ * Giao diện danh sách bài viết dạng có ảnh
+ *
+ * @param array  $header         Phần đầu trang gồm title, image, description, list_title
+ * @param array  $array_articles Danh sách bài viết, ở trang danh sách chủ đề là danh sách chủ đề
+ * @param array  $array_others   Danh sách các tin khác
+ * @param string $generate_page  HTML phân trang
+ * @return string
+ */
+function list_articles_theme(array $header, array $array_articles, array $array_others, $generate_page)
+{
+    global $module_name, $module_config, $nv_Lang, $home;
 
-            if (!empty($topic_array_i['imghome'])) {
-                $xtpl->parse('main.topic.homethumb');
-            }
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('list_articles.tpl'));
+    $tpl->registerPlugin('modifier', 'ddate', 'nv_date_format');
+    $tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
+    $tpl->registerPlugin('modifier', 'dnumber', 'nv_number_format');
+    $tpl->registerPlugin('modifier', 'editAllowed', 'nv_link_edit_page');
+    $tpl->registerPlugin('modifier', 'deleteAllowed', 'nv_link_delete_page');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('HOME', $home);
+    $tpl->assign('PAGE_TITLE', nv_html_page_title(false));
 
-            if (defined('NV_IS_MODADMIN')) {
-                $adminlink = trim(nv_link_edit_page($topic_array_i) . ' ' . nv_link_delete_page($topic_array_i));
-                if (!empty($adminlink)) {
-                    $xtpl->assign('ADMINLINK', $adminlink);
-                    $xtpl->parse('main.topic.adminlink');
-                }
-            }
-            $xtpl->parse('main.topic.h3');
-            $xtpl->parse('main.topic');
-        }
-    }
+    $imgratio = round(($module_config[$module_name]['homewidth'] / ($module_config[$module_name]['homeheight'] ?: $module_config[$module_name]['homewidth'])) * 100, 2);
+    $tpl->assign('IMGRATIO', $imgratio);
 
-    if (!empty($topic_other_array)) {
-        foreach ($topic_other_array as $topic_other_array_i) {
-            $topic_other_array_i['publtime'] = nv_datetime_format($topic_other_array_i['publtime']);
+    $tpl->assign('HEADER', $header);
+    $tpl->assign('ARTICLES', $array_articles);
+    $tpl->assign('OTHERS', $array_others);
+    $tpl->assign('GENERATE_PAGE', $generate_page);
 
-            if ($topic_other_array_i['external_link']) {
-                $topic_other_array_i['target_blank'] = 'target="_blank"';
-            }
-
-            $xtpl->assign('TOPIC_OTHER', $topic_other_array_i);
-            $xtpl->parse('main.other.loop');
-        }
-
-        $xtpl->parse('main.other');
-    }
-
-    if (!empty($generate_page)) {
-        $xtpl->assign('GENERATE_PAGE', $generate_page);
-        $xtpl->parse('main.generate_page');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('list_articles.tpl');
 }
 
 /**

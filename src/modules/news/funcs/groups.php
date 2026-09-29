@@ -60,7 +60,7 @@ if (isset($array_op[1])) {
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
     betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
-    $db->select('t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.external_link, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.weight')
+    $db->select('t1.id, t1.catid, t1.listcatid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.external_link, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.weight')
         ->order('t2.weight ASC')
         ->limit($per_page)
         ->offset(($page - 1) * $per_page);
@@ -74,6 +74,7 @@ if (isset($array_op[1])) {
 
         $end_weight = $item['weight'];
 
+        $item['newday'] = $global_array_cat[$item['catid']]['newday'];
         $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
         $item_array[] = $item;
     }
@@ -91,6 +92,7 @@ if (isset($array_op[1])) {
             ->limit($st_links);
         $result = $db->query($db->sql());
         while ($item = $result->fetch()) {
+            $item['newday'] = $global_array_cat[$item['catid']]['newday'];
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
             $item_array_other[] = $item;
         }

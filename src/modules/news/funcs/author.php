@@ -94,6 +94,7 @@ while ($item = $result->fetch()) {
 
     $end_publtime = $item['publtime'];
 
+    $item['newday'] = $global_array_cat[$item['catid']]['newday'];
     $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
     $item_array[] = $item;
 }
@@ -110,6 +111,7 @@ if ($st_links > 0) {
         ->limit($st_links);
     $result = $db->query($db->sql());
     while ($item = $result->fetch()) {
+        $item['newday'] = $global_array_cat[$item['catid']]['newday'];
         $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
         $item_array_other[] = $item;
     }
