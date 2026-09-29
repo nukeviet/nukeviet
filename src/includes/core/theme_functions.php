@@ -283,7 +283,7 @@ function nv_xmlOutput($content, $lastModified)
  * @param string $atomlink
  * @param string $timemode
  * @param bool   $noindex
- * @return never
+ * @return void
  * @throws DOMException
  */
 function nv_rss_generate($channel, $items, $atomlink = '', $timemode = '', $noindex = true)
@@ -678,15 +678,18 @@ function nv_disable_site()
  * @param string $module Biến $module_name
  * @param "js"|"css"|"both" $type
  * @param bool $direct Nếu là true thì đưa vào luôn $my_head và $my_footer.
- * @return array
+ * @param string $suffix Hậu tố ghép sau tên tệp, ví dụ '.print' sẽ tìm news.print.r.css, news.print.js
+ * @return array Gồm css, js là URL; css_path, js_path là đường dẫn tệp tính từ NV_ROOTDIR
  */
-function addition_module_assets(string $module, string $type, $direct = true): array
+function addition_module_assets(string $module, string $type, $direct = true, string $suffix = ''): array
 {
     global $global_config, $site_mods, $my_head, $my_footer, $module_name;
 
     $return = [
         'css' => '',
-        'js' => ''
+        'js' => '',
+        'css_path' => '',
+        'js_path' => ''
     ];
 
     if (!isset($site_mods[$module]) or ($module_name == $module and $direct)) {
@@ -723,9 +726,9 @@ function addition_module_assets(string $module, string $type, $direct = true): a
 
     // Xác định các module. Nếu có tùy biến module_theme thì ưu tiên, không có thì tìm tiếp vào module_file gốc
     $names = [];
-    $names[] = $site_mods[$module]['module_theme'];
+    $names[] = $site_mods[$module]['module_theme'] . $suffix;
     if ($site_mods[$module]['module_theme'] != $site_mods[$module]['module_file']) {
-        $names[] = $site_mods[$module]['module_file'];
+        $names[] = $site_mods[$module]['module_file'] . $suffix;
     }
 
     if ($type == 'js' or $type == 'both') {
@@ -740,6 +743,7 @@ function addition_module_assets(string $module, string $type, $direct = true): a
                     $src = NV_STATIC_URL . 'themes/' . $dir . '/js/' . $fileLoad;
                     $direct && $my_footer .= '<script src="' . $src . '"></script>' . PHP_EOL;
                     $return['js'] = $src;
+                    $return['js_path'] = 'themes/' . $dir . '/js/' . $fileLoad;
                     break 2;
                 }
                 if (theme_file_exists('/' . $dir . '/js/' . $fileIgnore)) {
@@ -780,6 +784,7 @@ function addition_module_assets(string $module, string $type, $direct = true): a
                         $href = NV_STATIC_URL . 'themes/' . $dir . '/css/' . $file;
                         $direct && $my_head .= '<link rel="stylesheet" type="text/css" href="' . $href . '">' . PHP_EOL;
                         $return['css'] .= $href;
+                        $return['css_path'] = 'themes/' . $dir . '/css/' . $file;
                         break 3;
                     }
                 }

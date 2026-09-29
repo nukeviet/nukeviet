@@ -28,6 +28,14 @@
 /tools/GeoLite2/release
 
 /src/assets/css/*.opt.css
+/src/assets/logo_*
+/src/assets/about
+/src/assets/banners
+/src/assets/news
+/src/assets/mobile
+
+/src/uploads
+
 /src/config.php
 /src/data/cache/*
 /src/data/config/config_ini.*.php
@@ -45,64 +53,9 @@
 /src/data/tmp/*
 /src/data/config/feeds_*.json
 /src/uploads/logo_*
-/src/assets/logo_*
 /src/install/default.php
 
 # Theme develop
 /src/composer.lock
 /node_modules
 /package-lock.json
-
-#vendor test ignore
-/src/includes/vendor/**/demo/
-/src/includes/vendor/**/example/
-/src/includes/vendor/**/examples/
-/src/includes/vendor/**/test/
-/src/includes/vendor/**/tests/
-/src/includes/vendor/**/Tests/
-/src/includes/vendor/**/travis*
-/src/includes/vendor/**/.travis.yml
-/src/includes/vendor/**/.scrutinizer.yml
-/src/includes/vendor/**/phpunit.xml*
-/src/includes/vendor/**/phpunit.php
-
-#vendor docs ignore
-/src/includes/vendor/**/doc/
-/src/includes/vendor/**/docs/
-/src/includes/vendor/**/readme*
-/src/includes/vendor/**/README*
-/src/includes/vendor/**/changelog*
-/src/includes/vendor/**/CHANGELOG*
-/src/includes/vendor/**/FAQ*
-/src/includes/vendor/**/CONTRIBUTING*
-/src/includes/vendor/**/HISTORY*
-/src/includes/vendor/**/UPGRADING*
-/src/includes/vendor/**/UPGRADE*
-/src/includes/vendor/**/package*
-/src/includes/vendor/**/phpunit.php
-/src/includes/vendor/**/.gitignore
-/src/includes/vendor/**/composer.*
-
-# Ignore some uploads, assets dir
-/src/assets/download
-/src/assets/*.jpg
-/src/assets/about/*.png
-/src/assets/banners/*.jpg
-/src/assets/news/**/*.jpg
-
-/src/uploads/download
-/src/uploads/users/*.jpg
-/src/uploads/contact/*.jpg
-/src/uploads/about/*.jpg
-/src/uploads/banners/*.jpg
-/src/uploads/page/*.jpg
-/src/uploads/menu/
-/src/uploads/news/
-
-# Allow default file
-!/src/uploads/banners/bongoaigiao.jpg
-!/src/uploads/banners/vinades.jpg
-!/src/uploads/banners/vndads___05.jpg
-!/src/uploads/banners/webnhanh_vn.png
-!/src/data/cache/index.html
-!/src/data/tmp/index.html

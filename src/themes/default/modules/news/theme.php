@@ -1375,6 +1375,36 @@ function news_print($result)
 }
 
 /**
+ * Tài liệu HTML độc lập của bài viết để tải về
+ *
+ * @param array $result
+ * @return string
+ */
+function news_savefile($result)
+{
+    global $nv_Lang, $module_name;
+
+    // Lấy tệp CSS nhúng inline để có giao diện độc lập
+    $assets = addition_module_assets($module_name, 'css', false, '.print');
+    $inline_css = '';
+    if (!empty($assets['css_path'])) {
+        $inline_css = file_get_contents(NV_ROOTDIR . '/' . $assets['css_path']);
+        $inline_css = preg_replace(['/^@charset\s+[^;]+;\s*/i', '/\/\*#\s*sourceMappingURL=[^*]*\*\/\s*$/'], '', $inline_css);
+        $inline_css = trim($inline_css);
+    }
+
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('savefile.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('IS_RTL', \NukeViet\Template\Config::isRtl());
+    $tpl->assign('INLINE_CSS', $inline_css);
+    $tpl->assign('CONTENT', $result);
+
+    return $tpl->fetch('savefile.tpl');
+}
+
+/**
  * search_theme()
  *
  * @param string $key

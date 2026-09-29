@@ -954,7 +954,7 @@ function nv_imageResize($origX, $origY, $maxX, $maxY)
  * nv_is_file()
  *
  * @param string $filepath
- * @param string $folders
+ * @param string|array $folders
  * @return bool
  */
 function nv_is_file($filepath, $folders = [])

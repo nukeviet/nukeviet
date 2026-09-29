@@ -1,0 +1,274 @@
+// Tài liệu bài viết độc lập (lưu file HTML), CSS được nhúng inline vào trang.
+// Chỉ dùng biến Sass để giá trị được biên dịch cố định, không phụ thuộc CSS variables hay tệp CSS khác.
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: $font-family-sans-serif;
+  font-size: $font-size-base;
+  font-weight: $font-weight-base;
+  line-height: $line-height-base;
+  color: $body-color;
+  background-color: $body-bg;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: $headings-margin-bottom;
+  font-weight: $headings-font-weight;
+  line-height: $headings-line-height;
+  color: $gray-900;
+}
+
+h1 {
+  font-size: $h1-font-size;
+}
+
+h2 {
+  font-size: $h2-font-size;
+}
+
+h3 {
+  font-size: $h3-font-size;
+}
+
+h4 {
+  font-size: $h4-font-size;
+}
+
+h5 {
+  font-size: $h5-font-size;
+}
+
+h6 {
+  font-size: $h6-font-size;
+}
+
+p,
+ul,
+ol,
+dl,
+pre,
+blockquote,
+figure,
+table {
+  margin-top: 0;
+  margin-bottom: $paragraph-margin-bottom;
+}
+
+a {
+  color: $link-color;
+  text-decoration: $link-decoration;
+
+  &:hover {
+    color: $link-hover-color;
+    text-decoration: $link-hover-decoration;
+  }
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+iframe {
+  max-width: 100%;
+  border: 0;
+}
+
+hr {
+  margin: $hr-margin-y 0;
+  border: 0;
+  border-top: $border-width solid $border-color;
+}
+
+blockquote {
+  padding: $spacer * .5 $spacer;
+  border-left: .25rem solid $border-color;
+  color: $gray-600;
+}
+
+pre,
+code,
+kbd,
+samp {
+  font-family: $font-family-code;
+  font-size: $code-font-size;
+}
+
+pre {
+  overflow: auto;
+  padding: $spacer;
+  background-color: $gray-100;
+  border-radius: $border-radius;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: $table-cell-padding-y $table-cell-padding-x;
+    border: $border-width solid $border-color;
+    vertical-align: top;
+  }
+
+  th {
+    font-weight: $font-weight-bold;
+    background-color: $gray-100;
+  }
+}
+
+figure {
+  figcaption {
+    margin-top: $spacer * .25;
+    font-size: $figure-caption-font-size;
+    font-style: italic;
+    color: $figure-caption-color;
+  }
+}
+
+.news-print {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: $spacer;
+}
+
+.news-print-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacer * .5;
+  padding-bottom: $spacer;
+  margin-bottom: $spacer;
+  border-bottom: $border-width solid $border-color;
+
+  .news-print-sitename {
+    font-size: $h4-font-size;
+    font-weight: $headings-font-weight;
+    color: $gray-900;
+  }
+}
+
+.news-print-title {
+  margin-bottom: $spacer * .5;
+}
+
+.news-print-time {
+  margin-bottom: $spacer;
+  font-size: $small-font-size;
+  color: $gray-600;
+}
+
+.news-print-alert {
+  padding: $alert-padding-y $alert-padding-x;
+  margin-bottom: $spacer;
+  color: $warning-text-emphasis;
+  background-color: $warning-bg-subtle;
+  border: $border-width solid $warning-border-subtle;
+  border-radius: $border-radius;
+}
+
+.news-print-hometext {
+  margin-bottom: $spacer;
+  font-weight: $font-weight-bold;
+
+  &::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+}
+
+.news-print-image {
+  text-align: center;
+
+  img {
+    padding: $thumbnail-padding;
+    background-color: $body-bg;
+    border: $border-width solid $border-color;
+    border-radius: $border-radius;
+  }
+
+  figcaption {
+    font-weight: $font-weight-base;
+  }
+
+  &.news-print-image-start {
+    float: left;
+    max-width: 50%;
+    margin: 0 $spacer $spacer * .5 0;
+  }
+
+  @include media-breakpoint-down(sm) {
+    &.news-print-image-start {
+      float: none;
+      max-width: 100%;
+      margin-right: 0;
+    }
+  }
+}
+
+.news-print-bodytext {
+  margin-bottom: $spacer;
+  overflow-wrap: break-word;
+
+  &::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+
+  >:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.news-print-author {
+  margin-bottom: $spacer;
+  text-align: right;
+
+  p {
+    margin-bottom: $spacer * .25;
+  }
+}
+
+.news-print-copyright {
+  padding: $alert-padding-y $alert-padding-x;
+  margin-bottom: $spacer;
+  color: $info-text-emphasis;
+  background-color: $info-bg-subtle;
+  border: $border-width solid $info-border-subtle;
+  border-radius: $border-radius;
+}
+
+.news-print-footer {
+  padding-top: $spacer;
+  font-size: $small-font-size;
+  border-top: $border-width solid $border-color;
+  overflow-wrap: anywhere;
+
+  p {
+    margin-bottom: $spacer * .25;
+  }
+}

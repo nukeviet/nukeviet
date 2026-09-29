@@ -1,0 +1,265 @@
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2026 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #4e5a63;
+  background-color: #fff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: #22313C;
+}
+
+h1 {
+  font-size: 1.625rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.375rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+p,
+ul,
+ol,
+dl,
+pre,
+blockquote,
+figure,
+table {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+a {
+  color: #1477cc;
+  text-decoration: none;
+}
+a:hover {
+  color: #105fa3;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+iframe {
+  max-width: 100%;
+  border: 0;
+}
+
+hr {
+  margin: 1rem 0;
+  border: 0;
+  border-top: 1px solid #e7e8ea;
+}
+
+blockquote {
+  padding: 0.5rem 1rem;
+  border-right: 0.25rem solid #e7e8ea;
+  color: #626d75;
+}
+
+pre,
+code,
+kbd,
+samp {
+  font-family: var(--bs-font-monospace);
+  font-size: 0.875em;
+}
+
+pre {
+  overflow: auto;
+  padding: 1rem;
+  background-color: #f4f5f5;
+  border-radius: 0.25rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+table th,
+table td {
+  padding: 0.5rem 0.5rem;
+  border: 1px solid #e7e8ea;
+  vertical-align: top;
+}
+table th {
+  font-weight: 700;
+  background-color: #f4f5f5;
+}
+
+figure figcaption {
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  font-style: italic;
+  color: var(--bs-secondary-color);
+}
+
+.news-print {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.news-print-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #e7e8ea;
+}
+.news-print-header .news-print-sitename {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #22313C;
+}
+
+.news-print-title {
+  margin-bottom: 0.5rem;
+}
+
+.news-print-time {
+  margin-bottom: 1rem;
+  font-size: 0.875em;
+  color: #626d75;
+}
+
+.news-print-alert {
+  padding: 1rem 1rem;
+  margin-bottom: 1rem;
+  color: #5a4300;
+  background-color: #f9eecc;
+  border: 1px solid #f3dc99;
+  border-radius: 0.25rem;
+}
+
+.news-print-hometext {
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+.news-print-hometext::after {
+  display: block;
+  clear: both;
+  content: "";
+}
+
+.news-print-image {
+  text-align: center;
+}
+.news-print-image img {
+  padding: 0.25rem;
+  background-color: #fff;
+  border: 1px solid #e7e8ea;
+  border-radius: 0.25rem;
+}
+.news-print-image figcaption {
+  font-weight: 400;
+}
+.news-print-image.news-print-image-start {
+  float: right;
+  max-width: 50%;
+  margin: 0 0 0.5rem 1rem;
+}
+@media (max-width: 575.98px) {
+  .news-print-image.news-print-image-start {
+    float: none;
+    max-width: 100%;
+    margin-left: 0;
+  }
+}
+
+.news-print-bodytext {
+  margin-bottom: 1rem;
+  overflow-wrap: break-word;
+}
+.news-print-bodytext::after {
+  display: block;
+  clear: both;
+  content: "";
+}
+.news-print-bodytext > :last-child {
+  margin-bottom: 0;
+}
+
+.news-print-author {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+.news-print-author p {
+  margin-bottom: 0.25rem;
+}
+
+.news-print-copyright {
+  padding: 1rem 1rem;
+  margin-bottom: 1rem;
+  color: #243e47;
+  background-color: #deebf0;
+  border: 1px solid #bdd7e0;
+  border-radius: 0.25rem;
+}
+
+.news-print-footer {
+  padding-top: 1rem;
+  font-size: 0.875em;
+  border-top: 1px solid #e7e8ea;
+  overflow-wrap: anywhere;
+}
+.news-print-footer p {
+  margin-bottom: 0.25rem;
+}
+/*# sourceMappingURL=news.print.r.rtl.css.map */

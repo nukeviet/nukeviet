@@ -1183,57 +1183,52 @@ function sendmail_themme($sendmail)
 }
 
 /**
- * news_print()
+ * Giao diện in bài viết
  *
  * @param array $result
  * @return string
  */
 function news_print($result)
 {
-    global $module_info;
+    global $nv_Lang, $module_name;
 
-    $xtpl = new XTemplate('print.tpl', get_module_tpl_dir('print.tpl'));
-    $xtpl->assign('CONTENT', $result);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('print.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('CONTENT', $result);
 
-    if (!empty($result['image']['width'])) {
-        if ($result['image']['position'] == 1) {
-            if (!empty($result['image']['note'])) {
-                $xtpl->parse('main.image.note');
-            }
+    return $tpl->fetch('print.tpl');
+}
 
-            $xtpl->parse('main.image');
-        } elseif ($result['image']['position'] == 2) {
-            if (!empty($result['image']['note'])) {
-                $xtpl->parse('main.imagefull.note');
-            }
+/**
+ * Tài liệu HTML độc lập của bài viết để tải về
+ *
+ * @param array $result
+ * @return string
+ */
+function news_savefile($result)
+{
+    global $nv_Lang, $module_name;
 
-            $xtpl->parse('main.imagefull');
-        }
+    // Lấy tệp CSS nhúng inline để có giao diện độc lập
+    $assets = addition_module_assets($module_name, 'css', false, '.print');
+    $inline_css = '';
+    if (!empty($assets['css_path'])) {
+        $inline_css = file_get_contents(NV_ROOTDIR . '/' . $assets['css_path']);
+        $inline_css = preg_replace(['/^@charset\s+[^;]+;\s*/i', '/\/\*#\s*sourceMappingURL=[^*]*\*\/\s*$/'], '', $inline_css);
+        $inline_css = trim($inline_css);
     }
 
-    if ($result['copyright'] == 1) {
-        $xtpl->parse('main.copyright');
-    }
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('savefile.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('IS_RTL', \NukeViet\Template\Config::isRtl());
+    $tpl->assign('INLINE_CSS', $inline_css);
+    $tpl->assign('CONTENT', $result);
 
-    if (!empty($result['author']) or !empty($result['source'])) {
-        if (!empty($result['author'])) {
-            $xtpl->parse('main.author.name');
-        }
-
-        if (!empty($result['source'])) {
-            $xtpl->parse('main.author.source');
-        }
-
-        $xtpl->parse('main.author');
-    }
-
-    if ($result['status'] != 1) {
-        $xtpl->parse('main.no_public');
-    }
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('savefile.tpl');
 }
 
 /**
