@@ -1456,14 +1456,13 @@ function search_theme($key, $check_num, $date_array, $array_cat_search)
  *
  * @param string $key
  * @param int    $numRecord
- * @param int    $per_pages
- * @param int    $page
  * @param array  $array_content
  * @param int    $catid
  * @param array  $internal_authors
+ * @param string $generate_page
  * @return string
  */
-function search_result_theme($key, $numRecord, $per_pages, $page, $array_content, $catid, $internal_authors)
+function search_result_theme($key, $numRecord, $array_content, $catid, $internal_authors, $generate_page)
 {
     global $module_info, $nv_Lang, $module_name, $global_array_cat, $module_config, $global_config;
 
@@ -1510,23 +1509,7 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
         $xtpl->parse('results.noneresult');
     }
 
-    if ($numRecord > $per_pages) {
-        // show pages
-
-        $url_link = $_SERVER['REQUEST_URI'];
-        if (strpos($url_link, '&page=') > 0) {
-            $url_link = substr($url_link, 0, strpos($url_link, '&page='));
-        } elseif (strpos($url_link, '?page=') > 0) {
-            $url_link = substr($url_link, 0, strpos($url_link, '?page='));
-        }
-
-        $_array_url = [
-            'link' => $url_link,
-            'amp' => '&page='
-        ];
-
-        $generate_page = nv_generate_page($_array_url, $numRecord, $per_pages, $page);
-
+    if (!empty($generate_page)) {
         $xtpl->assign('VIEW_PAGES', $generate_page);
         $xtpl->parse('results.pages_result');
     }

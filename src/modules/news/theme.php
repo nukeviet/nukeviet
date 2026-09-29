@@ -1232,7 +1232,7 @@ function news_savefile($result)
 }
 
 /**
- * search_theme()
+ * Giao diện form tìm kiếm
  *
  * @param string $key
  * @param int    $check_num
@@ -1242,128 +1242,88 @@ function news_savefile($result)
  */
 function search_theme($key, $check_num, $date_array, $array_cat_search)
 {
-    global $module_name, $module_name;
+    global $module_name, $nv_Lang;
 
-    [$template, $dir] = get_module_tpl_dir('search.tpl', true);
-    $xtpl = new XTemplate('search.tpl', $dir);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
-    $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
-    $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-    $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('BASE_URL_SITE', NV_BASE_SITEURL . 'index.php');
-    $xtpl->assign('TEMPLATE', $template);
-    $xtpl->assign('TO_DATE', $date_array['to_date']);
-    $xtpl->assign('FROM_DATE', $date_array['from_date']);
-    $xtpl->assign('KEY', $key);
-    $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-    $xtpl->assign('OP_NAME', 'search');
-    $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=search');
-
-    foreach ($array_cat_search as $search_cat) {
-        $xtpl->assign('SEARCH_CAT', $search_cat);
-        $xtpl->parse('main.search_cat');
+    // Key của mảng là catid, mục 0 (tất cả chuyên mục) không có sẵn catid và lev
+    $cats = [];
+    foreach ($array_cat_search as $catid => $search_cat) {
+        $cats[] = [
+            'catid' => $catid,
+            'title' => $search_cat['title'],
+            'lev' => $search_cat['lev'] ?? 0,
+            'selected' => !empty($search_cat['select'])
+        ];
     }
 
-    for ($i = 0; $i <= 3; ++$i) {
-        if ($check_num == $i) {
-            $xtpl->assign('CHECK' . $i, 'selected=\'selected\'');
-        } else {
-            $xtpl->assign('CHECK' . $i, '');
-        }
-    }
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('search.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('KEY', $key);
+    $tpl->assign('CHOOSE', (int) $check_num);
+    $tpl->assign('DATE', $date_array);
+    $tpl->assign('CATS', $cats);
 
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('search.tpl');
 }
 
 /**
- * search_result_theme()
+ * Giao diện kết quả tìm kiếm
  *
  * @param string $key
  * @param int    $numRecord
- * @param int    $per_pages
- * @param int    $page
  * @param array  $array_content
  * @param int    $catid
  * @param array  $internal_authors
+ * @param string $generate_page
  * @return string
  */
-function search_result_theme($key, $numRecord, $per_pages, $page, $array_content, $catid, $internal_authors)
+function search_result_theme($key, $numRecord, $array_content, $catid, $internal_authors, $generate_page)
 {
-    global $module_info, $nv_Lang, $module_name, $global_array_cat, $module_config, $global_config;
+    global $nv_Lang, $module_name, $global_array_cat, $module_config, $global_config;
 
-    $xtpl = new XTemplate('search.tpl', get_module_tpl_dir('search.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('KEY', $key);
-    $xtpl->assign('IMG_WIDTH', $module_config[$module_name]['homewidth']);
-    $xtpl->assign('TITLE_MOD', $nv_Lang->getModule('search_modul_title'));
-
-    if (!empty($array_content)) {
-        foreach ($array_content as $value) {
-            $catid_i = $value['catid'];
-            $authors = [];
-            if (isset($internal_authors[$value['id']]) and !empty($internal_authors[$value['id']])) {
-                foreach ($internal_authors[$value['id']] as $internal_author) {
-                    $authors[] = '<a href="' . $internal_author['href'] . '">' . BoldKeywordInStr($internal_author['pseudonym'], $key) . '</a>';
-                }
+    $array = [];
+    foreach ($array_content as $value) {
+        // Tác giả nội bộ có trang riêng, tác giả nhập tay chỉ là văn bản
+        $authors_internal = [];
+        if (!empty($internal_authors[$value['id']])) {
+            foreach ($internal_authors[$value['id']] as $internal_author) {
+                $authors_internal[] = [
+                    'href' => $internal_author['href'],
+                    'name' => BoldKeywordInStr($internal_author['pseudonym'], $key)
+                ];
             }
-            if (!empty($value['author'])) {
-                $authors[] = BoldKeywordInStr($value['author'], $key);
-            }
-            $authors = !empty($authors) ? implode(', ', $authors) : '';
-
-            $xtpl->assign('LINK', $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . '-' . $value['id'] . $global_config['rewrite_exturl']);
-            $xtpl->assign('TITLEROW', BoldKeywordInStr(strip_tags($value['title']), $key));
-            $xtpl->assign('CONTENT', BoldKeywordInStr(strip_tags($value['hometext']), $key));
-            $xtpl->assign('TIME', date('d/m/Y H:i:s', $value['publtime']));
-            $xtpl->assign('AUTHOR', $authors);
-            $xtpl->assign('SOURCE', BoldKeywordInStr(GetSourceNews($value['sourceid']), $key));
-            $xtpl->assign('TARGET_BLANK', !empty($value['external_link']) ? ' target="_blank"' : '');
-
-            if (!empty($value['homeimgfile'])) {
-                $xtpl->assign('IMG_SRC', $value['homeimgfile']);
-                $xtpl->parse('results.result.result_img');
-            }
-
-            $xtpl->parse('results.result');
-        }
-    }
-
-    if ($numRecord == 0) {
-        $xtpl->assign('KEY', $key);
-        $xtpl->assign('INMOD', $nv_Lang->getModule('search_modul_title'));
-        $xtpl->parse('results.noneresult');
-    }
-
-    if ($numRecord > $per_pages) {
-        // show pages
-
-        $url_link = $_SERVER['REQUEST_URI'];
-        if (strpos($url_link, '&page=') > 0) {
-            $url_link = substr($url_link, 0, strpos($url_link, '&page='));
-        } elseif (strpos($url_link, '?page=') > 0) {
-            $url_link = substr($url_link, 0, strpos($url_link, '?page='));
         }
 
-        $_array_url = [
-            'link' => $url_link,
-            'amp' => '&page='
+        $array[] = [
+            'link' => $global_array_cat[$value['catid']]['link'] . '/' . $value['alias'] . '-' . $value['id'] . $global_config['rewrite_exturl'],
+            'title' => BoldKeywordInStr(strip_tags($value['title']), $key),
+            'title_plain' => strip_tags($value['title']),
+            'content' => BoldKeywordInStr(strip_tags($value['hometext']), $key),
+            'publtime' => $value['publtime'],
+            'authors_internal' => $authors_internal,
+            'author' => !empty($value['author']) ? BoldKeywordInStr($value['author'], $key) : '',
+            'source' => $value['sourceid'] > 0 ? BoldKeywordInStr(GetSourceNews($value['sourceid']), $key) : '',
+            'external_link' => !empty($value['external_link']),
+            'homeimgfile' => $value['homeimgfile']
         ];
-
-        $generate_page = nv_generate_page($_array_url, $numRecord, $per_pages, $page);
-
-        $xtpl->assign('VIEW_PAGES', $generate_page);
-        $xtpl->parse('results.pages_result');
     }
 
-    $xtpl->assign('NUMRECORD', $numRecord);
-    $xtpl->assign('MY_DOMAIN', NV_MY_DOMAIN);
+    $imgratio = round(($module_config[$module_name]['homewidth'] / ($module_config[$module_name]['homeheight'] ?: $module_config[$module_name]['homewidth'])) * 100, 2);
 
-    $xtpl->parse('results');
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('search_result.tpl'));
+    $tpl->registerPlugin('modifier', 'ddatetime', 'nv_datetime_format');
+    $tpl->registerPlugin('modifier', 'dnumber', 'nv_number_format');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('KEY', $key);
+    $tpl->assign('NUMRECORD', $numRecord);
+    $tpl->assign('ARRAY', $array);
+    $tpl->assign('IMGRATIO', $imgratio);
+    $tpl->assign('GENERATE_PAGE', $generate_page);
 
-    return $xtpl->text('results');
+    return $tpl->fetch('search_result.tpl');
 }
 
 /**

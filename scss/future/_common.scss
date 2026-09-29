@@ -180,3 +180,9 @@
     margin-bottom: 0;
   }
 }
+
+// Đánh dấu từ khóa trong kết quả tìm kiếm
+span.keyword {
+  color: var(--#{$prefix}highlight-color);
+  background-color: var(--#{$prefix}highlight-bg);
+}

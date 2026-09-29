@@ -134,4 +134,51 @@ $(function() {
             newsContentAlias(btn);
         }
     });
+
+    // Lịch chọn ngày ở form tìm kiếm, khởi tạo khi dùng lần đầu
+    const newsSearchDatepicker = (el) => {
+        if (!el.length || typeof $.datepicker !== 'object') {
+            return;
+        }
+        if (!el.data('dp-init')) {
+            el.datepicker({
+                dateFormat: nv_jsdate_get.replace('yyyy', 'yy'),
+                changeMonth: true,
+                changeYear: true,
+                showOtherMonths: true,
+                showOn: 'focus'
+            });
+            el.data('dp-init', true);
+        }
+        el.datepicker('show');
+    };
+    $('body').on('focus', '[data-form="newsSearch"] [data-provide="datepicker"]', function() {
+        newsSearchDatepicker($(this));
+    });
+    $('body').on('click', '[data-form="newsSearch"] [data-toggle="newsSearchDateBtn"]', function() {
+        newsSearchDatepicker($(this).closest('.input-group').find('[data-provide="datepicker"]'));
+    });
+
+    // Chuyển từ khóa sang tìm kiếm toàn site
+    $('body').on('click', '[data-toggle="newsSearchOnSite"]', function(e) {
+        e.preventDefault();
+
+        const input = $('[name="q"]', $(this).closest('form'));
+        const min = parseInt(input.attr('minlength'));
+        const q =trim(strip_tags(input.val()).replace(/['"<>\\]/g, ''));
+
+        input.val(q);
+        nv_validate_reset(input);
+        if (q === '') {
+            nv_validate_show(input, nv_required);
+            input.focus();
+            return;
+        }
+        if (q.length < min) {
+            nv_validate_show(input, nv_minlength.replace('{0}', min));
+            input.focus();
+            return;
+        }
+        window.location.href = $(this).data('href') + rawurlencode(q);
+    });
 });

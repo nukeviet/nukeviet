@@ -124,31 +124,31 @@ function BoldKeywordInStr($str, $keyword)
 
 $key = nv_substr($nv_Request->get_title('q', 'get', ''), 0, NV_MAX_SEARCH_LENGTH);
 
-$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $is_search = false;
 $canonicalUrl = getCanonicalUrl($page_url);
 
 if (!empty($key)) {
-    $base_url .= '&q=' . urlencode($key);
+    $base_url .= '&amp;q=' . urlencode($key);
     $is_search = true;
 }
 
 $choose = $nv_Request->get_int('choose', 'get', 0);
 if (!empty($choose)) {
-    $base_url .= '&choose=' . $choose;
+    $base_url .= '&amp;choose=' . $choose;
     $is_search = true;
 }
 
 $catid = $nv_Request->get_int('catid', 'get', 0);
 if (!empty($catid)) {
-    $base_url .= '&catid=' . $catid;
+    $base_url .= '&amp;catid=' . $catid;
     $is_search = true;
 }
 $from_date = $nv_Request->get_title('from_date', 'get', '');
 $date_array['from_date'] = $from_date;
 $from_date = nv_d2u_get($from_date);
 if (!empty($from_date)) {
-    $base_url .= '&from_date=' . urlencode($date_array['from_date']);
+    $base_url .= '&amp;from_date=' . urlencode($date_array['from_date']);
     $is_search = true;
 } else {
     $date_array['from_date'] = '';
@@ -158,7 +158,7 @@ $to_date = $nv_Request->get_title('to_date', 'get', '');
 $date_array['to_date'] = $to_date;
 $to_date = nv_d2u_get($to_date, 23, 59, 59);
 if (!empty($to_date)) {
-    $base_url .= '&to_date=' . urlencode($date_array['to_date']);
+    $base_url .= '&amp;to_date=' . urlencode($date_array['to_date']);
     $is_search = true;
 } else {
     $date_array['to_date'] = '';
@@ -178,6 +178,7 @@ foreach ($global_array_cat as $arr_cat_i) {
     $array_cat_search[$arr_cat_i['catid']] = [
         'catid' => $arr_cat_i['catid'],
         'title' => $arr_cat_i['title'],
+        'lev' => (int) $arr_cat_i['lev'],
         'select' => ($arr_cat_i['catid'] == $catid) ? 'selected' : ''
     ];
 }
@@ -195,6 +196,8 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
     $dbkey = $db->dblikeescape($key);
     $dbkey_elas = nv_EncString($key);
     $internal_authors = [];
+    $array_content = [];
+    $show_no_image = $module_config[$module_name]['show_no_image'];
 
     if ($module_config[$module_name]['elas_use'] == 1) {
         // Kết nối đến CSDL elastic
@@ -376,7 +379,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         }
         $numRecord = $response['hits']['total'];
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-        betweenURLs($page, ceil($numRecord / $per_page), $base_url, '&page-', $prevPage, $nextPage);
+        betweenURLs($page, ceil($numRecord / $per_page), $base_url, '&amp;page=', $prevPage, $nextPage);
 
         foreach ($response['hits']['hits'] as $value) {
             $homeimgthumb = $value['_source']['homeimgthumb'];
@@ -490,7 +493,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         $numRecord = $db->query($db->sql())
             ->fetchColumn();
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-        betweenURLs($page, ceil($numRecord / $per_page), $base_url, '&page=', $prevPage, $nextPage);
+        betweenURLs($page, ceil($numRecord / $per_page), $base_url, '&amp;page=', $prevPage, $nextPage);
 
         $db->select('tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb2.bodyhtml,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid,tb1.external_link')
             ->order('tb1.' . $order_articles_by . ' DESC')
@@ -499,21 +502,16 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
 
         $result = $db->query($db->sql());
 
-        $array_content = [];
-        $show_no_image = $module_config[$module_name]['show_no_image'];
-
-        while ($_scratch = $result->fetch(3)) {
-            [$id, $title, $alias, $catid, $hometext, $bodyhtml, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link] = $_scratch;
-            unset($_scratch);
-            if ($homeimgthumb == 1) {
+        while ($row = $result->fetch()) {
+            if ($row['homeimgthumb'] == 1) {
                 // image thumb
-                $img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
-            } elseif ($homeimgthumb == 2) {
+                $img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
+            } elseif ($row['homeimgthumb'] == 2) {
                 // image file
-                $img_src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
-            } elseif ($homeimgthumb == 3) {
+                $img_src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
+            } elseif ($row['homeimgthumb'] == 3) {
                 // image url
-                $img_src = $homeimgfile;
+                $img_src = $row['homeimgfile'];
             } elseif (!empty($show_no_image)) {
                 // no image
                 $img_src = NV_BASE_SITEURL . $show_no_image;
@@ -521,18 +519,18 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 $img_src = '';
             }
             $array_content[] = [
-                'id' => $id,
-                'title' => $title,
-                'alias' => $alias,
-                'catid' => $catid,
-                'hometext' => $hometext . strip_tags($bodyhtml),
-                'author' => $author,
-                'publtime' => $publtime,
+                'id' => $row['id'],
+                'title' => $row['title'],
+                'alias' => $row['alias'],
+                'catid' => $row['catid'],
+                'hometext' => $row['hometext'] . strip_tags($row['bodyhtml']),
+                'author' => $row['author'],
+                'publtime' => $row['publtime'],
                 'homeimgfile' => $img_src,
-                'sourceid' => $sourceid,
-                'external_link' => $external_link
+                'sourceid' => $row['sourceid'],
+                'external_link' => $row['external_link']
             ];
-            $internal_authors[] = $id;
+            $internal_authors[] = $row['id'];
         }
     }
 
@@ -547,17 +545,18 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         while ($row = $result->fetch()) {
             !isset($internal_authors[$row['id']]) && $internal_authors[$row['id']] = [];
             $internal_authors[$row['id']][] = [
-                'href' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=author/' . $row['alias'],
+                'href' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $row['alias'],
                 'pseudonym' => $row['pseudonym']
             ];
         }
     }
 
-    $contents .= search_result_theme($key, $numRecord, $per_page, $page, $array_content, $catid, $internal_authors);
+    $generate_page = nv_generate_page($base_url, $numRecord, $per_page, $page);
+    $contents .= search_result_theme($key, $numRecord, $array_content, $catid, $internal_authors, $generate_page);
 }
 
 $page_title = $nv_Lang->getModule('search_title');
-if ($page > 2) {
+if ($page > 1) {
     $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
 }
 $page_title .= NV_TITLEBAR_DEFIS . $module_info['custom_title'];
