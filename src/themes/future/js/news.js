@@ -9,6 +9,33 @@
 
 'use strict';
 
+/**
+ * Kiểm tra đoạn văn bản đề xuất thay thế phải khác đoạn văn bản lỗi
+ *
+ * @param {String} val
+ * @param {JQuery} ipt
+ * @returns {Boolean}
+ */
+function newsReportFixCheck(val, ipt) {
+    const content = trim(strip_tags($('[name="report_content"]', ipt.closest('form')).val()));
+    const fix = trim(strip_tags(val.replace(/\s\s+/g, ' ')));
+
+    return content.localeCompare(fix, undefined, {
+        sensitivity: 'accent'
+    }) !== 0;
+}
+
+/**
+ * Gửi báo cáo lỗi thành công thì xóa nội dung đã nhập và đóng modal
+ *
+ * @param {Object} respon
+ * @param {JQuery} form
+ */
+function newsReportCallback(respon, form) {
+    $('[name="report_content"], [name="report_fix"], [name="report_email"]', form).val('');
+    bootstrap.Modal.getOrCreateInstance(form.closest('.modal')[0]).hide();
+}
+
 $(function() {
     // Admin xóa tin
     $('body').on('click', '[data-toggle="nv_del_content"]', function(e) {
@@ -181,4 +208,108 @@ $(function() {
         }
         window.location.href = $(this).data('href') + rawurlencode(q);
     });
+
+    // Báo cáo lỗi: bôi đen đoạn văn bản trong bài viết để hiện nút gửi báo cáo
+    const reportModal = $('[data-toggle="newsReportModal"]');
+    if (reportModal.length && $('[data-toggle="error-report"]').length) {
+        const reportForm = $('[data-form="newsReport"]', reportModal);
+        const reportTitle = $('.modal-title', reportModal).text();
+        let reportTimer = null;
+        let reportTip = null;
+        let reportExceeding = false;
+
+        // Ô nhập tự giãn chiều cao theo nội dung
+        const reportAutoResize = (el) => {
+            el.style.height = '5px';
+            el.style.height = el.scrollHeight + 'px';
+        };
+
+        reportModal.on('show.bs.modal', () => {
+            $('[data-valid]', reportForm).each(function() {
+                nv_validate_reset($(this));
+            });
+
+            const el = reportModal[0];
+            const display = el.style.display;
+            el.style.visibility = 'hidden';
+            el.style.display = 'block';
+            $('[data-toggle="newsReportAutoResize"]', reportModal).each(function() {
+                reportAutoResize(this);
+            });
+            el.style.display = display;
+            el.style.visibility = '';
+        });
+
+        $('[data-toggle="newsReportAutoResize"]', reportModal).on('input', function() {
+            reportAutoResize(this);
+        }).on('keydown', function(e) {
+            // Đoạn văn bản chỉ nằm trên một dòng
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
+
+        // Nút nổi mở modal báo cáo lỗi
+        const reportTipGet = () => {
+            if (reportTip) {
+                return reportTip;
+            }
+            reportTip = $('<div class="position-absolute z-3"></div>').hide();
+            const btn = $('<button type="button" class="btn btn-danger btn-sm"></button>');
+            btn.append('<i class="fa-solid fa-triangle-exclamation"></i> ').append(document.createTextNode(reportTitle));
+            btn.on('click', () => {
+                reportTip.hide();
+                const modal = bootstrap.Modal.getOrCreateInstance(reportModal[0]);
+                if (reportExceeding) {
+                    nukeviet.confirm(reportModal.data('truncated'), () => {
+                        modal.show();
+                    });
+                    return;
+                }
+                modal.show();
+            });
+            reportTip.append(btn);
+            $('body').append(reportTip);
+
+            return reportTip;
+        };
+
+        $('body').on('mouseup keyup touchend', '[data-toggle="error-report"]', function() {
+            clearTimeout(reportTimer);
+            reportTimer = setTimeout(() => {
+                const selection = window.getSelection ? window.getSelection() : null;
+                if (!selection || selection.rangeCount === 0) {
+                    return;
+                }
+
+                let text = trim(strip_tags(selection.toString()));
+                if (text.length <= 2 || /\r|\n/.test(text)) {
+                    reportTip && reportTip.hide();
+                    return;
+                }
+
+                // Chỉ nhận tối đa 250 ký tự, cắt tại khoảng trắng gần nhất
+                reportExceeding = text.length > 250;
+                if (reportExceeding) {
+                    const pos = text.lastIndexOf(' ', 250);
+                    text = text.substring(0, pos > 0 ? pos : 250);
+                }
+                $('[name="report_content"], [name="report_fix"]', reportForm).val(text);
+
+                // Hiện nút ngay dưới đoạn văn bản được chọn
+                const rect = selection.getRangeAt(0).getBoundingClientRect();
+                reportTipGet().css({
+                    left: Math.max(10, rect.left + window.scrollX),
+                    top: rect.bottom + window.scrollY + 8
+                }).fadeIn(200);
+            }, 100);
+        });
+
+        // Bấm ra ngoài thì ẩn nút
+        $(document).on('mousedown touchstart', (e) => {
+            if (reportTip && !$(e.target).closest(reportTip).length) {
+                reportTip.hide();
+            }
+        });
+    }
 });

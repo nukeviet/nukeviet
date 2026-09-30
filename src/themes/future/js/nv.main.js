@@ -167,8 +167,8 @@ function _check_invalid(ipt, customMess, specialType) {
             return _make_check_invalid(ipt, valid, valid.errMess || mess);
         }
     }
-    // Check email
-    if (valid.type == 'email' && !nv_mailfilter.test(trim(ipt.val()))) {
+    // Check email, bỏ qua khi rỗng và được phép rỗng
+    if (valid.type == 'email' && !(valid.allowedEmpty && trim(ipt.val()) === valid.empty) && !nv_mailfilter.test(trim(ipt.val()))) {
         return _make_check_invalid(ipt, valid, valid.errMess || nv_email);
     }
     // Check regex qua data-pattern, bỏ qua khi rỗng và được phép rỗng

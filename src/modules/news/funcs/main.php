@@ -46,7 +46,7 @@ if (!empty($module_config[$module_name]['report_active']) and (!empty($module_co
             $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
         } elseif ($module_captcha == 'turnstile') {
             // Xác định giá trị của captcha nhập vào nếu sử dụng Turnstile
-            $fcode = $nv_Request->get_title('cf-turnstile-response', 'post', '');
+            $nv_seccode = $nv_Request->get_title('cf-turnstile-response', 'post', '');
         } elseif ($module_captcha == 'captcha') {
             // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
             $nv_seccode = $nv_Request->get_title('captcha', 'post', '');

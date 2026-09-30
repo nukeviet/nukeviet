@@ -909,7 +909,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
 }
 
 /**
- * theme_report()
+ * Giao diện báo lỗi bài viết
  *
  * @param mixed $newsid
  * @param mixed $newscheckss
@@ -917,38 +917,17 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
  */
 function theme_report($newsid, $newscheckss)
 {
-    global $module_name, $module_captcha, $global_config;
+    global $module_name, $nv_Lang;
 
-    $xtpl = new XTemplate('report.tpl', NV_ROOTDIR . '/themes/default/modules/news');
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('REPORT_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    $xtpl->assign('NEWSID', $newsid);
-    $xtpl->assign('NEWSCHECKSS', $newscheckss);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('report.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('NEWSID', $newsid);
+    $tpl->assign('NEWSCHECKSS', $newscheckss);
+    $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('captcha'));
 
-    if (defined('NV_IS_USER')) {
-        $xtpl->parse('main.report_email_none');
-    }
-    // Nếu dùng reCaptcha v3
-    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-        $xtpl->parse('main.recaptcha3');
-    }
-    // Nếu dùng reCaptcha v2
-    elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-        $xtpl->parse('main.recaptcha');
-    }
-    // Nếu dùng turnstile
-    elseif ($module_captcha == 'turnstile') {
-        $xtpl->parse('main.turnstile');
-    }
-    // Nếu dùng captcha hình
-    elseif ($module_captcha == 'captcha') {
-        $xtpl->parse('main.captcha');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('report.tpl');
 }
 
 /**
