@@ -37,6 +37,10 @@ function _make_check_invalid(ipt, data, message) {
 
     if (!element.length || (!element.is('.invalid-feedback') && !element.is('.invalid-tooltip'))) {
         element = $(`<div class="invalid-${data.errType}"></div>`).insertAfter(eleBeforeInvalid);
+        element.data('error-mess', '');
+    } else if (element.data('error-mess') === undefined) {
+        // Lưu chữ gốc trong markup trước khi ghi đè thông báo
+        element.data('error-mess', element.text());
     }
     element.text(message);
     if (data.type === 'editor' || !ipt.attr('name')) {
@@ -82,7 +86,8 @@ function _check_invalid(ipt, customMess, specialType) {
             elErr = elErr.next();
         }
         if (elErr.length == 1 && (elErr.is('.invalid-feedback') || elErr.is('.invalid-tooltip'))) {
-            if (!elErr.data('error-mess') || elErr.data('error-mess') == '') {
+            // Chỉ lưu chữ gốc của thẻ một lần, tránh lấy nhầm thông báo tự sinh của lần kiểm tra trước
+            if (elErr.data('error-mess') === undefined) {
                 elErr.data('error-mess', elErr.text());
             }
             errMess = elErr.data('error-mess');

@@ -36,7 +36,57 @@ function newsReportCallback(respon, form) {
     bootstrap.Modal.getOrCreateInstance(form.closest('.modal')[0]).hide();
 }
 
+/**
+ * Gửi bài viết cho bạn bè thành công thì xóa nội dung đã nhập, đổi captcha và đóng modal
+ *
+ * @param {Object} respon
+ * @param {JQuery} form
+ */
+function newsSendMailCallback(respon, form) {
+    $('[name="friend_email"], [name="your_message"]', form).val('');
+    formChangeCaptcha(form);
+    bootstrap.Modal.getOrCreateInstance(form.closest('.modal')[0]).hide();
+}
+
 $(function() {
+    // Mở modal gửi bài viết cho bạn bè, lần đầu thì tải form về
+    $('body').on('click', '[data-toggle="newsSendMailModal"][data-obj][data-url][data-ss]', function(e) {
+        e.preventDefault();
+
+        const btn = $(this);
+        const modal = $(btn.data('obj'));
+        if (!modal.length || btn.data('busy')) {
+            return;
+        }
+        if (modal.data('sendmail-loaded')) {
+            bootstrap.Modal.getOrCreateInstance(modal[0]).show();
+            return;
+        }
+
+        btn.data('busy', true);
+        $.ajax({
+            type: 'POST',
+            cache: false,
+            url: btn.data('url'),
+            data: {
+                checkss: btn.data('ss')
+            },
+            dataType: 'html',
+            success: function(res) {
+                btn.data('busy', false);
+                $('.modal-dialog', modal).html(res);
+                loadCaptcha(modal);
+                modal.data('sendmail-loaded', true);
+                bootstrap.Modal.getOrCreateInstance(modal[0]).show();
+            },
+            error: function(xhr, text, err) {
+                btn.data('busy', false);
+                nukeviet.toast(err || text, 'error');
+                console.log(xhr, text, err);
+            }
+        });
+    });
+
     // Admin xóa tin
     $('body').on('click', '[data-toggle="nv_del_content"]', function(e) {
         e.preventDefault();

@@ -1027,57 +1027,24 @@ function list_articles_theme(array $header, array $array_articles, array $array_
 }
 
 /**
- * sendmail_themme()
+ * Giao diện gửi email bài viết cho bạn bè
  *
  * @param mixed $sendmail
  * @return string
  */
-function sendmail_themme($sendmail)
+function sendmail_theme($sendmail)
 {
-    global $module_info, $global_config, $nv_Lang, $nv_Lang, $module_config, $module_name, $module_captcha;
+    global $global_config, $nv_Lang, $module_name;
 
-    $xtpl = new XTemplate('sendmail.tpl', get_module_tpl_dir('sendmail.tpl'));
-    $xtpl->assign('SENDMAIL', $sendmail);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('sendmail.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('SENDMAIL', $sendmail);
+    $tpl->assign('CAPTCHA_ATTRS', nv_captcha_form_attrs('nv_seccode'));
 
-    if (defined('NV_IS_USER')) {
-        $xtpl->parse('main.sender_is_user');
-    }
-
-    // Nếu dùng reCaptcha v3
-    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-        $xtpl->parse('main.recaptcha3');
-    }
-    // Nếu dùng reCaptcha v2
-    elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
-        $xtpl->parse('main.recaptcha');
-    }
-    // Nếu dùng turnstile
-    elseif ($module_captcha == 'turnstile') {
-        $xtpl->parse('main.turnstile');
-    } elseif ($module_captcha == 'captcha') {
-        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
-        $xtpl->parse('main.captcha');
-    }
-
-    if (!empty($global_config['data_warning']) or !empty($global_config['antispam_warning'])) {
-        if (!empty($global_config['data_warning'])) {
-            $xtpl->assign('DATA_USAGE_CONFIRM', !empty($global_config['data_warning_content']) ? $global_config['data_warning_content'] : $nv_Lang->getGlobal('data_warning_content'));
-            $xtpl->parse('main.confirm.data_sending');
-        }
-
-        if (!empty($global_config['antispam_warning'])) {
-            $xtpl->assign('ANTISPAM_CONFIRM', !empty($global_config['antispam_warning_content']) ? $global_config['antispam_warning_content'] : $nv_Lang->getGlobal('antispam_warning_content'));
-            $xtpl->parse('main.confirm.antispam');
-        }
-        $xtpl->parse('main.confirm');
-    }
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('sendmail.tpl');
 }
 
 /**

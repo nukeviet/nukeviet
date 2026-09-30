@@ -1267,12 +1267,12 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
 }
 
 /**
- * sendmail_themme()
+ * Giao diện gửi email bài viết cho bạn bè
  *
  * @param mixed $sendmail
  * @return string
  */
-function sendmail_themme($sendmail)
+function sendmail_theme($sendmail)
 {
     global $module_info, $global_config, $nv_Lang, $nv_Lang, $module_config, $module_name, $module_captcha;
 
