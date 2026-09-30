@@ -900,23 +900,6 @@ function theme_report($newsid, $newscheckss)
 }
 
 /**
- * no_permission()
- *
- * @return string
- */
-function no_permission()
-{
-    global $module_info, $nv_Lang;
-
-    $xtpl = new XTemplate('detail.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
-
-    $xtpl->assign('NO_PERMISSION', $nv_Lang->getModule('no_permission'));
-    $xtpl->parse('no_permission');
-
-    return $xtpl->text('no_permission');
-}
-
-/**
  * topic_theme()
  *
  * @param array  $topic_array

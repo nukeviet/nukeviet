@@ -97,7 +97,7 @@ if (!empty($localversions)) {
  */
 if (!nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     $nv_BotManager->setPrivate();
-    $contents = no_permission();
+    $contents = nv_theme_alert('', $nv_Lang->getModule('no_permission'));
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
@@ -107,7 +107,7 @@ if (!nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
 if (!empty($news_contents['group_view'])) {
     if (!nv_user_in_groups($news_contents['group_view'])) {
         $nv_BotManager->setPrivate();
-        $contents = no_permission();
+        $contents = nv_theme_alert('', $nv_Lang->getModule('no_permission'));
 
         include NV_ROOTDIR . '/includes/header.php';
         echo nv_site_theme($contents);

@@ -335,12 +335,6 @@
 <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
 <!-- END: main -->
 
-<!-- BEGIN: no_permission -->
-<div class="alert alert-info">
-    {NO_PERMISSION}
-</div>
-<!-- END: no_permission -->
-
 <!-- BEGIN: related_articles -->
 <div class="margin-bottom-lg">
     <div class="h3 text-bold">{LANG.related_sarticles}:</div>
