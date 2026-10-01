@@ -187,3 +187,195 @@
     }
   }
 }
+
+// Trình phát báo nói ở trang chi tiết
+.news-detail-player {
+  // Màu của plyr.css (bản audio) lấy theo biến Bootstrap để khớp màu chủ đạo và chế độ sáng/tối
+  --plyr-color-main: var(--#{$prefix}primary);
+  --plyr-focus-visible-color: var(--#{$prefix}primary);
+  --plyr-range-fill-background: var(--#{$prefix}primary);
+  --plyr-audio-controls-background: transparent;
+  --plyr-audio-control-color: var(--#{$prefix}body-color);
+  --plyr-audio-control-color-hover: #{color-contrast($primary)};
+  --plyr-audio-control-background-hover: var(--#{$prefix}primary);
+  --plyr-audio-progress-buffered-background: rgba(var(--#{$prefix}secondary-rgb), .35);
+  --plyr-audio-range-track-background: rgba(var(--#{$prefix}secondary-rgb), .35);
+  --plyr-audio-range-thumb-active-shadow-color: rgba(var(--#{$prefix}primary-rgb), .25);
+  --plyr-range-thumb-background: var(--#{$prefix}body-bg);
+  --plyr-range-thumb-shadow: 0 1px 1px rgba(var(--#{$prefix}emphasis-color-rgb), .15), 0 0 0 1px rgba(var(--#{$prefix}emphasis-color-rgb), .2);
+  --plyr-progress-loading-background: rgba(var(--#{$prefix}emphasis-color-rgb), .6);
+  --plyr-tooltip-background: var(--#{$prefix}emphasis-color);
+  --plyr-tooltip-color: var(--#{$prefix}body-bg);
+  --plyr-tooltip-shadow: #{$box-shadow-sm};
+  --plyr-tooltip-radius: #{$border-radius};
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem 1rem;
+  padding-right: 1rem;
+  background-color: var(--#{$prefix}tertiary-bg);
+  border-radius: $border-radius;
+
+  .player {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  @include media-breakpoint-down(sm) {
+    justify-content: center;
+    padding: 0 0 .5rem;
+
+    .player {
+      flex-basis: 100%;
+    }
+  }
+}
+
+// Mục lục bài viết: khối phẳng nền nhạt, vạch màu chủ đạo bên trái
+.news-toc {
+  scroll-margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--#{$prefix}tertiary-bg);
+  border-left: .25rem solid var(--#{$prefix}primary);
+  border-radius: 0 $border-radius $border-radius 0;
+
+  .news-toc-title {
+    margin-bottom: .75rem;
+    font-weight: $font-weight-semibold;
+    color: var(--#{$prefix}emphasis-color);
+
+    i {
+      color: var(--#{$prefix}primary);
+    }
+  }
+
+  a {
+    color: var(--#{$prefix}body-color);
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      color: var(--#{$prefix}primary);
+    }
+  }
+
+  li::marker {
+    color: var(--#{$prefix}secondary-color);
+  }
+}
+
+.news-toc-list,
+.news-toc-sub {
+  padding-left: 1.25rem;
+  margin-bottom: 0;
+
+  li:not(:last-child) {
+    margin-bottom: .5rem;
+  }
+}
+
+.news-toc-list {
+  list-style-type: upper-roman;
+
+  >li>a {
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.news-toc-sub {
+  list-style-type: decimal;
+  margin-top: .5rem;
+}
+
+.news-toc-2 {
+  .news-toc-list {
+    list-style-type: disc;
+  }
+
+  .news-toc-sub {
+    list-style-type: circle;
+  }
+}
+
+.news-toc-3 {
+  .news-toc-list,
+  .news-toc-sub {
+    list-style-type: none;
+    padding-left: 0;
+  }
+}
+
+// Nút quay về mục lục và sao chép liên kết ở các tiêu đề trong bài
+.news-bodyhtml {
+  h2[data-id],
+  h3[data-id] {
+    // Cuộn tới tiêu đề thì chừa khoảng trống phía trên, không dính sát mép màn hình
+    scroll-margin-top: 1rem;
+
+    .btns {
+      float: right;
+      margin-left: .25rem;
+    }
+
+    button {
+      padding: 0;
+      font-size: 1rem;
+      line-height: 1;
+      color: var(--#{$prefix}body-color);
+      background: none;
+      border: 0;
+      opacity: .25;
+      appearance: none;
+
+      &:not(:last-child) {
+        margin-right: .25rem;
+      }
+
+      &:hover,
+      &:focus {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// Đánh giá sao, sắp ngược để chọn được các sao đứng trước bằng ~
+.news-rating {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  font-size: 1.125rem;
+  line-height: 1;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  label {
+    padding: 0 .125rem;
+    color: var(--#{$prefix}secondary-color);
+    cursor: pointer;
+  }
+
+  input:checked~label {
+    color: $warning;
+  }
+
+  input:focus-visible+label {
+    outline: 1px dotted var(--#{$prefix}body-color);
+  }
+
+  &:not(.disabled) {
+    label:hover,
+    label:hover~label {
+      color: $danger;
+    }
+  }
+
+  &.disabled label {
+    pointer-events: none;
+    cursor: default;
+  }
+}

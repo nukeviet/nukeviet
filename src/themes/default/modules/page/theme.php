@@ -23,7 +23,7 @@ if (!defined('NV_IS_MOD_PAGE')) {
  */
 function nv_page_main($row, $ab_links, $content_comment)
 {
-    global $module_name, $module_info, $meta_property, $client_info, $page_config, $global_config;
+    global $module_name, $module_info, $meta_property, $client_info, $page_config;
 
     [$template, $dir] = get_module_tpl_dir('main.tpl', true);
     $xtpl = new XTemplate('main.tpl', $dir);
@@ -46,10 +46,6 @@ function nv_page_main($row, $ab_links, $content_comment)
         }
         if (str_contains($page_config['socialbutton'], 'twitter')) {
             $xtpl->parse('main.socialbutton.twitter');
-        }
-        if (str_contains($page_config['socialbutton'], 'zalo') and !empty($global_config['zaloOfficialAccountID'])) {
-            $xtpl->assign('ZALO_OAID', $global_config['zaloOfficialAccountID']);
-            $xtpl->parse('main.socialbutton.zalo');
         }
 
         $xtpl->parse('main.socialbutton');

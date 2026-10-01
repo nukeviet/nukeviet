@@ -23,7 +23,23 @@ if (!defined('NV_IS_MOD_PAGE')) {
  */
 function nv_page_main(array $row, array $ab_links, string $content_comment): string
 {
-    global $module_name, $nv_Lang, $page_config, $global_config;
+    global $module_name, $nv_Lang, $page_config, $meta_property;
+
+    // Các nút chia sẻ mạng xã hội, bài viết phải bật và module có chọn nền tảng
+    $socials = [
+        'facebook' => false,
+        'twitter' => false
+    ];
+    if (!empty($row['socialbutton']) and !empty($page_config['socialbutton'])) {
+        if (str_contains($page_config['socialbutton'], 'facebook')) {
+            if (!empty($page_config['facebookapi'])) {
+                $meta_property['fb:app_id'] = $page_config['facebookapi'];
+                $meta_property['og:locale'] = (NV_LANG_DATA == 'vi') ? 'vi_VN' : 'en_US';
+            }
+            $socials['facebook'] = true;
+        }
+        $socials['twitter'] = str_contains($page_config['socialbutton'], 'twitter');
+    }
 
     $tpl = new \NukeViet\Template\NVSmarty();
     $tpl->setTemplateDir(get_module_tpl_dir('detail.tpl'));
@@ -32,7 +48,7 @@ function nv_page_main(array $row, array $ab_links, string $content_comment): str
     $tpl->assign('MODULE_NAME', $module_name);
     $tpl->assign('OTHERS', $ab_links);
     $tpl->assign('CONFIG', $page_config);
-    $tpl->assign('GCONFIG', $global_config);
+    $tpl->assign('SOCIALS', $socials);
     $tpl->assign('COMMENT', $content_comment);
 
     return $tpl->fetch('detail.tpl');

@@ -50,7 +50,6 @@ $lang_module['first_news'] = 'Lorsque le nouveau poste sera dabord';
 $lang_module['imagealt'] = 'Explication de l\'image';
 $lang_module['socialbutton'] = 'Boutons de réseaux sociaux';
 $lang_module['socialbuttonnote'] = 'Afficher les boutons des réseaux sociaux';
-$lang_module['socialbutton_zalo_note'] = 'Tout d\'abord, vous devez déclarer l\'ID de compte officiel Zalo';
 $lang_module['activecomm'] = 'Permission de discussion';
 $lang_module['imgposition'] = 'Lieu de Création';
 $lang_module['imgposition_0'] = 'Non illustré';

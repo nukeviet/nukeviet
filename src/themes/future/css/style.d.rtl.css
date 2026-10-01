@@ -28435,10 +28435,75 @@ body {
 .richtext-container > p:last-child {
   margin-bottom: 0;
 }
+.richtext-container img {
+  max-width: 100% !important;
+  height: auto !important;
+}
 
 span.keyword {
   color: var(--bs-highlight-color);
   background-color: var(--bs-highlight-bg);
+}
+
+.btn-share-facebook,
+.btn-share-x {
+  --bs-btn-padding-x: 0;
+  --bs-btn-padding-y: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+}
+
+.btn-share-facebook {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #0D5BD7;
+  --bs-btn-border-color: #0D5BD7;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #0b4db7;
+  --bs-btn-hover-border-color: #0a49ac;
+  --bs-btn-focus-shadow-rgb: 49, 116, 221;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #0a49ac;
+  --bs-btn-active-border-color: #0a44a1;
+  --bs-btn-active-shadow: 0 0;
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #0D5BD7;
+  --bs-btn-disabled-border-color: #0D5BD7;
+}
+
+.btn-share-x {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #000;
+  --bs-btn-border-color: #000;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: black;
+  --bs-btn-hover-border-color: black;
+  --bs-btn-focus-shadow-rgb: 38, 38, 38;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: black;
+  --bs-btn-active-border-color: black;
+  --bs-btn-active-shadow: 0 0;
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #000;
+  --bs-btn-disabled-border-color: #000;
+}
+[data-bs-theme=dark] .btn-share-x {
+  --bs-btn-color: #000;
+  --bs-btn-bg: #fff;
+  --bs-btn-border-color: #fff;
+  --bs-btn-hover-color: #000;
+  --bs-btn-hover-bg: white;
+  --bs-btn-hover-border-color: white;
+  --bs-btn-focus-shadow-rgb: 217, 217, 217;
+  --bs-btn-active-color: #000;
+  --bs-btn-active-bg: white;
+  --bs-btn-active-border-color: white;
+  --bs-btn-active-shadow: 0 0;
+  --bs-btn-disabled-color: #000;
+  --bs-btn-disabled-bg: #fff;
+  --bs-btn-disabled-border-color: #fff;
 }
 
 .site-user-inform .inform-toggle, .topbar .socal-icons a, .topbar .contact-icons a:not(.dropdown-item), .topbar .topbar-search .search-icon, .site-header-mobile .toggle-main-nav {

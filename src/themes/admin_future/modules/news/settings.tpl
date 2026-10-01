@@ -119,13 +119,8 @@
                 <div class="col-sm-8 col-lg-7 col-xxl-6">
                     {foreach from=$SOCIALBUTTON_OPTIONS item=row}
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" name="socialbutton[]" value="{$row.key}" id="socialbutton_{$row.key}"{if $row.checked} checked{/if}{if $row.disabled} disabled{/if}>
+                        <input class="form-check-input" type="checkbox" name="socialbutton[]" value="{$row.key}" id="socialbutton_{$row.key}"{if $row.checked} checked{/if}>
                         <label class="form-check-label" for="socialbutton_{$row.key}">{$row.title}</label>
-                        {if $row.key eq 'zalo' and $row.disabled}
-                        <div class="form-text">
-                            <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=zalo&amp;{$smarty.const.NV_OP_VARIABLE}=settings">{$LANG->getModule('socialbutton_zalo_note')}</a>
-                        </div>
-                        {/if}
                     </div>
                     {/foreach}
                 </div>

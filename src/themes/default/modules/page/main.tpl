@@ -7,11 +7,13 @@
     <div class="panel-body">
         <h1 class="title margin-bottom-lg">{CONTENT.title}</h1>
         <!-- BEGIN: socialbutton -->
-        <div class="margin-bottom">
-            <div style="display:flex;align-items:flex-start;">
-                <!-- BEGIN: facebook --><div class="margin-right"><div class="fb-like" style="float:left!important;margin-right:0!important" data-href="{CONTENT.link}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div></div><!-- END: facebook -->
-                <!-- BEGIN: twitter --><div class="margin-right"><a href="http://twitter.com/share" class="twitter-share-button">Tweet</a></div><!-- END: twitter -->
-                <!-- BEGIN: zalo --><div><div class="zalo-share-button" data-href="" data-oaid="{ZALO_OAID}" data-layout="1" data-color="blue" data-customize=false></div></div><!-- END: zalo -->
+        <div class="margin-bottom-lg">
+            <div class="social-share-container">
+                <div class="social-share-label"><i class="fa fa-share-alt" aria-hidden="true"></i> {GLANG.share}:</div>
+                <div class="social-share-buttons">
+                    <!-- BEGIN: facebook --><button type="button" class="social-share-facebook" data-toggle="nv-social-share" data-platform="facebook" data-url="{CONTENT.link}" data-title="{CONTENT.title}"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg> Facebook</button><!-- END: facebook -->
+                    <!-- BEGIN: twitter --><button type="button" class="social-share-x" data-toggle="nv-social-share" data-platform="x" data-url="{CONTENT.link}" data-title="{CONTENT.title}"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg> X</button><!-- END: twitter -->
+                </div>
             </div>
         </div>
         <!-- END: socialbutton -->

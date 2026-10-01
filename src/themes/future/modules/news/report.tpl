@@ -3,7 +3,7 @@
     <div class="modal-dialog">
         <form class="modal-content" action="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}" method="post" data-form="newsReport" data-toggle="ajax-form" data-precheck="nv_precheck_form" data-callback="newsReportCallback"{$CAPTCHA_ATTRS} novalidate>
             <div class="modal-header">
-                <h5 class="modal-title" id="newsReportModalLabel">{$LANG->getModule('report_error_content')}</h5>
+                <div class="fs-5 fww-medium modal-title" id="newsReportModalLabel">{$LANG->getModule('report_error_content')}</div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$LANG->getGlobal('close')}"></button>
             </div>
             <div class="modal-body">

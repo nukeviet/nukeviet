@@ -50,7 +50,6 @@ $lang_module['first_news'] = 'When the new post will be up first';
 $lang_module['imagealt'] = 'Image note';
 $lang_module['socialbutton'] = 'Social media buttons';
 $lang_module['socialbuttonnote'] = 'Display social media buttons';
-$lang_module['socialbutton_zalo_note'] = 'First of all, you need to declare the Zalo Official Account ID';
 $lang_module['activecomm'] = 'Allow comment';
 $lang_module['imgposition'] = 'Imag position';
 $lang_module['imgposition_0'] = 'Hidden';

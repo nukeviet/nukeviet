@@ -52,14 +52,10 @@
                     <div class="row mb-3">
                         <div class="col-sm-3 col-xxl-4 col-form-label text-sm-end pt-0">{$LANG->getModule('socialbutton')}</div>
                         <div class="col-sm-8 col-lg-6 col-xxl-8">
-                            {foreach from=$SOCIAL_BUTTONS item=button}
+                            {foreach from=$SOCIAL_BUTTONS key=button item=buttonTitle}
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox"{if $button eq 'zalo' and empty($GCONFIG.zaloOfficialAccountID)} disabled{/if} name="socialbutton[]" value="{$button}"{if in_array($button, $DATA.socialbutton, true)} checked{/if} role="switch" id="element_socialbutton_{$button}">
-                                <label class="form-check-label opacity-100" for="element_socialbutton_{$button}">
-                                    {$button|ucfirst}{if $button eq 'zalo' and empty($GCONFIG.zaloOfficialAccountID)}
-                                    (<a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=zalo&amp;{$smarty.const.NV_OP_VARIABLE}=settings">{$LANG->getModule('socialbutton_zalo_note')}</a>)
-                                    {/if}
-                                </label>
+                                <input class="form-check-input" type="checkbox" name="socialbutton[]" value="{$button}"{if in_array($button, $DATA.socialbutton, true)} checked{/if} role="switch" id="element_socialbutton_{$button}">
+                                <label class="form-check-label opacity-100" for="element_socialbutton_{$button}">{$buttonTitle}</label>
                             </div>
                             {/foreach}
                         </div>

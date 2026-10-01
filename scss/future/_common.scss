@@ -179,10 +179,41 @@
   >p:last-child {
     margin-bottom: 0;
   }
+
+  // Ảnh dán từ nơi khác hay kèm width/style cố định, ép về khung nội dung
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
 }
 
 // Đánh dấu từ khóa trong kết quả tìm kiếm
 span.keyword {
   color: var(--#{$prefix}highlight-color);
   background-color: var(--#{$prefix}highlight-bg);
+}
+
+// Nút chia sẻ mạng xã hội (data-toggle="nv-social-share"), màu theo nhận diện của từng nền tảng
+.btn-share-facebook,
+.btn-share-x {
+  // Nút chỉ có icon, cố định kích thước để thành hình tròn đều nhau giữa các nền tảng
+  --#{$prefix}btn-padding-x: 0;
+  --#{$prefix}btn-padding-y: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+}
+
+.btn-share-facebook {
+  @include button-variant(map-get($oauth-branches, facebook), map-get($oauth-branches, facebook));
+}
+
+.btn-share-x {
+  @include button-variant($black, $black);
+
+  [data-bs-theme="dark"] & {
+    @include button-variant($white, $white);
+  }
 }

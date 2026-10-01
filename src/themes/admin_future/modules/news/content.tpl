@@ -285,15 +285,17 @@
                 <div class="card-header fw-medium fs-5">
                     {$LANG->getModule('content_block')}
                 </div>
-                <div class="card-body">
-                    {foreach from=$LIST_BLOCKS key=key item=value}
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="{$key}" name="bids[]" id="bids_{$key}" {if in_array($key, $DATA_BLOCKS)} checked{/if}>
-                        <label class="form-check-label" for="bids_{$key}">
-                            {$value}
-                        </label>
+                <div class="position-relative maxh-300 overflow-hidden" data-nv-toggle="scroll">
+                    <div class="card-body">
+                        {foreach from=$LIST_BLOCKS key=key item=value}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="{$key}" name="bids[]" id="bids_{$key}" {if in_array($key, $DATA_BLOCKS)} checked{/if}>
+                            <label class="form-check-label" for="bids_{$key}">
+                                {$value}
+                            </label>
+                        </div>
+                        {/foreach}
                     </div>
-                    {/foreach}
                 </div>
             </div>
             {/if}

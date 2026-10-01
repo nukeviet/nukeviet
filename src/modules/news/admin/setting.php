@@ -19,7 +19,11 @@ if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-$socialbuttons = ['facebook', 'twitter', 'zalo'];
+// Nút chia sẻ mạng xã hội: khóa lưu CSDL => tên hiển thị. Khóa twitter giữ nguyên để tương thích dữ liệu cũ
+$socialbuttons = [
+    'facebook' => 'Facebook',
+    'twitter' => 'X'
+];
 $groupslist = nv_groups_list();
 $redirect_url = nv_url_rewrite(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true);
 
@@ -164,10 +168,7 @@ if ($nv_Request->isset_request('savesetting', 'post')) {
         $array_config['show_no_image'] = '';
     }
 
-    $array_config['socialbutton'] = array_intersect($array_config['socialbutton'], $socialbuttons);
-    if (in_array('zalo', $array_config['socialbutton'], true) and empty($global_config['zaloOfficialAccountID'])) {
-        $array_config['socialbutton'] = array_diff($array_config['socialbutton'], ['zalo']);
-    }
+    $array_config['socialbutton'] = array_intersect($array_config['socialbutton'], array_keys($socialbuttons));
     $array_config['socialbutton'] = !empty($array_config['socialbutton']) ? implode(',', $array_config['socialbutton']) : '';
 
     $array_config['schema_type'] = $nv_Request->get_title('schema_type', 'post', '');
@@ -301,13 +302,11 @@ for ($i = 0; $i <= 50; ++$i) {
 
 $socialbutton_selected = !empty($item['socialbutton']) ? array_map('trim', explode(',', $item['socialbutton'])) : [];
 $socialbutton_options = [];
-foreach ($socialbuttons as $socialbutton) {
-    $is_disabled = $socialbutton === 'zalo' and empty($global_config['zaloOfficialAccountID']);
+foreach ($socialbuttons as $socialbutton => $socialbutton_title) {
     $socialbutton_options[] = [
         'key' => $socialbutton,
-        'title' => ucfirst($socialbutton),
-        'checked' => !$is_disabled and in_array($socialbutton, $socialbutton_selected, true),
-        'disabled' => $is_disabled
+        'title' => $socialbutton_title,
+        'checked' => in_array($socialbutton, $socialbutton_selected, true)
     ];
 }
 

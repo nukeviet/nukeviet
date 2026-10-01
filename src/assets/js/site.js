@@ -1095,32 +1095,38 @@ $(function() {
         }
         nv_open_browse($(this).attr('href'), "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
     });
+
+    // Nút chia sẻ mạng xã hội, mở cửa sổ chia sẻ của nền tảng mà không cần nạp SDK
+    $('body').on('click', '[data-toggle="nv-social-share"]', function(e) {
+        e.preventDefault();
+
+        const url = encodeURIComponent($(this).data('url') || window.location.href);
+        const title = encodeURIComponent($(this).data('title') || document.title);
+        let shareUrl = '';
+
+        switch ($(this).data('platform')) {
+            case 'facebook':
+                shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + url;
+                break;
+            case 'x':
+            case 'twitter':
+                shareUrl = 'https://x.com/intent/post?text=' + title + '&url=' + url;
+                break;
+            case 'linkedin':
+                shareUrl = 'https://www.linkedin.com/shareArticle?mini=true&url=' + url + '&title=' + title;
+                break;
+            case 'reddit':
+                shareUrl = 'https://www.reddit.com/submit?url=' + url + '&title=' + title;
+                break;
+            default:
+                return;
+        }
+
+        window.open(shareUrl, '_blank', 'scrollbars=0,resizable=1,menubar=0,left=100,top=100,width=550,height=440,toolbar=0,status=0');
+    });
 });
 
 $(window).on('load', function() {
-    (0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
-        var d = a.getElementsByTagName(b)[0];
-        var fb_app_id = ($('[property="fb:app_id"]').length > 0) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
-        var fb_locale = ($('[property="og:locale"]').length > 0) ? $('[property="og:locale"]').attr("content") : ((nv_lang_data == "vi") ? 'vi_VN' : 'en_US');
-        a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + fb_locale + "/all.js#xfbml=1" + fb_app_id, "undefined" !== typeof site_nonce && a.setAttribute('nonce', site_nonce), d.parentNode.insertBefore(a, d));
-    }(document, "script", "facebook-jssdk"));
-    0 < $(".twitter-share-button").length && function() {
-        var a = document.createElement("script");
-        a.type = "text/javascript";
-        a.src = "//platform.twitter.com/widgets.js";
-        "undefined" !== typeof site_nonce && a.setAttribute('nonce', site_nonce);
-        var b = document.getElementsByTagName("script")[0];
-        b.parentNode.insertBefore(a, b);
-    }();
-    0 < $(".zalo-share-button, .zalo-follow-only-button, .zalo-follow-button, .zalo-chat-widget").length && function() {
-        var a = document.createElement("script");
-        a.type = "text/javascript";
-        a.src = "//sp.zalo.me/plugins/sdk.js";
-        "undefined" !== typeof site_nonce && a.setAttribute('nonce', site_nonce);
-        var b = document.getElementsByTagName("script")[0];
-        b.parentNode.insertBefore(a, b);
-    }();
-
     // Nếu có recaptcha thì load API. Recaptcha 2 hoặc 3 chỉ hỗ trợ 1 trong 2
     if ($('[data-toggle=recaptcha]').length || $("[data-recaptcha2]").length) {
         reCaptcha2ApiLoad();

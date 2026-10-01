@@ -188,4 +188,169 @@
   -o-object-fit: cover;
   object-fit: cover;
 }
+
+.news-detail-player {
+  --plyr-color-main: var(--bs-primary);
+  --plyr-focus-visible-color: var(--bs-primary);
+  --plyr-range-fill-background: var(--bs-primary);
+  --plyr-audio-controls-background: transparent;
+  --plyr-audio-control-color: var(--bs-body-color);
+  --plyr-audio-control-color-hover: #fff;
+  --plyr-audio-control-background-hover: var(--bs-primary);
+  --plyr-audio-progress-buffered-background: rgba(var(--bs-secondary-rgb), .35);
+  --plyr-audio-range-track-background: rgba(var(--bs-secondary-rgb), .35);
+  --plyr-audio-range-thumb-active-shadow-color: rgba(var(--bs-primary-rgb), .25);
+  --plyr-range-thumb-background: var(--bs-body-bg);
+  --plyr-range-thumb-shadow: 0 1px 1px rgba(var(--bs-emphasis-color-rgb), .15), 0 0 0 1px rgba(var(--bs-emphasis-color-rgb), .2);
+  --plyr-progress-loading-background: rgba(var(--bs-emphasis-color-rgb), .6);
+  --plyr-tooltip-background: var(--bs-emphasis-color);
+  --plyr-tooltip-color: var(--bs-body-bg);
+  --plyr-tooltip-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --plyr-tooltip-radius: 0.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding-left: 1rem;
+  background-color: var(--bs-tertiary-bg);
+  border-radius: 0.25rem;
+}
+.news-detail-player .player {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+@media (max-width: 575.98px) {
+  .news-detail-player {
+    justify-content: center;
+    padding: 0 0 0.5rem;
+  }
+  .news-detail-player .player {
+    flex-basis: 100%;
+  }
+}
+
+.news-toc {
+  scroll-margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--bs-tertiary-bg);
+  border-right: 0.25rem solid var(--bs-primary);
+  border-radius: 0.25rem 0 0 0.25rem;
+}
+.news-toc .news-toc-title {
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: var(--bs-emphasis-color);
+}
+.news-toc .news-toc-title i {
+  color: var(--bs-primary);
+}
+.news-toc a {
+  color: var(--bs-body-color);
+  text-decoration: none;
+}
+.news-toc a:hover, .news-toc a:focus {
+  color: var(--bs-primary);
+}
+.news-toc li::marker {
+  color: var(--bs-secondary-color);
+}
+
+.news-toc-list,
+.news-toc-sub {
+  padding-right: 1.25rem;
+  margin-bottom: 0;
+}
+.news-toc-list li:not(:last-child),
+.news-toc-sub li:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+
+.news-toc-list {
+  list-style-type: upper-roman;
+}
+.news-toc-list > li > a {
+  font-weight: 600;
+}
+
+.news-toc-sub {
+  list-style-type: decimal;
+  margin-top: 0.5rem;
+}
+
+.news-toc-2 .news-toc-list {
+  list-style-type: disc;
+}
+.news-toc-2 .news-toc-sub {
+  list-style-type: circle;
+}
+
+.news-toc-3 .news-toc-list,
+.news-toc-3 .news-toc-sub {
+  list-style-type: none;
+  padding-right: 0;
+}
+
+.news-bodyhtml h2[data-id],
+.news-bodyhtml h3[data-id] {
+  scroll-margin-top: 1rem;
+}
+.news-bodyhtml h2[data-id] .btns,
+.news-bodyhtml h3[data-id] .btns {
+  float: left;
+  margin-right: 0.25rem;
+}
+.news-bodyhtml h2[data-id] button,
+.news-bodyhtml h3[data-id] button {
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--bs-body-color);
+  background: none;
+  border: 0;
+  opacity: 0.25;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.news-bodyhtml h2[data-id] button:not(:last-child),
+.news-bodyhtml h3[data-id] button:not(:last-child) {
+  margin-left: 0.25rem;
+}
+.news-bodyhtml h2[data-id] button:hover, .news-bodyhtml h2[data-id] button:focus,
+.news-bodyhtml h3[data-id] button:hover,
+.news-bodyhtml h3[data-id] button:focus {
+  opacity: 1;
+}
+
+.news-rating {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+.news-rating input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.news-rating label {
+  padding: 0 0.125rem;
+  color: var(--bs-secondary-color);
+  cursor: pointer;
+}
+.news-rating input:checked ~ label {
+  color: #ffc107;
+}
+.news-rating input:focus-visible + label {
+  outline: 1px dotted var(--bs-body-color);
+}
+.news-rating:not(.disabled) label:hover,
+.news-rating:not(.disabled) label:hover ~ label {
+  color: #dc3545;
+}
+.news-rating.disabled label {
+  pointer-events: none;
+  cursor: default;
+}
 /*# sourceMappingURL=news.r.rtl.css.map */

@@ -12,16 +12,14 @@
     </span>
     {/if}
 </h1>
-{if not empty($DATA.social)}
-<div class="mb-3 d-flex flex-wrap gap-3">
-    {if not empty($DATA.social.facebook)}
-    <div class="fb-like" data-href="{$DATA.link}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>
+{if $SOCIALS.facebook or $SOCIALS.twitter}
+<div class="mb-3 d-flex flex-wrap align-items-center gap-2">
+    <span class="small text-body-secondary"><i class="fa-solid fa-share-nodes"></i> {$LANG->getGlobal('share')}:</span>
+    {if $SOCIALS.facebook}
+    <button type="button" class="btn btn-share-facebook rounded-circle" data-toggle="nv-social-share" data-platform="facebook" data-url="{$DATA.link}" data-title="{$DATA.title}" title="{$LANG->getGlobal('share_on', 'Facebook')}" aria-label="{$LANG->getGlobal('share_on', 'Facebook')}"><i class="fa-brands fa-facebook-f"></i></button>
     {/if}
-    {if not empty($DATA.social.twitter)}
-    <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
-    {/if}
-    {if not empty($DATA.social.zalo)}
-    <div class="zalo-share-button" data-href="{$DATA.absolute_link}" data-oaid="{$GCONFIG.zaloOfficialAccountID}" data-layout="1" data-color="blue" data-customize=false></div>
+    {if $SOCIALS.twitter}
+    <button type="button" class="btn btn-share-x rounded-circle" data-toggle="nv-social-share" data-platform="x" data-url="{$DATA.link}" data-title="{$DATA.title}" title="{$LANG->getGlobal('share_on', 'X')}" aria-label="{$LANG->getGlobal('share_on', 'X')}"><i class="fa-brands fa-x-twitter"></i></button>
     {/if}
 </div>
 {/if}

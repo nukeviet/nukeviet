@@ -583,7 +583,7 @@ function viewcat_two_column($array_content, $generate_page, $array_catpage)
 }
 
 /**
- * detail_theme()
+ * Giao diện chi tiết bài viết
  *
  * @param array  $news_contents
  * @param array  $array_keyword
@@ -595,313 +595,62 @@ function viewcat_two_column($array_content, $generate_page, $array_catpage)
  */
 function detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment)
 {
-    global $global_config, $module_info, $nv_Lang, $module_name, $module_config, $client_info;
+    global $nv_Lang, $module_name, $module_config, $meta_property;
 
-    [$template, $dir] = get_module_tpl_dir('detail.tpl', true);
-    $xtpl = new XTemplate('detail.tpl', $dir);
-    $xtpl->assign('LANG_GLOBAL', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $global_config['module_theme']);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
+    $mconfig = $module_config[$module_name];
 
-    $news_contents['addtime'] = nv_datetime_format($news_contents['addtime']);
-    $news_contents['css_autoplay'] = $news_contents['autoplay'] ? ' checked' : '';
-
-    !empty($news_contents['hometext']) && $news_contents['hometext'] = '<div data-toggle="error-report">' . $news_contents['hometext'] . '</div>';
-    !empty($news_contents['bodyhtml']) && $news_contents['bodyhtml'] = '<div data-toggle="error-report">' . $news_contents['bodyhtml'] . '</div>';
-
-    $xtpl->assign('NEWSID', $news_contents['id']);
-    $xtpl->assign('NEWSCHECKSS', $news_contents['newscheckss']);
-    $xtpl->assign('DETAIL', $news_contents);
-    $xtpl->assign('CHECKSESSION', md5($news_contents['id'] . NV_CHECK_SESSION));
-
-    // Xuất giọng đọc
-    if (!empty($news_contents['current_voice'])) {
-        foreach ($news_contents['voicedata'] as $voice) {
-            $xtpl->assign('VOICE', $voice);
-            $xtpl->parse('main.show_player.loop');
+    // Tóm tắt hiển thị ở tooltip của các danh sách tin liên quan
+    $prepareArticles = function (array $articles) use ($mconfig) {
+        foreach ($articles as $key => $article) {
+            $articles[$key]['hometext_clean'] = empty($mconfig['showtooltip']) ? '' : nv_clean60(strip_tags($article['hometext']), $mconfig['tooltip_length'], true);
         }
+        return $articles;
+    };
 
-        $xtpl->parse('main.show_player');
+    // Từ khóa của bài viết
+    $keywords = [];
+    foreach ($array_keyword as $value) {
+        $keywords[] = [
+            'keyword' => $value['keyword'],
+            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . urlencode($value['alias'])
+        ];
     }
 
-    if ($news_contents['allowed_send'] == 1) {
-        $xtpl->assign('URL_SENDMAIL', $news_contents['url_sendmail']);
-        $xtpl->parse('main.allowed_send');
-    }
-
-    if ($news_contents['allowed_print'] == 1) {
-        $xtpl->assign('URL_PRINT', $news_contents['url_print']);
-        $xtpl->parse('main.allowed_print');
-    }
-
-    if ($news_contents['allowed_save'] == 1) {
-        $xtpl->assign('URL_SAVEFILE', $news_contents['url_savefile']);
-        $xtpl->parse('main.allowed_save');
-    }
-
-    if ($news_contents['allowed_rating'] == 1) {
-        $xtpl->assign('STRINGRATING', $news_contents['stringrating']);
-        $xtpl->assign('RATINGFEEDBACK', !$news_contents['disablerating'] ? $nv_Lang->getModule('star_note') : '');
-
-        foreach ($news_contents['stars'] as $star) {
-            $xtpl->assign('STAR', $star);
-            $xtpl->parse('main.allowed_rating.star');
-        }
-
-        if ($news_contents['disablerating'] == 1) {
-            $xtpl->parse('main.allowed_rating.disablerating');
-        }
-
-        if ($news_contents['numberrating'] >= $module_config[$module_name]['allowed_rating_point']) {
-            $xtpl->parse('main.allowed_rating.data_rating');
-        }
-
-        $xtpl->parse('main.allowed_rating');
-    }
-
-    if ($news_contents['showhometext']) {
-        if (!empty($news_contents['image']['src'])) {
-            if ($news_contents['image']['position'] == 1) {
-                if (!empty($news_contents['image']['note'])) {
-                    $xtpl->parse('main.showhometext.imgthumb.note');
-                } else {
-                    $xtpl->parse('main.showhometext.imgthumb.empty');
-                }
-                $xtpl->parse('main.showhometext.imgthumb');
-            } elseif ($news_contents['image']['position'] == 2) {
-                if (!empty($news_contents['image']['note'])) {
-                    $xtpl->parse('main.showhometext.imgfull.note');
-                }
-                $xtpl->parse('main.showhometext.imgfull');
-            }
-        }
-
-        $xtpl->parse('main.showhometext');
-    }
-
-    // Mục lục bài viết
-    if (!empty($news_contents['navigation'])) {
-        foreach ($news_contents['navigation'] as $item) {
-            $xtpl->assign('NAVIGATION', $item['item']);
-            if (!empty($item['subitems'])) {
-                foreach ($item['subitems'] as $subitem) {
-                    $xtpl->assign('SUBNAVIGATION', $subitem);
-                    $xtpl->parse('main.navigation.navigation_item.sub_navigation.sub_navigation_item');
-                }
-                $xtpl->parse('main.navigation.navigation_item.sub_navigation');
-            }
-            $xtpl->parse('main.navigation.navigation_item');
-        }
-        $xtpl->parse('main.navigation');
-    }
-
-    if (!empty($news_contents['post_name'])) {
-        $xtpl->parse('main.post_name');
-    }
-
-    if (!empty($news_contents['files'])) {
-        foreach ($news_contents['files'] as $file) {
-            $xtpl->assign('FILE', $file);
-
-            // Hỗ trợ xem trực tuyến PDF và ảnh, các định dạng khác tải về để xem
-            if (!empty($file['urlfile'])) {
-                $xtpl->parse('main.files.loop.show_quick_viewfile');
-                $xtpl->parse('main.files.loop.content_quick_viewfile');
-            } elseif (preg_match('/^png|jpe|jpeg|jpg|gif|bmp|ico|tiff|tif|svg|svgz$/', $file['ext'])) {
-                $xtpl->parse('main.files.loop.show_quick_viewimg');
-            }
-            $xtpl->parse('main.files.loop');
-        }
-        $xtpl->parse('main.files');
-    }
-
-    if (!empty($news_contents['author']) or !empty($news_contents['source'])) {
-        if (!empty($news_contents['author'])) {
-            $xtpl->parse('main.author.name');
-        }
-
-        if (!empty($news_contents['source'])) {
-            $xtpl->parse('main.author.source');
-        }
-
-        $xtpl->parse('main.author');
-    }
-    if ($news_contents['copyright'] == 1) {
-        if (!empty($module_config[$module_name]['copyright'])) {
-            $xtpl->assign('COPYRIGHT', $module_config[$module_name]['copyright']);
-            $xtpl->parse('main.copyright');
-        }
-    }
-
-    if (!empty($array_keyword)) {
-        $t = count($array_keyword) - 1;
-        foreach ($array_keyword as $i => $value) {
-            $xtpl->assign('KEYWORD', $value['keyword']);
-            $xtpl->assign('LINK_KEYWORDS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . urlencode($value['alias']));
-            $xtpl->assign('SLASH', ($t == $i) ? '' : ', ');
-            $xtpl->parse('main.keywords.loop');
-        }
-        $xtpl->parse('main.keywords');
-    }
-
-    if (defined('NV_IS_MODADMIN')) {
-        $adminlink = trim(nv_link_edit_page($news_contents) . ' ' . nv_link_delete_page($news_contents, 1));
-        if (!empty($adminlink)) {
-            $xtpl->assign('EDITLINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $news_contents['id']);
-            $xtpl->assign('ADMINLINK', $adminlink);
-            $xtpl->parse('main.adminlink');
-        }
-    }
-
-    if (!empty($module_config[$module_name]['socialbutton'])) {
-        global $meta_property;
-
-        if (str_contains($module_config[$module_name]['socialbutton'], 'facebook')) {
-            if (!empty($module_config[$module_name]['facebookappid'])) {
-                $meta_property['fb:app_id'] = $module_config[$module_name]['facebookappid'];
+    // Các nút chia sẻ mạng xã hội
+    $socials = [
+        'facebook' => false,
+        'twitter' => false
+    ];
+    if (!empty($mconfig['socialbutton'])) {
+        if (str_contains($mconfig['socialbutton'], 'facebook')) {
+            if (!empty($mconfig['facebookappid'])) {
+                $meta_property['fb:app_id'] = $mconfig['facebookappid'];
                 $meta_property['og:locale'] = (NV_LANG_DATA == 'vi') ? 'vi_VN' : 'en_US';
             }
-            $xtpl->parse('main.socialbutton.facebook');
+            $socials['facebook'] = true;
         }
-        if (str_contains($module_config[$module_name]['socialbutton'], 'twitter')) {
-            $xtpl->parse('main.socialbutton.twitter');
-        }
-        if (str_contains($module_config[$module_name]['socialbutton'], 'zalo') and !empty($global_config['zaloOfficialAccountID'])) {
-            $xtpl->assign('ZALO_OAID', $global_config['zaloOfficialAccountID']);
-            $xtpl->parse('main.socialbutton.zalo');
-        }
-
-        $xtpl->parse('main.socialbutton');
+        $socials['twitter'] = str_contains($mconfig['socialbutton'], 'twitter');
     }
 
-    if (!empty($related_new_array) or !empty($related_array) or !empty($topic_array)) {
-        if (!empty($related_new_array)) {
-            foreach ($related_new_array as $key => $related_new_array_i) {
-                if ($module_config[$module_name]['showtooltip']) {
-                    $related_new_array_i['hometext_clean'] = nv_clean60(strip_tags($related_new_array_i['hometext']), $module_config[$module_name]['tooltip_length'], true);
-                }
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('detail.tpl'));
+    $tpl->registerPlugin('modifier', 'ddate', 'nv_date_format');
+    $tpl->registerPlugin('modifier', 'editAllowed', 'nv_link_edit_page');
+    $tpl->registerPlugin('modifier', 'deleteAllowed', 'nv_link_delete_page');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('MCONFIG', $mconfig);
+    $tpl->assign('DETAIL', $news_contents);
+    $tpl->assign('KEYWORDS', $keywords);
+    $tpl->assign('SOCIALS', $socials);
+    $tpl->assign('RELATED_ARTICLES', $prepareArticles($news_contents['related_articles']));
+    $tpl->assign('RELATED_NEW', $prepareArticles($related_new_array));
+    $tpl->assign('RELATED', $prepareArticles($related_array));
+    $tpl->assign('TOPICS', $prepareArticles($topic_array));
+    $tpl->assign('CONTENT_COMMENT', $content_comment);
 
-                if ($related_new_array_i['external_link']) {
-                    $related_new_array_i['target_blank'] = 'target="_blank"';
-                }
-
-                $newday = $related_new_array_i['time'] + (86400 * $related_new_array_i['newday']);
-                if ($newday >= NV_CURRENTTIME) {
-                    $xtpl->parse('main.others.related_new.loop.newday');
-                }
-                $related_new_array_i['time'] = nv_date_format(1, $related_new_array_i['time']);
-
-                $xtpl->assign('RELATED_NEW', $related_new_array_i);
-
-                if ($module_config[$module_name]['showtooltip']) {
-                    $xtpl->parse('main.others.related_new.loop.tooltip');
-                }
-
-                $xtpl->parse('main.others.related_new.loop');
-            }
-            unset($key);
-            $xtpl->parse('main.others.related_new');
-        }
-
-        if (!empty($related_array)) {
-            foreach ($related_array as $related_array_i) {
-                if ($module_config[$module_name]['showtooltip']) {
-                    $related_array_i['hometext_clean'] = nv_clean60(strip_tags($related_array_i['hometext']), $module_config[$module_name]['tooltip_length'], true);
-                }
-
-                if ($related_array_i['external_link']) {
-                    $related_array_i['target_blank'] = 'target="_blank"';
-                }
-
-                $newday = $related_array_i['time'] + (86400 * $related_array_i['newday']);
-                if ($newday >= NV_CURRENTTIME) {
-                    $xtpl->parse('main.others.related.loop.newday');
-                }
-                $related_array_i['time'] = nv_date_format(1, $related_array_i['time']);
-                $xtpl->assign('RELATED', $related_array_i);
-
-                if ($module_config[$module_name]['showtooltip']) {
-                    $xtpl->parse('main.others.related.loop.tooltip');
-                }
-
-                $xtpl->parse('main.others.related.loop');
-            }
-            $xtpl->parse('main.others.related');
-        }
-
-        if (!empty($topic_array)) {
-            foreach ($topic_array as $topic_array_i) {
-                if ($module_config[$module_name]['showtooltip']) {
-                    $topic_array_i['hometext_clean'] = nv_clean60(strip_tags($topic_array_i['hometext']), $module_config[$module_name]['tooltip_length'], true);
-                }
-
-                if ($topic_array_i['external_link']) {
-                    $topic_array_i['target_blank'] = 'target="_blank"';
-                }
-
-                $newday = $topic_array_i['time'] + (86400 * $topic_array_i['newday']);
-                if ($newday >= NV_CURRENTTIME) {
-                    $xtpl->parse('main.others.topic.loop.newday');
-                }
-                $topic_array_i['time'] = nv_date_format(1, $topic_array_i['time']);
-                $xtpl->assign('TOPIC', $topic_array_i);
-
-                if (!empty($module_config[$module_name]['showtooltip'])) {
-                    $xtpl->parse('main.others.topic.loop.tooltip');
-                }
-
-                $xtpl->parse('main.others.topic.loop');
-            }
-            $xtpl->parse('main.others.topic');
-        }
-
-        $xtpl->parse('main.others');
-    }
-
-    if (!empty($content_comment)) {
-        $xtpl->assign('CONTENT_COMMENT', $content_comment);
-        $xtpl->parse('main.comment');
-    }
-
-    if ($news_contents['status'] != 1) {
-        $xtpl->parse('main.no_public');
-    }
-
-    // Bài viết cố định liên quan
-    if (!empty($news_contents['related_articles'])) {
-        foreach ($news_contents['related_articles'] as $article) {
-            $article['target_blank'] = !empty($article['external_link']) ? ' target="_blank"' : '';
-            $article['hometext_clean'] = empty($module_config[$module_name]['showtooltip']) ? '' : nv_clean60(strip_tags($article['hometext']), $module_config[$module_name]['tooltip_length'], true);
-
-            $xtpl->assign('ARTICLE', $article);
-
-            $newday = $article['time'] + (86400 * $article['newday']);
-            if ($newday >= NV_CURRENTTIME) {
-                $xtpl->parse('related_articles.loop.newday');
-            }
-
-            if (!empty($module_config[$module_name]['showtooltip'])) {
-                $xtpl->parse('related_articles.loop.tooltip');
-            }
-
-            $xtpl->parse('related_articles.loop');
-        }
-
-        $xtpl->parse('related_articles');
-        $related_html = $xtpl->text('related_articles');
-        $xtpl->assign('RELATED_HTML', $related_html);
-
-        if ($news_contents['related_pos'] == 1) {
-            $xtpl->parse('main.related_top');
-        } else {
-            $xtpl->parse('main.related_bottom');
-        }
-    }
-
-    $xtpl->parse('main');
-    $contents = $xtpl->text('main');
-    if (!empty($module_config[$module_name]['report_active']) and (!empty($module_config[$module_name]['report_group']) and nv_user_in_groups($module_config[$module_name]['report_group']))) {
+    $contents = $tpl->fetch('detail.tpl');
+    if (!empty($mconfig['report_active']) and (!empty($mconfig['report_group']) and nv_user_in_groups($mconfig['report_group']))) {
         $contents .= theme_report($news_contents['id'], $news_contents['newscheckss']);
     }
 

@@ -16,7 +16,11 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $page_title = $nv_Lang->getModule('config');
 
 $array_config = [];
-$socialbuttons = ['facebook', 'twitter', 'zalo'];
+// Nút chia sẻ mạng xã hội: khóa lưu CSDL => tên hiển thị. Khóa twitter giữ nguyên để tương thích dữ liệu cũ
+$socialbuttons = [
+    'facebook' => 'Facebook',
+    'twitter' => 'X'
+];
 
 if ($nv_Request->isset_request('save', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
@@ -34,10 +38,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     $array_config['copy_page'] = $nv_Request->get_int('copy_page', 'post', 0);
     $array_config['alias_lower'] = $nv_Request->get_int('alias_lower', 'post', 0);
     $array_config['socialbutton'] = $nv_Request->get_typed_array('socialbutton', 'post', 'title', []);
-    $array_config['socialbutton'] = array_intersect($array_config['socialbutton'], $socialbuttons);
-    if (in_array('zalo', $array_config['socialbutton'], true) and empty($global_config['zaloOfficialAccountID'])) {
-        $array_config['socialbutton'] = array_diff($array_config['socialbutton'], ['zalo']);
-    }
+    $array_config['socialbutton'] = array_intersect($array_config['socialbutton'], array_keys($socialbuttons));
     $array_config['socialbutton'] = !empty($array_config['socialbutton']) ? implode(',', $array_config['socialbutton']) : '';
 
     $array_config['schema_type'] = $nv_Request->get_string('schema_type', 'post', '');
@@ -87,13 +88,11 @@ $array_config['socialbutton'] = !empty($array_config['socialbutton']) ? array_ma
 
 $tpl = new \NukeViet\Template\NVSmarty();
 $tpl->setTemplateDir(get_module_tpl_dir('config.tpl'));
-$tpl->registerPlugin('modifier', 'ucfirst', 'ucfirst');
 $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 $tpl->assign('DATA', $array_config);
 $tpl->assign('SOCIAL_BUTTONS', $socialbuttons);
-$tpl->assign('GCONFIG', $global_config);
 $tpl->assign('SCHEMA_TYPES', $schema_types);
 $tpl->assign('SCHEMA_ABOUTS', $schema_abouts);
 $tpl->assign('CHECKSS', csrf_create($csrf_key));
