@@ -14,6 +14,20 @@ if (!defined('NV_MAINFILE')) {
 }
 
 /**
+ * Mã kiểm tra gửi ra client cho form và các request bình luận.
+ *
+ * @param string $module
+ * @param string $area
+ * @param int    $id
+ * @param mixed  $allowed
+ * @return string
+ */
+function nv_comment_checkss($module, $area, $id, $allowed)
+{
+    return hash_hmac('sha256', $module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CHECK_SESSION, NV_CACHE_PREFIX);
+}
+
+/**
  * nv_comment_data()
  *
  * @param string $module
@@ -186,7 +200,7 @@ function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status
                     $nv_Request->set_Cookie('sortcomm', $sortcomm, NV_LIVE_COOKIE_TIME);
                 }
                 $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
-                $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&comment_load=1&perpage=' . $per_page_comment;
+                $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . nv_comment_checkss($module, $area, $id, $allowed) . '&comment_load=1&perpage=' . $per_page_comment;
                 $comment_array = nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url);
 
                 $is_delete = false;
@@ -228,8 +242,10 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
     // Kiểm tra module có được Sử dụng chức năng bình luận
     if (!empty($module) and isset($module_config[$module]['activecomm'])) {
         if ($id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CHECK_SESSION)) {
+            // $checkss từ module gọi vào (phía server), mã gửi ra client là $checkss_client
+            $checkss_client = nv_comment_checkss($module, $area, $id, $allowed);
             $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
-            $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&comment_load=1&perpage=' . $per_page_comment;
+            $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss_client . '&comment_load=1&perpage=' . $per_page_comment;
 
             if (file_exists(NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php')) {
                 require NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php';
@@ -302,7 +318,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
                 $comment = '';
             }
 
-            return nv_theme_comment_module($module, $area, $id, $allowed, $checkss, $comment, $sortcomm, $form_login, $header);
+            return nv_theme_comment_module($module, $area, $id, $allowed, $checkss_client, $comment, $sortcomm, $form_login, $header);
         }
 
         return '';
