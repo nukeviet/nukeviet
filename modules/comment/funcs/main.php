@@ -28,10 +28,16 @@ if (!empty($module) and isset($module_config[$module]['activecomm'])) {
 
     $comment_load = $nv_Request->get_int('comment_load', 'post,get', 0);
 
-    if ($comment_load) {
-        $content_comment = nv_comment_load($module, $checkss, $area, $id, $allowed_comm, $page, $status_comment);
+    if (!hash_equals(nv_comment_checkss($module, $area, $id, $allowed_comm), $checkss)) {
+        $content_comment = '';
     } else {
-        $content_comment = nv_comment_module($module, $checkss, $area, $id, $allowed_comm, $page, $status_comment, 0);
+        // Mã client hợp lệ => tạo lại mã phía server để gọi các hàm của comment
+        $checkss = md5($module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CHECK_SESSION);
+        if ($comment_load) {
+            $content_comment = nv_comment_load($module, $checkss, $area, $id, $allowed_comm, $page, $status_comment);
+        } else {
+            $content_comment = nv_comment_module($module, $checkss, $area, $id, $allowed_comm, $page, $status_comment, 0);
+        }
     }
 
     if (!defined('NV_COMM_ID')) {

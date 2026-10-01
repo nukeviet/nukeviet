@@ -28,12 +28,14 @@ if (empty($module) or !isset($module_config[$module]['activecomm']) or !isset($s
     _loadContents('ERR__' . $lang_module['comment_unsuccess']);
 }
 
+require_once NV_ROOTDIR . '/modules/comment/comment.php';
+
 // Kiểm tra module có được Sử dụng chức năng bình luận
 $area = $nv_Request->get_int('area', 'post', 0);
 $id = $nv_Request->get_int('id', 'post');
 $allowed_comm = $nv_Request->get_title('allowed', 'post');
 $checkss = $nv_Request->get_title('checkss', 'post');
-if ($id <= 0 or $module_config[$module]['activecomm'] != 1 or $checkss != md5($module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CHECK_SESSION)) {
+if ($id <= 0 or $module_config[$module]['activecomm'] != 1 or !hash_equals(nv_comment_checkss($module, $area, $id, $allowed_comm), $checkss)) {
     _loadContents('ERR__' . $lang_module['comment_unsuccess']);
 }
 

@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.5.14
+- Fix comment permission bypass via forgeable checkss token. Thanks Kevin Sanchez from GitHub @kevinsocute
 - Fix stored XSS via HTML entity decoding of banner content in banners block. Thanks Thế from GitHub @Pbat6
 
 NUKEVIET 4.5.13
