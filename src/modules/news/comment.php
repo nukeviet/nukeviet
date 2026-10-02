@@ -13,17 +13,17 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-$sql = 'SELECT listcatid FROM ' . NV_PREFIXLANG . '_' . $mod_info['module_data'] . '_rows WHERE id=' . $row['id'];
+$sql = 'SELECT listcatid FROM ' . NV_PREFIXLANG . '_' . $mod_info['module_data'] . '_rows WHERE id=' . (int) $row['id'];
 [$listcatid] = $db->query($sql)->fetch(3);
 
 // Cap nhat lai so luong comment duoc kich hoat
 $array_catid = explode(',', $listcatid);
 $numf = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment where module= ' . $db->quote($row['module']) . ' AND id= ' . $db->quote($row['id']) . ' AND status=1')->fetchColumn();
 
-$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $mod_info['module_data'] . '_rows SET hitscm=' . $numf . ' WHERE id=' . $row['id'];
+$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $mod_info['module_data'] . '_rows SET hitscm=' . $numf . ' WHERE id=' . (int) $row['id'];
 $db->query($query);
 foreach ($array_catid as $catid_i) {
-    $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $mod_info['module_data'] . '_' . $catid_i . ' SET hitscm=' . $numf . ' WHERE id=' . $row['id'];
+    $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $mod_info['module_data'] . '_' . (int) $catid_i . ' SET hitscm=' . $numf . ' WHERE id=' . (int) $row['id'];
     $db->query($query);
 }
 // Het Cap nhat lai so luong comment duoc kich hoat

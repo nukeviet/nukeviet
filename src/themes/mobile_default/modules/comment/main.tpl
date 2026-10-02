@@ -3,7 +3,7 @@
 <script type="text/javascript" src="{NV_STATIC_URL}themes/{TEMPLATE_JS}/js/comment.js"></script>
 <link rel="StyleSheet" href="{NV_STATIC_URL}themes/{TEMPLATE_CSS}/css/comment.css" type="text/css" />
 <!-- END: header -->
-<div id="idcomment" class="nv-fullbg" data-module="{MODULE_COMM}" data-content="{MODULE_DATA}_commentcontent" data-area="{AREA_COMM}" data-id="{ID_COMM}" data-allowed="{ALLOWED_COMM}" data-checkss="{CHECKSS_COMM}">
+<div id="idcomment" class="nv-fullbg" data-module="{MODULE_COMM}" data-content="{MODULE_DATA}_commentcontent" data-area="{AREA_COMM}" data-id="{ID_COMM}">
     <div class="row clearfix margin-bottom-lg">
         <div class="col-xs-12 text-left">
             <button type="button" class="btn btn-default btn-sm pull-right" data-toggle="commListShow" data-obj="#showcomment" title="{LANG.comment_hide_show}">
@@ -29,7 +29,6 @@
             <input type="hidden" name="area" value="{AREA_COMM}" />
             <input type="hidden" name="id" value="{ID_COMM}" />
             <input type="hidden" name="pid" value="0" />
-            <input type="hidden" name="allowed" value="{ALLOWED_COMM}" />
             <input type="hidden" name="checkss" value="{CHECKSS_COMM}" />
             <div class="form-group clearfix">
                 <div class="row">

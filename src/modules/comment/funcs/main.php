@@ -21,17 +21,15 @@ if (!empty($module) and isset($module_config[$module]['activecomm'])) {
 
     $area = $nv_Request->get_title('area', 'post,get', '');
     $id = $nv_Request->get_title('id', 'post,get', '');
-    $allowed_comm = $nv_Request->get_title('allowed', 'post,get', 0);
-    $checkss = $nv_Request->get_title('checkss', 'post,get');
     $page = $nv_Request->get_page('page', 'get', 1);
     $status_comment = $nv_Request->get_title('status_comment', 'post,get', '');
 
     $comment_load = $nv_Request->get_int('comment_load', 'post,get', 0);
 
     if ($comment_load) {
-        $content_comment = nv_comment_load($module, $checkss, $area, $id, $allowed_comm, $page, $status_comment);
+        $content_comment = nv_comment_load($module, $area, $id, $page, $status_comment);
     } else {
-        $content_comment = nv_comment_module($module, $checkss, $area, $id, $allowed_comm, $page, $status_comment, 0);
+        $content_comment = nv_comment_module($module, $area, $id, $page, $status_comment, 0);
     }
 
     if (!defined('NV_COMM_ID')) {

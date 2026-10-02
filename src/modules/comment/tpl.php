@@ -47,7 +47,6 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     $tpl->assign('MODULE_COMM', $module);
     $tpl->assign('AREA_COMM', $area);
     $tpl->assign('ID_COMM', $id);
-    $tpl->assign('ALLOWED_COMM', $allowed_comm);
     $tpl->assign('CHECKSS_COMM', $checkss);
     $tpl->assign('HEADER', $header);
     $tpl->assign('MODULE_DATA', $module_data);

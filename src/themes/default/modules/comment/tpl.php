@@ -46,7 +46,6 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     $xtpl->assign('MODULE_DATA', $module_data);
     $xtpl->assign('AREA_COMM', $area);
     $xtpl->assign('ID_COMM', $id);
-    $xtpl->assign('ALLOWED_COMM', $allowed_comm);
     $xtpl->assign('COMMENTCONTENT', $comment);
 
     // Hiện không dùng, giữ lại để tương thích phiên bản cũ.

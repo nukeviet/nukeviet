@@ -160,16 +160,8 @@ if ($page_config['viewtype'] == 2) {
     if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
         define('NV_COMM_ID', $id); //ID bài viết
         define('NV_COMM_AREA', $module_info['funcs'][$op]['func_id']);
-        //check allow comemnt
-        $allowed = $module_config[$module_name]['allowed_comm']; //tuy vào module để lấy cấu hình. Nếu là module news thì có cấu hình theo bài viết
-        if ($allowed == '-1') {
-            $allowed = $rowdetail['activecomm'];
-        }
         require_once NV_ROOTDIR . '/modules/comment/comment.php';
-        $area = (defined('NV_COMM_AREA')) ? NV_COMM_AREA : 0;
-        $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CHECK_SESSION);
-
-        $content_comment = nv_comment_module($module_name, $checkss, $area, NV_COMM_ID, $allowed, 1);
+        $content_comment = nv_comment_module($module_name, NV_COMM_AREA, NV_COMM_ID);
     } else {
         $content_comment = '';
     }

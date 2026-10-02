@@ -178,27 +178,66 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
 }
 
 /**
+ * Xác định nhóm được đăng bình luận vào một đối tượng
+ *
+ * @param string     $module
+ * @param string|int $area
+ * @param string|int $id
+ * @return string|null null nếu đối tượng không hợp lệ hoặc người dùng không được xem
+ */
+function nv_comment_allowed($module, $area, $id)
+{
+    global $module_config, $site_mods;
+
+    static $results = [];
+
+    $area = (string) $area;
+    $id = (string) $id;
+    if (empty($module) or !isset($site_mods[$module], $module_config[$module]) or empty($module_config[$module]['activecomm']) or empty($id)) {
+        return null;
+    }
+
+    $key = $module . '_' . $area . '_' . $id;
+    if (array_key_exists($key, $results)) {
+        return $results[$key];
+    }
+
+    $classname = 'NukeViet\\Module\\' . $site_mods[$module]['module_file'] . '\\Shared\\Comment';
+    if (!class_exists($classname) or !is_subclass_of($classname, 'NukeViet\\Comment\\ICommentable')) {
+        trigger_error('Module ' . $module . ' does not implement NukeViet\\Comment\\ICommentable at ' . $classname . ', comments are disabled', E_USER_NOTICE);
+        $results[$key] = null;
+
+        return null;
+    }
+
+    $allowed = $classname::getAllowed($module, $area, $id);
+    if ($allowed !== null and $module_config[$module]['allowed_comm'] != '-1') {
+        // Quyền hạn đăng bình luận theo cấu hình của module
+        $allowed = (string) $module_config[$module]['allowed_comm'];
+    }
+    $results[$key] = $allowed;
+
+    return $allowed;
+}
+
+/**
  * Giao diện danh sách bình luận (không bao gồm form bình luận)
  * sử dụng qua ajax load
  *
  * @param string $module
- * @param string $checkss
  * @param string $area
- * @param int    $id
- * @param mixed  $allowed
+ * @param string $id
  * @param int    $page
  * @param string $status_comment
  * @return string
  */
-function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status_comment = '')
+function nv_comment_load($module, $area, $id, $page, $status_comment = '')
 {
     global $module_config, $nv_Request, $nv_Lang;
 
-    // Kiểm tra module có được Sử dụng chức năng bình luận
-    if (empty($module) or !isset($module_config[$module]) or empty($id) or empty($module_config[$module]['activecomm'])) {
-        return '';
-    }
-    if ($checkss !== md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CHECK_SESSION)) {
+    // Kiểm tra đối tượng được bình luận
+    $allowed = nv_comment_allowed($module, $area, $id);
+    if ($allowed === null) {
         return '';
     }
 
@@ -219,7 +258,7 @@ function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status
         $nv_Request->set_Cookie('sortcomm', $sortcomm, NV_LIVE_COOKIE_TIME);
     }
     $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
-    $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&comment_load=1&perpage=' . $per_page_comment;
+    $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&comment_load=1&perpage=' . $per_page_comment;
     $comment_array = nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url);
 
     $is_delete = false;
@@ -244,29 +283,28 @@ function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status
  * Lấy giao diện đầy đủ của khối bình luận cho một module
  *
  * @param string $module
- * @param string $checkss
  * @param string $area
  * @param int    $id
- * @param mixed  $allowed
  * @param int    $page
  * @param string $status_comment
  * @param int    $header
  * @return string
  */
-function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $status_comment = '', $header = 1)
+function nv_comment_module($module, $area, $id, $page = 1, $status_comment = '', $header = 1)
 {
     global $module_config, $nv_Request, $global_config, $nv_Lang;
 
-    // Kiểm tra module có được Sử dụng chức năng bình luận
-    if (empty($module) or !isset($module_config[$module]) or empty($id) or empty($module_config[$module]['activecomm'])) {
-        return '';
-    }
-    if ($checkss !== md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CHECK_SESSION)) {
+    // Kiểm tra đối tượng được bình luận
+    $allowed = nv_comment_allowed($module, $area, $id);
+    if ($allowed === null) {
         return '';
     }
 
+    // Mã CSRF cho form đăng bình luận, gắn với phiên làm việc và đối tượng
+    $checkss = csrf_create('comment_' . $module . '_' . $area . '_' . $id);
+
     $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
-    $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&comment_load=1&perpage=' . $per_page_comment;
+    $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&comment_load=1&perpage=' . $per_page_comment;
 
     $nv_Lang->loadModule('comment', false, true);
 

@@ -95,7 +95,8 @@ if (!empty($localversions)) {
  * Lưu ý tới đây thì $catid này đã là $catid chính thức vì không chính thức thì
  * bên trên đã được chuyển hướng
  */
-if (!nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
+$view_status = NukeViet\Module\news\Shared\Posts::checkView($news_contents, (string) $global_array_cat[$catid]['groups_view'], defined('NV_IS_MODADMIN'));
+if ($view_status == NukeViet\Module\news\Shared\Posts::VIEW_NO_PERMISSION) {
     $nv_BotManager->setPrivate();
     $contents = nv_theme_alert('', $nv_Lang->getModule('no_permission'));
 
@@ -104,18 +105,7 @@ if (!nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-if (!empty($news_contents['group_view'])) {
-    if (!nv_user_in_groups($news_contents['group_view'])) {
-        $nv_BotManager->setPrivate();
-        $contents = nv_theme_alert('', $nv_Lang->getModule('no_permission'));
-
-        include NV_ROOTDIR . '/includes/header.php';
-        echo nv_site_theme($contents);
-        include NV_ROOTDIR . '/includes/footer.php';
-    }
-}
-
-if (!(defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME and ($news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME)))) {
+if ($view_status == NukeViet\Module\news\Shared\Posts::VIEW_NOT_FOUND) {
     $nv_BotManager->setPrivate();
     nv_error404();
 }
@@ -537,16 +527,8 @@ while ($row = $_query->fetch()) {
 if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm'])) {
     define('NV_COMM_ID', $id); // ID bài viết hoặc
     define('NV_COMM_AREA', $module_info['funcs'][$op]['func_id']); // để đáp ứng comment ở bất cứ đâu không cứ là bài viết
-    // check allow comemnt
-    $allowed = $module_config[$module_name]['allowed_comm']; // tuy vào module để lấy cấu hình. Nếu là module news thì có cấu hình theo bài viết
-    if ($allowed == '-1') {
-        $allowed = $news_contents['allowed_comm'];
-    }
     require_once NV_ROOTDIR . '/modules/comment/comment.php';
-    $area = (defined('NV_COMM_AREA')) ? NV_COMM_AREA : 0;
-    $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CHECK_SESSION);
-
-    $content_comment = nv_comment_module($module_name, $checkss, $area, NV_COMM_ID, $allowed, 1);
+    $content_comment = nv_comment_module($module_name, NV_COMM_AREA, NV_COMM_ID);
 } else {
     $content_comment = '';
 }

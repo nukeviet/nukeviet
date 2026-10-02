@@ -32,22 +32,19 @@ if (empty($module) or !isset($module_config[$module]['activecomm']) or !isset($s
     _loadContents(['status' => 'ERR', 'mess' => $nv_Lang->getModule('comment_unsuccess')]);
 }
 
+require_once NV_ROOTDIR . '/modules/comment/comment.php';
+
 // Kiểm tra module có được Sử dụng chức năng bình luận
 $area = $nv_Request->get_title('area', 'post', '');
 $id = $nv_Request->get_title('id', 'post', '');
-$allowed_comm = $nv_Request->get_title('allowed', 'post');
 $checkss = $nv_Request->get_title('checkss', 'post');
-if (empty($id) or $module_config[$module]['activecomm'] != 1 or $checkss != md5($module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CHECK_SESSION)) {
+if (empty($id) or $module_config[$module]['activecomm'] != 1 or !csrf_check($checkss, 'comment_' . $module . '_' . $area . '_' . $id, NV_CHECK_SESSION, 0)) {
     _loadContents(['status' => 'ERR', 'mess' => $nv_Lang->getModule('comment_unsuccess')]);
 }
 
-// Kiểm tra quyền đăng bình luận
-$allowed = $module_config[$module]['allowed_comm'];
-if ($allowed == '-1') {
-    // Quyền hạn đăng bình luận theo bài viết
-    $allowed = $allowed_comm;
-}
-if (!nv_user_in_groups($allowed)) {
+// Kiểm tra quyền đăng bình luận, do module sở hữu nội dung xác định
+$allowed = nv_comment_allowed($module, $area, $id);
+if ($allowed === null or !nv_user_in_groups($allowed)) {
     _loadContents(['status' => 'ERR', 'mess' => $nv_Lang->getModule('comment_unsuccess')]);
 }
 
@@ -272,5 +269,5 @@ try {
     }
 } catch (Throwable $e) {
     trigger_error($e);
-    _loadContents(['status' => 'ERR', 'mess' => $e->getMessage()]);
+    _loadContents(['status' => 'ERR', 'mess' => $nv_Lang->getModule('comment_unsuccess')]);
 }

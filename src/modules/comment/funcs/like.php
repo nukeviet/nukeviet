@@ -29,13 +29,20 @@ if ($cid > 0 and $checkss == md5($cid . '_' . NV_CHECK_SESSION)) {
 
     $nv_Request->set_Cookie($module_data . '_like_' . $cid, 1, 86400);
 
-    $stmt = $db->prepare('SELECT cid, likes, dislikes FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid = :cid');
+    $stmt = $db->prepare('SELECT cid, module, area, id, status, likes, dislikes FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid = :cid');
     $stmt->bindValue(':cid', $cid, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch();
     $stmt->closeCursor();
 
-    if (isset($row['cid'])) {
+    // Chỉ thích bình luận đã duyệt, thuộc đối tượng mà người dùng được xem
+    $is_valid = false;
+    if (isset($row['cid']) and $row['status'] == 1) {
+        require_once NV_ROOTDIR . '/modules/comment/comment.php';
+        $is_valid = nv_comment_allowed($row['module'], $row['area'], $row['id']) !== null;
+    }
+
+    if ($is_valid) {
         $like = $nv_Request->get_int('like', 'post');
 
         if ($like > 0) {

@@ -59,7 +59,7 @@ function commentDelete(cid, checkss) {
             return nukeviet.toast(res.mess, 'error');
         }
         const data = $('#idcomment').data();
-        $("#showcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&allowed=' + data.allowed + '&checkss=' + data.checkss + '&comment_load=1&nocache=' + new Date().getTime());
+        $("#showcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&comment_load=1&nocache=' + new Date().getTime());
     });
 }
 
@@ -71,7 +71,7 @@ function commentDelete(cid, checkss) {
 function nv_commment_reload(res) {
     const data = $('#idcomment').data();
     if (res.status === 'OK') {
-        $("#showcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&allowed=' + data.allowed + '&status_comment=' + res.mess + '&checkss=' + data.checkss + '&comment_load=1&nocache=' + new Date().getTime(), function() {
+        $("#showcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&status_comment=' + res.mess + '&comment_load=1&nocache=' + new Date().getTime(), function() {
             $("#formcomment form .reset").trigger("click")
         });
         $('html, body').animate({
@@ -146,7 +146,7 @@ function commFormSubmit(form) {
 
 function nv_comment_sort_change(sel) {
     var data = $('#idcomment').data();
-    $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&allowed=' + data.allowed + '&checkss=' + data.checkss + '&comment_load=1' + '&nocache=' + new Date().getTime(), 'sortcomm=' + $(sel).val(), function(res) {
+    $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + data.module + '&area=' + data.area + '&id=' + data.id + '&comment_load=1' + '&nocache=' + new Date().getTime(), 'sortcomm=' + $(sel).val(), function(res) {
         $('#showcomment').html(res);
     });
 }

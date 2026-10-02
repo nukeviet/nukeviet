@@ -3,8 +3,6 @@
     data-content="{$MODULE_DATA}_commentcontent"
     data-area="{$AREA_COMM}"
     data-id="{$ID_COMM}"
-    data-allowed="{$ALLOWED_COMM}"
-    data-checkss="{$CHECKSS_COMM}"
 >
     <div class="d-flex align-items-center gap-3 justify-content-between mb-3 border-bottom pb-2">
         <div class="h3 mb-0">
@@ -41,7 +39,6 @@
             <input type="hidden" name="area" value="{$AREA_COMM}">
             <input type="hidden" name="id" value="{$ID_COMM}">
             <input type="hidden" name="pid" value="0">
-            <input type="hidden" name="allowed" value="{$ALLOWED_COMM}">
             <input type="hidden" name="checkss" value="{$CHECKSS_COMM}">
             {assign var="DISABLED" value=($smarty.const.NV_IS_USER ? ' disabled' : '')}
             <div class="mb-3 row g-3">
