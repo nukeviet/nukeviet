@@ -61,19 +61,12 @@ if (empty($contents)) {
     if ($viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old' or $set_view_page) {
         $order_by = ($viewcat == 'viewcat_page_new') ? $order_articles_by . ' DESC, addtime DESC' : $order_articles_by . ' ASC, addtime ASC';
 
+        $select_fields = 'id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, weight, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating';
         $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
-            ->where('status=1');
+            ->select($select_fields)
+            ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid);
 
-        $num_items = $db->query($db->sql())
-            ->fetchColumn();
-
-        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
-
-        $db->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, weight, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating');
-
+        // Bài nổi bật được ghim lên đầu mọi trang nên lấy trước và không tính vào phân trang
         $featured = 0;
         if ($global_array_cat[$catid]['featured'] != 0) {
             $db->where('status=1 AND id=' . $global_array_cat[$catid]['featured']);
@@ -88,7 +81,16 @@ if (empty($contents)) {
             }
         }
 
-        $db->where('status=1 AND id != ' . $featured)
+        $db->select('COUNT(*)')
+            ->where('status=1 AND id!=' . $featured);
+
+        $num_items = $db->query($db->sql())
+            ->fetchColumn();
+
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
+
+        $db->select($select_fields)
             ->order($order_by)
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
@@ -354,22 +356,17 @@ if (empty($contents)) {
         // Xem theo tieu de
         $order_by = ($viewcat == 'viewcat_list_new') ? $order_articles_by . ' DESC, addtime DESC' : $order_articles_by . ' ASC, addtime ASC';
 
+        $select_fields = 'id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating';
         $db->sqlreset()
-            ->select('COUNT(*)')
-            ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
-            ->where('status=1');
+            ->select($select_fields)
+            ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid);
 
-        $num_items = $db->query($db->sql())
-            ->fetchColumn();
-
-        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
-
+        // Bài nổi bật được ghim lên đầu mọi trang nên lấy trước và không tính vào phân trang
         $featured = 0;
         if ($global_array_cat[$catid]['featured'] != 0) {
-            $db->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')->where('id=' . $global_array_cat[$catid]['featured']);
+            $db->where('status=1 AND id=' . $global_array_cat[$catid]['featured']);
             $result = $db->query($db->sql());
-            while ($item = $result->fetch()) {
+            if ($item = $result->fetch()) {
                 extend_articles($item);
 
                 $item['newday'] = $global_array_cat[$catid]['newday'];
@@ -378,12 +375,17 @@ if (empty($contents)) {
                 $featured = $item['id'];
             }
         }
-        if ($featured) {
-            $db->where('status= 1 AND inhome=1 AND id!=' . $featured);
-        } else {
-            $db->where('status= 1 AND inhome=1');
-        }
-        $db->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
+
+        $db->select('COUNT(*)')
+            ->where('status=1 AND id!=' . $featured);
+
+        $num_items = $db->query($db->sql())
+            ->fetchColumn();
+
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
+
+        $db->select($select_fields)
             ->order($order_by)
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);

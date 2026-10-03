@@ -100,85 +100,43 @@ function viewcat_grid_new($array_catpage, $catid, $generate_page)
 }
 
 /**
- * viewcat_list_new()
+ * Xem theo chuyên mục dạng danh sách tiêu đề có đánh số thứ tự
  *
- * @param array  $array_catpage
+ * @param array  $array_catpage Danh sách bài viết
  * @param int    $catid
- * @param int    $page
+ * @param int    $page Vị trí bắt đầu (offset) của trang hiện tại, dùng để đánh số thứ tự
  * @param string $generate_page
  * @return string
  */
 function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
 {
-    global $module_name, $module_upload, $module_config, $global_array_cat, $home;
+    global $module_name, $module_upload, $module_config, $global_array_cat, $home, $nv_Lang;
 
-    $xtpl = new XTemplate('viewcat_list.tpl', get_module_tpl_dir('viewcat_list.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('viewcat_list.tpl'));
+    $tpl->registerPlugin('modifier', 'editAllowed', 'nv_link_edit_page');
+    $tpl->registerPlugin('modifier', 'deleteAllowed', 'nv_link_delete_page');
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('MODULE_UPLOAD', $module_upload);
+    $tpl->assign('MCONFIG', $module_config[$module_name]);
+    $tpl->assign('HOME', $home);
+    $tpl->assign('PAGE_TITLE', nv_html_page_title(false));
 
-    if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 0) or $global_array_cat[$catid]['viewdescription'] == 2)) {
-        $xtpl->assign('CONTENT', $global_array_cat[$catid]);
-        if ($global_array_cat[$catid]['image']) {
-            $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
-            $xtpl->parse('main.viewdescription.image');
-        }
-        $xtpl->parse('main.viewdescription');
-    } elseif (!$home) {
-        $xtpl->assign('PAGE_TITLE', nv_html_page_title(false));
-        $xtpl->parse('main.h1');
+    // Hiển thị mô tả chuyên mục
+    $show_description = ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 0) or $global_array_cat[$catid]['viewdescription'] == 2));
+    $tpl->assign('SHOW_DESCRIPTION', $show_description);
+    if ($show_description) {
+        $tpl->assign('INFO_CAT', $global_array_cat[$catid]);
     }
 
-    $a = $page;
-    foreach ($array_catpage as $array_row_i) {
-        $newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday']);
-        $array_row_i['publtime'] = nv_datetime_format($array_row_i['publtime']);
+    // Bài nổi bật được ghim lên đầu mọi trang nên không đánh số thứ tự
+    $tpl->assign('FEATURED_ID', $catid > 0 ? (int) $global_array_cat[$catid]['featured'] : 0);
+    $tpl->assign('OFFSET', $page);
+    $tpl->assign('ARRAY_ARTICLES', $array_catpage);
+    $tpl->assign('GENERATE_PAGE', $generate_page);
 
-        if ($module_config[$module_name]['showtooltip']) {
-            $array_row_i['hometext_clean'] = nv_clean60(strip_tags($array_row_i['hometext']), $module_config[$module_name]['tooltip_length'], true);
-        }
-
-        if ($array_row_i['external_link']) {
-            $array_row_i['target_blank'] = 'target="_blank"';
-        }
-
-        $xtpl->clear_autoreset();
-        $xtpl->assign('NUMBER', ++$a);
-        $xtpl->assign('CONTENT', $array_row_i);
-
-        if ($module_config[$module_name]['showtooltip']) {
-            $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
-            $xtpl->parse('main.viewcatloop.tooltip');
-        }
-
-        if (defined('NV_IS_MODADMIN')) {
-            $adminlink = trim(nv_link_edit_page($array_row_i) . ' ' . nv_link_delete_page($array_row_i));
-            if (!empty($adminlink)) {
-                $xtpl->assign('ADMINLINK', $adminlink);
-                $xtpl->parse('main.viewcatloop.adminlink');
-            }
-        }
-
-        if ($array_row_i['imghome'] != '') {
-            $xtpl->assign('HOMEIMG1', $array_row_i['imghome']);
-            $xtpl->assign('HOMEIMGALT1', !empty($array_row_i['homeimgalt']) ? $array_row_i['homeimgalt'] : $array_row_i['title']);
-            $xtpl->parse('main.viewcatloop.image');
-        }
-
-        if ($newday >= NV_CURRENTTIME) {
-            $xtpl->parse('main.viewcatloop.newday');
-        }
-
-        $xtpl->set_autoreset();
-        $xtpl->parse('main.viewcatloop');
-    }
-    if (!empty($generate_page)) {
-        $xtpl->assign('GENERATE_PAGE', $generate_page);
-        $xtpl->parse('main.generate_page');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return $tpl->fetch('viewcat_list.tpl');
 }
 
 /**
