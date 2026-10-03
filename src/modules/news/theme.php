@@ -261,7 +261,7 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
 }
 
 /**
- * viewcat_page_new()
+ * Giao diện danh sách tin có ảnh minh họa
  *
  * @param array  $array_catpage
  * @param array  $array_cat_other
@@ -270,143 +270,30 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
  */
 function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
 {
-    global $site_mods, $global_array_cat, $module_name, $module_upload, $nv_Lang, $module_config, $catid, $page, $home;
+    global $global_array_cat, $module_upload, $catid, $page;
 
-    $xtpl = new XTemplate('viewcat_page.tpl', get_module_tpl_dir('viewcat_page.tpl'));
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
-
+    // Phần đầu trang là mô tả chuyên mục nếu được cấu hình hiển thị
+    $header = [
+        'title' => '',
+        'image' => '',
+        'description' => '',
+        'list_title' => ''
+    ];
     if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
-        $xtpl->assign('CONTENT', $global_array_cat[$catid]);
-        if ($global_array_cat[$catid]['image']) {
-            $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
-            $xtpl->parse('main.viewdescription.image');
+        $header['title'] = $global_array_cat[$catid]['title'];
+        $header['description'] = $global_array_cat[$catid]['description'];
+        if (!empty($global_array_cat[$catid]['image'])) {
+            $header['image'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image'];
         }
-        $xtpl->parse('main.viewdescription');
-    } elseif (!$home) {
-        $xtpl->assign('PAGE_TITLE', nv_html_page_title(false));
-        $xtpl->parse('main.h1');
     }
 
-    $a = 0;
-    foreach ($array_catpage as $array_row_i) {
-        $newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday']);
-        $array_row_i['publtime'] = nv_datetime_format($array_row_i['publtime']);
-        $array_row_i['listcatid'] = explode(',', $array_row_i['listcatid']);
-        $num_cat = count($array_row_i['listcatid']);
-
-        $n = 1;
-        foreach ($array_row_i['listcatid'] as $listcatid) {
-            $listcat = [
-                'title' => $global_array_cat[$listcatid]['title'],
-                'link' => $global_array_cat[$listcatid]['link']
-            ];
-            $xtpl->assign('CAT', $listcat);
-            (($n < $num_cat) ? $xtpl->parse('main.viewcatloop.cat.comma') : '');
-            $xtpl->parse('main.viewcatloop.cat');
-            ++$n;
-        }
-
-        if ($a == 0) {
-            $xtpl->clear_autoreset();
-
-            if ($array_row_i['external_link']) {
-                $array_row_i['target_blank'] = 'target="_blank"';
-            }
-
-            $xtpl->assign('CONTENT', $array_row_i);
-
-            if (defined('NV_IS_MODADMIN')) {
-                $adminlink = trim(nv_link_edit_page($array_row_i) . ' ' . nv_link_delete_page($array_row_i));
-                if (!empty($adminlink)) {
-                    $xtpl->assign('ADMINLINK', $adminlink);
-                    $xtpl->parse('main.viewcatloop.featured.adminlink');
-                }
-            }
-
-            if ($array_row_i['imghome'] != '') {
-                $xtpl->assign('HOMEIMG1', $array_row_i['imghome']);
-                $xtpl->assign('HOMEIMGALT1', !empty($array_row_i['homeimgalt']) ? $array_row_i['homeimgalt'] : $array_row_i['title']);
-                $xtpl->parse('main.viewcatloop.featured.image');
-            }
-
-            if ($newday >= NV_CURRENTTIME) {
-                $xtpl->parse('main.viewcatloop.featured.newday');
-            }
-
-            if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm']) and $module_config[$module_name]['activecomm']) {
-                $xtpl->parse('main.viewcatloop.featured.comment');
-            }
-
-            $xtpl->parse('main.viewcatloop.featured');
-        } else {
-            $xtpl->clear_autoreset();
-
-            if ($array_row_i['external_link']) {
-                $array_row_i['target_blank'] = 'target="_blank"';
-            }
-
-            $xtpl->assign('CONTENT', $array_row_i);
-
-            if (defined('NV_IS_MODADMIN')) {
-                $adminlink = trim(nv_link_edit_page($array_row_i) . ' ' . nv_link_delete_page($array_row_i));
-                if (!empty($adminlink)) {
-                    $xtpl->assign('ADMINLINK', $adminlink);
-                    $xtpl->parse('main.viewcatloop.news.adminlink');
-                }
-            }
-
-            if ($array_row_i['imghome'] != '') {
-                $xtpl->assign('HOMEIMG1', $array_row_i['imghome']);
-                $xtpl->assign('HOMEIMGALT1', !empty($array_row_i['homeimgalt']) ? $array_row_i['homeimgalt'] : $array_row_i['title']);
-                $xtpl->parse('main.viewcatloop.news.image');
-            }
-
-            if ($newday >= NV_CURRENTTIME) {
-                $xtpl->parse('main.viewcatloop.news.newday');
-            }
-
-            if (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm']) and $module_config[$module_name]['activecomm']) {
-                $xtpl->parse('main.viewcatloop.news.comment');
-            }
-
-            $xtpl->set_autoreset();
-            $xtpl->parse('main.viewcatloop.news');
-        }
-        ++$a;
-    }
-    $xtpl->parse('main.viewcatloop');
-
-    if (!empty($array_cat_other)) {
-        $xtpl->assign('ORTHERNEWS', $nv_Lang->getModule('other'));
-
-        foreach ($array_cat_other as $array_row_i) {
-            $newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday']);
-            $array_row_i['publtime'] = nv_date_format(1, $array_row_i['publtime']);
-
-            if ($array_row_i['external_link']) {
-                $array_row_i['target_blank'] = 'target="_blank"';
-            }
-
-            $xtpl->assign('RELATED', $array_row_i);
-
-            if ($newday >= NV_CURRENTTIME) {
-                $xtpl->parse('main.related.loop.newday');
-            }
-            $xtpl->parse('main.related.loop');
-        }
-
-        $xtpl->parse('main.related');
+    foreach ($array_catpage as $key => $row) {
+        $array_catpage[$key]['alt'] = !empty($row['homeimgalt']) ? $row['homeimgalt'] : $row['title'];
+        // Đánh dấu bài nổi bật của chuyên mục
+        $array_catpage[$key]['featured'] = ($catid > 0 and !empty($global_array_cat[$catid]['featured']) and $row['id'] == $global_array_cat[$catid]['featured']);
     }
 
-    if (!empty($generate_page)) {
-        $xtpl->assign('GENERATE_PAGE', $generate_page);
-        $xtpl->parse('main.generate_page');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
+    return list_articles_theme($header, $array_catpage, $array_cat_other, $generate_page);
 }
 
 /**
@@ -733,7 +620,7 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
  */
 function list_articles_theme(array $header, array $array_articles, array $array_others, $generate_page)
 {
-    global $module_name, $module_config, $nv_Lang, $home;
+    global $site_mods, $module_name, $module_config, $nv_Lang, $home;
 
     $tpl = new \NukeViet\Template\NVSmarty();
     $tpl->setTemplateDir(get_module_tpl_dir('list_articles.tpl'));
@@ -746,6 +633,7 @@ function list_articles_theme(array $header, array $array_articles, array $array_
     $tpl->assign('MODULE_NAME', $module_name);
     $tpl->assign('HOME', $home);
     $tpl->assign('PAGE_TITLE', nv_html_page_title(false));
+    $tpl->assign('COMMENT_ENABLED', (isset($site_mods['comment']) and isset($module_config[$module_name]['activecomm']) and $module_config[$module_name]['activecomm']));
 
     $imgratio = round(($module_config[$module_name]['homewidth'] / ($module_config[$module_name]['homeheight'] ?: $module_config[$module_name]['homewidth'])) * 100, 2);
     $tpl->assign('IMGRATIO', $imgratio);

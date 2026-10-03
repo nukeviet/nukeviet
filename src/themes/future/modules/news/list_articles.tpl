@@ -13,14 +13,16 @@
 {assign var="htag" value="h3"}
 {/if}
 {* Phần đầu trang *}
-{if not empty($HEADER.description)}
+{if not empty($HEADER.description) or not empty($HEADER.image)}
 <div class="card mb-4">
     <div class="card-body clearfix">
         <h1>{$HEADER.title}</h1>
         {if not empty($HEADER.image)}
         <img src="{$HEADER.image}" class="img-fluid rounded fw-150 me-2 mb-1 float-start" alt="{$HEADER.title}">
         {/if}
-        <p class="mb-0">{$HEADER.description}</p>
+        {if not empty($HEADER.description)}
+        <div>{$HEADER.description}</div>
+        {/if}
     </div>
 </div>
 {elseif not $HOME}
@@ -33,29 +35,34 @@
 {if not empty($ARTICLES)}
 <div class="border-top">
     {foreach from=$ARTICLES item=row}
+    {* Bài nổi bật giữ nguyên thẻ heading nhưng ảnh lớn hơn, tiêu đề to hơn; trên mobile ảnh full width, nội dung nằm dưới *}
+    {assign var="isFeatured" value=(not empty($row.featured))}
     <article class="row gx-3 py-3 mx-0 border-bottom">
         {if not empty($row.imghome)}
-        <div class="col-4 col-md-3 ps-0">
+        <div class="{if $isFeatured}col-12 col-sm-5 col-md-4 px-0 pe-sm-2 mb-3 mb-sm-0{else}col-4 col-md-3 ps-0{/if}">
             <a href="{$row.link}"{if not empty($row.external_link)} target="_blank"{/if} class="ratio d-block rounded overflow-hidden" style="--bs-aspect-ratio: {$IMGRATIO}%;">
                 <img src="{$row.imghome}" alt="{$row.alt}" class="object-fit-cover">
             </a>
         </div>
         {/if}
-        <div class="{if not empty($row.imghome)}col-8 col-md-9 pe-0{else}col-12 px-0{/if} d-flex flex-column">
+        <div class="{if empty($row.imghome)}col-12 px-0{elseif $isFeatured}col-12 col-sm-7 col-md-8 px-0 ps-sm-2{else}col-8 col-md-9 pe-0{/if} d-flex flex-column">
             <div class="mb-2">
-                <{$htag} class="fs-5 fw-medium d-inline mb-0">
+                <{$htag} class="{if $isFeatured}fs-4{else}fs-5{/if} fw-medium d-inline mb-0">
                     <a class="link-body-emphasis" href="{$row.link}"{if not empty($row.external_link)} target="_blank"{/if}>{$row.title}</a>
                 </{$htag}>
                 {if not empty($row.newday) and (($row.newday * 86400) + $row.publtime) gte $smarty.now}
                 {$smarty.capture.badgeNew}
                 {/if}
             </div>
-            <div class="text-truncate-3 mb-2 d-none d-sm-block">{$row.hometext}</div>
+            <div class="text-truncate-3 mb-2{if not $isFeatured} d-none d-sm-block{/if}">{$row.hometext}</div>
             <div class="mt-auto d-flex flex-wrap align-items-center gap-3 small">
                 <ul class="list-inline text-muted mb-0 me-auto">
                     <li class="list-inline-item"><i class="fa-regular fa-clock"></i> {$row.publtime|ddatetime}</li>
                     {if isset($row.hitstotal)}
                     <li class="list-inline-item"><i class="fa-regular fa-eye"></i> <span class="d-none d-sm-inline">{$LANG->getModule('view')}:</span> {$row.hitstotal|dnumber}</li>
+                    {/if}
+                    {if $COMMENT_ENABLED and isset($row.hitscm)}
+                    <li class="list-inline-item"><i class="fa-regular fa-comment"></i> <span class="d-none d-sm-inline">{$LANG->getModule('total_comment')}:</span> {$row.hitscm|dnumber}</li>
                     {/if}
                 </ul>
                 {if $smarty.const.NV_IS_MODADMIN}
