@@ -251,9 +251,9 @@ if (empty($contents)) {
             }
         }
         if ($featured) {
-            $db->where('status= 1 AND id!=' . $featured)->limit($array_cat_i['numlinks'] - 1);
+            $db->where('status= 1 AND id!=' . $featured)->limit($global_array_cat[$catid]['numlinks'] - 1);
         } else {
-            $db->where('status= 1')->limit($array_cat_i['numlinks']);
+            $db->where('status= 1')->limit($global_array_cat[$catid]['numlinks']);
         }
 
         $db->order($order_articles_by . ' DESC')->offset(($page - 1) * $per_page);
@@ -270,7 +270,7 @@ if (empty($contents)) {
 
         // cac bai viet cua cac chu de con
         $key = 0;
-        $array_catid = explode(',', $global_array_cat[$catid]['subcatid']);
+        $array_catid = $global_array_cat[$catid]['subcatid'] != '' ? explode(',', $global_array_cat[$catid]['subcatid']) : [];
 
         foreach ($array_catid as $catid_i) {
             $array_cat_other[$key] = $global_array_cat[$catid_i];
@@ -295,12 +295,12 @@ if (empty($contents)) {
             }
 
             if ($featured) {
-                $db->where('status= 1 AND inhome=1 AND id!=' . $featured)
-                    ->limit($array_cat_i['numlinks'] - 1)
+                $db->where('status= 1 AND id!=' . $featured)
+                    ->limit($global_array_cat[$catid_i]['numlinks'] - 1)
                     ->order($order_articles_by . ' DESC');
             } else {
-                $db->where('status= 1 AND inhome=1')
-                    ->limit($array_cat_i['numlinks'])
+                $db->where('status= 1')
+                    ->limit($global_array_cat[$catid_i]['numlinks'])
                     ->order($order_articles_by . ' DESC');
             }
 
@@ -313,7 +313,12 @@ if (empty($contents)) {
                 $array_cat_other[$key]['content'][] = $item;
             }
 
-            ++$key;
+            // Chuyên mục không có bài viết nào thì không lấy
+            if (empty($array_cat_other[$key]['content'])) {
+                unset($array_cat_other[$key]);
+            } else {
+                ++$key;
+            }
         }
 
         unset($sql, $result);
