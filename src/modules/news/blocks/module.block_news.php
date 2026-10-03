@@ -25,47 +25,23 @@ if (!nv_function_exists('nv_news_block_news')) {
     {
         global $nv_Lang;
 
+        [$block_theme, $dir] = get_block_tpl_dir('module.block_news.config.tpl', true, $module);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('CONFIG', $data_block);
+
+        // Vị trí tooltip
         $tooltip_position = [
             'top' => $nv_Lang->getModule('tooltip_position_top'),
             'bottom' => $nv_Lang->getModule('tooltip_position_bottom'),
             'left' => $nv_Lang->getModule('tooltip_position_left'),
             'right' => $nv_Lang->getModule('tooltip_position_right')
         ];
+        $tpl->assign('TOOLTIP_POSITION', $tooltip_position);
 
-        $html = '<div class="row mb-3">';
-        $html .= '	<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('numrow') . ':</label>';
-        $html .= '	<div class="col-sm-9"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('showtooltip') . ':</label>';
-        $html .= '<div class="col-sm-9">';
-        $html .= '<div class="row g-2 align-items-center">';
-        $html .= '<div class="col-sm-2">';
-        $html .= '<input class="form-check-input" type="checkbox" value="1" name="config_showtooltip" ' . ($data_block['showtooltip'] == 1 ? 'checked="checked"' : '') . ' /></div>';
-        $html .= '<div class="col-sm-5">';
-        $html .= '<div class="input-group">';
-        $html .= '<div class="input-group-text">' . $nv_Lang->getModule('tooltip_position') . '</div>';
-        $html .= '<select name="config_tooltip_position" class="form-select">';
-
-        foreach ($tooltip_position as $key => $value) {
-            $html .= '<option value="' . $key . '" ' . ($data_block['tooltip_position'] == $key ? 'selected="selected"' : '') . '>' . $value . '</option>';
-        }
-
-        $html .= '</select>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '<div class="col-sm-5">';
-        $html .= '<div class="input-group">';
-        $html .= '<div class="input-group-text">' . $nv_Lang->getModule('tooltip_length') . '</div>';
-        $html .= '<input type="text" class="form-control" name="config_tooltip_length" value="' . $data_block['tooltip_length'] . '"/>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-
-        return $html;
+        return $tpl->fetch('module.block_news.config.tpl');
     }
 
     /**
@@ -97,9 +73,14 @@ if (!nv_function_exists('nv_news_block_news')) {
      */
     function nv_news_block_news($block_config, $mod_data)
     {
-        global $nv_Cache, $module_array_cat, $module_info, $db, $module_config, $global_config, $site_mods;
+        global $nv_Cache, $module_array_cat, $db, $module_config, $global_config, $site_mods, $nv_Lang;
 
         $module = $block_config['module'];
+        [$block_theme, $dir] = get_block_tpl_dir('module.block_news.tpl', true, $module);
+        if (empty($dir)) {
+            return '';
+        }
+
         $blockwidth = $module_config[$module]['blockwidth'];
         $show_no_image = $module_config[$module]['show_no_image'];
         $order_articles_by = ($module_config[$module]['order_articles']) ? 'weight' : 'publtime';
@@ -113,7 +94,7 @@ if (!nv_function_exists('nv_news_block_news')) {
             $array_block_news = [];
 
             $db->sqlreset()
-                ->select('id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext, external_link')
+                ->select('id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, homeimgalt, hometext, external_link')
                 ->from(NV_PREFIXLANG . '_' . $mod_data . '_rows')
                 ->where('status= 1')
                 ->order($order_articles_by . ' DESC')
@@ -121,7 +102,7 @@ if (!nv_function_exists('nv_news_block_news')) {
             $result = $db->query($db->sql());
 
             while ($_scratch = $result->fetch(3)) {
-                [$id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link] = $_scratch;
+                [$id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $homeimgalt, $hometext, $external_link] = $_scratch;
                 unset($_scratch);
                 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
                 if ($homeimgthumb == 1) {
@@ -144,6 +125,7 @@ if (!nv_function_exists('nv_news_block_news')) {
                     'title' => $title,
                     'link' => $link,
                     'imgurl' => $imgurl,
+                    'homeimgalt' => $homeimgalt,
                     'width' => $blockwidth,
                     'hometext' => $hometext,
                     'external_link' => $external_link,
@@ -155,50 +137,46 @@ if (!nv_function_exists('nv_news_block_news')) {
             $nv_Cache->setItem($module, $cache_file, $cache);
         }
 
-        [$template, $dir] = get_module_tpl_dir('block_news.tpl', true);
-        $xtpl = new XTemplate('block_news.tpl', $dir);
-        $xtpl->assign('TEMPLATE', $template);
+        if (empty($array_block_news)) {
+            return '';
+        }
 
+        $block_config['showtooltip'] = !empty($block_config['showtooltip']);
+
+        // Vị trí tooltip chỉ nhận các giá trị hợp lệ
+        if (!in_array($block_config['tooltip_position'] ?? '', ['top', 'bottom', 'left', 'right'], true)) {
+            $block_config['tooltip_position'] = 'bottom';
+        }
+
+        // Độ dài tooltip bằng 0 thì lấy theo cấu hình của module, tránh đưa toàn bộ mô tả vào tooltip
+        $tooltip_length = (int) ($block_config['tooltip_length'] ?? 0);
+        if ($tooltip_length <= 0) {
+            $tooltip_length = (int) $module_config[$module]['tooltip_length'];
+        }
+
+        $items = [];
         foreach ($array_block_news as $array_news) {
-            $newday = $array_news['publtime'] + (86400 * $array_news['newday']);
-            $array_news['hometext_clean'] = strip_tags($array_news['hometext']);
-            $array_news['hometext_clean'] = nv_clean60($array_news['hometext_clean'], $block_config['tooltip_length'], true);
-
-            if ($array_news['external_link']) {
-                $array_news['target_blank'] = 'target="_blank"';
-            }
-
-            $xtpl->assign('blocknews', $array_news);
-
-            if (!empty($array_news['imgurl'])) {
-                $xtpl->parse('main.newloop.imgblock');
-            }
-
-            if (!$block_config['showtooltip']) {
-                $xtpl->assign('TITLE', 'title="' . $array_news['title'] . '"');
-            }
-
-            if ($newday >= NV_CURRENTTIME) {
-                $xtpl->parse('main.newloop.newday');
-            }
-
-            // Bootstrap 4/5
-            if ($block_config['showtooltip']) {
-                $xtpl->assign('TOOLTIP_POSITION', $block_config['tooltip_position']);
-                $xtpl->parse('main.newloop.tooltip');
-            }
-
-            $xtpl->parse('main.newloop');
+            $items[] = [
+                'title' => $array_news['title'],
+                'link' => $array_news['link'],
+                'imgurl' => $array_news['imgurl'],
+                // Cache cũ chưa có homeimgalt
+                'homeimgalt' => empty($array_news['homeimgalt']) ? $array_news['title'] : $array_news['homeimgalt'],
+                'external_link' => $array_news['external_link'],
+                'hometext_clean' => $block_config['showtooltip'] ? nv_clean60(strip_tags($array_news['hometext']), $tooltip_length, true) : '',
+                'is_new' => ($array_news['publtime'] + 86400 * $array_news['newday']) >= NV_CURRENTTIME
+            ];
         }
 
-        if ($block_config['showtooltip']) {
-            $xtpl->assign('TOOLTIP_POSITION', $block_config['tooltip_position']);
-            $xtpl->parse('main.tooltip');
-        }
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('MCONFIG', $module_config[$module]);
+        $tpl->assign('CONFIG', $block_config);
+        $tpl->assign('ITEMS', $items);
 
-        $xtpl->parse('main');
-
-        return $xtpl->text('main');
+        return $tpl->fetch('module.block_news.tpl');
     }
 }
 
