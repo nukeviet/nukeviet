@@ -61,7 +61,8 @@ if (!nv_function_exists('nv_block_headline')) {
         global $module_data, $db, $module_name, $nv_Cache, $global_array_cat, $global_config, $module_upload, $module_config;
 
         [$block_theme, $dir] = get_block_tpl_dir('block_headline.tpl', true, $block_config['module'], true);
-        $cache_file = 'block_headline_' . $block_theme . '_' . NV_CACHE_PREFIX . '.cache';
+        // Mỗi nhóm tin một file cache riêng để các block khác nhóm không dùng chung nội dung
+        $cache_file = 'block_headline_' . $block_theme . '_' . $block_config['group_id'] . '_' . NV_CACHE_PREFIX . '.cache';
         if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
             return $cache;
         }
