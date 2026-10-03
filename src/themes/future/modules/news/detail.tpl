@@ -79,7 +79,7 @@
                 <li class="list-inline-item">
                     <span class="dropdown">
                         <a class="link-secondary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-screwdriver-wrench"></i> <span class="visually-hidden">{$LANG->getModule('admtools')}</span>
+                            <i class="fa-solid fa-screwdriver-wrench"></i> <span class="visually-hidden">{$LANG->getGlobal('admtools')}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             {if not empty($linkEdit)}

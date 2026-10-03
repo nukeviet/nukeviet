@@ -97,6 +97,7 @@ $lang_global['2fa_problems'] = 'Having problems? Try some of the options below';
 $lang_global['remove2step_info'] = 'Click here to turn off 2-step verification';
 $lang_global['memory_time_usage'] = 'Memory: %1$s. Processing time: %2$s seconds';
 $lang_global['for_admin'] = 'For Admin';
+$lang_global['admtools'] = 'Admin tools';
 $lang_global['admin_account'] = 'Admin Account';
 $lang_global['admin_view'] = 'Your admin account';
 $lang_global['admin_page'] = 'Administration';

@@ -103,7 +103,7 @@
                             {if not empty($linkEdit) or not empty($linkDelete)}
                             <span class="dropdown">
                                 <a class="link-secondary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-screwdriver-wrench"></i> <span class="visually-hidden">{$LANG->getModule('admtools')}</span>
+                                    <i class="fa-solid fa-screwdriver-wrench"></i> <span class="visually-hidden">{$LANG->getGlobal('admtools')}</span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     {if not empty($linkEdit)}
@@ -166,7 +166,7 @@
                                 {if not empty($linkEdit) or not empty($linkDelete)}
                                 <span class="dropdown">
                                     <a class="link-secondary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fa-solid fa-screwdriver-wrench"></i> <span class="visually-hidden">{$LANG->getModule('admtools')}</span>
+                                        <i class="fa-solid fa-screwdriver-wrench"></i> <span class="visually-hidden">{$LANG->getGlobal('admtools')}</span>
                                     </a>
                                     <ul class="dropdown-menu">
                                         {if not empty($linkEdit)}

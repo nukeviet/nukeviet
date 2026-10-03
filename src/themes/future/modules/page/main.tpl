@@ -16,7 +16,7 @@
                     {if $smarty.const.NV_IS_MODADMIN}
                     <span class="dropdown">
                         <a class="link-secondary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-screwdriver-wrench fa-xs"></i></i> <span class="visually-hidden">{$LANG->getModule('admtools')}</span>
+                            <i class="fa-solid fa-screwdriver-wrench fa-xs"></i> <span class="visually-hidden">{$LANG->getGlobal('admtools')}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{$row.admin_edit}"><i class="fa-solid fa-pencil fa-fw text-center"></i> {$LANG->getGlobal('edit')}</a></li>

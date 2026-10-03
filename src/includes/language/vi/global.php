@@ -97,6 +97,7 @@ $lang_global['2fa_problems'] = 'Bạn gặp vấn đề? Hãy thử một số p
 $lang_global['remove2step_info'] = 'Click vào đây để tắt xác thực 2 bước';
 $lang_global['memory_time_usage'] = 'Bộ nhớ: %1$s, Thời gian xử lý: %2$s giây';
 $lang_global['for_admin'] = 'Dành cho quản trị';
+$lang_global['admtools'] = 'Công cụ quản trị';
 $lang_global['admin_account'] = 'Tài khoản quản trị';
 $lang_global['admin_view'] = 'Tài khoản quản trị của bạn';
 $lang_global['admin_page'] = 'Quản lý site';
