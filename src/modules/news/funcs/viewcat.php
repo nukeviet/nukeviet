@@ -176,6 +176,7 @@ if (empty($contents)) {
 
             foreach ($array_catid as $catid_i) {
                 $array_cat_other[$key] = $global_array_cat[$catid_i];
+                extend_categories($array_cat_other[$key]);
                 $db->sqlreset()
                     ->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
                     ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i);
@@ -271,6 +272,7 @@ if (empty($contents)) {
 
         foreach ($array_catid as $catid_i) {
             $array_cat_other[$key] = $global_array_cat[$catid_i];
+            extend_categories($array_cat_other[$key]);
             $db->sqlreset()
                 ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i)

@@ -12,7 +12,7 @@
 {/if}
 {* Phần viết các bài viết đầu chuyên mục *}
 {if not empty($HTML_POSTS)}
-<div class="cat-top-articles">
+<div class="cat-top-articles mb-4">
     {$HTML_POSTS}
 </div>
 {/if}
