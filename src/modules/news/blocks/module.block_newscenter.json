@@ -14,23 +14,33 @@
         "length_othertitle": "0",
         "showtooltip": "1",
         "tooltip_position": "bottom",
-        "tooltip_length": "0",
-        "nocatid": ""
+        "tooltip_length": "150",
+        "nocatid": "",
+        "margin_bottom": "4"
     },
     "datafunction": "nv_block_config_news_newscenter",
     "submitfunction": "nv_block_config_news_newscenter_submit",
     "i18n": {
         "en": {
+            "language": {
+                "margin_bottom": "Spacing below"
+            },
             "info": {
                 "name": "Display as news center"
             }
         },
         "fr": {
+            "language": {
+                "margin_bottom": "Espacement en dessous"
+            },
             "info": {
                 "name": "Afficher comme centre de nouvelles"
             }
         },
         "vi": {
+            "language": {
+                "margin_bottom": "Khoảng cách bên dưới"
+            },
             "info": {
                 "name": "Hiển thị dạng newscenter"
             }
