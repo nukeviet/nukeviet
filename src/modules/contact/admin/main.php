@@ -420,11 +420,9 @@ if (!empty($contact_allowed['view'])) {
             $userinfo['birthday'] = !empty($userinfo['birthday']) ? nv_date_format(1, $userinfo['birthday']) : '';
             $userinfo['regdate'] = nv_datetime_format($userinfo['regdate']);
             $userinfo['last_login'] = nv_datetime_format($userinfo['last_login']);
-            if (!empty($userinfo['photo'])) {
-                $userinfo['photo'] = NV_STATIC_URL . $userinfo['photo'];
-            } else {
-                $userinfo['photo'] = NV_STATIC_URL . 'themes/default/images/users/no_avatar.png';
-            }
+            $userinfo['avata'] = (!empty($userinfo['photo']) and file_exists(NV_ROOTDIR . '/' . $userinfo['photo'])) ? NV_STATIC_URL . $userinfo['photo'] : '';
+            $userinfo['avatar_letters'] = nv_user_avatar_letters($userinfo['first_name'], $userinfo['last_name'], $userinfo['username']);
+            $userinfo['avatar_color'] = nv_user_avatar_color($userinfo['username']);
             $tpl->assign('USER', $userinfo);
         }
         if (isset($contact_allowed['reply'][$row['cid']])) {

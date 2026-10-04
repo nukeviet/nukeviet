@@ -25,6 +25,8 @@
                 {if $row.send_from_id gt 0}
                 {if not empty($row.photo)}
                 <img class="d-block" src="{$row.photo}" alt="{$row.send_from}">
+                {elseif not empty($row.avatar_letters)}
+                <span class="avatar-letters w-100 h-100" style="background-color:{$row.avatar_color}" aria-hidden="true">{$row.avatar_letters}</span>
                 {else}
                 <span class="d-block position-relative w-100 h-100"><i class="fa-solid fa-circle-user ico-vc"></i></span>
                 {/if}

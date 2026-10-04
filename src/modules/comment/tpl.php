@@ -138,9 +138,14 @@ function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_co
     foreach ($comment_array['comment'] as $cid => $row) {
         // Render giao diện bình luận con nếu có
         $row['children'] = !empty($row['subcomment']) ? nv_comment_module_data($module, ['comment' => $row['subcomment']], $is_delete, $allowed_comm) : '';
-        $row['post_name_letter'] = $row['post_name'] ? nv_strtoupper(nv_substr($row['post_name'], 0, 1)) : 'V';
+        $row['avata'] = (!empty($row['photo'])) ? NV_STATIC_URL . $row['photo'] : '';
         if (!empty($row['userid'])) {
             $row['post_name'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
+            $row['avatar_letters'] = nv_user_avatar_letters($row['first_name'], $row['last_name'], $row['username']);
+            $row['avatar_color'] = nv_user_avatar_color($row['username']);
+        } else {
+            $row['avatar_letters'] = nv_user_avatar_letters($row['post_name'], '');
+            $row['avatar_color'] = nv_user_avatar_color($row['post_name']);
         }
 
         $comment_array['comment'][$cid] = $row;

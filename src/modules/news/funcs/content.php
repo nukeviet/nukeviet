@@ -521,7 +521,7 @@ if ($nv_Request->isset_request('contentid', 'get')) {
                             'title' => $rowcontent['title'],
                             'hometext' => $rowcontent['hometext']
                         ];
-                        nv_insert_notification($module_name, 'post_queue', $content, $contentid);
+                        nv_insert_notification($module_name, 'post_queue', $content, $contentid, 0, defined('NV_IS_USER') ? (int) $user_info['userid'] : 0);
                     }
 
                     $user_content = defined('NV_IS_USER') ? ' | ' . $user_info['username'] : '';
@@ -570,7 +570,7 @@ if ($nv_Request->isset_request('contentid', 'get')) {
                             'title' => $rowcontent['title'],
                             'hometext' => $rowcontent['hometext']
                         ];
-                        nv_insert_notification($module_name, 'post_queue', $content, $contentid);
+                        nv_insert_notification($module_name, 'post_queue', $content, $contentid, 0, defined('NV_IS_USER') ? (int) $user_info['userid'] : 0);
                     }
                     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('update_content'), $rowcontent['title'] . ' | ' . $client_info['ip'] . ' | ' . $user_info['username'], 0);
                 } else {

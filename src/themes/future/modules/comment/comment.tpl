@@ -7,13 +7,11 @@
     {foreach from=$DATA.comment item=comment}
     <li class="d-flex" id="cid_{$comment.cid}">
         <div class="flex-shrink-0">
-            <div class="align-baseline d-flex align-items-center rounded-circle justify-content-center fw-50 fh-50 bg-primary-subtle fs-1 fw-medium text-primary-emphasis overflow-hidden">
-                {if empty($comment.photo)}
-                {$comment.post_name_letter}
-                {else}
-                <img class="object-fit-cover w-100 h-100" src="{NV_BASE_SITEURL}{$comment.photo}" alt="{$comment.post_name}">
-                {/if}
-            </div>
+            {if $comment.avata}
+            <img src="{$comment.avata}" alt="{$comment.post_name}" width="50" height="50" class="fw-50 fh-50 rounded-circle object-fit-cover">
+            {else}
+            <span class="avatar-letters fw-50 fh-50" style="background-color:{$comment.avatar_color}" aria-hidden="true">{$comment.avatar_letters}</span>
+            {/if}
         </div>
         <div class="flex-grow-1 ms-2">
             <div class="p-2 rounded-3 bg-body-tertiary">

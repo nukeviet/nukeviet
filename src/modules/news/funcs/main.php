@@ -112,7 +112,7 @@ if (!empty($module_config[$module_name]['report_active']) and (!empty($module_co
             $sth->execute();
             $rid = $db->lastInsertId();
         }
-        nv_insert_notification($module_name, 'report', ['newsid' => $newsid, 'title' => $news_details['title'], 'post_ip' => $client_info['ip'], 'post_email' => $post_email], $rid);
+        nv_insert_notification($module_name, 'report', ['newsid' => $newsid, 'title' => $news_details['title'], 'post_ip' => $client_info['ip'], 'post_email' => $post_email], $rid, 0, defined('NV_IS_USER') ? (int) $user_info['userid'] : 0);
         nv_jsonOutput([
             'status' => 'OK',
             'mess' => $nv_Lang->getModule('report_success')

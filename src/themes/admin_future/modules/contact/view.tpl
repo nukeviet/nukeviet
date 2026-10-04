@@ -228,8 +228,12 @@
                             <tr>
                                 <td class="text-nowrap" style="width:1%">{$LANG->getModule('user_fullname')}</td>
                                 <td>{$USER.full_name}</td>
-                                <td rowspan="3" style="width:80px">
-                                    <img src="{$USER.photo}" style="width:80px;height:80px" alt="">
+                                <td rowspan="3" class="fw-100 text-center align-middle">
+                                    {if $USER.avata}
+                                    <img src="{$USER.avata}" alt="{$USER.full_name}" width="75" height="75" class="fw-75 fh-75 rounded-circle object-fit-cover">
+                                    {else}
+                                    <span class="avatar-letters avatar-letters-lg fw-75 fh-75" style="background-color:{$USER.avatar_color}" aria-hidden="true">{$USER.avatar_letters}</span>
+                                    {/if}
                                 </td>
                             </tr>
                             <tr>

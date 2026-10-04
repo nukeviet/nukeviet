@@ -297,6 +297,8 @@ while ($data = $stmt->fetch()) {
                 $stmt_user->closeCursor();
                 if ($user) {
                     $data['send_from'] = nv_show_name_user($user['first_name'], $user['last_name'], $user['username']);
+                    $data['avatar_letters'] = nv_user_avatar_letters($user['first_name'], $user['last_name'], $user['username']);
+                    $data['avatar_color'] = nv_user_avatar_color($user['username']);
                 } else {
                     $data['send_from'] = $nv_Lang->getGlobal('level5');
                 }
