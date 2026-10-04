@@ -954,6 +954,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const id = 'alert-' + nv_randomPassword(8);
 
+            // Ghi nhớ phần tử đang focus để trả lại khi đóng
+            const prevFocus = document.activeElement;
+
             // Đối tượng box
             const box = document.createElement('div');
             box.id = id;
@@ -1015,6 +1018,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 body.style.overflow = 'hidden';
                 cVScroll && (body.style.paddingRight = nukeviet.getScrollbarWidth() + 'px');
+
+                // Chuyển focus vào nút xác nhận
+                document.getElementById(id + '-confirm').focus();
             }, 1);
 
             // Xử lý nút ấn
@@ -1037,6 +1043,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     body.removeChild(box);
                     body.removeChild(backdrop);
                     body.classList.remove('cr-alert-open');
+
+                    // Trả focus về phần tử trước khi mở, làm trước callback để callback có thể chuyển focus đi nơi khác
+                    if (prevFocus && prevFocus !== body && typeof prevFocus.focus === 'function' && document.contains(prevFocus)) {
+                        prevFocus.focus({
+                            preventScroll: true
+                        });
+                    }
+
                     if (event == 'confirm') {
                         cbConfirm();
                     } else if (event == 'cancel') {
@@ -1072,13 +1086,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Enter để confirm
-        document.addEventListener('keyup', function(event) {
-            if (event.key === 'Enter' && document.body.classList.contains('cr-alert-open')) {
-                const btnConfirm = document.querySelector('.cr-alert .cr-btn-primary');
-                if (btnConfirm) {
-                    btnConfirm.click();
-                }
+        /*
+         * Enter để confirm
+         * Bắt ở keydown để lần nhấn Enter mở hộp (gửi form, kích hoạt nút) không tự xác nhận luôn khi nhả phím
+         */
+        document.addEventListener('keydown', function(event) {
+            if (event.key !== 'Enter' || event.isComposing || !document.body.classList.contains('cr-alert-open')) {
+                return;
+            }
+            const al = document.querySelector('.cr-alert');
+            if (!al) {
+                return;
+            }
+            // Giữ phím Enter: chặn luôn để không kích hoạt nút đang focus trong hộp
+            if (event.repeat) {
+                event.preventDefault();
+                return;
+            }
+            // Đang focus nút trong hộp (VD nút Đóng) thì để trình duyệt tự kích hoạt nút đó
+            if (al.contains(event.target) && event.target.closest('button')) {
+                return;
+            }
+            const btnConfirm = al.querySelector('.cr-btn-primary');
+            if (btnConfirm) {
+                // Chặn hành động mặc định của phần tử bên dưới (gửi form, click nút)
+                event.preventDefault();
+                btnConfirm.click();
             }
         });
     }
