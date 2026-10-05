@@ -14,59 +14,48 @@ if (!defined('NV_IS_FILE_ZALO')) {
 }
 
 $zaloWebhookIPs = !empty($global_config['zaloWebhookIPs']) ? $global_config['zaloWebhookIPs'] : [];
+$page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
-if ($nv_Request->get_string('func', 'get', '') == 'access_token_create') {
-    $result = $myZalo->oa_accesstoken_create(NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings&func=accesstoken');
-
-    $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    if (empty($result)) {
-        $err = zaloGetError();
-        $xtpl->assign('ERROR', $err);
-        $xtpl->parse('isError');
-        $contents = $xtpl->text('isError');
-        include NV_ROOTDIR . '/includes/header.php';
-        echo nv_admin_theme($contents, false);
-        include NV_ROOTDIR . '/includes/footer.php';
-    } elseif (isset($result['access_token'])) {
-        accessTokenUpdate($result);
-        $xtpl->assign('RESULT', $result);
-        $xtpl->parse('isSuccess');
-        $contents = $xtpl->text('isSuccess');
-        include NV_ROOTDIR . '/includes/header.php';
-        echo nv_admin_theme($contents, false);
-        include NV_ROOTDIR . '/includes/footer.php';
+// Tạo access token trong cửa sổ popup: chuyển sang trang cấp quyền của Zalo, sau đó Zalo gọi lại với func=accesstoken
+$get_func = $nv_Request->get_string('func', 'get', '');
+if ($get_func == 'access_token_create' or ($get_func == 'accesstoken' and $nv_Request->isset_request('code, oa_id', 'get'))) {
+    if ($get_func == 'access_token_create') {
+        $result = $myZalo->oa_accesstoken_create(NV_MY_DOMAIN . $page_url . '&func=accesstoken');
+        if (!empty($result) and !isset($result['access_token'])) {
+            $nv_Request->set_Session('oa_code_verifier', $result['code_verifier']);
+            nv_redirect_location($result['permission_url']);
+        }
     } else {
-        $nv_Request->set_Session('oa_code_verifier', $result['code_verifier']);
-        nv_redirect_location($result['permission_url']);
+        $codeVerifier = $nv_Request->get_string('oa_code_verifier', 'session', '');
+        $nv_Request->unset_request('oa_code_verifier', 'session');
+        $result = $myZalo->accesstokenGet($codeVerifier);
     }
-}
 
-if ($nv_Request->get_string('func', 'get', '') == 'accesstoken' and $nv_Request->isset_request('code, oa_id', 'get')) {
-    $codeVerifier = $nv_Request->get_string('oa_code_verifier', 'session', '');
-    $nv_Request->unset_request('oa_code_verifier', 'session');
-
-    $result = $myZalo->accesstokenGet($codeVerifier);
-
-    $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $token_result = [
+        'status' => 'error',
+        'mess' => ''
+    ];
     if (empty($result)) {
-        $err = zaloGetError();
-        $xtpl->assign('ERROR', $err);
-        $xtpl->parse('isError');
-        $contents = $xtpl->text('isError');
-        include NV_ROOTDIR . '/includes/header.php';
-        echo nv_admin_theme($contents, false);
-        include NV_ROOTDIR . '/includes/footer.php';
+        $token_result['mess'] = nv_htmlspecialchars(zaloGetError());
     } else {
         accessTokenUpdate($result);
-        $xtpl->assign('RESULT', $result);
-        $xtpl->parse('isSuccess');
-        $contents = $xtpl->text('isSuccess');
-        include NV_ROOTDIR . '/includes/header.php';
-        echo nv_admin_theme($contents, false);
-        include NV_ROOTDIR . '/includes/footer.php';
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('access_token_create'), '', $admin_info['userid']);
+        $token_result['status'] = 'success';
     }
+
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('settings-token-result.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('RESULT', $token_result);
+
+    $contents = $tpl->fetch('settings-token-result.tpl');
+
+    include NV_ROOTDIR . '/includes/header.php';
+    echo nv_admin_theme($contents, false);
+    include NV_ROOTDIR . '/includes/footer.php';
 }
 
+// Lưu mã gọi quốc gia
 if ($nv_Request->isset_request('callingcodesSave', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
@@ -83,10 +72,15 @@ if ($nv_Request->isset_request('callingcodesSave', 'post')) {
         if (!preg_match('/^[A-Z0-9]+$/', $name)) {
             continue;
         }
-        $codes = array_filter($codes);
-        $codes = array_unique($codes);
+        $codes = array_unique(array_filter(array_map('intval', (array) $codes)));
+        if (empty($codes)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $nv_Lang->getModule('country_callcode_error'),
+                'input' => 'callcode[' . $name . ']'
+            ]);
+        }
         foreach ($codes as $code) {
-            $code = (int) $code;
             $callingcodes[$name . $code] = [$code, $name];
             !isset($db_callingcodes2[$code]) && $db_callingcodes2[$code] = [];
             $db_callingcodes2[$code][] = $name . $code;
@@ -113,15 +107,16 @@ if ($nv_Request->isset_request('callingcodesSave', 'post')) {
     $output .= "\$callingcodes2 = [\n" . implode(",\n", $lines) . "\n];\n";
 
     file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/callingcodes.php', $output, LOCK_EX);
-
-    $contents = callingcodes_to_html($callingcodes);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('callingcodes_settings'), '', $admin_info['userid']);
 
     nv_jsonOutput([
-        'status' => 'success',
-        'content' => $contents
+        'status' => 'OK',
+        'mess' => $nv_Lang->getGlobal('save_success'),
+        'redirect' => nv_url_rewrite($page_url . '&action=callingcodes', true)
     ]);
 }
 
+// Lưu các đơn vị hành chính
 if ($nv_Request->isset_request('vnsubdivisionsSave, parent', 'post')) {
     if (!csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
         nv_jsonOutput([
@@ -149,7 +144,8 @@ if ($nv_Request->isset_request('vnsubdivisionsSave, parent', 'post')) {
         if (empty($name) or !preg_match('/^[A-Z0-9]+$/', $code)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $nv_Lang->getModule('vnsubdivisions_title_empty')
+                'mess' => $nv_Lang->getModule('vnsubdivisions_title_empty'),
+                'input' => 'subdiv_mainname[' . $code . ']'
             ]);
         }
 
@@ -212,17 +208,16 @@ if ($nv_Request->isset_request('vnsubdivisionsSave, parent', 'post')) {
     $output .= "];\n";
 
     file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/vnsubdivisions.php', $output, LOCK_EX);
-
-    $data = empty($parent) ? $db_provinces : $db_districts[$parent];
-
-    $contents = vnsubdivisions_to_html($db_provinces, $data, $parent);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('vnsubdivisions_settings'), $parent, $admin_info['userid']);
 
     nv_jsonOutput([
-        'status' => 'success',
-        'content' => $contents
+        'status' => 'OK',
+        'mess' => $nv_Lang->getGlobal('save_success'),
+        'redirect' => nv_url_rewrite($page_url . '&action=vnsubdivisions' . (!empty($parent) ? '&subdiv=' . $parent : ''), true)
     ]);
 }
 
+// Tải nội dung tab các đơn vị hành chính
 if ($nv_Request->isset_request('vnsubdivisionsLoad, subdivParent', 'post')) {
     require_once NV_ROOTDIR . '/' . NV_DATADIR . '/vnsubdivisions.php';
     $subdivParent = $nv_Request->get_string('subdivParent', 'post', '');
@@ -230,69 +225,127 @@ if ($nv_Request->isset_request('vnsubdivisionsLoad, subdivParent', 'post')) {
         $subdivParent = '';
     }
 
-    $data = empty($subdivParent) ? $provinces : $districts[$subdivParent];
-    $contents = vnsubdivisions_to_html($provinces, $data, $subdivParent);
+    $array_provinces = [];
+    foreach ($provinces as $code => $names) {
+        $array_provinces[] = [
+            'code' => (string) $code,
+            'name' => nv_htmlspecialchars($names[0])
+        ];
+    }
 
-    echo $contents;
-    exit;
+    $array_subdivs = [];
+    $data = empty($subdivParent) ? $provinces : $districts[$subdivParent];
+    foreach ($data as $code => $names) {
+        $mainname = array_shift($names);
+        $array_subdivs[] = [
+            'code' => (string) $code,
+            'code_format' => (!empty($subdivParent) ? $subdivParent . '-' : '') . $code,
+            'mainname' => nv_htmlspecialchars($mainname),
+            'othernames' => empty($names) ? [''] : nv_htmlspecialchars(array_values($names))
+        ];
+    }
+
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('settings-vnsubdivisions.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('OP', $op);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
+    $tpl->assign('PARENT', $subdivParent);
+    $tpl->assign('PROVINCES', $array_provinces);
+    $tpl->assign('SUBDIVS', $array_subdivs);
+
+    echo $tpl->fetch('settings-vnsubdivisions.tpl');
+    exit();
 }
 
+// Tải nội dung tab mã gọi quốc gia
 if ($nv_Request->isset_request('callingcodesLoad', 'post')) {
     require_once NV_ROOTDIR . '/' . NV_DATADIR . '/callingcodes.php';
-    $contents = callingcodes_to_html($callingcodes);
-    echo $contents;
-    exit;
+
+    $countries = [];
+    foreach ($callingcodes as $country) {
+        if (!isset($countries[$country[1]])) {
+            $countries[$country[1]] = [
+                'code' => $country[1],
+                'name' => $nv_Lang->existsGlobal('country_' . $country[1]) ? $nv_Lang->getGlobal('country_' . $country[1]) : $country[1],
+                'callcodes' => []
+            ];
+        }
+        $countries[$country[1]]['callcodes'][] = $country[0];
+    }
+
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(get_module_tpl_dir('settings-callingcodes.tpl'));
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('MODULE_NAME', $module_name);
+    $tpl->assign('OP', $op);
+    $tpl->assign('CHECKSS', csrf_create($csrf_key));
+    $tpl->assign('COUNTRIES', $countries);
+
+    echo $tpl->fetch('settings-callingcodes.tpl');
+    exit();
 }
 
-$errormess = '';
-$array_config_site = [];
-$checkss = $nv_Request->get_string('checkss', 'post');
+$func = $nv_Request->get_string('func', 'post', '');
+$checkss = $nv_Request->get_string('checkss', 'post', '');
 
-if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func', 'post', '') == 'webhook') {
-    if (!csrf_check($checkss, $csrf_key)) {
-        nv_info_die($nv_Lang->getGlobal('error_page_title'), $nv_Lang->getGlobal('error_checkss'), $nv_Lang->getGlobal('error_checkss'));
-    }
-    $array_config_site['zaloOASecretKey'] = $nv_Request->get_title('zaloOASecretKey', 'post', '');
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
-    foreach ($array_config_site as $config_name => $config_value) {
-        $sth->bindValue(':config_name', $config_name, PDO::PARAM_STR);
-        $sth->bindValue(':config_value', $config_value, PDO::PARAM_STR);
-        $sth->execute();
-    }
+if (!empty($func) and !csrf_check($checkss, $csrf_key)) {
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => $nv_Lang->getGlobal('error_checkss')
+    ]);
+}
+
+// Lưu khóa bí mật của OA
+if ($func == 'webhook') {
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'zaloOASecretKey'");
+    $sth->bindValue(':config_value', $nv_Request->get_title('zaloOASecretKey', 'post', ''), PDO::PARAM_STR);
+    $sth->execute();
 
     $nv_Cache->delAll(false);
-    if (empty($errormess)) {
-        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&action=webhook_setup');
-    }
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('webhook_setup'), $nv_Lang->getModule('oa_secrect_key'), $admin_info['userid']);
+
+    nv_jsonOutput([
+        'status' => 'OK',
+        'mess' => $nv_Lang->getGlobal('save_success'),
+        'redirect' => nv_url_rewrite($page_url . '&action=webhook_setup', true)
+    ]);
 }
 
-if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func', 'post', '') == 'access_token_copy') {
-    if (!csrf_check($checkss, $csrf_key)) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'mess' => $nv_Lang->getGlobal('error_checkss')
-        ]);
-    }
+// Lưu access token sao chép từ trình tạo mã của Zalo
+if ($func == 'access_token_copy') {
     $result = [
         'access_token' => $nv_Request->get_title('new_access_token', 'post', ''),
         'refresh_token' => $nv_Request->get_title('new_refresh_token', 'post', '')
     ];
-    if (!empty($result['access_token']) and !empty($result['refresh_token'])) {
-        accessTokenUpdate($result);
+    if (empty($result['access_token'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('required_invalid'),
+            'input' => 'new_access_token'
+        ]);
     }
+    if (empty($result['refresh_token'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getGlobal('required_invalid'),
+            'input' => 'new_refresh_token'
+        ]);
+    }
+
+    accessTokenUpdate($result);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('access_token_copy'), '', $admin_info['userid']);
+
     nv_jsonOutput([
-        'status' => 'success',
-        'mess' => ''
+        'status' => 'OK',
+        'mess' => $nv_Lang->getGlobal('save_success'),
+        'redirect' => nv_url_rewrite($page_url . '&action=access_token_create', true)
     ]);
 }
 
-if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func', 'post', '') == 'webhookIPs') {
-    if (!csrf_check($checkss, $csrf_key)) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'mess' => $nv_Lang->getGlobal('error_checkss')
-        ]);
-    }
+// Lưu danh sách IP của Zalo Webhook nhập thủ công
+if ($func == 'webhookIPs') {
     $zaloWebhookIPs = $nv_Request->get_textarea('zaloWebhookIPs', 'post', '');
     $zaloWebhookIPs = !empty($zaloWebhookIPs) ? array_map('trim', explode("\n", $zaloWebhookIPs)) : [];
     if (!empty($zaloWebhookIPs)) {
@@ -310,19 +363,17 @@ if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func
     $sth->execute();
 
     nv_save_file_config_global();
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('zalowebhook_ips'), '', $admin_info['userid']);
+
     nv_jsonOutput([
-        'status' => 'success',
-        'mess' => ''
+        'status' => 'OK',
+        'mess' => $nv_Lang->getGlobal('save_success'),
+        'redirect' => nv_url_rewrite($page_url . '&action=webhook_setup', true)
     ]);
 }
 
-if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func', 'post', '') == 'zalowebhook_ip_update') {
-    if (!csrf_check($checkss, $csrf_key)) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'mess' => $nv_Lang->getGlobal('error_checkss')
-        ]);
-    }
+// Cập nhật IP của Zalo Webhook từ log ghi nhận được trong thời gian kiểm tra
+if ($func == 'zalowebhook_ip_update') {
     $_long = nv_scandir(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/zalo_logs', '/^[0-9]+\.' . nv_preg_quote(NV_LOGS_EXT) . '$/');
     if (!empty($_long)) {
         foreach ($_long as $l) {
@@ -342,38 +393,34 @@ if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func
     $sth->execute();
 
     nv_save_file_config_global();
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('zalowebhook_ips'), $nv_Lang->getModule('zalowebhook_ip_update'), $admin_info['userid']);
+
     nv_jsonOutput([
-        'status' => 'success',
+        'status' => 'OK',
+        'mess' => $nv_Lang->getGlobal('save_success'),
+        'redirect' => nv_url_rewrite($page_url . '&action=webhook_setup', true)
+    ]);
+}
+
+// Bật chế độ ghi nhận IP của Zalo Webhook trong 10 phút
+if ($func == 'check_zaloip') {
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = 'check_zaloip_expired'");
+    $sth->bindValue(':config_value', NV_CURRENTTIME + 600, PDO::PARAM_STR);
+    $sth->execute();
+    nv_save_file_config_global();
+
+    nv_jsonOutput([
+        'status' => 'OK',
         'mess' => ''
     ]);
 }
 
-if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func', 'post', '') == 'check_zaloip') {
-    if (!csrf_check($checkss, $csrf_key)) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'mess' => $nv_Lang->getGlobal('error_checkss')
-        ]);
-    }
-    $expired = NV_CURRENTTIME + 600;
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = 'check_zaloip_expired'");
-    $sth->bindValue(':config_value', $expired, PDO::PARAM_STR);
-    $sth->execute();
-    nv_save_file_config_global();
-    echo 'OK';
-    exit();
-}
-
-if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func', 'post', '') == 'settings') {
-    if (!csrf_check($checkss, $csrf_key)) {
-        nv_info_die($nv_Lang->getGlobal('error_page_title'), $nv_Lang->getGlobal('error_checkss'), $nv_Lang->getGlobal('error_checkss'));
-    }
-    $array_config_site['zaloOfficialAccountID'] = $nv_Request->get_title('zaloOfficialAccountID', 'post', '');
-    $array_config_site['zaloOfficialAccountID'] = preg_replace('/[^0-9]/', '', $array_config_site['zaloOfficialAccountID']);
-    $array_config_site['zaloAppID'] = $nv_Request->get_title('zaloAppID', 'post', '');
-    $array_config_site['zaloAppID'] = preg_replace('/[^0-9]/', '', $array_config_site['zaloAppID']);
-    $array_config_site['zaloAppSecretKey'] = $nv_Request->get_title('zaloAppSecretKey', 'post', '');
-    $array_config_site['zaloAppSecretKey'] = preg_replace('/[^a-zA-Z0-9\_\-]/', '', $array_config_site['zaloAppSecretKey']);
+// Lưu cấu hình chung
+if ($func == 'settings') {
+    $array_config_site = [];
+    $array_config_site['zaloOfficialAccountID'] = preg_replace('/[^0-9]/', '', $nv_Request->get_title('zaloOfficialAccountID', 'post', ''));
+    $array_config_site['zaloAppID'] = preg_replace('/[^0-9]/', '', $nv_Request->get_title('zaloAppID', 'post', ''));
+    $array_config_site['zaloAppSecretKey'] = preg_replace('/[^a-zA-Z0-9\_\-]/', '', $nv_Request->get_title('zaloAppSecretKey', 'post', ''));
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_site as $config_name => $config_value) {
@@ -383,141 +430,103 @@ if ($nv_Request->isset_request('func', 'post') and $nv_Request->get_string('func
     }
 
     $nv_Cache->delAll(false);
-    if (empty($errormess)) {
-        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&action=general_settings');
-    }
-}
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('general_settings'), '', $admin_info['userid']);
 
+    nv_jsonOutput([
+        'status' => 'OK',
+        'mess' => $nv_Lang->getGlobal('save_success'),
+        'redirect' => nv_url_rewrite($page_url . '&action=general_settings', true)
+    ]);
+}
 
 require_once NV_ROOTDIR . '/' . NV_DATADIR . '/vnsubdivisions.php';
 
-$action = $nv_Request->get_string('action', 'get', 'general_settings');
+$array_actions = ['general_settings', 'access_token_create', 'webhook_setup', 'system_check', 'vnsubdivisions', 'callingcodes'];
+$action = $nv_Request->get_title('action', 'get', '');
+if (!in_array($action, $array_actions, true)) {
+    $action = 'general_settings';
+}
 $subdiv_parent = $nv_Request->get_string('subdiv', 'get', '');
 if (!empty($subdiv_parent) and !isset($provinces[$subdiv_parent])) {
     $subdiv_parent = '';
 }
 
-$global_config['zaloWebhookIPs_format'] = !empty($zaloWebhookIPs) ? implode("\n", $zaloWebhookIPs) : '';
-
-$nv_Lang->setModule('access_token_copy_note', $nv_Lang->getModule('access_token_copy_note', 'https://developers.zalo.me/tools/explorer/' . $global_config['zaloAppID'], 'https://developers.zalo.me/docs/api/official-account-api/xac-thuc-va-uy-quyen/cach-2-xac-thuc-voi-cong-cu-api-explorer/phuong-thuc-lay-access-token-su-dung-cong-cu-api-explorer-post-5004'));
-$nv_Lang->setModule('zalowebhook_ip_check_note', $nv_Lang->getModule('zalowebhook_ip_check_note', 'https://developers.zalo.me/app/' . $global_config['zaloAppID'] . '/webhook'));
-
-$xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-
-$nv_Lang->setModule('oa_create_note', $nv_Lang->getModule('oa_create_note', 'https://oa.zalo.me/manage/oa?option=create', 'https://oa.zalo.me/manage/oa'));
-$nv_Lang->setModule('app_note', $nv_Lang->getModule('app_note', 'https://developers.zalo.me/createapp', 'https://developers.zalo.me/apps', NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php', NV_MY_DOMAIN, NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php', NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php'));
-$nv_Lang->setModule('webhook_note', $nv_Lang->getModule('webhook_note', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=plugin', 'https://developers.zalo.me/apps', NV_MY_DOMAIN . NV_BASE_SITEURL . '?zalo=' . $global_config['zaloAppID']));
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('DATA', $global_config);
-$xtpl->assign('CHECKSS', csrf_create($csrf_key));
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('PAGE_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('SUBDIV_PARENT', $subdiv_parent);
-$xtpl->assign('OP', $op);
-
-if ($errormess != '') {
-    $xtpl->assign('ERROR', $errormess);
-    $xtpl->parse('main.error');
-}
-
-if (!empty($global_config['zaloOfficialAccountID']) and !empty($global_config['zaloAppID']) and !empty($global_config['zaloAppID'])) {
-    $xtpl->parse('main.webhook_is_allowed');
-    $xtpl->parse('main.access_token_is_allowed');
-} else {
-    $xtpl->parse('main.webhook_not_allowed');
-    $xtpl->parse('main.access_token_not_allowed');
-}
-
+// Kiểm tra tính tương thích của hệ thống với việc tải tập tin lên Zalo
 $norm = 5242880;
 $norm_format = nv_convertfromBytes($norm);
 $allow_files = ['adobe', 'documents', 'images'];
-$finally = true;
+$upload_config_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=upload&amp;' . NV_OP_VARIABLE . '=uploadconfig';
 
 $upload_max_filesize = nv_converttoBytes(ini_get('upload_max_filesize'));
-$upload_max_filesize_suitable = $upload_max_filesize >= $norm;
-$upload_max_filesize_format = nv_convertfromBytes($upload_max_filesize);
-if (!$upload_max_filesize_suitable) {
-    $finally = false;
-}
 $post_max_size = nv_converttoBytes(ini_get('post_max_size'));
-$post_max_size_suitable = $post_max_size >= $norm;
-$post_max_size_format = nv_convertfromBytes($post_max_size);
-if (!$post_max_size_suitable) {
-    $finally = false;
-}
 $nv_max_size = (int) $global_config['nv_max_size'];
-$nv_max_size_suitable = $nv_max_size >= $norm;
-$nv_max_size_format = nv_convertfromBytes($nv_max_size);
-if (!$nv_max_size_suitable) {
-    $finally = false;
-}
-$file_allowed_ext = $global_config['file_allowed_ext'];
-$file_allowed_ext_current = array_intersect($allow_files, $file_allowed_ext);
-$file_allowed_ext_suitable = $file_allowed_ext_current == $allow_files;
-if (!$file_allowed_ext_suitable) {
-    $finally = false;
-}
-$check = [
-    'upload_max_filesize' => [
+$file_allowed_ext_current = array_intersect($allow_files, $global_config['file_allowed_ext']);
+
+$system_check = [
+    [
         'key' => 'upload_max_filesize',
         'required' => $norm_format,
-        'current' => $upload_max_filesize_format,
-        'suitable' => $upload_max_filesize_suitable,
-        'suitable_info' => $upload_max_filesize_suitable ? $nv_Lang->getModule('suitable') : $nv_Lang->getModule('notsuitable'),
-        'recommendation' => $upload_max_filesize_suitable ? '' : $nv_Lang->getModule('upload_max_filesize_not_suitable')
+        'current' => nv_convertfromBytes($upload_max_filesize),
+        'suitable' => $upload_max_filesize >= $norm,
+        'recommendation' => $nv_Lang->getModule('upload_max_filesize_not_suitable')
     ],
-    'post_max_size' => [
+    [
         'key' => 'post_max_size',
         'required' => $norm_format,
-        'current' => $post_max_size_format,
-        'suitable' => $post_max_size_suitable,
-        'suitable_info' => $post_max_size_suitable ? $nv_Lang->getModule('suitable') : $nv_Lang->getModule('notsuitable'),
-        'recommendation' => $post_max_size_suitable ? '' : $nv_Lang->getModule('post_max_size_not_suitable')
+        'current' => nv_convertfromBytes($post_max_size),
+        'suitable' => $post_max_size >= $norm,
+        'recommendation' => $nv_Lang->getModule('post_max_size_not_suitable')
     ],
-    'nv_max_size' => [
+    [
         'key' => $nv_Lang->getModule('nv_max_size'),
         'required' => $norm_format,
-        'current' => $nv_max_size_format,
-        'suitable' => $nv_max_size_suitable,
-        'suitable_info' => $nv_max_size_suitable ? $nv_Lang->getModule('suitable') : $nv_Lang->getModule('notsuitable'),
-        'recommendation' => $nv_max_size_suitable ? '' : $nv_Lang->getModule('nv_max_size_not_suitable', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=uploadconfig')
+        'current' => nv_convertfromBytes($nv_max_size),
+        'suitable' => $nv_max_size >= $norm,
+        'recommendation' => $nv_Lang->getModule('nv_max_size_not_suitable', $upload_config_url)
     ],
-    'file_allowed_ext' => [
+    [
         'key' => $nv_Lang->getModule('file_allowed_ext'),
         'required' => implode(', ', $allow_files),
         'current' => implode(', ', $file_allowed_ext_current),
-        'suitable' => $file_allowed_ext_suitable,
-        'suitable_info' => $file_allowed_ext_suitable ? $nv_Lang->getModule('suitable') : $nv_Lang->getModule('notsuitable'),
-        'recommendation' => $file_allowed_ext_suitable ? '' : $nv_Lang->getModule('file_allowed_ext_not_suitable', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=uploadconfig')
+        'suitable' => $file_allowed_ext_current == $allow_files,
+        'recommendation' => $nv_Lang->getModule('file_allowed_ext_not_suitable', $upload_config_url)
     ]
 ];
+$system_suitable = !in_array(false, array_column($system_check, 'suitable'), true);
 
-foreach ($check as $ch) {
-    $xtpl->assign('CHECK', $ch);
-    if ($ch['suitable']) {
-        $xtpl->parse('main.system_check.suitable');
-    } else {
-        $xtpl->parse('main.system_check.notsuitable');
-    }
-    $xtpl->parse('main.system_check');
-}
+// Webhook và access token chỉ thiết lập được khi đã khai báo đủ OAID, ID ứng dụng và khóa bí mật của ứng dụng
+$is_allowed = (!empty($global_config['zaloOfficialAccountID']) and !empty($global_config['zaloAppID']) and !empty($global_config['zaloAppSecretKey']));
 
-if ($finally) {
-    $xtpl->parse('main.suitable');
-    $xtpl->parse('main.suitable2');
-} else {
-    $xtpl->parse('main.notsuitable');
-    $xtpl->parse('main.notsuitable2');
-}
+// Trạng thái các bước thiết lập, hiển thị ở thanh tiến độ
+$setup_status = [
+    'general_settings' => $is_allowed,
+    'access_token_create' => !empty($global_config['zaloOAAccessToken']),
+    'webhook_setup' => (!empty($global_config['zaloOASecretKey']) and !empty($zaloWebhookIPs)),
+    'system_check' => $system_suitable
+];
 
-if (!empty($action) and in_array($action, ['general_settings', 'webhook_setup', 'access_token_create', 'system_check', 'vnsubdivisions', 'callingcodes'], true)) {
-    $xtpl->assign('ACTION', $action);
-    $xtpl->parse('main.action');
-}
+$nv_Lang->setModule('access_token_copy_note', $nv_Lang->getModule('access_token_copy_note', 'https://developers.zalo.me/tools/explorer/' . $global_config['zaloAppID'], 'https://developers.zalo.me/docs/api/official-account-api/xac-thuc-va-uy-quyen/cach-2-xac-thuc-voi-cong-cu-api-explorer/phuong-thuc-lay-access-token-su-dung-cong-cu-api-explorer-post-5004'));
+$nv_Lang->setModule('zalowebhook_ip_check_note', $nv_Lang->getModule('zalowebhook_ip_check_note', 'https://developers.zalo.me/app/' . $global_config['zaloAppID'] . '/webhook'));
+$nv_Lang->setModule('oa_create_note', $nv_Lang->getModule('oa_create_note', 'https://oa.zalo.me/manage/oa?option=create', 'https://oa.zalo.me/manage/oa'));
+$nv_Lang->setModule('app_note', $nv_Lang->getModule('app_note', 'https://developers.zalo.me/createapp', 'https://developers.zalo.me/apps', NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php', NV_MY_DOMAIN, NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php', NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php'));
+$nv_Lang->setModule('webhook_note', $nv_Lang->getModule('webhook_note', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=plugin', 'https://developers.zalo.me/apps', NV_MY_DOMAIN . NV_BASE_SITEURL . '?zalo=' . $global_config['zaloAppID']));
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(get_module_tpl_dir('settings.tpl'));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('OP', $op);
+$tpl->assign('CHECKSS', csrf_create($csrf_key));
+$tpl->assign('GCONFIG', $global_config);
+$tpl->assign('ACTION', $action);
+$tpl->assign('SUBDIV_PARENT', $subdiv_parent);
+$tpl->assign('IS_ALLOWED', $is_allowed);
+$tpl->assign('SETUP_STATUS', $setup_status);
+$tpl->assign('SYSTEM_CHECK', $system_check);
+$tpl->assign('SYSTEM_SUITABLE', $system_suitable);
+$tpl->assign('WEBHOOK_IPS', !empty($zaloWebhookIPs) ? implode("\n", $zaloWebhookIPs) : '');
+
+$contents = $tpl->fetch('settings.tpl');
 
 $page_title = $nv_Lang->getModule('settings');
 

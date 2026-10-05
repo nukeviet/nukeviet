@@ -32,6 +32,9 @@ nv_add_hook($module_name, 'get_global_admin_theme', $priority, function ($vars) 
     if ($module_file == 'feeds' and in_array($op, ['main'])) {
         return $new_theme;
     }
+    if ($module_file == 'zalo' and in_array($op, ['settings'])) {
+        return $new_theme;
+    }
 
     return $admin_theme;
 });
