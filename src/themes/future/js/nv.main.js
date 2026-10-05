@@ -550,6 +550,25 @@ $(function() {
         });
     }
 
+    // Xử lý đóng các kiểu menu khi click ra bên ngoài
+    if ($('[data-toggle="hmenu"]').length) {
+        $(document).on('click', function(e) {
+            if (nukeviet.isMScreen()) {
+                return;
+            }
+            $('[data-toggle="hmenu"]').each(function() {
+                if (this.contains(e.target)) {
+                    return;
+                }
+                $('.hmenu-sub.show', this).each(function() {
+                    bootstrap.Collapse.getOrCreateInstance(this, {
+                        toggle: false
+                    }).hide();
+                });
+            });
+        });
+    }
+
     // Xử lý đóng mở menu mobile
     const mainNavToggler = $('[data-toggle="toggle-main-nav"]');
     mainNavToggler.on('click', function(e) {

@@ -29201,11 +29201,55 @@ span.keyword {
   transform: rotate(180deg);
 }
 
-.vert-menu .menu-toggle > i {
+.collapse-caret > i {
   transition: transform 0.15s ease-in-out;
 }
-.vert-menu .menu-toggle:not(.collapsed) > i {
+.collapse-caret:not(.collapsed) > i {
   transform: rotate(180deg);
+}
+
+.treeview-menu .tree-toggle .icon-expanded {
+  display: none;
+}
+.treeview-menu .tree-toggle:not(.collapsed) .icon-collapsed {
+  display: none;
+}
+.treeview-menu .tree-toggle:not(.collapsed) .icon-expanded {
+  display: inline-block;
+}
+
+.hmenu .hmenu-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.hmenu .hmenu-list li {
+  position: relative;
+}
+.hmenu .hmenu-text {
+  white-space: nowrap;
+}
+.hmenu .hmenu-sub {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1000;
+  min-width: 15rem;
+  padding: 0.5rem 0;
+  background-color: var(--bs-body-bg);
+  border: var(--bs-border-width) solid var(--bs-border-color-translucent);
+  border-radius: var(--bs-border-radius);
+  box-shadow: var(--bs-box-shadow);
+}
+.hmenu .hmenu-sub .hmenu-sub {
+  top: calc(-0.5rem - var(--bs-border-width));
+  right: 100%;
+}
+.hmenu .hmenu-sub .collapse-caret > i {
+  transform: rotate(90deg);
+}
+.hmenu li:hover > .hmenu-sub,
+.hmenu li:focus-within > .hmenu-sub {
+  display: block;
 }
 
 .footer-top .footer-start {

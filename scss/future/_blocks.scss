@@ -142,17 +142,82 @@ $max-depth: 10;
   }
 }
 
-// Menu dọc đa cấp. Collapse mặc định của bootstrap, chỉ thêm hiệu ứng xoay mũi tên
-.vert-menu {
-  .menu-toggle {
+// Nút đóng mở collapse của bootstrap, xoay mũi tên khi mở
+.collapse-caret {
+  >i {
+    transition: transform .15s ease-in-out;
+  }
+
+  &:not(.collapsed) {
     >i {
-      transition: transform .15s ease-in-out;
+      transform: rotate(-180deg);
+    }
+  }
+}
+
+// Menu dạng cây thư mục: đổi icon cộng/trừ theo trạng thái
+.treeview-menu {
+  .tree-toggle {
+    .icon-expanded {
+      display: none;
     }
 
     &:not(.collapsed) {
-      >i {
-        transform: rotate(-180deg);
+      .icon-collapsed {
+        display: none;
       }
+
+      .icon-expanded {
+        display: inline-block;
+      }
+    }
+  }
+}
+
+// Menu ngang đa cấp: màn hình nhỏ xếp dọc, menu con đóng mở bằng collapse.
+// Màn hình lớn dàn ngang, menu con xổ xuống khi rê chuột, focus hoặc bấm nút mũi tên
+.hmenu {
+  @include media-breakpoint-up($theme-layout-breakpoint) {
+    .hmenu-list {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .hmenu-list li {
+      position: relative;
+    }
+
+    // Màn hình nhỏ menu xếp dọc thì cho xuống dòng, màn hình lớn giữ 1 dòng
+    .hmenu-text {
+      white-space: nowrap;
+    }
+
+    .hmenu-sub {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: $zindex-dropdown;
+      min-width: $dropdown-min-width * 1.5;
+      padding: $dropdown-padding-y 0;
+      background-color: var(--#{$prefix}body-bg);
+      border: var(--#{$prefix}border-width) solid var(--#{$prefix}border-color-translucent);
+      border-radius: var(--#{$prefix}border-radius);
+      box-shadow: var(--#{$prefix}box-shadow);
+
+      .hmenu-sub {
+        top: calc(-1 * $dropdown-padding-y - var(--#{$prefix}border-width));
+        left: 100%;
+      }
+
+      // Cấp 2 trở đi mũi tên hướng sang bên
+      .collapse-caret>i {
+        transform: rotate(-90deg);
+      }
+    }
+
+    li:hover>.hmenu-sub,
+    li:focus-within>.hmenu-sub {
+      display: block;
     }
   }
 }

@@ -19,6 +19,6 @@ if (defined('NV_IS_FILE_THEMES')) {
 }
 
 if (defined('NV_SYSTEM')) {
-    require_once NV_ROOTDIR . '/modules/menu/menu_blocks.php';
+    require_once pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), PATHINFO_DIRNAME) . '/menu_blocks.php';
     $content = nv_menu_blocks($block_config);
 }

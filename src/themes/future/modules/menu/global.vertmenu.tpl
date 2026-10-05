@@ -9,7 +9,7 @@
             <span class="text-truncate">{$menu.title_trim}</span>
         </a>
         {if not empty($menu.sub)}
-        <button type="button" class="menu-toggle btn btn-link link-secondary p-1 lh-1 flex-shrink-0{if not $menu.is_active} collapsed{/if}" data-bs-toggle="collapse" data-bs-target="#vertmenu-{$CONFIG.bid}-{$menu.id}" aria-expanded="{if $menu.is_active}true{else}false{/if}" aria-controls="vertmenu-{$CONFIG.bid}-{$menu.id}" aria-label="{$LANG->getGlobal('toggle_submenu')}">
+        <button type="button" class="collapse-caret btn btn-link link-secondary p-1 lh-1 flex-shrink-0{if not $menu.is_active} collapsed{/if}" data-bs-toggle="collapse" data-bs-target="#vertmenu-{$CONFIG.bid}-{$menu.id}" aria-expanded="{if $menu.is_active}true{else}false{/if}" aria-controls="vertmenu-{$CONFIG.bid}-{$menu.id}" aria-label="{$LANG->getGlobal('toggle_submenu')}">
             <i class="fa-solid fa-caret-down fa-fw"></i>
         </button>
         {/if}
