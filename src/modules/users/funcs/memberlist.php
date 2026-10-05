@@ -154,13 +154,7 @@ $users_array = [];
 
 while ($item = $stmt->fetch()) {
     $item['full_name'] = nv_show_name_user($item['first_name'], $item['last_name']);
-    if (!empty($item['photo']) and file_exists(NV_ROOTDIR . '/' . $item['photo'])) {
-        $item['photo'] = NV_BASE_SITEURL . $item['photo'];
-        $item['avata'] = $item['photo'];
-    } else {
-        $item['photo'] = NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png';
-        $item['avata'] = '';
-    }
+    $item['avata'] = nv_user_avatar_url($item['photo']);
     $item['avatar_letters'] = nv_user_avatar_letters($item['first_name'], $item['last_name'], $item['username']);
     $item['avatar_color'] = nv_user_avatar_color($item['username']);
 

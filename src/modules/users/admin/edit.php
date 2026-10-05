@@ -682,7 +682,7 @@ $photo_info = ['src' => '', 'width' => 0, 'height' => 0];
 if (!empty($row['photo']) and file_exists(NV_ROOTDIR . '/' . $row['photo'])) {
     $size = @getimagesize(NV_ROOTDIR . '/' . $row['photo']);
     $photo_info = [
-        'src' => NV_BASE_SITEURL . $row['photo'],
+        'src' => nv_user_avatar_url($row['photo']),
         'height' => $size[1] ?? 0,
         'width' => $size[0] ?? 0
     ];

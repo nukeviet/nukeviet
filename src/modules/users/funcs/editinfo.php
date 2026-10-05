@@ -1512,7 +1512,7 @@ $array_data['last_name'] = $row['last_name'];
 $array_data['gender'] = $row['gender'];
 $array_data['birthday'] = nv_u2d_post($row['birthday']);
 $array_data['view_mail'] = $row['view_mail'] ? ' checked="checked"' : '';
-$array_data['photo'] = (!empty($row['photo']) and file_exists(NV_ROOTDIR . '/' . $row['photo'])) ? NV_BASE_SITEURL . $row['photo'] : '';
+$array_data['photo'] = (!empty($row['photo']) and file_exists(NV_ROOTDIR . '/' . $row['photo'])) ? nv_user_avatar_url($row['photo']) : '';
 $array_data['langinterface'] = $row['language'];
 
 if (empty($array_data['photo'])) {

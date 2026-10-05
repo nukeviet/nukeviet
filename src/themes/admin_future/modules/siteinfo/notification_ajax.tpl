@@ -23,8 +23,8 @@
         <a class="noti-item d-flex p-3 fw-medium" href="{$row.link}">
             <div class="image me-2 rounded-circle overflow-hidden flex-shrink-0">
                 {if $row.send_from_id gt 0}
-                {if not empty($row.photo)}
-                <img class="d-block" src="{$row.photo}" alt="{$row.send_from}">
+                {if not empty($row.avata)}
+                <img class="d-block" src="{$row.avata}" alt="{$row.send_from}">
                 {elseif not empty($row.avatar_letters)}
                 <span class="avatar-letters w-100 h-100" style="background-color:{$row.avatar_color}" aria-hidden="true">{$row.avatar_letters}</span>
                 {else}

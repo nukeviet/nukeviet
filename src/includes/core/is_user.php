@@ -62,7 +62,7 @@ if (defined('NV_IS_ADMIN')) {
 
                         if ($checknum) {
                             $user_info['full_name'] = nv_show_name_user($user_info['first_name'], $user_info['last_name'], $user_info['username']);
-                            $user_info['avata'] = !empty($user_info['photo']) ? NV_STATIC_URL . $user_info['photo'] : '';
+                            $user_info['avata'] = nv_user_avatar_url($user_info['photo']);
 
                             // Dữ liệu dựng ảnh đại diện dạng chữ khi tài khoản chưa có ảnh
                             $user_info['avatar_letters'] = nv_user_avatar_letters($user_info['first_name'], $user_info['last_name'], $user_info['username']);

@@ -49,8 +49,8 @@
                                 <div class="me-2">
                                     <div class="rounded-circle overflow-hidden image">
                                         {if $row.send_from_id gt 0}
-                                        {if not empty($row.photo)}
-                                        <img src="{$row.photo}" alt="{$row.send_from}">
+                                        {if not empty($row.avata)}
+                                        <img src="{$row.avata}" alt="{$row.send_from}">
                                         {elseif not empty($row.avatar_letters)}
                                         <span class="avatar-letters w-100 h-100" style="background-color:{$row.avatar_color}" aria-hidden="true">{$row.avatar_letters}</span>
                                         {else}

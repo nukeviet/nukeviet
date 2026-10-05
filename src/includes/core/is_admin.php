@@ -156,9 +156,6 @@ if (!empty($admin_cookie)) {
         $nv_Request->set_Session('online', $admin_info['checkpass'] . '|' . $admin_info['last_online'] . '|' . NV_CURRENTTIME . '|' . $admin_info['checkhits']);
     }
     $admin_info['full_name'] = nv_show_name_user($admin_info['first_name'], $admin_info['last_name']);
-    if (defined('SSO_REGISTER_DOMAIN') and !empty($admin_info['photo'])) {
-        $admin_info['avata'] = SSO_REGISTER_DOMAIN . NV_BASE_SITEURL . $admin_info['photo'];
-    }
 
     // Dữ liệu dựng ảnh đại diện dạng chữ khi tài khoản chưa có ảnh
     $admin_info['avatar_letters'] = nv_user_avatar_letters($admin_info['first_name'], $admin_info['last_name'], $admin_info['username']);

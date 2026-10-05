@@ -1118,6 +1118,28 @@ function nv_user_avatar_color($seed)
 }
 
 /**
+ * Lấy URL ảnh đại diện từ giá trị cột photo trong CSDL
+ *
+ * @param string|null $photo Đường dẫn tương đối lưu trong CSDL
+ * @return string URL ảnh hoặc rỗng nếu chưa có ảnh
+ */
+function nv_user_avatar_url($photo): string
+{
+    $photo = trim((string) $photo);
+    if ($photo === '') {
+        return '';
+    }
+    if (preg_match('#^(https?:)?//#i', $photo)) {
+        return $photo;
+    }
+    if (defined('SSO_REGISTER_DOMAIN')) {
+        return SSO_REGISTER_DOMAIN . NV_BASE_SITEURL . $photo;
+    }
+
+    return NV_STATIC_URL . $photo;
+}
+
+/**
  * greeting_for_user_create()
  * Function tạo lời chào trong email
  *

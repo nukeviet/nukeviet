@@ -1183,7 +1183,7 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields,
     $tpl->assign('MODULE_NAME', $module_name);
 
     // Ảnh đại diện để rỗng khi tài khoản chưa có ảnh, giao diện tự dựng avatar dạng chữ
-    $item['avata'] = (!empty($item['photo']) and file_exists(NV_ROOTDIR . '/' . $item['photo'])) ? NV_BASE_SITEURL . $item['photo'] : '';
+    $item['avata'] = nv_user_avatar_url($item['photo']);
     $item['avatar_letters'] = nv_user_avatar_letters($item['first_name'], $item['last_name'], $item['username']);
     $item['avatar_color'] = nv_user_avatar_color($item['username']);
 
