@@ -25,75 +25,30 @@ if (!nv_function_exists('nv_block_news_cat')) {
     {
         global $nv_Cache, $site_mods, $nv_Lang;
 
+        [$block_theme, $dir] = get_block_tpl_dir('global.block_news_cat.config.tpl', true, $module);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+
+        // Chuyên mục đã chọn đưa về mảng số nguyên để so khớp checkbox
+        $data_block['catid'] = empty($data_block['catid']) ? [] : array_map('intval', (array) $data_block['catid']);
+        $tpl->assign('CONFIG', $data_block);
+
+        // Các chuyên mục
+        $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
+        $tpl->assign('CATS', $nv_Cache->db($sql, '', $module));
+
+        // Vị trí tooltip
         $tooltip_position = [
             'top' => $nv_Lang->getModule('tooltip_position_top'),
             'bottom' => $nv_Lang->getModule('tooltip_position_bottom'),
             'left' => $nv_Lang->getModule('tooltip_position_left'),
             'right' => $nv_Lang->getModule('tooltip_position_right')
         ];
+        $tpl->assign('TOOLTIP_POSITION', $tooltip_position);
 
-        $html = '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('catid') . ':</label>';
-
-        $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
-        $list = $nv_Cache->db($sql, '', $module);
-        if (!is_array($data_block['catid'])) {
-            $data_block['catid'] = [$data_block['catid']];
-        }
-
-        $html .= '<div class="col-sm-9">';
-        foreach ($list as $l) {
-            if ($l['status'] == 1 or $l['status'] == 2) {
-                $xtitle_i = '';
-
-                if ($l['lev'] > 0) {
-                    for ($i = 1; $i <= $l['lev']; ++$i) {
-                        $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-                    }
-                }
-                $html .= '<div class="form-check"><input class="form-check-input" type="checkbox" name="config_catid[]" value="' . $l['catid'] . '" ' . ((in_array((int) $l['catid'], array_map('intval', $data_block['catid']), true)) ? ' checked="checked"' : '') . ' id="checkbox_catid_' . $l['catid'] . '"><label class="form-check-label" for="checkbox_catid_' . $l['catid'] . '">' . $xtitle_i . $l['title'] . '</label></div>';
-            }
-        }
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('title_length') . ':</label>';
-        $html .= '<div class="col-sm-9"><input type="text" class="form-control" name="config_title_length" size="5" value="' . $data_block['title_length'] . '"/></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('numrow') . ':</label>';
-        $html .= '<div class="col-sm-9"><input type="text" class="form-control" name="config_numrow" size="5" value="' . $data_block['numrow'] . '"/></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('showtooltip') . ':</label>';
-        $html .= '<div class="col-sm-9">';
-        $html .= '<div class="row g-2 align-items-center">';
-        $html .= '<div class="col-sm-2">';
-        $html .= '<input class="form-check-input" type="checkbox" value="1" name="config_showtooltip" ' . ($data_block['showtooltip'] == 1 ? 'checked="checked"' : '') . ' /></div>';
-        $html .= '<div class="col-sm-5">';
-        $html .= '<div class="input-group">';
-        $html .= '<div class="input-group-text">' . $nv_Lang->getModule('tooltip_position') . '</div>';
-        $html .= '<select name="config_tooltip_position" class="form-select">';
-
-        foreach ($tooltip_position as $key => $value) {
-            $html .= '<option value="' . $key . '" ' . ($data_block['tooltip_position'] == $key ? 'selected="selected"' : '') . '>' . $value . '</option>';
-        }
-
-        $html .= '</select>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '<div class="col-sm-5">';
-        $html .= '<div class="input-group">';
-        $html .= '<div class="input-group-text">' . $nv_Lang->getModule('tooltip_length') . '</div>';
-        $html .= '<input type="text" class="form-control" name="config_tooltip_length" value="' . $data_block['tooltip_length'] . '"/>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-
-        return $html;
+        return $tpl->fetch('global.block_news_cat.config.tpl');
     }
 
     /**
@@ -112,8 +67,8 @@ if (!nv_function_exists('nv_block_news_cat')) {
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 20);
         $return['config']['showtooltip'] = $nv_Request->get_int('config_showtooltip', 'post', 0);
-        $return['config']['tooltip_position'] = $nv_Request->get_string('config_tooltip_position', 'post', 0);
-        $return['config']['tooltip_length'] = $nv_Request->get_string('config_tooltip_length', 'post', 0);
+        $return['config']['tooltip_position'] = $nv_Request->get_title('config_tooltip_position', 'post', '');
+        $return['config']['tooltip_length'] = $nv_Request->get_absint('config_tooltip_length', 'post', 0);
 
         return $return;
     }
@@ -122,91 +77,89 @@ if (!nv_function_exists('nv_block_news_cat')) {
      * nv_block_news_cat()
      *
      * @param array $block_config
-     * @return string|void
+     * @return string
      */
     function nv_block_news_cat($block_config)
     {
-        global $nv_Cache, $module_array_cat, $site_mods, $module_config, $global_config, $db;
+        global $nv_Cache, $module_array_cat, $site_mods, $module_config, $global_config, $db, $nv_Lang;
 
         $module = $block_config['module'];
-        $show_no_image = $module_config[$module]['show_no_image'];
-        $blockwidth = $module_config[$module]['blockwidth'];
-        $order_articles_by = ($module_config[$module]['order_articles']) ? 'weight' : 'publtime';
-
-        if (empty($block_config['catid'])) {
+        [$block_theme, $dir] = get_block_tpl_dir('global.block_news_cat.tpl', true, $module);
+        if (empty($dir)) {
             return '';
         }
 
-        $catid = implode(',', array_map('intval', $block_config['catid']));
+        // Giá trị mặc định trong json là chuỗi "0" nên cần lọc bỏ
+        $catids = empty($block_config['catid']) ? [] : array_filter(array_map('intval', (array) $block_config['catid']));
+        if (empty($catids)) {
+            return '';
+        }
+
+        $show_no_image = $module_config[$module]['show_no_image'];
+        $order_articles_by = ($module_config[$module]['order_articles']) ? 'weight' : 'publtime';
 
         $db->sqlreset()
-            ->select('id, catid, title, alias, homeimgfile, homeimgthumb, hometext, publtime, external_link')
+            ->select('id, catid, title, alias, homeimgfile, homeimgthumb, homeimgalt, hometext, publtime, external_link')
             ->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows')
-            ->where('status= 1 AND catid IN(' . $catid . ')')
+            ->where('status= 1 AND catid IN(' . implode(',', $catids) . ')')
             ->order($order_articles_by . ' DESC')
-            ->limit($block_config['numrow']);
+            ->limit((int) $block_config['numrow']);
         $list = $nv_Cache->db($db->sql(), '', $module);
-
-        if (!empty($list)) {
-            $block_theme = get_tpl_dir($global_config['module_theme'], 'default', '/modules/news/block_groups.tpl');
-            $xtpl = new XTemplate('block_groups.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
-            $xtpl->assign('TEMPLATE', $block_theme);
-            $xtpl->assign('BLOCKWIDTH', $module_config[$module]['blockwidth']);
-            $xtpl->assign('BLOCKHEIGHT', $module_config[$module]['blockheight']);
-
-            foreach ($list as $l) {
-                $l['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$l['catid']]['alias'] . '/' . $l['alias'] . '-' . $l['id'] . $global_config['rewrite_exturl'];
-                if ($l['homeimgthumb'] == 1) {
-                    $l['thumb'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $l['homeimgfile'];
-                    if (!empty($global_config['cdn_url'])) {
-                        $l['thumb'] = $global_config['cdn_url'] . $l['thumb'];
-                    }
-                } elseif ($l['homeimgthumb'] == 2) {
-                    $l['thumb'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $l['homeimgfile'];
-                    if (!empty($global_config['cdn_url'])) {
-                        $l['thumb'] = $global_config['cdn_url'] . $l['thumb'];
-                    }
-                } elseif ($l['homeimgthumb'] == 3) {
-                    $l['thumb'] = $l['homeimgfile'];
-                } elseif (!empty($show_no_image)) {
-                    $l['thumb'] = NV_BASE_SITEURL . $show_no_image;
-                } else {
-                    $l['thumb'] = '';
-                }
-
-                $l['blockwidth'] = $module_config[$module]['blockwidth'];
-
-                $l['hometext_clean'] = strip_tags($l['hometext']);
-                $l['hometext_clean'] = nv_clean60($l['hometext_clean'], $block_config['tooltip_length'], true);
-
-                if (!$block_config['showtooltip']) {
-                    $xtpl->assign('TITLE', 'title="' . $l['title'] . '"');
-                }
-
-                $l['title_clean'] = nv_clean60($l['title'], $block_config['title_length']);
-
-                if ($l['external_link']) {
-                    $l['target_blank'] = 'target="_blank"';
-                }
-
-                $xtpl->assign('ROW', $l);
-                if (!empty($l['thumb'])) {
-                    $xtpl->parse('main.loop.img');
-                }
-                $xtpl->parse('main.loop');
-            }
-
-            if ($block_config['showtooltip']) {
-                $xtpl->assign('TOOLTIP_POSITION', $block_config['tooltip_position']);
-                $xtpl->parse('main.tooltip');
-            }
-
-            $xtpl->parse('main');
-
-            return $xtpl->text('main');
+        if (empty($list)) {
+            return '';
         }
+
+        $block_config['showtooltip'] = !empty($block_config['showtooltip']);
+
+        // Vị trí tooltip chỉ nhận các giá trị hợp lệ
+        if (!in_array($block_config['tooltip_position'] ?? '', ['top', 'bottom', 'left', 'right'], true)) {
+            $block_config['tooltip_position'] = 'bottom';
+        }
+
+        // Độ dài tooltip bằng 0 thì không cắt mô tả
+        $tooltip_length = (int) ($block_config['tooltip_length'] ?? 0);
+
+        $items = [];
+        foreach ($list as $row) {
+            if ($row['homeimgthumb'] == 1) {
+                // Ảnh thumb
+                $thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['homeimgfile'];
+            } elseif ($row['homeimgthumb'] == 2) {
+                // Ảnh gốc
+                $thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['homeimgfile'];
+            } elseif ($row['homeimgthumb'] == 3) {
+                // Ảnh từ URL
+                $thumb = $row['homeimgfile'];
+            } elseif (!empty($show_no_image)) {
+                // Ảnh mặc định
+                $thumb = NV_BASE_SITEURL . $show_no_image;
+            } else {
+                $thumb = '';
+            }
+
+            $items[] = [
+                'title' => $row['title'],
+                'title_clean' => nv_clean60($row['title'], (int) $block_config['title_length']),
+                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'],
+                'thumb' => $thumb,
+                'homeimgalt' => empty($row['homeimgalt']) ? $row['title'] : $row['homeimgalt'],
+                'external_link' => $row['external_link'],
+                'hometext_clean' => $block_config['showtooltip'] ? nv_clean60(strip_tags($row['hometext']), $tooltip_length, true) : ''
+            ];
+        }
+
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('MCONFIG', $module_config[$module]);
+        $tpl->assign('CONFIG', $block_config);
+        $tpl->assign('ITEMS', $items);
+
+        return $tpl->fetch('global.block_news_cat.tpl');
     }
 }
+
 if (defined('NV_SYSTEM')) {
     global $nv_Cache, $site_mods, $module_name, $global_array_cat, $module_array_cat;
     $module = $block_config['module'];

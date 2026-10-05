@@ -141,8 +141,8 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
         $return['config'] = [];
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
         $return['config']['showtooltip'] = $nv_Request->get_int('config_showtooltip', 'post', 0);
-        $return['config']['tooltip_position'] = $nv_Request->get_title('config_tooltip_position', 'post', 0);
-        $return['config']['tooltip_length'] = $nv_Request->get_title('config_tooltip_length', 'post', 0);
+        $return['config']['tooltip_position'] = $nv_Request->get_title('config_tooltip_position', 'post', '');
+        $return['config']['tooltip_length'] = $nv_Request->get_absint('config_tooltip_length', 'post', 0);
         $return['config']['length_title'] = $nv_Request->get_int('config_length_title', 'post', 0);
         $return['config']['length_hometext'] = $nv_Request->get_int('config_length_hometext', 'post', 0);
         $return['config']['length_othertitle'] = $nv_Request->get_int('config_length_othertitle', 'post', 0);

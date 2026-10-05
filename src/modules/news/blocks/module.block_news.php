@@ -58,8 +58,8 @@ if (!nv_function_exists('nv_news_block_news')) {
         $return['config'] = [];
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
         $return['config']['showtooltip'] = $nv_Request->get_int('config_showtooltip', 'post', 0);
-        $return['config']['tooltip_position'] = $nv_Request->get_string('config_tooltip_position', 'post', 0);
-        $return['config']['tooltip_length'] = $nv_Request->get_string('config_tooltip_length', 'post', 0);
+        $return['config']['tooltip_position'] = $nv_Request->get_title('config_tooltip_position', 'post', '');
+        $return['config']['tooltip_length'] = $nv_Request->get_absint('config_tooltip_length', 'post', 0);
 
         return $return;
     }
@@ -148,11 +148,8 @@ if (!nv_function_exists('nv_news_block_news')) {
             $block_config['tooltip_position'] = 'bottom';
         }
 
-        // Độ dài tooltip bằng 0 thì lấy theo cấu hình của module, tránh đưa toàn bộ mô tả vào tooltip
+        // Độ dài tooltip bằng 0 thì không cắt mô tả
         $tooltip_length = (int) ($block_config['tooltip_length'] ?? 0);
-        if ($tooltip_length <= 0) {
-            $tooltip_length = (int) $module_config[$module]['tooltip_length'];
-        }
 
         $items = [];
         foreach ($array_block_news as $array_news) {
