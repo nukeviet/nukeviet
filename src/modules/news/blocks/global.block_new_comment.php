@@ -25,17 +25,14 @@ if (!nv_function_exists('nv_comment_new')) {
     {
         global $nv_Lang;
 
-        $html = '<div class="row mb-3">';
-        $html .= '	<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('titlelength') . ':</label>';
-        $html .= '	<div class="col-sm-5"><input type="text" name="config_titlelength" class="form-control" value="' . $data_block['titlelength'] . '"/><span class="form-text">' . $nv_Lang->getModule('titlenote') . '</span></div>';
-        $html .= '</div>';
+        [$block_theme, $dir] = get_block_tpl_dir('global.block_new_comment.config.tpl', true, $module);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('CONFIG', $data_block);
 
-        $html .= '<div class="row mb-3">';
-        $html .= '	<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('numrow') . ':</label>';
-        $html .= '	<div class="col-sm-5"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
-        $html .= '</div>';
-
-        return $html;
+        return $tpl->fetch('global.block_new_comment.config.tpl');
     }
 
     /**
@@ -60,50 +57,86 @@ if (!nv_function_exists('nv_comment_new')) {
      * nv_comment_new()
      *
      * @param array $block_config
-     * @return string|void
+     * @return string
      */
     function nv_comment_new($block_config)
     {
-        global $db, $site_mods, $module_info, $global_config;
+        global $db, $site_mods, $global_config, $nv_Lang;
 
         $module = $block_config['module'];
-        $mod_data = $site_mods[$module]['module_data'];
+        if (!isset($site_mods[$module])) {
+            return '';
+        }
 
-        $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_comment WHERE module = ' . $db->quote($module) . ' AND status=1 ORDER BY post_time DESC LIMIT ' . $block_config['numrow'];
+        [$block_theme, $dir] = get_block_tpl_dir('global.block_new_comment.tpl', true, $module);
+        if (empty($dir)) {
+            return '';
+        }
+
+        // Bình luận bài viết được lưu với area là func_id của function detail
+        $detail_alias = $site_mods[$module]['alias']['detail'] ?? '';
+        if (empty($site_mods[$module]['funcs'][$detail_alias]['func_id'])) {
+            return '';
+        }
+        $area = (int) $site_mods[$module]['funcs'][$detail_alias]['func_id'];
+
+        $numrow = (int) $block_config['numrow'];
+        if ($numrow <= 0) {
+            return '';
+        }
+
+        $sql = 'SELECT id, content, post_time, post_name FROM ' . NV_PREFIXLANG . '_comment
+        WHERE module = ' . $db->quote($module) . ' AND area = ' . $area . ' AND status = 1
+        ORDER BY post_time DESC LIMIT ' . $numrow;
         $result = $db->query($sql);
         $array_comment = [];
         $array_news_id = [];
         while ($comment = $result->fetch()) {
             $array_comment[] = $comment;
-            $array_news_id[] = $comment['id'];
+            $array_news_id[] = (int) $comment['id'];
+        }
+        if (empty($array_comment)) {
+            return '';
         }
 
-        if (!empty($array_news_id)) {
-            $result = $db->query('SELECT t1.id, t1.alias AS alias_id, t2.alias AS alias_cat FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $mod_data . '_cat t2 ON t1.catid = t2.catid WHERE t1.id IN (' . implode(',', array_unique($array_news_id)) . ') AND t1.status = 1');
-            $array_news_id = [];
-            while ($row = $result->fetch()) {
-                $array_news_id[$row['id']] = $row;
-            }
-
-            $mod_file = $site_mods[$module]['module_file'];
-            $block_theme = get_tpl_dir($module_info['template'], 'default', '/modules/' . $mod_file . '/block_new_comment.tpl');
-
-            $xtpl = new XTemplate('block_new_comment.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file);
-            $xtpl->assign('TEMPLATE', $block_theme);
-
-            foreach ($array_comment as $comment) {
-                if (isset($array_news_id[$comment['id']])) {
-                    $comment['url_comment'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module . '&' . NV_OP_VARIABLE . '=' . $array_news_id[$comment['id']]['alias_cat'] . '/' . $array_news_id[$comment['id']]['alias_id'] . '-' . $comment['id'] . $global_config['rewrite_exturl'], true);
-                    $comment['content'] = nv_clean60($comment['content'], $block_config['titlelength']);
-                    $comment['post_time'] = nv_datetime_format($comment['post_time']);
-                    $xtpl->assign('COMMENT', $comment);
-                    $xtpl->parse('main.loop');
-                }
-            }
-            $xtpl->parse('main');
-
-            return $xtpl->text('main');
+        $mod_data = $site_mods[$module]['module_data'];
+        $result = $db->query('SELECT t1.id, t1.alias AS alias_id, t2.alias AS alias_cat FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $mod_data . '_cat t2 ON t1.catid = t2.catid WHERE t1.id IN (' . implode(',', array_unique($array_news_id)) . ') AND t1.status = 1');
+        $array_news = [];
+        while ($row = $result->fetch()) {
+            $array_news[$row['id']] = $row;
         }
+
+        $items = [];
+        foreach ($array_comment as $comment) {
+            if (!isset($array_news[$comment['id']])) {
+                continue;
+            }
+            $news = $array_news[$comment['id']];
+
+            // Nội dung có thể chứa thẻ br hoặc HTML từ editor nên loại bỏ thẻ trước khi cắt
+            $items[] = [
+                'post_name' => $comment['post_name'],
+                'post_time' => nv_datetime_format($comment['post_time']),
+                'content' => nv_clean60(strip_tags($comment['content']), (int) $block_config['titlelength']),
+                'link' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module . '&' . NV_OP_VARIABLE . '=' . $news['alias_cat'] . '/' . $news['alias_id'] . '-' . $comment['id'] . $global_config['rewrite_exturl'], true)
+            ];
+        }
+        if (empty($items)) {
+            return '';
+        }
+
+        $nv_Lang->loadModule($site_mods[$module]['module_file'], loadtmp: true);
+
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($dir);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('TEMPLATE', $block_theme);
+        $tpl->assign('ITEMS', $items);
+
+        $content = $tpl->fetch('global.block_new_comment.tpl');
+        $nv_Lang->changeLang();
+
+        return $content;
     }
 }
 
