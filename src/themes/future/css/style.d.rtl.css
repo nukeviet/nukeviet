@@ -29201,6 +29201,13 @@ span.keyword {
   transform: rotate(180deg);
 }
 
+.vert-menu .menu-toggle > i {
+  transition: transform 0.15s ease-in-out;
+}
+.vert-menu .menu-toggle:not(.collapsed) > i {
+  transform: rotate(180deg);
+}
+
 .footer-top .footer-start {
   flex: 0 0 auto;
   width: 40%;

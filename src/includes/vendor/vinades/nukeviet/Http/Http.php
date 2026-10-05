@@ -861,6 +861,14 @@ class Http extends Server
             return false;
         }
 
+        /**
+         * @since 05/10/2026 Kiểm tra fragment, chặn dấu nháy, < > để link không phá được thuộc tính HTML khi xuất ra.
+         * Chấp nhận ~ cho text fragment ví dụ https://domain.com/#:~:text=abc
+         */
+        if (isset($parts['fragment']) and !preg_match('/^[0-9a-z\+\-\_\/\?\&\@\=\#\.\,\;\%\\s\!\:\*\~]*$/i', $parts['fragment'])) {
+            return false;
+        }
+
         if ($return_bool) {
             return true;
         }

@@ -141,3 +141,18 @@ $max-depth: 10;
     }
   }
 }
+
+// Menu dọc đa cấp. Collapse mặc định của bootstrap, chỉ thêm hiệu ứng xoay mũi tên
+.vert-menu {
+  .menu-toggle {
+    >i {
+      transition: transform .15s ease-in-out;
+    }
+
+    &:not(.collapsed) {
+      >i {
+        transform: rotate(-180deg);
+      }
+    }
+  }
+}
