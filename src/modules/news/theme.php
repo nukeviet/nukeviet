@@ -384,6 +384,28 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
 }
 
 /**
+ * Nhóm nút (về mục lục, sao chép liên kết) chèn vào các tiêu đề h2, h3 của bài viết khi có mục lục
+ *
+ * @param string $link liên kết tới tiêu đề
+ * @return string
+ */
+function theme_detail_heading_btns(string $link): string
+{
+    global $nv_Lang;
+
+    // Bài viết có nhiều tiêu đề nên chỉ khởi tạo template một lần
+    static $tpl = null;
+    if ($tpl === null) {
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir(get_module_tpl_dir('detail_heading_btns.tpl'));
+        $tpl->assign('LANG', $nv_Lang);
+    }
+    $tpl->assign('LINK', $link);
+
+    return trim($tpl->fetch('detail_heading_btns.tpl'));
+}
+
+/**
  * Giao diện báo lỗi bài viết
  *
  * @param mixed $newsid

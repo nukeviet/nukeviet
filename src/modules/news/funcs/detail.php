@@ -590,7 +590,7 @@ if (!empty($news_contents['auto_nav']) and !empty($news_contents['bodyhtml'])) {
             ++$i;
             $attrid = $idname . $i;
 
-            $html = '<div class="btns"><button type="button" class="gonav" title="' . $nv_Lang->getModule('go_menu') . '"><i class="fa fa-chevron-up fa-fw"></i></button><button type="button" class="copylink" data-clipboard-text="' . $location . $attrid . '"><i class="fa fa-files-o fa-fw" title="' . $nv_Lang->getModule('copy_link') . '"></i></button></div>';
+            $html = theme_detail_heading_btns($location . $attrid);
             $html = '<' . $tag . $match[2] . ' data-id="' . $attrid . '">' . $html . $match[3] . '</' . $tag . '>';
 
             $news_contents['navigation'][$y]['item'] = [$text, $attrid, $location . $attrid];
@@ -599,7 +599,7 @@ if (!empty($news_contents['auto_nav']) and !empty($news_contents['bodyhtml'])) {
             ++$i;
             $attrid = $idname . $i;
 
-            $html = '<div class="btns"><button type="button" class="gonav" title="' . $nv_Lang->getModule('go_menu') . '"><i class="fa fa-chevron-up fa-fw"></i></button><button type="button" class="copylink" data-clipboard-text="' . $location . $attrid . '"><i class="fa fa-files-o fa-fw" title="' . $nv_Lang->getModule('copy_link') . '"></i></button></div>';
+            $html = theme_detail_heading_btns($location . $attrid);
             $html = '<' . $tag . $match[2] . ' data-id="' . $attrid . '">' . $html . $match[3] . '</' . $tag . '>';
 
             !isset($news_contents['navigation'][$y]['subitems']) && $news_contents['navigation'][$y]['subitems'] = [];

@@ -857,6 +857,27 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
 }
 
 /**
+ * Nhóm nút (về mục lục, sao chép liên kết) chèn vào các tiêu đề h2, h3 của bài viết khi có mục lục
+ *
+ * @param string $link liên kết tới tiêu đề
+ * @return string
+ */
+function theme_detail_heading_btns(string $link): string
+{
+    // Bài viết có nhiều tiêu đề nên chỉ khởi tạo template một lần
+    static $xtpl = null;
+    if ($xtpl === null) {
+        $xtpl = new XTemplate('detail_heading_btns.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    }
+    $xtpl->assign('LINK', $link);
+    $xtpl->reset('main');
+    $xtpl->parse('main');
+
+    return trim($xtpl->text('main'));
+}
+
+/**
  * theme_report()
  *
  * @param mixed $newsid
