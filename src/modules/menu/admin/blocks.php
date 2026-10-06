@@ -81,7 +81,7 @@ if ($action == 'block') {
             $stmt = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = :mid');
             $stmt->bindValue(':mid', $mid, PDO::PARAM_INT);
             $stmt->execute();
-            unset($site_mods['menu'], $site_mods['comment'], $site_mods['zalo']);
+            unset($site_mods['menu'], $site_mods['comment']);
             foreach ($site_mods as $mod_name => $modvalues) {
                 ++$weight;
                 ++$sort;
@@ -173,7 +173,7 @@ if ($action == 'block') {
 
     // Xuất HTML cho modal
     $site_mods_filtered = $site_mods;
-    unset($site_mods_filtered['menu'], $site_mods_filtered['comment'], $site_mods_filtered['zalo']);
+    unset($site_mods_filtered['menu'], $site_mods_filtered['comment']);
     $action_menu_options = [];
     foreach ($site_mods_filtered as $mod_name => $modvalues) {
         $action_menu_options[] = [

@@ -47,8 +47,7 @@ $system_modules = [
     "statistics",
     "two-step-verification",
     "users",
-    "voting",
-    "zalo"
+    "voting"
 ];
 
 $target_themes = ['default', 'mobile_default'];

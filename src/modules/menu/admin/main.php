@@ -650,7 +650,7 @@ if ($nv_Request->get_title('action', 'get') == 'add' or !empty($post['id'])) {
 
     // Modules options
     $site_mods_row = $site_mods;
-    unset($site_mods_row['menu'], $site_mods_row['comment'], $site_mods_row['zalo']);
+    unset($site_mods_row['menu'], $site_mods_row['comment']);
     $modules_options = [];
     foreach ($site_mods_row as $key => $mod) {
         $modules_options[] = [

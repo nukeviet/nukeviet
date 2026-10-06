@@ -13,7 +13,7 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-define('NV_MODULE_SETUP_DEFAULT', 'users,inform,statistics,banners,zalo,seek,news,contact,about,siteterms,voting,feeds,menu,page,comment,two-step-verification,myapi');
+define('NV_MODULE_SETUP_DEFAULT', 'users,inform,statistics,banners,seek,news,contact,about,siteterms,voting,feeds,menu,page,comment,two-step-verification,myapi');
 
 /**
  * @param string $table_des
@@ -200,7 +200,6 @@ function nv_create_table_sys($lang, $init = [])
         theme, mobile, description, keywords, groups_view, weight, act, admins, rss, sitemap, icon
     ) VALUES
          ('about', 'page', 'about', 'about', 'page', 'About', '', 1626512400, 1, 1, '', '', '', '', '0', 1, 1, '', 1, 1, 'fa-solid fa-campground'),
-         ('zalo', 'zalo', 'zalo', 'zalo', 'zalo', 'Zalo', 'Zalo', 1626512400, 0, 1, '', '', '', '', '0', 2, 1, '', 1, 1, 'fa-solid fa-z'),
          ('news', 'news', 'news', 'news', 'news', 'News', '', 1626512400, 1, 1, '', '', '', '', '0', 3, 1, '', 1, 1, 'fa-solid fa-newspaper'),
          ('users', 'users', 'users', 'users', 'users', 'Users', 'Users', 1626512400, 1, 1, '', '', '', '', '0', 4, 1, '', 0, 1, 'fa-solid fa-users'),
          ('inform', 'inform', 'inform', 'inform', 'inform', 'Inform', 'Inform', 1626512400, 1, 1, '', '', '', '', '0', 5, 1, '', 0, 1, 'fa-solid fa-bell'),

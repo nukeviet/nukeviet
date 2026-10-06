@@ -110,22 +110,6 @@ if (NV_CLIENT_IP == 'none') {
     throw new \NukeViet\Http\HttpException('Error! Your IP address is not correct!', 403);
 }
 
-// Xac dinh IP của Zalo-webhook
-if (isset($global_config['check_zaloip_expired'])) {
-    if (
-        (int) $global_config['check_zaloip_expired'] > NV_CURRENTTIME and
-        isset($_SERVER['HTTP_USER_AGENT'], $_SERVER['HTTP_X_ZEVENT_SIGNATURE']) and
-        $_SERVER['HTTP_USER_AGENT'] == 'ZaloWebhook' and
-        !empty($_SERVER['HTTP_X_ZEVENT_SIGNATURE'])
-    ) {
-        include NV_ROOTDIR . '/includes/zalowebhookIP.php';
-    }
-}
-
-if (isset($global_config['zaloWebhookIPs'])) {
-    $global_config['crosssite_valid_ips'] += $global_config['zaloWebhookIPs'];
-}
-
 // Xac dinh Quoc gia
 require NV_ROOTDIR . '/includes/countries.php';
 if (isset($_SERVER['HTTP_CF_IPCOUNTRY'])) {
@@ -407,8 +391,6 @@ if (!empty($global_config['custom_configs'])) {
 } else {
     $global_config['custom_configs'] = [];
 }
-
-nv_apply_hook('', 'zalo_webhook');
 
 if (!empty($global_config['nv_csp_script_nonce'])) {
     define('NV_SCRIPT_NONCE', bin2hex(openssl_random_pseudo_bytes(10)));

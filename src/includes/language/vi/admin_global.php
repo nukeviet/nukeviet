@@ -33,7 +33,6 @@ $lang_global['mod_webtools'] = 'Công cụ web';
 $lang_global['mod_seotools'] = 'Công cụ SEO';
 $lang_global['mod_subsite'] = 'Quản lý site con';
 $lang_global['mod_extensions'] = 'Mở rộng';
-$lang_global['mod_zalo'] = 'Zalo';
 $lang_global['mod_emailtemplates'] = 'Mẫu email';
 $lang_global['go_clientsector'] = 'Trang chủ site';
 $lang_global['go_clientmod'] = 'Xem ngoài site';

@@ -361,9 +361,6 @@ $openid_servers = [];
 foreach ($openid_files as $server) {
     if (preg_match('/^(cas|oauth)\-([a-z0-9\-\_]+)\.php$/', $server, $m)) {
         $link_config = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;oauth_config=' . $m[2];
-        if ($server == 'oauth-zalo.php') {
-            $link_config = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=zalo&amp;' . NV_OP_VARIABLE . '=settings';
-        }
 
         $disabled = 0;
         if ($server == 'cas-single-sign-on.php' and !isset($global_config['config_sso'])) {
@@ -382,7 +379,7 @@ foreach ($openid_files as $server) {
             'name' => $m[2],
             'title' => $m[1] . ' ' . $m[2],
             'note' => $nv_Lang->getModule('oauth_config', $m[1] . ' ' . $m[2]),
-            'config' => ($server == 'oauth-zalo.php' or file_exists(NV_ROOTDIR . '/modules/users/admin/config_' . $m[2] . '.php')),
+            'config' => (file_exists(NV_ROOTDIR . '/modules/users/admin/config_' . $m[2] . '.php')),
             'link' => $link_config,
             'disabled' => $disabled
         ];

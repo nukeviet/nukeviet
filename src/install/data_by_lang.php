@@ -39,14 +39,6 @@ $installMods['about'] = [
     'icon' => 'fa-solid fa-campground'
 ];
 
-$installMods['zalo'] = [
-    'custom_title' => 'Zalo',
-    'admin_title' => 'Zalo',
-    'admin_file' => 1,
-    'groups_view' => '3',
-    'icon' => 'fa-solid fa-z'
-];
-
 $installMods['news'] = [
     'custom_title' => $install_lang['modules']['news'],
     'admin_title' => $install_lang['modules']['news_for_acp'],

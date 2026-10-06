@@ -33,7 +33,6 @@ $lang_global['mod_webtools'] = 'Utilitaire Web';
 $lang_global['mod_seotools'] = 'Outils SEO';
 $lang_global['mod_subsite'] = 'Gestion du site fils';
 $lang_global['mod_extensions'] = 'Extension';
-$lang_global['mod_zalo'] = 'Zalo';
 $lang_global['mod_emailtemplates'] = 'Modèles d\'email';
 $lang_global['go_clientsector'] = 'Page d\'Accueil';
 $lang_global['go_clientmod'] = 'Prévisualiser';

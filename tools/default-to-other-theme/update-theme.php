@@ -53,8 +53,7 @@ $system_modules = [
     "statistics",
     "two-step-verification",
     "users",
-    "voting",
-    "zalo"
+    "voting"
 ];
 
 // Quét giao diện hiện có

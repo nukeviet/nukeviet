@@ -128,10 +128,8 @@
                                         <input type="checkbox" class="form-check-input" id="admin_2step_opt_{$admin_2step}" name="admin_2step_opt[]" value="{$admin_2step}"{if in_array($admin_2step, $GDATA.admin_2step_opt)} checked{/if}>
                                         <label class="form-check-label" for="admin_2step_opt_{$admin_2step}">
                                             {$LANG->getGlobal("admin_2step_opt_`$admin_2step`")}
-                                            {if $admin_2step eq 'facebook' or $admin_2step eq 'google'}
+                                            {if $admin_2step eq 'facebook' or $admin_2step eq 'google' or $admin_2step eq 'zalo'}
                                             (<a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=users&amp;{$smarty.const.NV_OP_VARIABLE}=config&amp;oauth_config={$admin_2step}" target="_blank">{$LANG->getModule('admin_2step_appconfig')}</a>)
-                                            {elseif $admin_2step eq 'zalo'}
-                                            (<a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=zalo&amp;{$smarty.const.NV_OP_VARIABLE}=settings" target="_blank">{$LANG->getModule('admin_2step_appconfig')}</a>)
                                             {/if}
                                         </label>
                                     </div>
