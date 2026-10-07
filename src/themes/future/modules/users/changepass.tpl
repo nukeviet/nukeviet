@@ -2,7 +2,7 @@
     <div class="rounded-4 border shadow-lg p-4" data-toggle="form">
         <div class="text-center mb-3">
             <a title="{$GCONFIG.site_name}" href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}">
-                <img class="img-fluid" src="{$smarty.const.NV_BASE_SITEURL}{$GCONFIG.site_logo}" alt="{$GCONFIG.site_name}">
+                <img class="img-fluid" src="{$smarty.const.NV_STATIC_URL}{$GCONFIG.site_logo}" alt="{$GCONFIG.site_name}">
             </a>
         </div>
         <h1 class="h2 text-center mb-3">{$LANG->getModule('change_pass')}</h1>
