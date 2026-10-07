@@ -67,7 +67,7 @@ if (!nv_function_exists('nv_company_info')) {
 
         // JSON-LD LocalBusiness
         $ld_json = [
-            '@context' => 'http://schema.org',
+            '@context' => 'https://schema.org',
             '@type' => 'LocalBusiness',
             'priceRange' => 'N/A',
             'image' => [NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']],
