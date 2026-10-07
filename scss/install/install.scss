@@ -205,6 +205,62 @@ body {
   font-weight: 500;
 }
 
+// Card con nằm trong card chính: cùng nền trắng nên dùng viền và nền header để phân vùng
+.install-card .card-body .card {
+  border: $border-width solid $border-color;
+  box-shadow: none;
+
+  > .card-header,
+  > .card-footer {
+    background-color: $gray-100;
+  }
+
+  > .card-header {
+    color: $gray-900;
+    border-bottom: $border-width solid $border-color;
+  }
+
+  > .card-footer {
+    border-top: $border-width solid $border-color;
+  }
+}
+
+// Danh sách công việc, file của luồng nâng cấp
+.update-list {
+  max-height: 22rem;
+  overflow-y: auto;
+}
+
+// Trạng thái tác vụ: chờ, đang chạy (iload), thành công (iok), cảnh báo (iwarn), lỗi (ierror)
+.update-task {
+  .task-icon {
+    --fa: #{'"\\f111"'};
+    margin-right: .25rem;
+    color: $gray-300;
+  }
+
+  &.iload .task-icon {
+    --fa: #{'"\\f110"'};
+    color: $primary;
+    animation: fa-spin 1s linear infinite;
+  }
+
+  &.iok .task-icon {
+    --fa: #{'"\\f00c"'};
+    color: $green;
+  }
+
+  &.iwarn .task-icon {
+    --fa: #{'"\\f071"'};
+    color: $warning;
+  }
+
+  &.ierror .task-icon {
+    --fa: #{'"\\f00d"'};
+    color: $red;
+  }
+}
+
 .install-license {
   max-height: 25rem;
   overflow-y: auto;

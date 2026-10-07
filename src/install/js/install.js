@@ -13,11 +13,33 @@
  * Hiển thị thông báo lỗi dạng modal
  *
  * @param {string} html
+ * @param {string} [title] Mặc định là tiêu đề lỗi của trang
  */
-function nvInstallModal(html) {
+function nvInstallModal(html, title) {
     const modalEl = document.getElementById('install-modal');
+    modalEl.querySelector('.modal-title').textContent = title || modalEl.dataset.titleError;
     modalEl.querySelector('.modal-body').innerHTML = html;
+    modalEl.querySelector('.modal-footer').classList.add('d-none');
     bootstrap.Modal.getOrCreateInstance(modalEl).show();
+}
+
+/**
+ * Hộp thoại xác nhận dạng modal, thay cho confirm()
+ *
+ * @param {string} html
+ * @param {Function} onConfirm Gọi khi người dùng bấm đồng ý
+ */
+function nvInstallConfirm(html, onConfirm) {
+    const modalEl = document.getElementById('install-modal');
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modalEl.querySelector('.modal-title').textContent = modalEl.dataset.titleConfirm;
+    modalEl.querySelector('.modal-body').innerHTML = html;
+    modalEl.querySelector('.modal-footer').classList.remove('d-none');
+    $('[data-toggle="modalConfirm"]', modalEl).off('click').on('click', function() {
+        modal.hide();
+        onConfirm();
+    });
+    modal.show();
 }
 
 /**

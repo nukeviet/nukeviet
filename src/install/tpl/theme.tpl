@@ -1,28 +1,31 @@
 <!DOCTYPE html>
-<html lang="{$smarty.const.NV_LANG_DATA}">
+<html lang="{$LANG_CODE}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
-    <title>{$MAIN_TITLE} - {$LANG->getModule('titlesetup')}</title>
+    <title>{$MAIN_TITLE} - {$SITE_TITLE}</title>
     <link rel="shortcut icon" href="{$smarty.const.NV_BASE_SITEURL}favicon.ico">
     <link rel="stylesheet" href="{$smarty.const.NV_BASE_SITEURL}install/css/install.css">
     <script src="{$smarty.const.ASSETS_STATIC_URL}/js/jquery/jquery.min.js"></script>
     <script src="{$smarty.const.NV_BASE_SITEURL}themes/admin_future/js/bootstrap.bundle.min.js"></script>
     <script src="{$smarty.const.NV_BASE_SITEURL}install/js/install.js"></script>
+    {foreach from=$SCRIPTS item=script}
+    <script src="{$script}"></script>
+    {/foreach}
 </head>
 <body data-base-siteurl="{$smarty.const.NV_BASE_SITEURL}">
     <header class="install-header">
         <div class="install-container">
             <img class="install-logo" src="{$smarty.const.ASSETS_STATIC_URL}/images/logo.svg" alt="NukeViet">
-            <h1 class="install-title d-none d-sm-block">{$LANG->getModule('titlesetup')} <span class="badge text-bg-light fw-normal">v{$VERSION}</span></h1>
+            <h1 class="install-title d-none d-sm-block">{$SITE_TITLE} <span class="badge text-bg-light fw-normal">{$VERSION}</span></h1>
             <div class="dropdown ms-auto">
                 <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-language"></i> {$LANGS[$smarty.const.NV_LANG_DATA]}
+                    <i class="fa-solid fa-language"></i> {$LANGS[$LANG_CODE].name}
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    {foreach from=$LANGS key=lang item=langname}
-                    <li><a class="dropdown-item{if $lang eq $smarty.const.NV_LANG_DATA} active{/if}" href="{$smarty.const.NV_BASE_SITEURL}install/index.php?{$smarty.const.NV_LANG_VARIABLE}={$lang}&amp;step={$MAIN_STEP}&amp;t={$smarty.const.NV_CURRENTTIME}">{$langname}</a></li>
+                    {foreach from=$LANGS key=lang item=row}
+                    <li><a class="dropdown-item{if $lang eq $LANG_CODE} active{/if}" href="{$row.url}">{$row.name}</a></li>
                     {/foreach}
                 </ul>
             </div>
@@ -69,14 +72,18 @@
             <div>{$LANG->getModule('publish')} <a href="https://www.gnu.org/licenses/gpl-2.0.html" target="_blank" rel="noopener">GNU/GPL v2.0</a></div>
         </div>
     </footer>
-    <div class="modal fade" id="install-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="install-modal" tabindex="-1" aria-hidden="true" data-title-error="{$MODAL_TITLE|escape}" data-title-confirm="{$LANG->getGlobal('confirm')|escape}">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-danger"><i class="fa-solid fa-triangle-exclamation"></i> {$LANG->getModule('install_error')}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$LANG->getGlobal('close')|escape}"></button>
                 </div>
                 <div class="modal-body"></div>
+                <div class="modal-footer d-none">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{$LANG->getGlobal('cancel')}</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modalConfirm">{$LANG->getGlobal('ok')}</button>
+                </div>
             </div>
         </div>
     </div>

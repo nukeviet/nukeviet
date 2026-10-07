@@ -33,6 +33,7 @@
 /src/assets/banners
 /src/assets/news
 /src/assets/mobile
+/src/assets/users
 
 /src/uploads
 
@@ -45,6 +46,9 @@
 /src/data/config/admin_config.php
 /src/data/config/disable_site_content.*.txt
 /src/data/logs/**/*.log
+/src/data/logs/**/*.sql
+/src/data/logs/**/*.gz
+/src/data/logs/**/*.zip
 /src/data/tmp/*
 /src/data/config/feeds_*.json
 /src/uploads/logo_*

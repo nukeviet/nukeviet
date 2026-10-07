@@ -1,5 +1,1 @@
-<!-- BEGIN: main -->
-<div class="infoerror">
-    {MESSAGE}
-</div>
-<!-- END: main -->
+<div class="alert alert-danger mb-0">{$MESSAGE}</div>

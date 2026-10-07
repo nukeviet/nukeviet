@@ -21115,6 +21115,50 @@ body {
   font-weight: 500;
 }
 
+.install-card .card-body .card {
+  border: 1px solid #e5e5e5;
+  box-shadow: none;
+}
+.install-card .card-body .card > .card-header,
+.install-card .card-body .card > .card-footer {
+  background-color: #f9f9f9;
+}
+.install-card .card-body .card > .card-header {
+  color: #212529;
+  border-bottom: 1px solid #e5e5e5;
+}
+.install-card .card-body .card > .card-footer {
+  border-top: 1px solid #e5e5e5;
+}
+
+.update-list {
+  max-height: 22rem;
+  overflow-y: auto;
+}
+
+.update-task .task-icon {
+  --fa: "\f111";
+  margin-right: 0.25rem;
+  color: #d5d5d5;
+}
+.update-task.iload .task-icon {
+  --fa: "\f110";
+  color: #4285f4;
+  animation: fa-spin 1s linear infinite;
+}
+.update-task.iok .task-icon {
+  --fa: "\f00c";
+  color: #27ad57;
+}
+.update-task.iwarn .task-icon {
+  --fa: "\f071";
+  color: #ffc107;
+}
+.update-task.ierror .task-icon {
+  --fa: "\f00d";
+  color: #ee3232;
+}
+
 .install-license {
   max-height: 25rem;
   overflow-y: auto;

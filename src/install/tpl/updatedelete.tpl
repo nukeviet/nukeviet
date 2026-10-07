@@ -1,0 +1,1 @@
+<button type="button" class="btn btn-danger btn-sm" data-toggle="deleteUpdatePackage" data-url="{$DELETE_URL}" data-redirect="{$SITEINFO_URL}" data-checkss="{$CHECKSS_DELETE}"><i class="fa-solid fa-trash-can"></i> {$LANG->getModule('update_package_delete')}</button>

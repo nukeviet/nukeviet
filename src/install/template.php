@@ -13,40 +13,7 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-/**
- * Khởi tạo NVSmarty cho trình cài đặt
- *
- * Bước 1 chạy trước khi kiểm tra quyền ghi thư mục nên data/cache có thể chưa ghi được,
- * khi đó biên dịch template vào data/tmp hoặc thư mục tạm của hệ thống
- *
- * @return \NukeViet\Template\NVSmarty
- */
-function nv_install_tpl()
-{
-    global $nv_Lang;
-
-    $tpl = new \NukeViet\Template\NVSmarty();
-    $tpl->setTemplateDir(NV_ROOTDIR . '/install/tpl');
-    $tpl->setCompileCheck(\Smarty\Smarty::COMPILECHECK_ON);
-
-    $compile_dirs = [
-        NV_ROOTDIR . '/' . NV_CACHEDIR,
-        NV_ROOTDIR . '/' . NV_TEMP_DIR,
-        rtrim(str_replace('\\', '/', sys_get_temp_dir()), '/') . '/nv-install-' . md5(NV_ROOTDIR)
-    ];
-    foreach ($compile_dirs as $dir) {
-        $compile_dir = $dir . '/' . \NukeViet\Template\NVSmarty::COMPILEDIR;
-        if (is_dir($compile_dir) ? is_writable($compile_dir) : (is_dir($dir) ? is_writable($dir) : is_writable(dirname($dir)))) {
-            $tpl->setCompileDir($compile_dir);
-            break;
-        }
-    }
-
-    $tpl->assign('LANG', $nv_Lang);
-    $tpl->assign('STEP_URL', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;t=' . NV_CURRENTTIME . '&amp;step=');
-
-    return $tpl;
-}
+require_once NV_ROOTDIR . '/install/layout.php';
 
 /**
  * Giao diện chung của trình cài đặt
@@ -60,7 +27,7 @@ function nv_site_theme($step, $titletheme, $contenttheme)
 {
     global $nv_Lang, $languageslist, $language_array, $global_config, $array_samples_data;
 
-    $step_bar = [
+    $steps = [
         1 => $nv_Lang->getModule('select_language'),
         2 => $nv_Lang->getModule('check_chmod'),
         3 => $nv_Lang->getModule('license'),
@@ -71,43 +38,30 @@ function nv_site_theme($step, $titletheme, $contenttheme)
         8 => $nv_Lang->getModule('done')
     ];
     if (empty($array_samples_data)) {
-        unset($step_bar[7]);
-    }
-
-    // Đánh số lại các bước hiển thị khi bỏ qua bước dữ liệu mẫu
-    $steps = [];
-    $current_num = 0;
-    foreach ($step_bar as $n => $name) {
-        $num = count($steps) + 1;
-        if ($n == $step) {
-            $current_num = $num;
-        }
-        $steps[] = [
-            'num' => $num,
-            'name' => $name,
-            'status' => $step > $n ? 'passed' : ($step == $n ? 'current' : '')
-        ];
+        unset($steps[7]);
     }
 
     $langs = [];
     foreach ($languageslist as $lang) {
         if (!empty($lang)) {
-            $langs[$lang] = $language_array[$lang]['name'];
+            $langs[$lang] = [
+                'name' => $language_array[$lang]['name'],
+                'url' => NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;step=' . $step . '&amp;t=' . NV_CURRENTTIME
+            ];
         }
     }
 
-    $tpl = nv_install_tpl();
-    $tpl->assign('MAIN_TITLE', $titletheme);
-    $tpl->assign('MAIN_STEP', $step);
-    $tpl->assign('MAIN_CONTENT', $contenttheme);
-    $tpl->assign('VERSION', $global_config['version']);
-    $tpl->assign('STEPS', $steps);
-    $tpl->assign('CURRENT_NUM', $current_num);
-    $tpl->assign('PROGRESS', round($current_num / count($steps) * 100));
-    $tpl->assign('YEAR', date('Y', NV_CURRENTTIME));
-    $tpl->assign('LANGS', $langs);
-
-    return $tpl->fetch('theme.tpl');
+    return nv_install_theme([
+        'site_title' => $nv_Lang->getModule('titlesetup'),
+        'version' => 'v' . $global_config['version'],
+        'title' => $titletheme,
+        'content' => $contenttheme,
+        'steps' => $steps,
+        'step' => $step,
+        'lang' => NV_LANG_DATA,
+        'langs' => $langs,
+        'modal_title' => $nv_Lang->getModule('install_error')
+    ]);
 }
 
 /**

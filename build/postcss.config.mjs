@@ -6,7 +6,8 @@ const mapConfig = {
 
 export default context => {
   return {
-    map: context.file.dirname.includes('examples') ? false : mapConfig,
+    // Không sinh map cho CSS trình cài đặt
+    map: context.file.dirname.includes('examples') || /[\\/]install[\\/]css$/.test(context.file.dirname) ? false : mapConfig,
     plugins: {
       autoprefixer: {
         cascade: false

@@ -7,231 +7,274 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-$(document).ready(function() {
-    // Xóa gói cập nhật
-    $('.delete_update_backage').click(function(e) {
-        e.preventDefault();
-        if (!confirm(nv_is_del_confirm[0])) {
-            return;
-        }
-        var $this = $(this);
-        $('#infodetectedupg').append('<div id="dpackagew"><img src="' + nv_base_siteurl + nv_assets_dir + '/images/load_bar.gif" alt="Waiting..."/></div>');
+'use strict';
+
+/**
+ * Đặt trạng thái cho một tác vụ hoặc một file trong danh sách
+ *
+ * @param {jQuery} $item
+ * @param {string} status iok, ierror, iwarn, iload hoặc rỗng
+ * @param {string} [title]
+ */
+function nvUpdateSetStatus($item, status, title) {
+    $item.removeClass('iok ierror iwarn iload').addClass(status);
+    if (title !== undefined) {
+        $item.attr('title', title);
+    }
+}
+
+/**
+ * Gửi yêu cầu xóa gói cập nhật
+ *
+ * @param {jQuery} $btn Nút bấm chứa data-url, data-checkss
+ * @param {Function} onSuccess
+ * @param {Function} onFail Nhận mảng lỗi
+ */
+function nvUpdateDeletePackage($btn, onSuccess, onFail) {
+    nvInstallConfirm('<p class="mb-0">' + nvInstallEscape(nv_is_del_confirm[0]) + '</p>', function() {
+        $btn.prop('disabled', true);
         $.ajax({
             type: 'POST',
-            url: nv_base_siteurl + nv_admindir + '/index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=webtools&' + nv_fc_variable + '=deleteupdate&nocache=' + new Date().getTime(),
+            // URL có thể đã được rewrite thành dạng /admin/vi/webtools/deleteupdate/ nên phải kiểm tra trước khi nối tham số
+            url: $btn.data('url') + ($btn.data('url').indexOf('?') === -1 ? '?' : '&') + 'nocache=' + new Date().getTime(),
             data: {
-                'checksess': $this.data('checksess')
+                checkss: $btn.data('checkss')
             },
-            dataType: 'json',
-            success: function(data) {
-                $('#dpackagew').remove();
-                if (data.success) {
-                    window.location = nv_base_siteurl + nv_admindir + '/index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=siteinfo';
-                    return;
+            dataType: 'json'
+        }).done(function(res) {
+            if (res.success) {
+                onSuccess();
+                return;
+            }
+            $btn.prop('disabled', false);
+            onFail(res.error || []);
+        }).fail(function(xhr, text) {
+            $btn.prop('disabled', false);
+            onFail([text]);
+        });
+    });
+}
+
+/**
+ * Hiện danh sách lỗi dạng modal
+ *
+ * @param {Array} errors
+ */
+function nvUpdateShowErrors(errors) {
+    nvInstallModal(errors.map(function(error) {
+        return '<p class="mb-1">' + nvInstallEscape(error) + '</p>';
+    }).join(''));
+}
+
+$(function() {
+    // Xóa gói cập nhật rồi chuyển về trang quản trị
+    $('[data-toggle="deleteUpdatePackage"]').on('click', function() {
+        const $btn = $(this);
+        nvUpdateDeletePackage($btn, function() {
+            window.location = $btn.data('redirect');
+        }, nvUpdateShowErrors);
+    });
+
+    // Sao lưu CSDL, sao lưu code, kết quả trả về là HTML có link tải
+    $('[data-toggle="updateDump"]').on('click', function(e) {
+        e.preventDefault();
+        const $btn = $(this);
+        const $result = $($btn.data('target'));
+        if ($btn.hasClass('disabled')) {
+            return;
+        }
+        $btn.addClass('disabled').prepend('<span class="spinner-border spinner-border-sm me-1"></span>');
+        $.get($btn.attr('href')).done(function(res) {
+            $result.append('<div class="mt-1">' + res + '</div>');
+        }).fail(function(xhr) {
+            nvInstallModal('<p class="mb-0">HTTP ' + xhr.status + '</p>');
+        }).always(function() {
+            $btn.removeClass('disabled').find('.spinner-border').remove();
+        });
+    });
+
+    // Chạy lần lượt các tác vụ cập nhật CSDL
+    $('#update-tasks').each(function() {
+        const $box = $(this);
+        const lang = {
+            navConfirm: $box.data('lang-nav-confirm'),
+            taskiload: $box.data('lang-taskiload'),
+            taskierror: $box.data('lang-taskierror'),
+            taskiwarn: $box.data('lang-taskiwarn'),
+            taskiok: $box.data('lang-taskiok'),
+            do1Error: $box.data('lang-do1-error'),
+            do2Error: $box.data('lang-do2-error'),
+            allComplete: $box.data('lang-all-complete'),
+            allCompleteAlert: $box.data('lang-all-complete-alert'),
+            taskLoad: $box.data('lang-task-load'),
+            taskLoadMessage: $box.data('lang-task-load-message'),
+            nextStep: $box.data('lang-next-step')
+        };
+        const state = {
+            isStart: false,
+            isAlert: false,
+            nextFuncs: String($box.data('next-funcs')),
+            nextFuncsName: String($box.data('next-funcs-name')),
+            nextUrl: ''
+        };
+
+        const $task = function(id) {
+            return $(document.getElementById(id));
+        };
+
+        const showLoad = function(message) {
+            $('#nv-loading').html('<div class="spinner-border text-primary mb-2" role="status"></div><p class="mb-0">' + nvInstallEscape(lang.taskLoad) + ' <strong>' + nvInstallEscape(message) + '</strong><br>' + nvInstallEscape(lang.taskLoadMessage) + '.</p>').prop('hidden', false);
+        };
+
+        const hideLoad = function() {
+            $('#nv-loading').html('').prop('hidden', true);
+        };
+
+        const setStop = function() {
+            state.isStart = false;
+            $('#nv-message').html('<div class="alert alert-danger mb-0">' + nvInstallEscape(lang.do1Error) + ' <strong>&quot;' + nvInstallEscape(state.nextFuncsName) + '&quot;</strong> ' + lang.do2Error + '</div>').prop('hidden', false);
+        };
+
+        const setComplete = function() {
+            state.isStart = false;
+            const ok = !state.isAlert;
+            $('#nv-message').html('<div class="alert ' + (ok ? 'alert-success' : 'alert-warning') + ' mb-0">' + nvInstallEscape(ok ? lang.allComplete : lang.allCompleteAlert) + '</div>').prop('hidden', false);
+            $('#control_t').append('<span class="next_step"><a class="btn btn-primary" href="' + $box.data('next-step-url') + '">' + nvInstallEscape(lang.nextStep) + ' <i class="fa-solid fa-arrow-right"></i></a></span>');
+        };
+
+        const load = function() {
+            const url = state.nextUrl || ($box.data('update-url') + '?step=2&substep=3&load=' + encodeURIComponent(state.nextFuncs));
+
+            $.get(url).done(function(r) {
+                // status|funcname|functitle|url|lang|message|stop|allcomplete
+                const check = String(r).split('|');
+                hideLoad();
+
+                if (check.length < 8) {
+                    check[6] = '1';
                 }
-                alert(data.error.join("\n"));
-            },
-            error: function(xhr, text, err) {
-                console.log(xhr, text, err);
-                alert(text);
+
+                if (check[0] == '0') {
+                    state.isAlert = true;
+                    if (check[6] == '1') {
+                        nvUpdateSetStatus($task(state.nextFuncs), 'ierror', lang.taskierror);
+                    } else {
+                        nvUpdateSetStatus($task(state.nextFuncs), 'iwarn', lang.taskiwarn);
+                    }
+                } else {
+                    nvUpdateSetStatus($task(state.nextFuncs), 'iok', lang.taskiok);
+                }
+
+                if (check[6] == '1') {
+                    setStop();
+                } else if (check[7] == '1') {
+                    setComplete();
+                } else {
+                    state.nextFuncs = check[1];
+                    state.nextFuncsName = check[2];
+                    state.nextUrl = (check[3] != 'NO' && check[3] != '') ? check[3] : '';
+                    showLoad((check[5] != 'NO' && check[5] != '') ? state.nextFuncsName + ' - ' + check[5] : state.nextFuncsName);
+                    nvUpdateSetStatus($task(state.nextFuncs), 'iload', lang.taskiload);
+                    setTimeout(load, 1000);
+                }
+            }).fail(function(xhr) {
+                hideLoad();
+                nvUpdateSetStatus($task(state.nextFuncs), 'ierror', lang.taskierror);
+                setStop();
+                nvInstallModal('<p class="mb-0">HTTP ' + xhr.status + '</p>');
+            });
+        };
+
+        $('[data-toggle="updateTaskStart"]').on('click', function() {
+            $('#nv-message').prop('hidden', true);
+            state.isStart = true;
+            showLoad(state.nextFuncsName);
+            nvUpdateSetStatus($task(state.nextFuncs), 'iload', lang.taskiload);
+            setTimeout(load, 1000);
+        });
+
+        window.addEventListener('beforeunload', function(e) {
+            if (state.isStart) {
+                e.preventDefault();
+                e.returnValue = lang.navConfirm;
+                return lang.navConfirm;
             }
         });
     });
 
-    $('.update_dump').click(function() {
-        $('#infodetectedupg').append('<div id="dpackagew"><img src="' + nv_base_siteurl + nv_assets_dir + '/images/load_bar.gif" alt="Waiting..."/></div>');
-        $.get($(this).attr('href'), function(e) {
-            $('#dpackagew').remove();
-            $('#infodetectedupg').append('<br />' + e);
-        });
-        return !1;
-    });
+    // Di chuyển các file của gói nâng cấp
+    $('#update-move').each(function() {
+        const $box = $(this);
+        let isStart = false;
 
-    // Kết thúc và xóa gói cập nhật
-    $('.delete_update_backage_end').click(function(e) {
-        e.preventDefault();
+        const start = function() {
+            isStart = true;
+            $('#ftp_nosupport, #check_ftp').prop('hidden', true);
+            $('#nv-toolmove').prop('hidden', true);
+            $('#nv-message').html('<div class="text-center"><div class="spinner-border text-primary mb-2" role="status"></div><p class="mb-0">' + nvInstallEscape($box.data('lang-load-waiting')) + '</p></div>').prop('hidden', false);
 
-        if (completeUpdate != 0 || !confirm(nv_is_del_confirm[0])) {
-            return;
-        }
-        var $this = $(this);
-        $('#infodetectedupg').append('<div id="dpackagew"><img src="' + nv_base_siteurl + nv_assets_dir + '/images/load_bar.gif" alt="Waiting..."/></div>');
-        $.ajax({
-            type: 'POST',
-            url: nv_base_siteurl + nv_admindir + '/index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=webtools&' + nv_fc_variable + '=deleteupdate&nocache=' + new Date().getTime(),
-            data: {
-                'checksess': $this.data('checksess')
-            },
-            dataType: 'json',
-            success: function(data) {
-                $('#dpackagew').remove();
-                if (data.success) {
-                    completeUpdate = 1;
-                    $('#endupdate').append(
-                        '<div class="infook">' +
-                        update_package_deleted + '<br />' +
-                        '<a href="' + URL_GOHOME + '" title="' + gohome + '">' + gohome + '</a> - ' +
-                        '<a href="' + URL_GOADMIN + '" title="' + update_goadmin + '">' + update_goadmin + '</a>' +
-                        '</div>'
-                    );
+            $.get($box.data('update-url') + '?step=2&substep=4&move').done(function(r) {
+                isStart = false;
+                if (r == 'OK') {
+                    nvUpdateSetStatus($('.update-task', $box), 'iok');
+                    $('#nv-message').html('<div class="alert alert-success mb-0">' + $box.data('ok-message') + '</div>');
+                    $('#control_t').append('<span class="next_step"><a class="btn btn-primary" href="' + $box.data('next-step-url') + '">' + nvInstallEscape($box.data('lang-next-step')) + ' <i class="fa-solid fa-arrow-right"></i></a></span>');
                     return;
                 }
-                alert(data.error.join("\n"));
-                $('#endupdate').append(
-                    '<div class="infoerror">' +
-                    update_package_not_deleted + '<br />' +
-                    '<a href="' + URL_GOHOME + '" title="' + gohome + '">' + gohome + '</a> - ' +
-                    '<a href="' + URL_GOADMIN + '" title="' + update_goadmin + '">' + update_goadmin + '</a>' +
-                    '</div>'
-                );
-            },
-            error: function(xhr, text, err) {
-                console.log(xhr, text, err);
-                alert(text);
+
+                // Lỗi thì hiện lại cấu hình FTP và cho thực hiện lại
+                $('#ftp_nosupport, #check_ftp').prop('hidden', false);
+                $('#nv-message').prop('hidden', true);
+                $('#nv-toolmove').removeClass('alert-info').addClass('alert-danger').html(
+                    '<p>' + r + '</p>' +
+                    '<button type="button" class="btn btn-primary btn-sm mb-2" data-toggle="updateMoveStart"><i class="fa-solid fa-rotate"></i> ' + nvInstallEscape($box.data('lang-move-redo')) + '</button>' +
+                    '<p class="mb-1">' + nvInstallEscape($box.data('lang-move-redo-message')) + '</p>' +
+                    '<p class="mb-0">' + $box.data('lang-move-redo-manual') + '</p>'
+                ).prop('hidden', false);
+            }).fail(function(xhr) {
+                isStart = false;
+                $('#nv-message').prop('hidden', true);
+                $('#nv-toolmove').prop('hidden', false);
+                nvInstallModal('<p class="mb-0">HTTP ' + xhr.status + '</p>');
+            });
+        };
+
+        $box.on('click', '[data-toggle="updateMoveStart"]', start);
+
+        window.addEventListener('beforeunload', function(e) {
+            if (isStart) {
+                e.preventDefault();
+                e.returnValue = $box.data('lang-nav-confirm');
+                return $box.data('lang-nav-confirm');
             }
+        });
+    });
+
+    // Bước 3: Tải thông tin phiên bản, nâng cấp toàn hệ thống thì tải thêm thông tin các module
+    $('[data-toggle="updateVersionInfo"]').each(function() {
+        const $box = $(this);
+        $box.load($box.data('url'), function() {
+            const modUrl = $box.data('mod-url');
+            if (!modUrl) {
+                return;
+            }
+            const $mod = $('<div class="mt-3"><div class="alert alert-light d-flex align-items-center gap-2 mb-0"><span class="spinner-border spinner-border-sm text-primary"></span> ' + nvInstallEscape($box.data('lang-waiting-continue')) + '</div></div>');
+            $box.append($mod);
+            setTimeout(function() {
+                $mod.load(modUrl);
+            }, 1000);
+        });
+    });
+
+    // Bước 3: Kết thúc và xóa gói cập nhật
+    $('[data-toggle="deleteUpdatePackageEnd"]').on('click', function() {
+        const $btn = $(this);
+        nvUpdateDeletePackage($btn, function() {
+            $btn.closest('.alert').prop('hidden', true);
+            $('#endupdate-success, #endupdate-nav').prop('hidden', false);
+        }, function(errors) {
+            nvUpdateShowErrors(errors);
+            $('#endupdate-error, #endupdate-nav').prop('hidden', false);
         });
     });
 });
-
-// Control update task
-var NVU = {};
-NVU.IsStart = 0;
-NVU.IsAlert = 0;
-NVU.NextStepUrl = '';
-NVU.NavigateConfirm = '';
-NVU.NextFuncs = '';
-NVU.NextFuncsName = '';
-NVU.NextUrl = '';
-NVU.update_taskiload = '';
-NVU.Start = function() {
-    $('#nv-message').hide();
-    NVU.IsStart = 1;
-    NVU.ShowLoad(NVU.NextFuncsName);
-    $('#' + NVU.NextFuncs).removeClass('ierror').removeClass('iok').removeClass('iwarn').addClass('iload').attr('title', NVU.update_taskiload);
-    setTimeout("NVU.load()", 1000);
-}
-NVU.load = function() {
-    var url;
-    if (NVU.NextUrl == '') {
-        url = nv_base_siteurl + 'install/update.php?step=2&substep=3&load=' + NVU.NextFuncs;
-    } else {
-        url = NVU.NextUrl;
-    }
-
-    // Dieu khien
-    $.get(url, function(r) {
-        var check = r.split('|');
-        NVU.HideLoad();
-
-        if (check[0] == undefined || check[1] == undefined || check[2] == undefined || check[3] == undefined || check[4] == undefined || check[5] == undefined || check[6] == undefined || check[7] == undefined) {
-            check[6] = '1';
-        }
-
-        if (check[0] == '0') {
-            NVU.IsAlert = 1;
-            if (check[6] == '1') {
-                $('#' + NVU.NextFuncs).removeClass('iload').removeClass('iok').removeClass('iwarn').addClass('ierror').attr('title', update_taskierror);
-            } else {
-                $('#' + NVU.NextFuncs).removeClass('iload').removeClass('iok').removeClass('ierror').addClass('iwarn').attr('title', update_taskiwarn);
-            }
-        } else {
-            $('#' + NVU.NextFuncs).removeClass('iload').removeClass('iwarn').removeClass('ierror').addClass('iok').attr('title', update_taskiok);
-        }
-
-        if (check[6] == '1') {
-            NVU.SetStop();
-        } else if (check[7] == '1') {
-            NVU.SetComplete();
-        } else {
-            NVU.NextFuncs = check[1];
-            NVU.NextFuncsName = check[2];
-            NVU.NextUrl = '';
-            var loadmessage = '';
-            if (check[3] != 'NO' && check[3] != '') NVU.NextUrl = check[3];
-            if (check[5] != 'NO' && check[5] != '') {
-                loadmessage = NVU.NextFuncsName + ' - ' + check[5];
-            } else {
-                loadmessage = NVU.NextFuncsName;
-            }
-            NVU.ShowLoad(loadmessage);
-            $('#' + NVU.NextFuncs).removeClass('ierror').removeClass('iok').removeClass('iwarn').addClass('iload').attr('title', NVU.update_taskiload);
-            setTimeout("NVU.load()", 1000);
-        }
-    });
-}
-NVU.SetStop = function() {
-    NVU.IsStart = 0;
-    $('#nv-message').show().html('<div class="infoerror">' + update_task_do1_error + ' <strong>&quot;' + NVU.NextFuncsName + '&quot;</strong> ' + update_task_do2_error + '</div>');
-}
-NVU.SetComplete = function() {
-    NVU.IsStart = 0;
-    var DivClass = 'infook';
-    if (NVU.IsAlert == 1) {
-        DivClass = 'infoalert';
-    }
-    $('#nv-message').show().html('<div class="' + DivClass + '">' + ((DivClass == 'infook') ? update_task_all_complete : update_task_all_complete_alert) + '</div>');
-    $('#control_t').append('<li><span class="next_step"><a href="' + NVU.NextStepUrl + '">' + next_step + '</a></span></li>');
-}
-NVU.ShowLoad = function(m) {
-    $('#nv-loading').html('<img src="' + nv_base_siteurl + nv_assets_dir + '/images/load_bar.gif" alt=""/><br />' + update_task_load + ' <strong>' + m + '</strong><br />' + update_task_load_message + '.');
-    $('#nv-loading').show();
-}
-NVU.HideLoad = function() {
-    $('#nv-loading').html('');
-    $('#nv-loading').hide();
-}
-NVU.ConfirmExit = function(event) {
-    if (NVU.IsStart == 0) {
-        event.cancelBubble = true;
-    } else {
-        return NVU.NavigateConfirm;
-    }
-}
-
-// Control FTP detected
-var NVMF = {};
-NVMF.IsStart = 0;
-NVMF.ftp_nosupport = document.getElementById('ftp_nosupport');
-NVMF.check_ftp = document.getElementById('check_ftp');
-NVMF.NavigateConfirm = 'update_nav_confirm';
-NVMF.OkMessage = '';
-NVMF.Start = function() {
-    NVMF.IsStart = 1;
-    $('#nv-message').html('<img src="' + nv_base_siteurl + nv_assets_dir + '/images/load_bar.gif" alt="Loading..."/><br />' + update_load_waiting);
-    if (NVMF.ftp_nosupport) {
-        $('#ftp_nosupport').slideUp(400);
-    }
-    if (NVMF.check_ftp) {
-        $('#check_ftp').slideUp(400);
-    }
-    $('#nv-toolmove').slideUp(200, function() {
-        $('#nv-message').slideDown(200, function() {
-            $.get(nv_base_siteurl + 'install/update.php?step=2&substep=4&move', function(r) {
-                NVMF.IsStart = 0;
-                if (r == 'OK') {
-                    $('.workitem').removeClass('ierror').removeClass('iload').removeClass('iwarn').addClass('iok');
-                    $('#nv-message').html('<div class="infook">' + NVMF.OkMessage + '</div>');
-                    $('#control_t').append('<li><span class="next_step"><a href="' + NextStepUrl + '">' + next_step + '</a></span></li>');
-                } else {
-                    if (NVMF.ftp_nosupport) {
-                        $('#ftp_nosupport').slideDown(600);
-                    }
-                    if (NVMF.check_ftp) {
-                        $('#check_ftp').slideDown(600);
-                    }
-                    $('#nv-message').slideUp(200, function() {
-                        $('#nv-toolmove').removeClass('infook').addClass('infoerror').html(r + '<br /><strong><a href="javascript:NVMF.Start();" title="' + update_move_redo + '">' + update_move_redo + '</a></strong><br />' + update_move_redo_message + '<br />' + update_move_redo_manual);
-                        $('#nv-toolmove').slideDown(200);
-                    });
-                }
-            });
-        });
-    });
-}
-NVMF.ConfirmExit = function(event) {
-    if (NVMF.IsStart == 0) {
-        event.cancelBubble = true;
-    } else {
-        return NVMF.NavigateConfirm;
-    }
-}
