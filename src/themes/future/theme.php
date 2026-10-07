@@ -225,6 +225,22 @@ function nv_site_theme($contents, $full = true)
     // Thông báo thu thập cookie lần đầu
     $tpl->assign('COOKIE_NOTICE', ($global_config['cookie_notice_popup'] and !isset($_COOKIE[$global_config['cookie_prefix'] . '_cn'])));
 
+    // Breadcrumbs
+    $breadcrumbs = [];
+    if ($full and !$home) {
+        if ($global_config['rewrite_op_mod'] != $module_name) {
+            array_unshift($array_mod_title, [
+                'catid' => 0,
+                'title' => $module_info['custom_title'],
+                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name
+            ]);
+        }
+        if (!empty($array_mod_title)) {
+            $breadcrumbs = array_values($array_mod_title);
+        }
+    }
+    $tpl->assign('BREADCRUMBS', $breadcrumbs);
+
     $sitecontent = $tpl->fetch($layout_file);
 
     // Giao diện đầy đủ thì có thêm block và thông báo lỗi

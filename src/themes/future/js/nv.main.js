@@ -550,6 +550,124 @@ $(function() {
         });
     }
 
+    // Thanh breadcrumbs: ẩn bớt cấp trên vào nút "...", cắt ngắn item cuối để giữ cấp cha gần nhất
+    const brcb = $('[data-toggle="breadcrumbs"]');
+    if (brcb.length == 1) {
+        const brcbWrap = brcb.closest('.site-breadcrumbs');
+        const brcbList = $('[data-toggle="breadcrumbs-list"]', brcb);
+        const brcbMore = $('[data-toggle="breadcrumbs-more"]', brcb);
+        const brcbMenu = $('[data-toggle="breadcrumbs-menu"]', brcb);
+        const brcbItems = $('[data-toggle="breadcrumbs-item"]', brcb);
+        const brcbAncestors = brcbItems.slice(0, -1);
+        const parentIdx = brcbAncestors.length - 1;
+        const lastText = brcbItems.last().find('.site-breadcrumbs-text');
+        const lastChars = Array.from(lastText.text());
+        const minChars = 20;
+        let brcbWidth = 0;
+
+        // Các item đang hiển thị có nằm vừa trong thanh không
+        const brcbFits = () => {
+            let start = Infinity;
+            let end = -Infinity;
+            brcbList.children(':not(.d-none)').each(function() {
+                const rect = this.getBoundingClientRect();
+                start = Math.min(start, rect.left);
+                end = Math.max(end, rect.right);
+            });
+            return (end - start) <= brcbList[0].clientWidth + 0.5;
+        };
+
+        // Hiển thị item cuối với số ký tự cho trước
+        const setLastText = (length) => {
+            if (length >= lastChars.length) {
+                lastText.text(lastChars.join(''));
+                return;
+            }
+            lastText.text(lastChars.slice(0, length).join('').trimEnd() + '…');
+        };
+
+        // Đưa một cấp trên vào danh sách bị ẩn
+        const hideAncestor = (idx) => {
+            brcbAncestors.eq(idx).addClass('d-none');
+            brcbMore.removeClass('d-none');
+        };
+
+        const buildBreadcrumbs = () => {
+            const dropdown = bootstrap.Dropdown.getInstance($('[data-bs-toggle="dropdown"]', brcbMore)[0]);
+            dropdown && dropdown.hide();
+
+            brcbWidth = brcbList[0].clientWidth;
+            brcbWrap.addClass('is-measuring');
+            brcbItems.removeClass('d-none');
+            brcbMore.addClass('d-none');
+            brcbMenu.empty();
+            setLastText(lastChars.length);
+
+            if (!brcbFits()) {
+                // Ẩn dần các cấp trên từ Trang chủ xuống, chừa lại cấp cha gần nhất
+                for (let i = 0; i < parentIdx && !brcbFits(); i++) {
+                    hideAncestor(i);
+                }
+
+                // Vẫn tràn thì cắt ngắn item cuối, không ít hơn minChars ký tự
+                if (!brcbFits()) {
+                    let fitted = false;
+                    if (lastChars.length > minChars) {
+                        setLastText(minChars);
+                        if (brcbFits()) {
+                            fitted = true;
+
+                            // Tìm số ký tự lớn nhất còn vừa thanh
+                            let low = minChars;
+                            let high = lastChars.length - 1;
+                            while (low < high) {
+                                const mid = Math.ceil((low + high) / 2);
+                                setLastText(mid);
+                                if (brcbFits()) {
+                                    low = mid;
+                                } else {
+                                    high = mid - 1;
+                                }
+                            }
+                            setLastText(low);
+                        }
+                    }
+
+                    // Cắt tối đa vẫn không đủ chỗ thì ẩn luôn cấp cha, item cuối để CSS tự cắt
+                    if (!fitted) {
+                        setLastText(lastChars.length);
+                        hideAncestor(parentIdx);
+                    }
+                }
+
+                brcbAncestors.filter('.d-none').each(function() {
+                    const link = $('a', this);
+                    brcbMenu.append($('<li></li>').append(
+                        $('<a class="dropdown-item"></a>').attr('href', link.attr('href')).text(link.text())
+                    ));
+                });
+            }
+            brcbWrap.removeClass('is-measuring');
+        };
+
+        // Chỉ dựng lại khi chiều rộng thanh thay đổi (bỏ qua resize theo chiều dọc trên mobile)
+        let brcbTimer = null;
+        $(window).on('resize', function() {
+            clearTimeout(brcbTimer);
+            brcbTimer = setTimeout(() => {
+                if (brcbList[0].clientWidth != brcbWidth) {
+                    buildBreadcrumbs();
+                }
+            }, 50);
+        });
+        buildBreadcrumbs();
+
+        // Font tải xong làm thay đổi chiều rộng chữ nên dựng lại
+        if (document.fonts) {
+            document.fonts.ready.then(buildBreadcrumbs);
+        }
+    }
+
     // Xử lý đóng các kiểu menu khi click ra bên ngoài
     if ($('[data-toggle="hmenu"]').length) {
         $(document).on('click', function(e) {

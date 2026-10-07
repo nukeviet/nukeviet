@@ -112,3 +112,4 @@
         </div>
     </div>
 </header>
+{include file='breadcrumbs.tpl'}

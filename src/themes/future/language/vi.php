@@ -108,3 +108,5 @@ $lang_module['tconf_success'] = 'Các thiết lập đã được áp dụng';
 $lang_module['tconf_cleaned'] = 'Đã gỡ bỏ các thiết lập trên thẻ này';
 $lang_module['tconf_warning'] = 'Các thiết lập đã được ghi nhận, tuy nhiên có một số cảnh báo có thể ảnh hưởng đến kết quả như sau';
 $lang_module['toggle_mobile_nav'] = 'Đóng mở thanh menu';
+$lang_module['breadcrumbs'] = 'Đường dẫn trang';
+$lang_module['breadcrumbs_more'] = 'Hiện các cấp bị ẩn';
