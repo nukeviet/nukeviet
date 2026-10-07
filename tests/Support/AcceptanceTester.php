@@ -112,4 +112,43 @@ class AcceptanceTester extends \Codeception\Actor
 
         $I->saveSessionSnapshot('userLogin');
     }
+
+    /**
+     * Cuộn phần tử vào giữa màn hình và đợi cuộn xong mới trả về.
+     * Giao diện Bootstrap 5 bật scroll-behavior: smooth nên phải đợi
+     * vị trí cuộn đứng yên, nếu không click sẽ bị phần tử khác chặn.
+     *
+     * @param string $selector CSS selector
+     * @param int $timeout
+     */
+    public function scrollToElement(string $selector, int $timeout = 5)
+    {
+        $I = $this;
+        $sel = json_encode($selector);
+
+        $I->waitForElementVisible($selector, $timeout);
+        $I->executeJS('window.nvTestScrollY = null; document.querySelector(' . $sel . ').scrollIntoView({block: "center"});');
+        $I->waitForJS('
+            const el = document.querySelector(' . $sel . ');
+            if (!el) {
+                return false;
+            }
+            const rect = el.getBoundingClientRect();
+            const stable = window.nvTestScrollY === window.scrollY;
+            window.nvTestScrollY = window.scrollY;
+            return stable && rect.top >= 0 && rect.bottom <= window.innerHeight;
+        ', $timeout);
+    }
+
+    /**
+     * Cuộn tới phần tử rồi click
+     *
+     * @param string $selector CSS selector
+     * @param int $timeout
+     */
+    public function scrollAndClick(string $selector, int $timeout = 5)
+    {
+        $this->scrollToElement($selector, $timeout);
+        $this->click($selector);
+    }
 }

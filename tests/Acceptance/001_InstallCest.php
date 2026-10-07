@@ -85,22 +85,20 @@ class InstallCest
 
         // Step 1
         $I->selectOption('#lang', $_ENV['NV_LANG']);
-        $I->click('.next_step a');
+        // Nút tiếp tục chỉ hiện sau khi AJAX kiểm tra rewrite xong
+        $I->scrollAndClick('.next_step a', 10);
 
         // Step 2
         $I->waitForElement('#checkchmod', 5);
-        $I->seeElement('.next_step a');
-        $I->click('.next_step a');
+        $I->scrollAndClick('.next_step a');
 
         // Step 3
         $I->waitForElement('#license', 5);
-        $I->seeElement('.next_step a');
-        $I->click('.next_step a');
+        $I->scrollAndClick('.next_step a');
 
         // Step 4
         $I->waitForElement('#checkserver', 5);
-        $I->seeElement('.next_step a');
-        $I->click('.next_step a');
+        $I->scrollAndClick('.next_step a');
 
         // Step 5: CSDL
         $I->waitForElement('#database_config', 5);
@@ -110,7 +108,7 @@ class InstallCest
         $I->fillField(['name' => 'dbname'], $_ENV['DB_NAME']);
 
         // JS sẽ intercept form submit và chạy AJAX tuần tự
-        $I->click('[type="submit"]');
+        $I->scrollAndClick('[type="submit"]');
 
         // Đợi AJAX system phản hồi (progress bar hiện ra)
         $I->waitForElement('#nv_install_progress', 10);
@@ -119,8 +117,9 @@ class InstallCest
         // JS sẽ show lại form với checkbox #db_detete khi server trả has_table=true
         $I->wait(2);
         if ($I->tryToSeeElement('#db_detete')) {
+            $I->scrollToElement('#db_detete');
             $I->checkOption('#db_detete');
-            $I->click('[type="submit"]');
+            $I->scrollAndClick('[type="submit"]');
             $I->waitForElement('#nv_install_progress', 10);
         }
 
@@ -137,12 +136,14 @@ class InstallCest
         $I->fillField(['name' => 'answer_question'], $_ENV['NV_ANSWER']);
 
         if (!empty($_ENV['LANG_MULTI'])) {
+            $I->scrollToElement('[name="lang_multi"]');
             $I->checkOption('[name="lang_multi"]');
         }
 
+        $I->scrollToElement('[name="dev_mode"]');
         $I->checkOption('[name="dev_mode"]');
 
-        $I->click('[type="submit"]');
+        $I->scrollAndClick('[type="submit"]');
 
         // Step 7 thành công
         $I->waitForElement('.home', 5);
