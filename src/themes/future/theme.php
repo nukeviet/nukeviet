@@ -102,9 +102,6 @@ function nv_site_theme($contents, $full = true)
     // Chỉ nên tải trước tập tin được dùng ngay ở phần đầu trang, tải trước tập tin không dùng tới sẽ phí băng thông.
     $custom_preloads[] = [
         'as' => 'font',
-        // File fa-solid-900.woff2 (Font Awesome 7) được tải từ style.d.css hoặc style.r.css
-        // qua đường dẫn ../webfonts/, nên href tính từ thư mục gốc là themes/{theme}/webfonts/
-        // Icon solid có ngay ở header (tìm kiếm, menu mobile) nên tải trước
         'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/webfonts/fa-solid-900.woff2',
         'type' => 'font/woff2',
         'crossorigin' => true
@@ -112,7 +109,6 @@ function nv_site_theme($contents, $full = true)
     /*
     $custom_preloads[] = [
         'as' => 'font',
-        // Tương tự cho fa-brands-400.woff2 (icon thương hiệu) và fa-regular-400.woff2 (icon nét mảnh)
         'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/webfonts/fa-brands-400.woff2',
         'type' => 'font/woff2',
         'crossorigin' => true
