@@ -19,7 +19,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2009-2021 VINADES.,JSC. Tous dro
 $lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['titlesetup'] = 'Installation de Nukeviet 4';
+$lang_module['titlesetup'] = 'Installation de Nukeviet';
 $lang_module['select_language'] = 'Sélectionner la langue';
 $lang_module['license'] = 'Licence';
 $lang_module['check_server'] = 'Vérification du système';

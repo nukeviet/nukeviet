@@ -274,13 +274,13 @@ if ($step == 1) {
 
     $array_resquest = [];
     $array_resquest['pdo_support'] = $nv_Lang->getModule('not_compatible');
-    $array_resquest['class_pdo_support'] = 'highlight_red';
+    $array_resquest['ok_pdo_support'] = false;
     if (class_exists('PDO', false)) {
         $PDODrivers = PDO::getAvailableDrivers();
         foreach ($PDODrivers as $_driver) {
             if (file_exists(NV_ROOTDIR . '/install/action_' . $_driver . '.php')) {
                 $array_resquest['pdo_support'] = $nv_Lang->getModule('compatible');
-                $array_resquest['class_pdo_support'] = 'highlight_green';
+                $array_resquest['ok_pdo_support'] = true;
                 $nextstep = 1;
                 break;
             }
@@ -292,7 +292,7 @@ if ($step == 1) {
     $array_resquest['php_version'] = $sys_info['php_version'];
 
     foreach ($nv_resquest_serverext_key as $key) {
-        $array_resquest['class_' . $key] = ($sys_info[$key]) ? 'highlight_green' : 'highlight_red';
+        $array_resquest['ok_' . $key] = (bool) $sys_info[$key];
         $array_resquest[$key] = ($sys_info[$key]) ? $nv_Lang->getModule('compatible') : $nv_Lang->getModule('not_compatible');
 
         if (!$sys_info[$key]) {
@@ -313,7 +313,7 @@ if ($step == 1) {
     $array_support['zlib_support'] = ($sys_info['zlib_support']) ? 1 : 0;
     $array_support['zip_support'] = (extension_loaded('zip')) ? 1 : 0;
     foreach ($array_support as $_key => $_support) {
-        $array_support['class_' . $_key] = ($_support) ? 'highlight_green' : 'highlight_red';
+        $array_support['ok_' . $_key] = (bool) $_support;
         $array_support[$_key] = ($_support) ? $nv_Lang->getModule('compatible') : $nv_Lang->getModule('not_compatible');
     }
 

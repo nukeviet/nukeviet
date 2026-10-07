@@ -14,377 +14,346 @@ if (!defined('NV_MAINFILE')) {
 }
 
 /**
- * nv_site_theme()
+ * Khởi tạo NVSmarty cho trình cài đặt
  *
- * @param mixed $step
- * @param mixed $titletheme
- * @param mixed $contenttheme
+ * Bước 1 chạy trước khi kiểm tra quyền ghi thư mục nên data/cache có thể chưa ghi được,
+ * khi đó biên dịch template vào data/tmp hoặc thư mục tạm của hệ thống
+ *
+ * @return \NukeViet\Template\NVSmarty
+ */
+function nv_install_tpl()
+{
+    global $nv_Lang;
+
+    $tpl = new \NukeViet\Template\NVSmarty();
+    $tpl->setTemplateDir(NV_ROOTDIR . '/install/tpl');
+    $tpl->setCompileCheck(\Smarty\Smarty::COMPILECHECK_ON);
+
+    $compile_dirs = [
+        NV_ROOTDIR . '/' . NV_CACHEDIR,
+        NV_ROOTDIR . '/' . NV_TEMP_DIR,
+        rtrim(str_replace('\\', '/', sys_get_temp_dir()), '/') . '/nv-install-' . md5(NV_ROOTDIR)
+    ];
+    foreach ($compile_dirs as $dir) {
+        $compile_dir = $dir . '/' . \NukeViet\Template\NVSmarty::COMPILEDIR;
+        if (is_dir($compile_dir) ? is_writable($compile_dir) : (is_dir($dir) ? is_writable($dir) : is_writable(dirname($dir)))) {
+            $tpl->setCompileDir($compile_dir);
+            break;
+        }
+    }
+
+    $tpl->assign('LANG', $nv_Lang);
+    $tpl->assign('STEP_URL', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;t=' . NV_CURRENTTIME . '&amp;step=');
+
+    return $tpl;
+}
+
+/**
+ * Giao diện chung của trình cài đặt
+ *
+ * @param int $step
+ * @param string $titletheme
+ * @param string $contenttheme
+ * @return string
  */
 function nv_site_theme($step, $titletheme, $contenttheme)
 {
     global $nv_Lang, $languageslist, $language_array, $global_config, $array_samples_data;
 
-    $xtpl = new XTemplate('theme.tpl', NV_ROOTDIR . '/install/tpl');
-    $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('NV_FILES_DIR', NV_FILES_DIR);
-    $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
-    $xtpl->assign('LANG_DATA', NV_LANG_DATA);
-    $xtpl->assign('MAIN_TITLE', $titletheme);
-    $xtpl->assign('MAIN_STEP', $step);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('VERSION', 'v' . $global_config['version']);
-
     $step_bar = [
-        $nv_Lang->getModule('select_language'),
-        $nv_Lang->getModule('check_chmod'),
-        $nv_Lang->getModule('license'),
-        $nv_Lang->getModule('check_server'),
-        $nv_Lang->getModule('config_database'),
-        $nv_Lang->getModule('website_info'),
-        $nv_Lang->getModule('sample_data'),
-        $nv_Lang->getModule('done')
+        1 => $nv_Lang->getModule('select_language'),
+        2 => $nv_Lang->getModule('check_chmod'),
+        3 => $nv_Lang->getModule('license'),
+        4 => $nv_Lang->getModule('check_server'),
+        5 => $nv_Lang->getModule('config_database'),
+        6 => $nv_Lang->getModule('website_info'),
+        7 => $nv_Lang->getModule('sample_data'),
+        8 => $nv_Lang->getModule('done')
     ];
-
-    foreach ($step_bar as $i => $step_bar_i) {
-        $n = $i + 1;
-        $class = '';
-
-        if ($n == 7 and empty($array_samples_data)) {
-            continue;
-        }
-        if ($step >= $n) {
-            $class = ' class="';
-            $class .= ($step > $n) ? 'passed_step' : '';
-            $class .= ($step == $n) ? 'current_step' : '';
-            $class .= '"';
-        }
-
-        $xtpl->assign('CLASS_STEP', $class);
-        $xtpl->assign('STEP_BAR', $step_bar_i);
-        $xtpl->assign('NUM', ($n >= 7 and empty($array_samples_data)) ? ($n - 1) : $n);
-        $xtpl->parse('main.step_bar.loop');
+    if (empty($array_samples_data)) {
+        unset($step_bar[7]);
     }
 
-    $xtpl->assign('LANGTYPESL', NV_LANG_DATA);
-    $langname = $language_array[NV_LANG_DATA]['name'];
-    $xtpl->assign('LANGNAMESL', $langname);
+    // Đánh số lại các bước hiển thị khi bỏ qua bước dữ liệu mẫu
+    $steps = [];
+    $current_num = 0;
+    foreach ($step_bar as $n => $name) {
+        $num = count($steps) + 1;
+        if ($n == $step) {
+            $current_num = $num;
+        }
+        $steps[] = [
+            'num' => $num,
+            'name' => $name,
+            'status' => $step > $n ? 'passed' : ($step == $n ? 'current' : '')
+        ];
+    }
 
-    foreach ($languageslist as $languageslist_i) {
-        if (!empty($languageslist_i) and (NV_LANG_DATA != $languageslist_i)) {
-            $xtpl->assign('LANGTYPE', $languageslist_i);
-            $langname = $language_array[$languageslist_i]['name'];
-            $xtpl->assign('LANGNAME', $langname);
-            $xtpl->parse('main.looplang');
+    $langs = [];
+    foreach ($languageslist as $lang) {
+        if (!empty($lang)) {
+            $langs[$lang] = $language_array[$lang]['name'];
         }
     }
 
-    $xtpl->parse('main.step_bar');
-    $xtpl->assign('MAIN_CONTENT', $contenttheme);
-    $xtpl->parse('main');
-    $xtpl->out('main');
+    $tpl = nv_install_tpl();
+    $tpl->assign('MAIN_TITLE', $titletheme);
+    $tpl->assign('MAIN_STEP', $step);
+    $tpl->assign('MAIN_CONTENT', $contenttheme);
+    $tpl->assign('VERSION', $global_config['version']);
+    $tpl->assign('STEPS', $steps);
+    $tpl->assign('CURRENT_NUM', $current_num);
+    $tpl->assign('PROGRESS', round($current_num / count($steps) * 100));
+    $tpl->assign('YEAR', date('Y', NV_CURRENTTIME));
+    $tpl->assign('LANGS', $langs);
+
+    return $tpl->fetch('theme.tpl');
 }
 
 /**
- * nv_step_1()
+ * Bước 1: Chọn ngôn ngữ
+ *
+ * @return string
  */
 function nv_step_1()
 {
     global $languageslist, $language_array, $sys_info, $global_config;
 
-    $xtpl = new XTemplate('step1.tpl', NV_ROOTDIR . '/install/tpl');
-    $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
-
-    foreach ($languageslist as $languageslist_i) {
-        if (!empty($languageslist_i)) {
-            $langname = (isset($language_array[$languageslist_i]['name_' . NV_LANG_DATA])) ? $language_array[$languageslist_i]['name_' . NV_LANG_DATA] : $language_array[$languageslist_i]['name'];
-
-            $xtpl->assign('LANGTYPE', $languageslist_i);
-            $xtpl->assign('SELECTED', (NV_LANG_DATA == $languageslist_i) ? ' selected="selected"' : '');
-            $xtpl->assign('LANGNAME', $langname);
-            $xtpl->parse('step.languagelist');
+    $langs = [];
+    foreach ($languageslist as $lang) {
+        if (!empty($lang)) {
+            $langs[$lang] = $language_array[$lang]['name_' . NV_LANG_DATA] ?? $language_array[$lang]['name'];
         }
     }
 
-    $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $tpl = nv_install_tpl();
+    $tpl->assign('LANGS', $langs);
+    $tpl->assign('UNOFFICIAL_MODE', !empty($global_config['unofficial_mode']));
+    $tpl->assign('CHECK_REWRITE', empty($sys_info['supports_rewrite']));
 
-    if ($global_config['unofficial_mode']) {
-        $xtpl->parse('step.unofficial_mode');
-    }
-
-    if (empty($sys_info['supports_rewrite'])) {
-        $xtpl->parse('step.check_supports_rewrite');
-    }
-
-    $xtpl->parse('step');
-
-    return $xtpl->text('step');
+    return $tpl->fetch('step1.tpl');
 }
 
 /**
- * nv_step_2()
+ * Bước 2: Kiểm tra quyền ghi thư mục
  *
- * @param mixed $array_dir_check
- * @param mixed $array_ftp_data
- * @param mixed $nextstep
+ * @param array $array_dir_check
+ * @param array $array_ftp_data
+ * @param int $nextstep
+ * @return string
  */
 function nv_step_2($array_dir_check, $array_ftp_data, $nextstep)
 {
     global $nv_Lang, $sys_info, $step;
 
-    $xtpl = new XTemplate('step2.tpl', NV_ROOTDIR . '/install/tpl');
-    $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
-    $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
+    $is_win = str_contains($sys_info['os'], 'WIN');
 
-    if ($nextstep) {
-        $xtpl->parse('step.nextstep');
-    } elseif ($sys_info['ftp_support'] and !str_contains($sys_info['os'], 'WIN')) {
-        $xtpl->assign('FTPDATA', $array_ftp_data);
-        $xtpl->parse('step.ftpconfig.errorftp');
-        $xtpl->parse('step.ftpconfig');
-    }
-
-    $a = 0;
+    $dirs = [];
     foreach ($array_dir_check as $dir => $check) {
-        $class = ($a % 2 == 0) ? 'spec text_normal' : 'specalt text_normal';
-
-        $xtpl->assign('DATAFILE', [
+        $dirs[] = [
             'dir' => $dir,
             'check' => $check,
-            'classcheck' => $check == $nv_Lang->getModule('dir_writable') ? 'highlight_green' : 'highlight_red',
-            'class' => $class
-        ]);
-
-        $xtpl->parse('step.loopdir');
-        ++$a;
+            'ok' => $check == $nv_Lang->getModule('dir_writable')
+        ];
     }
 
-    if (!(!str_contains($sys_info['os'], 'WIN'))) {
-        if ($nextstep) {
-            $xtpl->parse('step.winhost.infonext');
-        } else {
-            $xtpl->parse('step.winhost.inforeload');
-        }
-        $xtpl->parse('step.winhost');
-    }
+    $tpl = nv_install_tpl();
+    $tpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;step=' . $step);
+    $tpl->assign('NEXTSTEP', $nextstep);
+    $tpl->assign('IS_WIN', $is_win);
+    $tpl->assign('SHOW_FTP', !$nextstep and $sys_info['ftp_support'] and !$is_win);
+    $tpl->assign('FTPDATA', $array_ftp_data);
+    $tpl->assign('DIRS', $dirs);
 
-    $xtpl->parse('step');
-
-    return $xtpl->text('step');
+    return $tpl->fetch('step2.tpl');
 }
 
 /**
- * nv_step_3()
+ * Bước 3: Giấy phép sử dụng
  *
- * @param mixed $license
+ * @param string $license
+ * @return string
  */
 function nv_step_3($license)
 {
-    $xtpl = new XTemplate('step3.tpl', NV_ROOTDIR . '/install/tpl');
-    $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
-    $xtpl->assign('CONTENT_LICENSE', $license);
-    $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->parse('step');
+    $tpl = nv_install_tpl();
+    $tpl->assign('CONTENT_LICENSE', $license);
 
-    return $xtpl->text('step');
+    return $tpl->fetch('step3.tpl');
 }
 
 /**
- * nv_step_4()
+ * Bước 4: Kiểm tra máy chủ
  *
- * @param mixed $array_resquest
- * @param mixed $array_support
- * @param mixed $nextstep
+ * @param array $array_resquest
+ * @param array $array_support
+ * @param int $nextstep
+ * @return string
  */
 function nv_step_4($array_resquest, $array_support, $nextstep)
 {
-    $xtpl = new XTemplate('step4.tpl', NV_ROOTDIR . '/install/tpl');
-    $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
-    $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('DATA_REQUEST', $array_resquest);
-    $xtpl->assign('DATA_SUPPORT', $array_support);
+    global $nv_Lang;
 
-    if ($nextstep) {
-        $xtpl->parse('step.nextstep');
-    }
+    $required = $nv_Lang->getModule('required_on');
+    $request = $nv_Lang->getModule('request');
 
-    $xtpl->parse('step');
+    $requests = [
+        'php_support' => [$nv_Lang->getModule('php_version') . ': ' . $array_resquest['php_version'], $required . ' &gt;= ' . $array_resquest['php_required_min'] . ' ' . $nv_Lang->getModule('and') . ' &lt;= ' . $array_resquest['php_allowed_max']],
+        'pdo_support' => [$nv_Lang->getModule('pdo_support') . ' (PDO)', $required],
+        'curl_support' => [$nv_Lang->getModule('curl_support'), $required],
+        'opendir_support' => [$nv_Lang->getModule('opendir_support'), $request],
+        'gd_support' => [$nv_Lang->getModule('gd_support'), $request],
+        'xml_support' => [$nv_Lang->getModule('xml_support'), $request],
+        'openssl_support' => [$nv_Lang->getModule('openssl_support'), $request],
+        'session_support' => [$nv_Lang->getModule('session_support'), $request],
+        'mb_support' => ['Extension Mbstring Support', $request],
+        'fileuploads_support' => [$nv_Lang->getModule('fileuploads_support'), $request],
+        'json_support' => [$nv_Lang->getModule('json_support'), $request]
+    ];
+    $supports = [
+        'supports_rewrite' => [$nv_Lang->getModule('supports_rewrite'), $nv_Lang->getModule('is_support')],
+        'output_buffering' => ['Output Buffering', $nv_Lang->getModule('turnoff')],
+        'session_auto_start' => ['Session Auto Start', $nv_Lang->getModule('turnoff')],
+        'display_errors' => ['Display Errors', $nv_Lang->getModule('turnoff')],
+        'allowed_set_time_limit' => ['Set_time_limit()', $nv_Lang->getModule('turnon')],
+        'zlib_support' => ['Zlib Compression Support', $nv_Lang->getModule('is_support')],
+        'zip_support' => ['Extension Zip Support', $nv_Lang->getModule('is_support')]
+    ];
 
-    return $xtpl->text('step');
+    $tpl = nv_install_tpl();
+    $tpl->assign('REQUESTS', nv_step_4_rows($requests, $array_resquest));
+    $tpl->assign('SUPPORTS', nv_step_4_rows($supports, $array_support));
+    $tpl->assign('NEXTSTEP', $nextstep);
+
+    return $tpl->fetch('step4.tpl');
 }
 
 /**
- * nv_step_5()
+ * Ghép tên, ghi chú với kết quả kiểm tra thành các dòng hiển thị ở bước 4
  *
- * @param mixed $db_config
- * @param mixed $nextstep
+ * @param array $items key => [tên, ghi chú]
+ * @param array $result key => tên kết quả, ok_key => đạt hay không
+ * @return array
+ */
+function nv_step_4_rows($items, $result)
+{
+    $rows = [];
+    foreach ($items as $key => $item) {
+        $rows[] = [
+            'name' => $item[0],
+            'note' => $item[1],
+            'result' => $result[$key],
+            'ok' => !empty($result['ok_' . $key])
+        ];
+    }
+
+    return $rows;
+}
+
+/**
+ * Bước 5: Cấu hình CSDL
+ *
+ * @param array $db_config
+ * @param int $nextstep
+ * @return string
  */
 function nv_step_5($db_config, $nextstep)
 {
     global $step, $PDODrivers;
 
-    $xtpl = new XTemplate('step5.tpl', NV_ROOTDIR . '/install/tpl');
-    $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
-    $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('DATADASE', $db_config);
-    $xtpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
+    $lang_pdo = [
+        'cubrid' => 'Cubrid',
+        'dblib' => 'FreeTDS / Microsoft SQL Server / Sybase',
+        'firebird' => 'Firebird',
+        'ibm' => 'IBM DB2',
+        'informix' => 'IBM Informix Dynamic Server',
+        'mysql' => 'MySQL 5.x / MariaDB',
+        'oci' => 'Oracle',
+        'odbc' => 'ODBC v3 (IBM DB2, unixODBC and win32 ODBC)',
+        'pgsql' => 'PostgreSQL',
+        'sqlite' => 'SQLite 3 and SQLite 2',
+        'sqlsrv' => 'Microsoft SQL Server / SQL Azure',
+        '4d' => '4D'
+    ];
 
-    $lang_pdo = [];
-    $lang_pdo['pdo_cubrid'] = 'Cubrid';
-    $lang_pdo['pdo_dblib'] = 'FreeTDS / Microsoft SQL Server / Sybase';
-    $lang_pdo['pdo_firebird'] = 'Firebird';
-    $lang_pdo['pdo_ibm'] = 'IBM DB2 ';
-    $lang_pdo['pdo_informix'] = 'IBM Informix Dynamic Server';
-    $lang_pdo['pdo_mysql'] = 'MySQL 5.x / MariaDB';
-    $lang_pdo['pdo_oci'] = 'Oracle';
-    $lang_pdo['pdo_odbc'] = 'ODBC v3 (IBM DB2, unixODBC and win32 ODBC)';
-    $lang_pdo['pdo_pgsql'] = 'PostgreSQL';
-    $lang_pdo['pdo_sqlite'] = ' SQLite 3 and SQLite 2 ';
-    $lang_pdo['pdo_sqlsrv'] = 'Microsoft SQL Server / SQL Azure';
-    $lang_pdo['pdo_4d'] = '4D';
-
+    $dbtypes = [];
     foreach ($PDODrivers as $value) {
-        $array_dbtype = [];
-        $array_dbtype['value'] = $value;
-        $array_dbtype['selected'] = ($db_config['dbtype'] == $value) ? ' selected="selected"' : '';
-        $array_dbtype['text'] = (isset($lang_pdo['pdo_' . $value])) ? $lang_pdo['pdo_' . $value] : $value;
-
-        $xtpl->assign('DBTYPE', $array_dbtype);
-        $xtpl->parse('step.dbtype');
+        $dbtypes[$value] = $lang_pdo[$value] ?? $value;
     }
 
-    if (!empty($db_config['error'])) {
-        $xtpl->parse('step.errordata');
-    }
+    $tpl = nv_install_tpl();
+    $tpl->assign('DATABASE', $db_config);
+    $tpl->assign('DBTYPES', $dbtypes);
+    $tpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;step=' . $step);
+    $tpl->assign('NEXTSTEP', $nextstep);
 
-    if ($nextstep) {
-        $xtpl->parse('step.nextstep');
-    }
-
-    $xtpl->parse('step');
-
-    return $xtpl->text('step');
+    return $tpl->fetch('step5.tpl');
 }
 
 /**
- * nv_step_6()
+ * Bước 6: Thông tin website và tài khoản quản trị
  *
- * @param mixed $array_data
- * @param mixed $nextstep
+ * @param array $array_data
+ * @param int $nextstep
+ * @return string
  */
 function nv_step_6($array_data, $nextstep)
 {
     global $step;
 
-    $xtpl = new XTemplate('step6.tpl', NV_ROOTDIR . '/install/tpl');
-    $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
-    $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $tpl = nv_install_tpl();
+    $tpl->assign('DATA', $array_data);
+    $tpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;step=' . $step);
+    $tpl->assign('NEXTSTEP', $nextstep);
 
-    $array_data['dev_mode'] = empty($array_data['dev_mode']) ? '' : ' checked="checked"';
-
-    $xtpl->assign('DATA', $array_data);
-    $xtpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
-    $xtpl->assign('CHECK_LANG_MULTI', ($array_data['lang_multi']) ? ' checked="checked"' : '');
-
-    if (!empty($array_data['error'])) {
-        $xtpl->parse('step.errordata');
-    }
-
-    if ($nextstep) {
-        $xtpl->parse('step.nextstep');
-    }
-
-    $xtpl->parse('step');
-
-    return $xtpl->text('step');
+    return $tpl->fetch('step6.tpl');
 }
 
 /**
- * nv_step_7()
+ * Bước 7: Dữ liệu mẫu
  *
- * @param mixed $array_data
- * @param mixed $nextstep
+ * @param array $array_data
+ * @param int $nextstep
+ * @return string
  */
 function nv_step_7($array_data, $nextstep)
 {
     // Chú ý không xóa global $db_config vì bên dưới có dùng khi require
     global $nv_Lang, $step, $array_samples_data, $db_config;
 
-    $xtpl = new XTemplate('step7.tpl', NV_ROOTDIR . '/install/tpl');
-    $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
-    $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-    $xtpl->assign('DATA', $array_data);
-    $xtpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
-
+    $samples = [];
     foreach ($array_samples_data as $key => $data) {
         require NV_ROOTDIR . '/install/samples/' . $data;
         unset($sql_create_table);
-        $data = substr(substr($data, 0, -4), 5);
-        $row = [
-            'url' => $sample_base_siteurl,
-            'compatible' => $sample_base_siteurl == NV_BASE_SITEURL ? true : false,
-            'title' => $data
+
+        $compatible = $sample_base_siteurl == NV_BASE_SITEURL;
+        $samples[] = [
+            'key' => $key,
+            'title' => substr(substr($data, 0, -4), 5),
+            'compatible' => $compatible,
+            'message' => $compatible ? $nv_Lang->getModule('spdata_compatible') : $nv_Lang->getModule('spdata_incompatible', ($sample_base_siteurl == '/' ? $nv_Lang->getModule('spdata_root') : trim($sample_base_siteurl, '/')), (NV_BASE_SITEURL == '/' ? $nv_Lang->getModule('spdata_root') : trim(NV_BASE_SITEURL, '/')))
         ];
-        $xtpl->assign('ROW', $row);
-        $xtpl->assign('ROWKEY', $key);
-
-        if ($row['compatible']) {
-            $xtpl->assign('MESSAGE', $nv_Lang('spdata_compatible'));
-        } else {
-            $xtpl->assign('MESSAGE', $nv_Lang->getModule('spdata_incompatible', ($row['url'] == '/' ? $nv_Lang->getModule('spdata_root') : trim($row['url'], '/')), (NV_BASE_SITEURL == '/' ? $nv_Lang('spdata_root') : trim(NV_BASE_SITEURL, '/'))));
-        }
-
-        $xtpl->parse('step.loop');
     }
 
-    if (!empty($array_data['error'])) {
-        $xtpl->parse('step.errordata');
-    }
+    $tpl = nv_install_tpl();
+    $tpl->assign('DATA', $array_data);
+    $tpl->assign('SAMPLES', $samples);
+    $tpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;step=' . $step);
+    $tpl->assign('NEXTSTEP', $nextstep);
 
-    if ($nextstep) {
-        $xtpl->parse('step.nextstep');
-    }
-
-    $xtpl->parse('step');
-
-    return $xtpl->text('step');
+    return $tpl->fetch('step7.tpl');
 }
 
 /**
- * nv_step_8()
+ * Bước 8: Hoàn tất
  *
- * @param mixed $finish
+ * @param int $finish 1 là thành công, 2 là chưa chuyển được file cấu hình
+ * @return string
  */
 function nv_step_8($finish)
 {
-    $xtpl = new XTemplate('step8.tpl', NV_ROOTDIR . '/install/tpl');
-    $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('ADMINDIR', NV_ADMINDIR);
-    $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
-    $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $tpl = nv_install_tpl();
+    $tpl->assign('FINISH', $finish);
 
-    if ($finish == 1) {
-        $xtpl->parse('step.finish1');
-    } else {
-        $xtpl->parse('step.finish2');
-    }
-
-    $xtpl->parse('step');
-
-    return $xtpl->text('step');
+    return $tpl->fetch('step8.tpl');
 }

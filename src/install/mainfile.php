@@ -52,6 +52,14 @@ define('NV_SERVER_PORT', $nv_Server->getServerPort());
 define('NV_MY_DOMAIN', $nv_Server->getOriginalDomain());
 define('NV_BASE_SITEURL', $nv_Server->getWebsitePath() . '/');
 
+define('NV_STATIC_URL', NV_BASE_SITEURL);
+define('ASSETS_STATIC_URL', NV_STATIC_URL . NV_ASSETS_DIR);
+define('ASSETS_LANG_STATIC_URL', ASSETS_STATIC_URL);
+define('AUTO_MINIFIED', '');
+define('NV_GFX_WIDTH', 150);
+define('NV_GFX_HEIGHT', 40);
+define('NV_GFX_NUM', 6);
+
 require_once realpath(NV_ROOTDIR . '/install/config.php');
 
 $global_config['my_domains'] = [
@@ -130,6 +138,8 @@ define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
 // Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
 $nv_Lang = new \NukeViet\Core\Language();
+// Ngôn ngữ giao diện mặc định theo site_lang của cấu hình cài đặt, đổi theo ngôn ngữ người dùng chọn để global và install cùng một ngôn ngữ
+$nv_Lang->setLang(NV_LANG_DATA);
 $nv_Lang->loadGlobal();
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 

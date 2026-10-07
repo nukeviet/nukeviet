@@ -1,0 +1,261 @@
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+// CSS của trình cài đặt
+
+@use "../../node_modules/@fortawesome/fontawesome-free/scss/variables" with (
+  $font-path: "../../themes/admin_future/webfonts"
+);
+
+@import "../functions";
+@import "../admin_future/variables";
+
+// Cỡ chữ to thoải mái hơn so với admin
+$font-size-base: .875rem;
+$h1-font-size: $font-size-base * 1.75;
+$h2-font-size: $font-size-base * 1.5;
+$h3-font-size: $font-size-base * 1.3;
+$h4-font-size: $font-size-base * 1.2;
+$h5-font-size: $font-size-base * 1.1;
+$h6-font-size: $font-size-base;
+$form-text-font-size: $font-size-base * .875;
+
+$dropdown-divider-bg: $border-color;
+$body-bg: #eef0f3;
+$card-bg: $white;
+$input-bg: $white;
+$dropdown-bg: $white;
+$modal-content-bg: $white;
+$list-group-bg: $white;
+$table-bg: $white;
+$table-cell-padding-x-sm: .75rem;
+$install-stepper-size: 1.75rem;
+$install-max-width: 1140px;
+
+@import "../../node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/solid";
+
+@each $weight, $name in (400: "Regular", 500: "Medium", 700: "Bold") {
+  @font-face {
+    font-family: "Roboto";
+    src: url("../../themes/admin_future/webfonts/Roboto-#{$name}.woff2") format("woff2"),
+      url("../../themes/admin_future/webfonts/Roboto-#{$name}.woff") format("woff");
+    font-weight: $weight;
+    font-style: normal;
+    font-display: swap;
+  }
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.install-container {
+  width: 100%;
+  max-width: $install-max-width;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: $spacer;
+  padding-left: $spacer;
+}
+
+// Header
+.install-header {
+  background-color: $white;
+  border-bottom: $border-width solid $border-color;
+
+  .install-container {
+    display: flex;
+    align-items: center;
+    gap: $spacer;
+    min-height: $header-height;
+  }
+
+  .install-logo {
+    height: 2rem;
+    width: auto;
+  }
+
+  .install-title {
+    font-size: $h6-font-size;
+    font-weight: 500;
+    color: $gray-900;
+    margin: 0;
+  }
+}
+
+.install-main {
+  flex: 1 0 auto;
+  padding-top: $spacer * 1.5;
+  padding-bottom: $spacer * 1.5;
+}
+
+// Danh sách các bước
+.install-stepper {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: $spacer * .75;
+    padding: $spacer * .5 0;
+    color: $gray-500;
+
+    // Đường nối giữa các bước
+    &:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      left: calc($install-stepper-size / 2 - 1px);
+      top: calc(50% + $install-stepper-size / 2);
+      height: calc(100% - $install-stepper-size);
+      border-left: 2px solid $gray-200;
+    }
+  }
+
+  .step-num {
+    flex: 0 0 $install-stepper-size;
+    width: $install-stepper-size;
+    height: $install-stepper-size;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid $gray-300;
+    background-color: $white;
+    font-size: $font-size-sm;
+    font-weight: 500;
+  }
+
+  .passed {
+    color: $body-color;
+
+    .step-num {
+      border-color: $green;
+      background-color: $green;
+      color: $white;
+    }
+
+    &::after {
+      border-color: $green;
+    }
+  }
+
+  .current {
+    color: $gray-900;
+    font-weight: 500;
+
+    .step-num {
+      border-color: $primary;
+      background-color: $primary;
+      color: $white;
+      box-shadow: 0 0 0 .25rem rgba($primary, .2);
+    }
+  }
+}
+
+.install-card {
+  background-color: $white;
+  border: $border-width solid $gray-200;
+  border-radius: $border-radius-xxl;
+  box-shadow: 0 .125rem .25rem rgba($black, .04), 0 .5rem 1.5rem rgba($black, .08);
+  overflow: hidden;
+
+  > .card-header {
+    background-color: $white;
+    border-bottom: $border-width solid $border-color;
+    padding: $spacer $spacer * 1.5;
+  }
+
+  > .card-body {
+    padding: $spacer * 1.5;
+  }
+}
+
+// Nút điều hướng giữa các bước
+.install-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: $spacer * .5;
+  margin-top: $spacer * 1.5;
+  padding-top: $spacer;
+  border-top: $border-width solid $border-color;
+
+  .next_step {
+    margin-left: auto;
+  }
+}
+
+// Hàng tiêu đề bảng nền nhạt, viền giữ cùng màu với thân bảng
+.install-card .table > thead > tr > th {
+  background-color: $gray-100;
+  color: $gray-900;
+  font-weight: 500;
+}
+
+.install-license {
+  max-height: 25rem;
+  overflow-y: auto;
+  padding: $spacer;
+  border: $border-width solid $border-color;
+  border-radius: $border-radius-lg;
+  background-color: $gray-100;
+
+  // Nội dung giấy phép là HTML soạn sẵn, thu nhỏ heading cho hài hòa với chữ thường
+  h1 {
+    font-size: $font-size-base * 1.4;
+  }
+
+  h2 {
+    font-size: $font-size-base * 1.25;
+  }
+
+  h3 {
+    font-size: $font-size-base * 1.1;
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-size: $font-size-base;
+  }
+}
+
+.install-log {
+  max-height: 12rem;
+  overflow-y: auto;
+  padding: $spacer * .5;
+  border: $border-width solid $border-color;
+  border-radius: $border-radius;
+  background-color: $gray-100;
+  font-family: $font-family-monospace;
+  font-size: $font-size-sm;
+}
+
+.install-thanks {
+  font-size: $font-size-sm;
+
+  h5 {
+    font-size: $font-size-base;
+    margin-top: $spacer;
+  }
+}
+
+.install-footer {
+  padding: $spacer 0;
+  border-top: $border-width solid $border-color;
+  background-color: $white;
+  font-size: $font-size-sm;
+}

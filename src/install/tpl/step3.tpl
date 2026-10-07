@@ -1,9 +1,7 @@
-<!-- BEGIN: step -->
-<div id="license" style="height:400px;overflow-x:hidden;overflow-y:auto;margin-bottom:10px;padding-right:10px">
-    {CONTENT_LICENSE}
+<div id="license" class="install-license">
+    {$CONTENT_LICENSE}
 </div>
-<ul class="control_t fr">
-    <li><span class="back_step"><a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=2&amp;t={NV_CURRENTTIME}">{LANG.previous}</a></span></li>
-    <li><span class="next_step"><a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=4&amp;t={NV_CURRENTTIME}">{LANG.next_step}</a></span></li>
-</ul>
-<!-- END: step -->
+<div class="install-nav">
+    <a class="btn btn-outline-secondary back_step" href="{$STEP_URL}2"><i class="fa-solid fa-arrow-left"></i> {$LANG->getModule('previous')}</a>
+    <span class="next_step"><a class="btn btn-primary" href="{$STEP_URL}4">{$LANG->getModule('next_step')} <i class="fa-solid fa-arrow-right"></i></a></span>
+</div>

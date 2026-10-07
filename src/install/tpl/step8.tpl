@@ -1,24 +1,20 @@
-<!-- BEGIN: step -->
-<!-- BEGIN: finish1 -->
-<h1 class="install_succesfull">{LANG.success}</h1>
-<br />
-<p>{LANG.congratulations}</p>
-<p>{LANG.noteuploads}</p>
-<p>{LANG.notesupport}</p>
-<p>{LANG.thanks}</p>
-
-<ul class="control_t fr">
-    <li><span class="home"><a href="{BASE_SITEURL}index.php">{LANG.gohome}</a></span></li>
-    <li><span class="okay"><a href="{BASE_SITEURL}{ADMINDIR}/index.php">{LANG.goadmin}</a></span></li>
-</ul>
-<!-- END: finish1 -->
-
-<!-- BEGIN: finish2 -->
-<br /><br />
-<center><p>{LANG.movefileconfig}</p><center>
-
-<ul class="control_t fr">
-    <li><span class="okay"><a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=7&amp;t={NV_CURRENTTIME}">{LANG.checkfileconfig}</a></span></li>
-</ul>
-<!-- END: finish2 -->    
-<!-- END: step -->
+{if $FINISH eq 1}
+<div class="text-center py-3">
+    <div class="display-5 text-success mb-3"><i class="fa-solid fa-circle-check"></i></div>
+    <h3 class="h4 text-dark install_succesfull">{$LANG->getModule('success')}</h3>
+    <p class="mb-0">{$LANG->getModule('congratulations')}</p>
+</div>
+<div class="alert alert-info mt-3">
+    <p>{$LANG->getModule('noteuploads')}</p>
+    <p class="mb-0">{$LANG->getModule('notesupport')}</p>
+</div>
+<div class="install-nav">
+    <a class="btn btn-outline-secondary home" href="{$smarty.const.NV_BASE_SITEURL}index.php"><i class="fa-solid fa-house"></i> {$LANG->getModule('gohome')}</a>
+    <a class="btn btn-primary okay" href="{$smarty.const.NV_BASE_SITEURL}{$smarty.const.NV_ADMINDIR}/index.php"><i class="fa-solid fa-gauge"></i> {$LANG->getModule('goadmin')}</a>
+</div>
+{else}
+<div class="alert alert-warning">{$LANG->getModule('movefileconfig')}</div>
+<div class="install-nav">
+    <a class="btn btn-primary okay ms-auto" href="{$STEP_URL}7"><i class="fa-solid fa-rotate"></i> {$LANG->getModule('checkfileconfig')}</a>
+</div>
+{/if}

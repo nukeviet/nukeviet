@@ -1,41 +1,23 @@
-<!-- BEGIN: step -->
-<blockquote>{LANG.spdata_note}</blockquote>
-<form method="post" action="{ACTIONFORM}">
-    <table cellspacing="0" summary="{LANG.website_info}">
-        <tr>
-            <th scope="col" class="nobg" style="width: 200px;">&nbsp;</th>
-            <th scope="col">{LANG.spdata_name}</th>
-            <th scope="col">{LANG.note}</th>
-        </tr>
-        <!-- BEGIN: loop -->
-        <tr>
-            <th scope="row" class="spec center">
-                <input type="radio" name="package" id="package{ROWKEY}" value="{ROW.title}"/>
-            </th>
-            <td>
-                <strong><label for="package{ROWKEY}">{ROW.title}</label></strong>
-            </td>
-            <td>{MESSAGE}</td>
-        </tr>
-        <!-- END: loop -->
-        <tr>
-            <th class="spec center">
-                <input type="submit" name="submit" class="button" value="{LANG.spdata_choose}"/>
-            </th>
-            <td colspan="2"></td>
-        </tr>
-    </table>
+<div class="alert alert-info">{$LANG->getModule('spdata_note')}</div>
+<form method="post" action="{$ACTIONFORM}">
+    {if not empty($DATA.error)}
+    <div class="alert alert-danger">{$DATA.error}</div>
+    {/if}
+    <div class="list-group mb-3">
+        {foreach from=$SAMPLES item=row}
+        <label class="list-group-item d-flex gap-3" for="package{$row.key}">
+            <input class="form-check-input flex-shrink-0 mt-1" type="radio" name="package" id="package{$row.key}" value="{$row.title}" required>
+            <span>
+                <strong class="d-block text-dark">{$row.title}</strong>
+                <small class="{if $row.compatible}text-success{else}text-warning-emphasis{/if}">{$row.message}</small>
+            </span>
+        </label>
+        {/foreach}
+    </div>
+    <button type="submit" name="submit" value="1" class="btn btn-primary"><i class="fa-solid fa-download"></i> {$LANG->getModule('spdata_choose')}</button>
 </form>
-<ul class="control_t fr">
-    <!-- BEGIN: nextstep -->
-    <li>
-        <span class="next_step"><a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=8&amp;t={NV_CURRENTTIME}">{LANG.next_step}</a></span>
-    </li>
-    <!-- END: nextstep -->
-</ul>
-<script type="text/javascript">
-//<![CDATA[
-document.getElementById('site_config').setAttribute("autocomplete", "off");
-//]]>
-</script>
-<!-- END: step -->
+{if $NEXTSTEP}
+<div class="install-nav">
+    <span class="next_step"><a class="btn btn-primary" href="{$STEP_URL}8">{$LANG->getModule('next_step')} <i class="fa-solid fa-arrow-right"></i></a></span>
+</div>
+{/if}

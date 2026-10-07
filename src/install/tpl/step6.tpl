@@ -1,118 +1,66 @@
-<!-- BEGIN: step -->
-<script type="text/javascript">
-$(document).ready(function(){
-    $("#site_config").validate({
-        rules :{
-            nv_login :{
-                minlength : 5
-            },
-            nv_password :{
-                minlength : 6
-            },
-            re_password :{
-                equalTo : "#nv_password_iavim"
-            }
-        }
-    });
-});
-</script>
-<form action="{ACTIONFORM}" id="site_config" method="post">
-<input type="text" value="" id="__fake_username" style="display:none"/>
-<input type="password" value="" id="__fake_password" style="display:none"/>
-    <table cellspacing="0" summary="{LANG.website_info}">
-        <caption>
-            {LANG.properties} <span class="highlight_red">*</span>{LANG.is_required}
-        </caption>
-        <tr>
-            <th scope="col" class="nobg" style="width: 200px;">&nbsp;</th>
-            <th scope="col">{LANG.enter_form}</th>
-            <th scope="col">{LANG.note}</th>
-        </tr>
-        <tr>
-            <th scope="row" class="spec"> {LANG.sitename} <span class="highlight_red">*</span></th>
-            <td>
-            <input type="text" name="site_name" value="{DATA.site_name}" class="required" />
-            </td>
-            <td>{LANG.sitename_note}</td>
-        </tr>
-        <tr>
-            <th scope="row" class="specalt"> {LANG.admin_account} <span class="highlight_red">*</span></th>
-            <td class="alt">
-            <input type="text" value="{DATA.nv_login}" name="nv_login" class="required" id="nv_login_iavim"/>
-            </td>
-            <td class="alt">{LANG.admin_account_note}</td>
-        </tr>
-        <tr>
-            <th scope="row" class="spec"> {LANG.admin_email} <span class="highlight_red">*</span></th>
-            <td>
-            <input type="email" value="{DATA.nv_email}" name="nv_email" class="required email" id="nv_email_iavim"/>
-            </td>
-            <td>{LANG.admin_email_note}</td>
-        </tr>
-        <tr>
-            <th scope="row" class="specalt"> {LANG.admin_pass} <span class="highlight_red">*</span></th>
-            <td class="alt">
-            <input autocomplete="off" type="password" value="{DATA.nv_password}" id="nv_password_iavim" name="nv_password" class="required" />
-            </td>
-            <td class="alt">{LANG.admin_pass_note}</td>
-        </tr>
-        <tr>
-            <th scope="row" class="spec"> {LANG.admin_repass} <span class="highlight_red">*</span></th>
-            <td>
-            <input autocomplete="off" type="password" value="{DATA.re_password}" id="re_password_iavim" name="re_password" class="required" />
-            </td>
-            <td>{LANG.admin_repass_note}</td>
-        </tr>
-        <tr>
-            <th scope="row" class="specalt"> {LANG.question} <span class="highlight_red">*</span></th>
-            <td class="alt">
-            <input type="text" value="{DATA.question}" id="question" name="question" class="required" />
-            </td>
-            <td class="alt">{LANG.question_note}</td>
-        </tr>
-        <tr>
-            <th scope="row" class="spec"> {LANG.answer_question} <span class="highlight_red">*</span></th>
-            <td>
-            <input type="text" value="{DATA.answer_question}"  id="answer_question" name="answer_question" class="required" />
-            </td>
-            <td>{LANG.answer_question_note}</td>
-        </tr>
-        <tr>
-            <th scope="row" class="specalt"> {LANG.lang_multi}</th>
-            <td class="alt">
-            <input type="checkbox" value="1" name="lang_multi" {CHECK_LANG_MULTI}/>
-            </td>
-            <td class="alt">{LANG.lang_multi_note}</td>
-        </tr>
-        <tr>
-            <th scope="row" class="specalt"> {LANG.dev_mode}</th>
-            <td class="alt">
-            <input type="checkbox" value="1" name="dev_mode"{DATA.dev_mode}/>
-            </td>
-            <td class="alt">{LANG.dev_mode_note}</td>
-        </tr>
-        <tr>
-            <th class="spec">&nbsp;</th>
-            <td class="spec" colspan="2">
-            <input class="button" type="submit" value="{LANG.refesh}" />
-            </td>
-        </tr>
-    </table><!-- BEGIN: errordata --><span class="highlight_red"> {DATA.error} </span>
-    <!-- END: errordata -->
+<form action="{$ACTIONFORM}" id="site_config" method="post" autocomplete="off" novalidate data-toggle="siteConfig">
+    <input type="text" value="" class="d-none" tabindex="-1" aria-hidden="true">
+    <input type="password" value="" class="d-none" tabindex="-1" aria-hidden="true">
+    <p class="text-body-secondary">{$LANG->getModule('properties')} <span class="text-danger">*</span> {$LANG->getModule('is_required')}</p>
+    {if not empty($DATA.error)}
+    <div class="alert alert-danger">{$DATA.error}</div>
+    {/if}
+    <div class="row g-3">
+        <div class="col-12">
+            <label for="site_name" class="form-label">{$LANG->getModule('sitename')} <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="site_name" name="site_name" value="{$DATA.site_name}" required>
+            <div class="form-text">{$LANG->getModule('sitename_note')}</div>
+        </div>
+        <div class="col-sm-6">
+            <label for="nv_login_iavim" class="form-label">{$LANG->getModule('admin_account')} <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="nv_login_iavim" name="nv_login" value="{$DATA.nv_login}" minlength="5" required>
+            <div class="form-text">{$LANG->getModule('admin_account_note')}</div>
+        </div>
+        <div class="col-sm-6">
+            <label for="nv_email_iavim" class="form-label">{$LANG->getModule('admin_email')} <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" id="nv_email_iavim" name="nv_email" value="{$DATA.nv_email}" required>
+            <div class="form-text">{$LANG->getModule('admin_email_note')}</div>
+        </div>
+        <div class="col-sm-6">
+            <label for="nv_password_iavim" class="form-label">{$LANG->getModule('admin_pass')} <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" id="nv_password_iavim" name="nv_password" value="{$DATA.nv_password}" minlength="6" autocomplete="new-password" required>
+            <div class="form-text">{$LANG->getModule('admin_pass_note')}</div>
+        </div>
+        <div class="col-sm-6">
+            <label for="re_password_iavim" class="form-label">{$LANG->getModule('admin_repass')} <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" id="re_password_iavim" name="re_password" value="{$DATA.re_password}" autocomplete="new-password" required>
+            <div class="form-text">{$LANG->getModule('admin_repass_note')}</div>
+        </div>
+        <div class="col-sm-6">
+            <label for="question" class="form-label">{$LANG->getModule('question')} <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="question" name="question" value="{$DATA.question}" required>
+            <div class="form-text">{$LANG->getModule('question_note')}</div>
+        </div>
+        <div class="col-sm-6">
+            <label for="answer_question" class="form-label">{$LANG->getModule('answer_question')} <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="answer_question" name="answer_question" value="{$DATA.answer_question}" required>
+            <div class="form-text">{$LANG->getModule('answer_question_note')}</div>
+        </div>
+        <div class="col-12">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="lang_multi" name="lang_multi" value="1"{if not empty($DATA.lang_multi)} checked{/if}>
+                <label class="form-check-label" for="lang_multi">{$LANG->getModule('lang_multi')}</label>
+            </div>
+            <div class="form-text mt-0 mb-2">{$LANG->getModule('lang_multi_note')}</div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="dev_mode" name="dev_mode" value="1"{if not empty($DATA.dev_mode)} checked{/if}>
+                <label class="form-check-label" for="dev_mode">{$LANG->getModule('dev_mode')}</label>
+            </div>
+            <div class="form-text mt-0">{$LANG->getModule('dev_mode_note')}</div>
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i> {$LANG->getModule('refesh')}</button>
+        </div>
+    </div>
 </form>
-<ul class="control_t fr">
-    <li>
-        <span class="back_step"><a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=5&amp;t={NV_CURRENTTIME}">{LANG.previous}</a></span>
-    </li>
-    <!-- BEGIN: nextstep -->
-    <li>
-        <span class="next_step"><a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=7&amp;t={NV_CURRENTTIME}">{LANG.next_step}</a></span>
-    </li>
-    <!-- END: nextstep -->
-</ul>
-<script type="text/javascript">
-//<![CDATA[
-document.getElementById('site_config').setAttribute("autocomplete", "off");
-//]]>
-</script>
-<!-- END: step -->
+<div class="install-nav">
+    <a class="btn btn-outline-secondary back_step" href="{$STEP_URL}5"><i class="fa-solid fa-arrow-left"></i> {$LANG->getModule('previous')}</a>
+    {if $NEXTSTEP}
+    <span class="next_step"><a class="btn btn-primary" href="{$STEP_URL}7">{$LANG->getModule('next_step')} <i class="fa-solid fa-arrow-right"></i></a></span>
+    {/if}
+</div>
