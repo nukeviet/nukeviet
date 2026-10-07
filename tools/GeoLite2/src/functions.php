@@ -11,7 +11,7 @@
 
 date_default_timezone_set('Asia/Ho_Chi_Minh');
 
-define('IP_FILEHEAD', "/**\n * NukeViet Content Management System\n * @version 4.x\n * @author VINADES.,JSC <contact@vinades.vn>\n * @copyright (C) 2009-" . date('Y') . " VINADES.,JSC\n * @license GNU/GPL version 2 or any later version\n * @see https://github.com/nukeviet The NukeViet CMS GitHub project\n * @This file includes GeoLite2 data created by MaxMind, available from http://www.maxmind.com\n */");
+define('IP_FILEHEAD', "/**\n * NukeViet Content Management System\n * @version 5.x\n * @author VINADES.,JSC <contact@vinades.vn>\n * @copyright (C) 2009-" . date('Y') . " VINADES.,JSC. All rights reserved\n * @license GNU/GPL version 2 or any later version\n * @see https://github.com/nukeviet The NukeViet CMS GitHub project\n * @This file includes GeoLite2 data created by MaxMind, available from http://www.maxmind.com\n */");
 
 /**
  * nv_print_variable_ip()

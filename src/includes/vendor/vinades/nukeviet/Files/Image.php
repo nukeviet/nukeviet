@@ -20,7 +20,7 @@ use NukeViet\Site;
  *
  * @package NukeViet\Files
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2026 VINADES.,JSC. All rights reserved
  * @version 5.x
  * @access public
  */

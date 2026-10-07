@@ -19,8 +19,8 @@ use NukeViet\Http\Http;
  *
  * @package NukeViet\Client
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2024 VINADES.,JSC. All rights reserved
- * @version 4.6.00
+ * @copyright (C) 2009-2026 VINADES.,JSC. All rights reserved
+ * @version 5.x
  * @access public
  */
 class Gfonts2
