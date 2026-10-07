@@ -114,7 +114,7 @@ if ($page_config['viewtype'] == 2) {
         ];
     }
 
-    $rowdetail['schema_type'] != 'BlogPosting' && $schema['publisher'] = $schema_org;
+    $schema['publisher'] = $schema_org;
     !$is_webpage && $schema['author'] = $schema_org;
 
     $rowdetail['add_time'] = nv_datetime_format($rowdetail['add_time'], 1, 0);

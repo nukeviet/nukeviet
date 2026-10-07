@@ -236,10 +236,10 @@ $news_contents['post_name'] = nv_show_name_user($post_first_name, $post_last_nam
 
 $publtime = (int) ($news_contents['publtime']);
 $meta_property['og:type'] = 'article';
-$meta_property['article:published_time'] = date('Y-m-dTH:i:s', $publtime);
-$meta_property['article:modified_time'] = date('Y-m-dTH:i:s', $news_contents['edittime']);
+$meta_property['article:published_time'] = date('c', $publtime);
+$meta_property['article:modified_time'] = date('c', $news_contents['edittime']);
 if ($news_contents['exptime']) {
-    $meta_property['article:expiration_time'] = date('Y-m-dTH:i:s', $news_contents['exptime']);
+    $meta_property['article:expiration_time'] = date('c', $news_contents['exptime']);
 }
 $meta_property['article:section'] = $global_array_cat[$news_contents['catid']]['title'];
 
@@ -262,17 +262,15 @@ if (!empty($meta_property['og:image'])) {
         'url' => $meta_property['og:image']
     ];
 }
-if ($news_contents['schema_type'] != 'BlogPosting') {
-    $schema['publisher'] = [
-        '@type' => 'Organization',
-        'name' => $global_config['site_name'],
+$schema['publisher'] = [
+    '@type' => 'Organization',
+    'name' => $global_config['site_name'],
+];
+if (!empty($global_config['site_logo'])) {
+    $schema['publisher']['logo'] = [
+        '@type' => 'ImageObject',
+        'url' => NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']
     ];
-    if (!empty($global_config['site_logo'])) {
-        $schema['publisher']['logo'] = [
-            '@type' => 'ImageObject',
-            'url' => NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']
-        ];
-    }
 }
 
 if (defined('NV_IS_MODADMIN') and $news_contents['status'] != 1) {

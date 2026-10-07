@@ -2867,7 +2867,7 @@ function api_url_create($action, $language = '', $module = '', $domain = '')
  */
 function nv_change_buffer($buffer)
 {
-    global $global_config, $client_info, $array_mod_title, $nv_Lang, $strdata;
+    global $global_config, $client_info, $array_mod_title, $nv_Lang, $nv_schemas;
 
     $script = 'script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '');
 
@@ -2916,6 +2916,8 @@ function nv_change_buffer($buffer)
      * @link https://github.com/nukeviet/nukeviet/issues/3779
      */
     if (defined('NV_SYSTEM') and defined('NV_MAIN_DOMAIN')) {
+        $siteSchemas = [];
+
         //  Cung cấp tên trang web cho Google Tìm kiếm
         // https://developers.google.com/search/docs/appearance/site-names?hl=vi#json-ld
         $typeWebSite = [
@@ -2943,11 +2945,11 @@ function nv_change_buffer($buffer)
                 ];
             }
         }
-        $strdata[] = $typeWebSite;
+        $siteSchemas[] = $typeWebSite;
         // Thêm biểu trưng của tổ chức lên Google Search
         // https://developers.google.com/search/docs/appearance/structured-data/logo
         if (!empty($global_config['organization_logo'])) {
-            $strdata[] = [
+            $siteSchemas[] = [
                 '@context' => 'https://schema.org',
                 '@type' => 'Organization',
                 'url' => NV_MAIN_DOMAIN,
@@ -2973,7 +2975,7 @@ function nv_change_buffer($buffer)
                     'item' => NV_MY_DOMAIN . nv_url_rewrite($breadcrumb['link'], true)
                 ];
             }
-            $strdata[] = [
+            $siteSchemas[] = [
                 '@context' => 'https://schema.org',
                 '@type' => 'BreadcrumbList',
                 'itemListElement' => $breadcrumbs
@@ -2986,17 +2988,19 @@ function nv_change_buffer($buffer)
                 $data = file_get_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json');
                 $data = json_decode($data, true);
                 if (json_last_error() === JSON_ERROR_NONE) {
-                    $strdata[] = $data;
+                    $siteSchemas[] = $data;
                 }
             }
         }
-        if (!empty($strdata)) {
-            if (count($strdata) == 1) {
-                $strdata = $strdata[0];
+
+        $schemas = array_merge($siteSchemas, array_values($nv_schemas));
+        if (!empty($schemas)) {
+            if (count($schemas) == 1) {
+                $schemas = $schemas[0];
             }
-            $strdata = json_encode($strdata, NV_JSON_ENCODE_LDJSON);
-            $strdata = '<script type="application/ld+json">' . PHP_EOL . $strdata . PHP_EOL . '</script>';
-            $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $strdata . '$1', $buffer, 1);
+            $schemas = json_encode(nv_unhtmlspecialchars($schemas), NV_JSON_ENCODE_LDJSON);
+            $schemas = '<script type="application/ld+json">' . PHP_EOL . $schemas . PHP_EOL . '</script>';
+            $buffer = preg_replace_callback('/(<\/head[^>]*>)/', fn($m) => PHP_EOL . $schemas . $m[1], $buffer, 1);
         }
     }
 
