@@ -457,8 +457,10 @@ class Request
         if (!empty($this->origin)) {
             $hasControlRequestHeader = Site::getEnv(['HTTP_ACCESS_CONTROL_REQUEST_HEADERS', 'Access-Control-Request-Headers']);
 
+            // Kiểm tra isOriginValid (trong hàm) và lấy origin để điền vào header
+            $allowOrigin = $this->getAllowOriginHeaderValue();
             if ($this->autoACAO) {
-                $this->corsHeaders['Access-Control-Allow-Origin'] = $this->getAllowOriginHeaderValue();
+                $this->corsHeaders['Access-Control-Allow-Origin'] = $allowOrigin;
                 foreach ($this->corsHeaders as $header => $value) {
                     header($header . ': ' . $value);
                 }
@@ -1783,16 +1785,22 @@ class Request
      */
     private function getAllowOriginHeaderValue()
     {
-        // Không block hoặc domain hợp lệ (domain trong danh sách hoặc là self) hoặc null và
+        // Same-site hoặc domain trong danh sách cho phép: được gửi kèm cookie
+        if ($this->origin_key === 1 or in_array($this->origin, $this->validCrossDomains, true)) {
+            $this->isOriginValid = true;
+
+            return $this->origin;
+        }
+
+        // Không giới hạn cross-domain hoặc Origin null được phép: chấp nhận nhưng không cho gửi kèm cookie
         if (
             !$this->restrictCrossDomain or
-            $this->origin_key === 1 or
             ($this->origin === 'null' and $this->allowNullOrigin and (
                 empty($this->allowNullOriginIps) or in_array($this->remote_ip, $this->allowNullOriginIps, true)
-            )) or
-            in_array($this->origin, $this->validCrossDomains, true)
+            ))
         ) {
             $this->isOriginValid = true;
+            unset($this->corsHeaders['Access-Control-Allow-Credentials']);
 
             return $this->origin;
         }
