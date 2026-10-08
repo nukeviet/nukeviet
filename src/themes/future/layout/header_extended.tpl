@@ -70,7 +70,7 @@
                     <div class="d-flex align-items-center justify-content-between gap-4 my-3">
                         <div class="logo flex-shrink-1 flex-lg-shrink-0 flex-grow-1 flex-lg-grow-0 text-center text-lg-start">
                             <a title="{$GCONFIG.site_name}" href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}" aria-label="Logo {$GCONFIG.site_name}">
-                                <img src="{$smarty.const.NV_BASE_SITEURL}{$GCONFIG.site_logo}" alt="{$GCONFIG.site_name}">
+                                <img src="{$smarty.const.NV_STATIC_URL}{$GCONFIG.site_logo}" alt="{$GCONFIG.site_name}">
                             </a>
                             {if not $H1_EXISTS}
                             <h1 aria-hidden="true" class="visually-hidden">{$THEME_PAGE_TITLE}</h1>
@@ -96,7 +96,7 @@
                 <div class="col-6">
                     <div class="logo ps-2 ps-sm-0">
                         <a title="{$GCONFIG.site_name}" href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}" aria-label="Logo {$GCONFIG.site_name}">
-                            <img src="{$smarty.const.NV_BASE_SITEURL}{$GCONFIG.site_logo}" alt="{$GCONFIG.site_name}">
+                            <img src="{$smarty.const.NV_STATIC_URL}{$GCONFIG.site_logo}" alt="{$GCONFIG.site_name}">
                         </a>
                     </div>
                 </div>
@@ -112,3 +112,4 @@
         </div>
     </div>
 </header>
+{include file='breadcrumbs.tpl'}

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 5.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2026 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -63,11 +63,11 @@ if (!nv_function_exists('nv_company_info')) {
      */
     function nv_company_info($block_config)
     {
-        global $global_config, $nv_Lang;
+        global $global_config, $nv_Lang, $nv_schemas;
 
         // JSON-LD LocalBusiness
         $ld_json = [
-            '@context' => 'http://schema.org',
+            '@context' => 'https://schema.org',
             '@type' => 'LocalBusiness',
             'priceRange' => 'N/A',
             'image' => [NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']],
@@ -122,11 +122,12 @@ if (!nv_function_exists('nv_company_info')) {
         !empty($block_config['company_website']) && $ld_json['url'] = $block_config['company_website'][0];
         !empty($block_config['company_fax']) && $ld_json['faxNumber'] = $block_config['company_fax'];
 
+        $nv_schemas[] = $ld_json;
+
         $tpl = new \NukeViet\Template\NVSmarty();
         $tpl->setTemplateDir($block_config['real_path']);
         $tpl->assign('LANG', $nv_Lang);
         $tpl->assign('DATA', $block_config);
-        $tpl->assign('LD_JSON', json_encode($ld_json, NV_JSON_ENCODE_LDJSON));
         return $tpl->fetch('global.company_info.tpl');
     }
 }

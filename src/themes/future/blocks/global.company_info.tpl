@@ -62,4 +62,3 @@
 </div>
 <!-- END FORFOOTER -->
 {/if}
-<script type="application/ld+json">{$LD_JSON}</script>

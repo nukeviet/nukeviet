@@ -2,9 +2,9 @@
 
 /**
  * NukeViet Content Management System
- * @version 4.x
+ * @version 5.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2026 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -91,7 +91,7 @@ function nv_site_theme($contents, $full = true)
     }
     $tpl->assign('SITE_FAVICON', $site_favicon);
 
-    // XÁC ĐỊNH BIẾN $custom_preloads - TẢI TRƯỚC TẬP TIN (không bắt buộc)
+    // Xác định biến $custom_preloads - tải trước tập tin (không bắt buộc)
     // Các tập tin hình ảnh, font chữ được liệt kê trong các file css nguồn
     // theo mặc định sẽ được tải sau khi trình duyệt đã phân tích xong toàn bộ file css.
     // Tải trước các tập tin hình ảnh, font chữ này sẽ khiến việc load trang nhanh hơn.
@@ -99,20 +99,17 @@ function nv_site_theme($contents, $full = true)
     // thuộc tính 'crossorigin' - bắt buộc nếu tập tin đòi hỏi CORS (ví dụ: font chữ).
     // Nếu đường dẫn của tập tin trong file css nguồn là tương đối thì giá trị của thuộc tính 'href'
     // sẽ là đường dẫn đến nó tính từ thư mục gốc của site (tương tự như của file css nguồn).
-    /*
+    // Chỉ nên tải trước tập tin được dùng ngay ở phần đầu trang, tải trước tập tin không dùng tới sẽ phí băng thông.
     $custom_preloads[] = [
         'as' => 'font',
-        // File fontawesome-webfont.woff2 được tải từ font-awesome.min.css,
-        // nên đường dẫn đến thư mục của font-awesome.min.css thế nào thì của fontawesome-webfont.woff2 như thế
-        'href' => ASSETS_STATIC_URL . '/fonts/fontawesome-webfont.woff2',
+        'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/webfonts/fa-solid-900.woff2',
         'type' => 'font/woff2',
         'crossorigin' => true
     ];
+    /*
     $custom_preloads[] = [
         'as' => 'font',
-        // File NukeVietIcons.woff2 được tải từ style.css,
-        // nên đường dẫn đến thư mục của style.css thế nào thì của NukeVietIcons.woff2 như thế
-        'href' => NV_STATIC_URL . 'themes/default/fonts/NukeVietIcons.woff2',
+        'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/webfonts/fa-brands-400.woff2',
         'type' => 'font/woff2',
         'crossorigin' => true
     ];
@@ -228,6 +225,22 @@ function nv_site_theme($contents, $full = true)
     // Thông báo thu thập cookie lần đầu
     $tpl->assign('COOKIE_NOTICE', ($global_config['cookie_notice_popup'] and !isset($_COOKIE[$global_config['cookie_prefix'] . '_cn'])));
 
+    // Breadcrumbs
+    $breadcrumbs = [];
+    if ($full and !$home) {
+        if ($global_config['rewrite_op_mod'] != $module_name) {
+            array_unshift($array_mod_title, [
+                'catid' => 0,
+                'title' => $module_info['custom_title'],
+                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name
+            ]);
+        }
+        if (!empty($array_mod_title)) {
+            $breadcrumbs = array_values($array_mod_title);
+        }
+    }
+    $tpl->assign('BREADCRUMBS', $breadcrumbs);
+
     $sitecontent = $tpl->fetch($layout_file);
 
     // Giao diện đầy đủ thì có thêm block và thông báo lỗi
@@ -248,82 +261,6 @@ function nv_site_theme($contents, $full = true)
     }
 
     return $sitecontent;
-
-
-
-
-    // FIXME
-    $xtpl = new XTemplate($layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout');
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $global_config['module_theme']);
-
-    $xtpl->assign('NV_SITE_COPYRIGHT', $global_config['site_name'] . ' [' . $global_config['site_email'] . '] ');
-    $xtpl->assign('NV_SITE_NAME', $global_config['site_name']);
-    $xtpl->assign('NV_SITE_TITLE', $global_config['site_name'] . NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('admin_page') . NV_TITLEBAR_DEFIS . $module_info['custom_title']);
-    $xtpl->assign('SITE_DESCRIPTION', $global_config['site_description']);
-
-    $xtpl->assign('NV_CURRENTTIME', nv_datetime_format(NV_CURRENTTIME, 0, 0));
-    $xtpl->assign('NV_COOKIE_PREFIX', $global_config['cookie_prefix']);
-
-    // System variables
-
-
-    // Module contents
-
-
-    // Header variables
-    $xtpl->assign('SITE_NAME', $global_config['site_name']);
-    $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
-    $xtpl->assign('LOGO_SRC', NV_STATIC_URL . $global_config['site_logo']);
-
-    if (empty($global_config['site_banner'])) {
-        $custom_preloads[] = [
-            'as' => 'image',
-            'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/images/header.png',
-            'type' => 'image/png'
-        ];
-        $xtpl->assign('BANNER_SRC', NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/images/header.png');
-    } else {
-        $custom_preloads[] = [
-            'as' => 'image',
-            'href' => NV_STATIC_URL . $global_config['site_banner']
-        ];
-        $xtpl->assign('BANNER_SRC', NV_STATIC_URL . $global_config['site_banner']);
-    }
-
-    // Only full theme
-    if ($full) {
-        if (!$global_config['rewrite_enable']) {
-            $xtpl->assign('THEME_SEARCH_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek&amp;q=');
-        } else {
-            $xtpl->assign('THEME_SEARCH_URL', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek', true) . '?q=');
-        }
-
-        // Breadcrumbs
-        if (!$home) {
-            if ($global_config['rewrite_op_mod'] != $module_name) {
-                array_unshift($array_mod_title, [
-                    'catid' => 0,
-                    'title' => $module_info['custom_title'],
-                    'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name
-                ]);
-            }
-            if (!empty($array_mod_title)) {
-                $border = 1;
-                foreach ($array_mod_title as $arr_cat_title_i) {
-                    ++$border;
-                    $arr_cat_title_i['position'] = $border;
-                    $xtpl->assign('BREADCRUMBS', $arr_cat_title_i);
-                    $xtpl->parse('main.breadcrumbs.loop');
-                }
-            }
-            $xtpl->parse('main.breadcrumbs');
-        } elseif (empty($array_mod_title)) {
-            $xtpl->parse('main.currenttime');
-        }
-
-
-    }
 }
 
 /**

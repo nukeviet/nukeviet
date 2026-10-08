@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 5.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2026 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -36,22 +36,3 @@ if (count($global_config['array_theme_type']) > 1) {
 
     $content = $tpl->fetch('global.change_theme_mode.tpl');
 }
-
-/**
- *
-foreach ($array_theme_type as $theme_type) {
-            $xtpl->assign('STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
-            $xtpl->assign('STHEME_TITLE', $nv_Lang->getGlobal('theme_type_' . $theme_type));
-            $xtpl->assign('STHEME_INFO', $nv_Lang->getGlobal('theme_type_chose', $nv_Lang->getGlobal('theme_type_' . $theme_type)));
-            $xtpl->assign('STHEME_ICON', $icons[$theme_type]);
-
-            if ($theme_type == $current_theme_type) {
-                $xtpl->parse('main.theme_type.loop.current');
-            } else {
-                $xtpl->parse('main.theme_type.loop.other');
-            }
-
-            $xtpl->parse('main.theme_type.loop');
-        }
-        $xtpl->parse('main.theme_type');
- */

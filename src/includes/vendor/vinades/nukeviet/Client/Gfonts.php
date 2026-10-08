@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 5.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2026 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -19,7 +19,7 @@ use NukeViet\Http\Http;
  *
  * @package NukeViet\Client
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2026 VINADES.,JSC. All rights reserved
  * @version 5.x
  * @access public
  * @deprecated Đã lỗi thời trên NukeViet 5.0, sẽ bị xóa bỏ trên NukeViet 6.0

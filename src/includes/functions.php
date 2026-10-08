@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 5.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2026 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -2867,7 +2867,7 @@ function api_url_create($action, $language = '', $module = '', $domain = '')
  */
 function nv_change_buffer($buffer)
 {
-    global $global_config, $client_info, $array_mod_title, $nv_Lang, $strdata;
+    global $global_config, $client_info, $array_mod_title, $nv_Lang, $nv_schemas;
 
     $script = 'script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '');
 
@@ -2916,89 +2916,91 @@ function nv_change_buffer($buffer)
      * @link https://github.com/nukeviet/nukeviet/issues/3779
      */
     if (defined('NV_SYSTEM') and defined('NV_MAIN_DOMAIN')) {
-        if ($client_info['is_bot'] or stripos(NV_USER_AGENT, 'google') !== false) {
-            //  Cung cấp tên trang web cho Google Tìm kiếm
-            // https://developers.google.com/search/docs/appearance/site-names?hl=vi#json-ld
-            $typeWebSite = [
+        $siteSchemas = [];
+
+        //  Cung cấp tên trang web cho Google Tìm kiếm
+        // https://developers.google.com/search/docs/appearance/site-names?hl=vi#json-ld
+        $typeWebSite = [
+            '@context' => 'https://schema.org',
+            '@type' => 'WebSite',
+            'name' => $global_config['site_name']
+        ];
+        // Việc cung cấp tên website thay thế bằng thuộc tính alternateName
+        // giúp Google xem xét các lựa chọn khác nếu tên bạn ưu tiên không được chọn
+        if (!empty($global_config['custom_configs']['site_alternate_name'])) {
+            $typeWebSite['alternateName'] = $global_config['custom_configs']['site_alternate_name'];
+        }
+        $typeWebSite['url'] = NV_MAIN_DOMAIN . '/';
+        if (!preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN) . '\/?$/', $client_info['selfurl'])) {
+            // Thêm Hộp tìm kiếm liên kết trang web lên Google Search
+            // https://developers.google.com/search/docs/appearance/structured-data/sitelinks-searchbox
+            if (!empty($global_config['sitelinks_search_box_schema'])) {
+                $typeWebSite['potentialAction'] = [
+                    '@type' => 'SearchAction',
+                    'target' => [
+                        '@type' => 'EntryPoint',
+                        'urlTemplate' => NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek&amp;q=', true) . '{search_term_string}'
+                    ],
+                    'query-input' => 'required name=search_term_string'
+                ];
+            }
+        }
+        $siteSchemas[] = $typeWebSite;
+        // Thêm biểu trưng của tổ chức lên Google Search
+        // https://developers.google.com/search/docs/appearance/structured-data/logo
+        if (!empty($global_config['organization_logo'])) {
+            $siteSchemas[] = [
                 '@context' => 'https://schema.org',
-                '@type' => 'WebSite',
-                'name' => $global_config['site_name']
+                '@type' => 'Organization',
+                'url' => NV_MAIN_DOMAIN,
+                'logo' => NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['organization_logo']
             ];
-            // Việc cung cấp tên website thay thế bằng thuộc tính alternateName
-            // giúp Google xem xét các lựa chọn khác nếu tên bạn ưu tiên không được chọn
-            if (!empty($global_config['custom_configs']['site_alternate_name'])) {
-                $typeWebSite['alternateName'] = $global_config['custom_configs']['site_alternate_name'];
-            }
-            $typeWebSite['url'] = NV_MAIN_DOMAIN . '/';
-            if (!preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN) . '\/?$/', $client_info['selfurl'])) {
-                // Thêm Hộp tìm kiếm liên kết trang web lên Google Search
-                // https://developers.google.com/search/docs/appearance/structured-data/sitelinks-searchbox
-                if (!empty($global_config['sitelinks_search_box_schema'])) {
-                    $typeWebSite['potentialAction'] = [
-                        '@type' => 'SearchAction',
-                        'target' => [
-                            '@type' => 'EntryPoint',
-                            'urlTemplate' => NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek&amp;q=', true) . '{search_term_string}'
-                        ],
-                        'query-input' => 'required name=search_term_string'
-                    ];
-                }
-            }
-            $strdata[] = $typeWebSite;
-            // Thêm biểu trưng của tổ chức lên Google Search
-            // https://developers.google.com/search/docs/appearance/structured-data/logo
-            if (!empty($global_config['organization_logo'])) {
-                $strdata[] = [
-                    '@context' => 'https://schema.org',
-                    '@type' => 'Organization',
-                    'url' => NV_MAIN_DOMAIN,
-                    'logo' => NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['organization_logo']
+        }
+        // Thêm đường dẫn breadcrumb của trang hiện tại lên Google Search
+        // https://developers.google.com/search/docs/appearance/structured-data/breadcrumb
+        if (!empty($global_config['breadcrumblist']) and !empty($array_mod_title)) {
+            array_unshift($array_mod_title, [
+                'catid' => 0,
+                'title' => $nv_Lang->getGlobal('Home'),
+                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA
+            ]);
+            $breadcrumbs = [];
+            $position = 0;
+            foreach ($array_mod_title as $breadcrumb) {
+                ++$position;
+                $breadcrumbs[] = [
+                    '@type' => 'ListItem',
+                    'position' => $position,
+                    'name' => $breadcrumb['title'],
+                    'item' => NV_MY_DOMAIN . nv_url_rewrite($breadcrumb['link'], true)
                 ];
             }
-            // Thêm đường dẫn breadcrumb của trang hiện tại lên Google Search
-            // https://developers.google.com/search/docs/appearance/structured-data/breadcrumb
-            if (!empty($global_config['breadcrumblist']) and !empty($array_mod_title)) {
-                array_unshift($array_mod_title, [
-                    'catid' => 0,
-                    'title' => $nv_Lang->getGlobal('Home'),
-                    'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA
-                ]);
-                $breadcrumbs = [];
-                $position = 0;
-                foreach ($array_mod_title as $breadcrumb) {
-                    ++$position;
-                    $breadcrumbs[] = [
-                        '@type' => 'ListItem',
-                        'position' => $position,
-                        'name' => $breadcrumb['title'],
-                        'item' => NV_MY_DOMAIN . nv_url_rewrite($breadcrumb['link'], true)
-                    ];
-                }
-                $strdata[] = [
-                    '@context' => 'https://schema.org',
-                    '@type' => 'BreadcrumbList',
-                    'itemListElement' => $breadcrumbs
-                ];
-            }
-            // Hiển thị thông tin doanh nghiệp trên Google Search
-            // https://developers.google.com/search/docs/appearance/structured-data/local-business
-            if (!empty($global_config['localbusiness'])) {
-                if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json')) {
-                    $data = file_get_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json');
-                    $data = json_decode($data, true);
-                    if (json_last_error() === JSON_ERROR_NONE) {
-                        $strdata[] = $data;
-                    }
+            $siteSchemas[] = [
+                '@context' => 'https://schema.org',
+                '@type' => 'BreadcrumbList',
+                'itemListElement' => $breadcrumbs
+            ];
+        }
+        // Hiển thị thông tin doanh nghiệp trên Google Search
+        // https://developers.google.com/search/docs/appearance/structured-data/local-business
+        if (!empty($global_config['localbusiness'])) {
+            if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json')) {
+                $data = file_get_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json');
+                $data = json_decode($data, true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $siteSchemas[] = $data;
                 }
             }
-            if (!empty($strdata)) {
-                if (count($strdata) == 1) {
-                    $strdata = $strdata[0];
-                }
-                $strdata = json_encode($strdata, NV_JSON_ENCODE_LDJSON);
-                $strdata = '<script type="application/ld+json">' . PHP_EOL . $strdata . PHP_EOL . '</script>';
-                $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $strdata . '$1', $buffer, 1);
+        }
+
+        $schemas = array_merge($siteSchemas, array_values($nv_schemas));
+        if (!empty($schemas)) {
+            if (count($schemas) == 1) {
+                $schemas = $schemas[0];
             }
+            $schemas = json_encode(nv_unhtmlspecialchars($schemas), NV_JSON_ENCODE_LDJSON);
+            $schemas = '<script type="application/ld+json">' . PHP_EOL . $schemas . PHP_EOL . '</script>';
+            $buffer = preg_replace_callback('/(<\/head[^>]*>)/', fn($m) => PHP_EOL . $schemas . $m[1], $buffer, 1);
         }
     }
 
