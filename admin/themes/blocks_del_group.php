@@ -21,12 +21,14 @@ $array_bid = array_map('intval', $array_bid);
 
 if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request->get_string('checkss', 'post,get')) {
     $array_expression = [];
-    $result = $db->query('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid in (' . implode(',', $array_bid) . ')');
+    $array_logs = [];
+    $result = $db->query('SELECT bid, theme, position, title FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid in (' . implode(',', $array_bid) . ')');
 
     while ($_scratch = $result->fetch(3)) {
-        list($bid_i, $theme_i, $position_i) = $_scratch;
+        list($bid_i, $theme_i, $position_i, $title_i) = $_scratch;
         unset($_scratch);
         $array_expression[$theme_i][$position_i][] = $bid_i;
+        $array_logs[] = $title_i . ' (ID: ' . $bid_i . ', theme: ' . $theme_i . ', position: ' . $position_i . ')';
     }
 
     if (!empty($array_expression)) {
@@ -73,6 +75,8 @@ if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request-
 
         $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
         $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
+
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete block', 'Name : ' . implode('; ', $array_logs), $admin_info['userid']);
     }
 }
 

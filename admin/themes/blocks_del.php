@@ -15,7 +15,7 @@ if (!defined('NV_IS_FILE_THEMES')) {
 
 $bid = $nv_Request->get_int('bid', 'post');
 $checkss = $nv_Request->get_string('checkss', 'post');
-list($bid, $theme, $position) = $db->query('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3);
+list($bid, $theme, $position, $title) = $db->query('SELECT bid, theme, position, title FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch(3);
 
 if ($bid > 0 and (md5($theme . NV_CHECK_SESSION) == $checkss or md5(NV_CHECK_SESSION . '_' . $bid) == $checkss)) {
     $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid);
@@ -58,6 +58,8 @@ if ($bid > 0 and (md5($theme . NV_CHECK_SESSION) == $checkss or md5(NV_CHECK_SES
 
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
+
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete block', 'Name : ' . $title . ' (ID: ' . $bid . ', theme: ' . $theme . ', position: ' . $position . ')', $admin_info['userid']);
 
     echo $lang_module['block_delete_success'];
 } else {
