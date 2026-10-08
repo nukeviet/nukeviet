@@ -15,7 +15,7 @@ if (!defined('NV_IS_FILE_THEMES')) {
 
 $bid = $nv_Request->get_int('bid', 'post');
 $checkss = $nv_Request->get_string('checkss', 'post');
-$stmt = $db->prepare('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid= :bid');
+$stmt = $db->prepare('SELECT bid, theme, position, title FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid= :bid');
 $stmt->bindValue(':bid', $bid, PDO::PARAM_INT);
 $stmt->execute();
 $row = $stmt->fetch();
@@ -79,6 +79,8 @@ while ($_row_weight = $sth->fetch()) {
 $sth->closeCursor();
 
 $nv_Cache->delMod('themes');
+
+nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete block', 'Name : ' . $row['title'] . ' (ID: ' . $bid . ', theme: ' . $theme . ', position: ' . $position . ')', $admin_info['userid']);
 
 nv_jsonOutput([
     'success' => 1,

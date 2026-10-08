@@ -20,8 +20,10 @@ $array_bid = explode(',', $list);
 $array_bid = array_map('intval', $array_bid);
 
 if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request->get_string('checkss', 'post,get')) {
+    $array_expression = [];
+    $array_logs = [];
     $placeholders = implode(',', array_fill(0, count($array_bid), '?'));
-    $result = $db->prepare('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid in (' . $placeholders . ')');
+    $result = $db->prepare('SELECT bid, theme, position, title FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid in (' . $placeholders . ')');
     foreach ($array_bid as $k => $id) {
         $result->bindValue($k + 1, $id, PDO::PARAM_INT);
     }
@@ -29,6 +31,7 @@ if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request-
 
     while ($_row = $result->fetch()) {
         $array_expression[$_row['theme']][$_row['position']][] = $_row['bid'];
+        $array_logs[] = $_row['title'] . ' (ID: ' . $_row['bid'] . ', theme: ' . $_row['theme'] . ', position: ' . $_row['position'] . ')';
     }
     $result->closeCursor();
 
@@ -89,6 +92,8 @@ if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request-
         }
 
         $nv_Cache->delMod('themes');
+
+        nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete block', 'Name : ' . implode('; ', $array_logs), $admin_info['userid']);
     }
 }
 
