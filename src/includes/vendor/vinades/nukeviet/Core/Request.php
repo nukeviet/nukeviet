@@ -352,6 +352,11 @@ class Request
         $this->Initialize();
         $this->get_cookie_save_path();
 
+        // Site chạy HTTPS thì mọi cookie đều bật Secure
+        if ($this->server_protocol == 'https' and !empty($config['https_only'])) {
+            $this->secure = true;
+        }
+
         $this->sessionStart(!empty($config['https_only']));
         $_REQUEST = array_merge($_POST, array_diff_key($_GET, $_POST));
     }
