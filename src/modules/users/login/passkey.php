@@ -18,7 +18,7 @@ use NukeViet\Webauthn\SerializerFactory;
 use Webauthn\CeremonyStep\CeremonyStepManagerFactory;
 use Webauthn\PublicKeyCredential;
 use Webauthn\PublicKeyCredentialRequestOptions;
-use Webauthn\PublicKeyCredentialSource;
+use Webauthn\CredentialRecord;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAssertionResponseValidator;
 
@@ -125,7 +125,7 @@ if ($nv_Request->isset_request('auth_assertion', 'post')) {
     }
 
     // Kiểm tra an ninh khóa này
-    $publicKeyCredentialSource = PublicKeyCredentialSource::create(
+    $credentialRecord = CredentialRecord::create(
         base64_decode($row['keyid']),
         $row['keytype'], [], 'none',
         \Webauthn\TrustPath\EmptyTrustPath::create(),
@@ -136,12 +136,13 @@ if ($nv_Request->isset_request('auth_assertion', 'post')) {
 
     // Khởi tạo Validation
     $csmFactory = new CeremonyStepManagerFactory();
+    $csmFactory->setAllowedOrigins([NV_MY_DOMAIN]);
     $requestCSM = $csmFactory->requestCeremony();
     $assertValidator = AuthenticatorAssertionResponseValidator::create($requestCSM);
 
     try {
         $publicKeyCheck = $assertValidator->check(
-            $publicKeyCredentialSource,
+            $credentialRecord,
             $publicKeyCredential->response,
             $requestOptions,
             NV_SERVER_NAME,

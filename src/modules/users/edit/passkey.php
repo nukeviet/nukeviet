@@ -58,35 +58,23 @@ if ($nv_Request->isset_request('create_challenge', 'post')) {
     /**
      * name: tên website
      * id: tên miền website
-     * icon: ảnh đại diện dạng base64
      * @var mixed
      */
-    $logo = null;
-    if (!empty($global_config['site_logo']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_logo'])) {
-        $logo = 'data:image/' . nv_getextension($global_config['site_logo']) . ';base64,' . base64_encode(file_get_contents(NV_ROOTDIR . '/' . $global_config['site_logo']));
-    }
     $rpEntity = PublicKeyCredentialRpEntity::create(
         $global_config['site_name'],
-        NV_SERVER_NAME,
-        $logo
+        NV_SERVER_NAME
     );
 
     /**
      * name: tên người dùng ví dụ user name
      * id: id người dùng, không thể thay đổi
      * displayName: tên hiển thị như là họ và tên
-     * icon: ảnh đại diện dạng base64
      * @var mixed
      */
-    $photo = null;
-    if (!empty($user_info['photo']) and file_exists(NV_ROOTDIR . '/' . $user_info['photo'])) {
-        $photo = 'data:image/' . nv_getextension($user_info['photo']) . ';base64,' . base64_encode(file_get_contents(NV_ROOTDIR . '/' . $user_info['photo']));
-    }
     $userEntity = PublicKeyCredentialUserEntity::create(
         $user_info['username'],
         md5('U:' . $edit_userid),
-        $user_info['full_name'],
-        $photo
+        $user_info['full_name']
     );
 
     // Loại mã hóa được hỗ trợ
@@ -220,6 +208,7 @@ if ($nv_Request->isset_request('save_credential', 'post')) {
     $certificateChainValidator = new CertificateChainValidator();
 
     $csmFactory = new CeremonyStepManagerFactory();
+    $csmFactory->setAllowedOrigins([NV_MY_DOMAIN]);
     $csmFactory->setAttestationStatementSupportManager(SerializerFactory::getAttestationManager());
     $csmFactory->enableMetadataStatementSupport(
         $metadataStatementRepository,

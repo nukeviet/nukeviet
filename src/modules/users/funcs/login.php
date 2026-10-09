@@ -22,7 +22,7 @@ use Webauthn\CeremonyStep\CeremonyStepManagerFactory;
 use Webauthn\PublicKeyCredentialDescriptor;
 use Webauthn\PublicKeyCredential;
 use Webauthn\PublicKeyCredentialRequestOptions;
-use Webauthn\PublicKeyCredentialSource;
+use Webauthn\CredentialRecord;
 
 if (defined('NV_IS_USER') or !$global_config['allowuserlogin']) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -1297,7 +1297,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
             }
 
             // Kiểm tra an ninh khóa này
-            $publicKeyCredentialSource = PublicKeyCredentialSource::create(
+            $credentialRecord = CredentialRecord::create(
                 base64_decode($publickey['keyid']),
                 $publickey['type'], [], 'none',
                 \Webauthn\TrustPath\EmptyTrustPath::create(),
@@ -1308,12 +1308,13 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
 
             // Khởi tạo Validation
             $csmFactory = new CeremonyStepManagerFactory();
+            $csmFactory->setAllowedOrigins([NV_MY_DOMAIN]);
             $requestCSM = $csmFactory->requestCeremony();
             $assertValidator = AuthenticatorAssertionResponseValidator::create($requestCSM);
 
             try {
                 $publicKeyCheck = $assertValidator->check(
-                    $publicKeyCredentialSource,
+                    $credentialRecord,
                     $publicKeyCredential->response,
                     $requestOptions,
                     NV_SERVER_NAME,

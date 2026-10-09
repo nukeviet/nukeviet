@@ -19,7 +19,7 @@ use Webauthn\CeremonyStep\CeremonyStepManagerFactory;
 use Webauthn\PublicKeyCredentialDescriptor;
 use Webauthn\PublicKeyCredential;
 use Webauthn\PublicKeyCredentialRequestOptions;
-use Webauthn\PublicKeyCredentialSource;
+use Webauthn\CredentialRecord;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAssertionResponseValidator;
 
@@ -225,7 +225,7 @@ if ($passkey_allowed and $nv_Request->isset_request('login_assertion', 'post')) 
     }
 
     // Kiểm tra an ninh khóa này
-    $publicKeyCredentialSource = PublicKeyCredentialSource::create(
+    $credentialRecord = CredentialRecord::create(
         base64_decode($row['keyid']),
         $row['keytype'], [], 'none',
         \Webauthn\TrustPath\EmptyTrustPath::create(),
@@ -236,12 +236,13 @@ if ($passkey_allowed and $nv_Request->isset_request('login_assertion', 'post')) 
 
     // Khởi tạo Validation
     $csmFactory = new CeremonyStepManagerFactory();
+    $csmFactory->setAllowedOrigins([NV_MY_DOMAIN]);
     $requestCSM = $csmFactory->requestCeremony();
     $assertValidator = AuthenticatorAssertionResponseValidator::create($requestCSM);
 
     try {
         $publicKeyCheck = $assertValidator->check(
-            $publicKeyCredentialSource,
+            $credentialRecord,
             $publicKeyCredential->response,
             $requestOptions,
             NV_SERVER_NAME,
@@ -684,7 +685,7 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2spasskey', 'p
     }
 
     // Kiểm tra an ninh khóa này
-    $publicKeyCredentialSource = PublicKeyCredentialSource::create(
+    $credentialRecord = CredentialRecord::create(
         base64_decode($publickey['keyid']),
         $publickey['type'], [], 'none',
         \Webauthn\TrustPath\EmptyTrustPath::create(),
@@ -695,12 +696,13 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2spasskey', 'p
 
     // Khởi tạo Validation
     $csmFactory = new CeremonyStepManagerFactory();
+    $csmFactory->setAllowedOrigins([NV_MY_DOMAIN]);
     $requestCSM = $csmFactory->requestCeremony();
     $assertValidator = AuthenticatorAssertionResponseValidator::create($requestCSM);
 
     try {
         $publicKeyCheck = $assertValidator->check(
-            $publicKeyCredentialSource,
+            $credentialRecord,
             $publicKeyCredential->response,
             $requestOptions,
             NV_SERVER_NAME,
