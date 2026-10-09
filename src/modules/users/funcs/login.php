@@ -36,6 +36,15 @@ $rules = [
 ];
 $blocker->trackLogin($rules, $global_config['is_login_blocker']);
 
+// Bộ đếm đăng nhập sai theo tài khoản, độc lập với IP. Chạm ngưỡng thì bắt captcha, không khóa tài khoản
+$loginTracker = new NukeViet\Core\LoginTracker(
+    $db,
+    NV_USERS_GLOBALTABLE . '_login_attempts',
+    (int) $global_config['login_number_tracking'],
+    (int) $global_config['login_time_tracking'],
+    (int) $global_config['login_time_ban']
+);
+
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
 // Dùng để bật giao diện login box
@@ -114,6 +123,9 @@ if (defined('SSO_CLIENT_DOMAIN')) {
 
 $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
 $gfx_chk = (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk, true)) ? 1 : 0;
+
+// Loại captcha khi tài khoản bị bắt captcha do đăng nhập sai nhiều lần, chưa cấu hình thì dùng captcha hình
+$account_captcha = !empty($module_captcha) ? $module_captcha : 'captcha';
 
 /**
  * @param mixed $array
@@ -611,6 +623,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                     $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $module_captcha) : true;
 
                     $nv_Request->unset_request('openid_attribs', 'session');
+                    $tracker_key = NukeViet\Core\LoginTracker::getKey((int) $nv_row['userid'], $nv_row['username']);
                     if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php')) {
                         $nv_username = $nv_row['username'];
                         $nv_password = $password;
@@ -627,12 +640,20 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                             'status' => 'error',
                             'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : (($module_captcha == 'turnstile') ? $nv_Lang->getGlobal('securitycodeincorrect2') : $nv_Lang->getGlobal('securitycodeincorrect'))
                         ]);
+                    } elseif (!$gfx_chk and $loginTracker->isRequired($tracker_key)) {
+                        // Tài khoản đang bị dò mật khẩu, màn hình này không bật được captcha nên yêu cầu đăng nhập thường trước
+                        opidr_login([
+                            'status' => 'error',
+                            'mess' => $nv_Lang->getGlobal('login_captcha_oauth')
+                        ]);
                     } elseif (!$crypt->validate_password($password, $nv_row['password'])) {
+                        $loginTracker->fail($tracker_key);
                         opidr_login([
                             'status' => 'error',
                             'mess' => $nv_Lang->getModule('openid_confirm_failed')
                         ]);
                     }
+                    $loginTracker->reset($tracker_key);
                 } else {
                     $key_words = $module_info['keywords'];
 
@@ -737,12 +758,23 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             require NV_ROOTDIR . '/modules/users/methods/' . $method . '.php';
             $row = check_user_login($nv_username);
 
+            // Tài khoản đang bị dò mật khẩu, form này không có captcha nên yêu cầu đăng nhập thường trước
+            $tracker_key = NukeViet\Core\LoginTracker::getKey(empty($row) ? null : (int) $row['userid'], $nv_username);
+            if ($loginTracker->isRequired($tracker_key)) {
+                opidr_login([
+                    'status' => 'error',
+                    'mess' => $nv_Lang->getGlobal('login_captcha_oauth')
+                ]);
+            }
+
             if (empty($row) or !$crypt->validate_password($nv_password, $row['password'])) {
+                $loginTracker->fail($tracker_key);
                 opidr_login([
                     'status' => 'error',
                     'mess' => $nv_Lang->getGlobal('loginincorrect')
                 ]);
             }
+            $loginTracker->reset($tracker_key);
 
             if ($row['safemode'] == 1) {
                 opidr_login([
@@ -1008,8 +1040,35 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
     $row = check_user_login($nv_username);
     $row_reg = empty($row) ? check_user_login($nv_username, true) : false;
 
+    /*
+     * Bộ đếm theo tài khoản. Tài khoản chờ kích hoạt và tên không tồn tại đếm theo tên đăng nhập
+     * (userid bảng chờ kích hoạt có thể trùng userid tài khoản thật), phản hồi như tài khoản thật để không lộ tài khoản
+     */
+    $tracker_key = NukeViet\Core\LoginTracker::getKey(empty($row) ? null : (int) $row['userid'], $nv_username);
+
+    // Tài khoản đang bị dò mật khẩu mà chưa có captcha hoặc captcha sai thì yêu cầu captcha, chưa kiểm tra mật khẩu
+    if (!$gfx_chk and $loginTracker->isRequired($tracker_key)) {
+        if ($account_captcha == 'recaptcha') {
+            $account_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+        } elseif ($account_captcha == 'turnstile') {
+            $account_seccode = $nv_Request->get_title('cf-turnstile-response', 'post', '');
+        } else {
+            $account_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+        }
+
+        if ($account_seccode === '' or !nv_capcha_txt($account_seccode, $account_captcha)) {
+            signin_result([
+                'status' => 'captcha',
+                'input' => '',
+                'mess' => $account_seccode === '' ? $nv_Lang->getGlobal('login_captcha_continue') : (($account_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : (($account_captcha == 'turnstile') ? $nv_Lang->getGlobal('securitycodeincorrect2') : $nv_Lang->getGlobal('securitycodeincorrect'))),
+                'captcha_attrs' => nv_captcha_form_attrs('nv_seccode', $account_captcha, true)
+            ]);
+        }
+    }
+
     // Nếu tài khoản đang chờ kích hoạt
     if (!empty($row_reg) and $crypt->validate_password($nv_password, $row_reg['password'])) {
+        $loginTracker->reset($tracker_key);
         $nv_Request->set_Session($module_data . '_preactivation_verified', json_encode([
             'username' => $row_reg['username'],
             'email' => $row_reg['email'],
@@ -1027,12 +1086,16 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
         if ($global_config['login_number_tracking']) {
             $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
         }
+        $loginTracker->fail($tracker_key);
         signin_result([
             'status' => 'error',
             'input' => '',
             'mess' => $nv_Lang->getGlobal('loginincorrect')
         ]);
     }
+
+    // Mật khẩu đúng thì xóa bộ đếm theo tài khoản, kể cả khi còn bước xác thực 2 bước
+    $loginTracker->reset($tracker_key);
 
     // Nếu tài khoản bị đình chỉ
     if (empty($row['active'])) {
@@ -1102,6 +1165,27 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
 
         // Chống brute-force cho bước xác thực 2 bước
         $tfa_blocker_key = '2fa_uid_' . $row['userid'];
+
+        /*
+         * Bộ đếm sai mã 2 bước theo tài khoản, độc lập với IP. Đủ ngưỡng thì bắt bước mật khẩu phải có captcha,
+         * form gửi lại cả mật khẩu nên lần xác nhận mã tiếp theo phải kèm captcha, mỗi lượt dò mã tốn thêm một captcha
+         */
+        $tfa_key = NukeViet\Core\LoginTracker::getScopeKey('tfa', (int) $row['userid']);
+        $tfa_failed = function () use ($loginTracker, $tfa_key, $tracker_key, $account_captcha, $nv_Request, $nv_Lang) {
+            $loginTracker->fail($tfa_key);
+            if (!$loginTracker->isRequired($tfa_key)) {
+                return;
+            }
+            $loginTracker->reset($tfa_key);
+            $loginTracker->forceRequired($tracker_key);
+            $nv_Request->unset_request('users_dismiss_captcha', 'session');
+            signin_result([
+                'status' => 'captcha',
+                'input' => '',
+                'mess' => $nv_Lang->getGlobal('login_tfa_captcha'),
+                'captcha_attrs' => nv_captcha_form_attrs('nv_seccode', $account_captcha, true)
+            ]);
+        };
         if ($global_config['login_number_tracking'] and $blocker->is_blocklogin($tfa_blocker_key)) {
             signin_result([
                 'status' => 'error',
@@ -1117,6 +1201,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
             if ($global_config['login_number_tracking']) {
                 $blocker->set_loginFailed($tfa_blocker_key, NV_CURRENTTIME);
             }
+            $tfa_failed();
             signin_result([
                 'status' => 'error',
                 'input' => 'nv_totppin',
@@ -1140,6 +1225,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
                 if ($global_config['login_number_tracking']) {
                     $blocker->set_loginFailed($tfa_blocker_key, NV_CURRENTTIME);
                 }
+                $tfa_failed();
                 signin_result([
                     'status' => 'error',
                     'input' => 'nv_backupcodepin',
@@ -1260,6 +1346,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
 
     $blocker->reset_trackLogin($nv_username);
     $blocker->reset_trackLogin('2fa_uid_' . $row['userid']);
+    $loginTracker->reset(NukeViet\Core\LoginTracker::getScopeKey('tfa', (int) $row['userid']));
 
     // Xác nhận đăng nhập thành công
     if (defined('SSO_SERVER')) {

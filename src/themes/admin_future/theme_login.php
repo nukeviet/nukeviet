@@ -67,6 +67,7 @@ if (empty($admin_pre_data)) {
     $tpl->assign('V_LOGIN', $nv_username);
     $tpl->assign('V_PASSWORD', $nv_password);
     $tpl->assign('GFX_CHK', $gfx_chk);
+    $tpl->assign('CAPTCHA_REQUIRED', $captcha_notice);
     $tpl->assign('CAPTCHA_TYPE', $captcha_type);
     $tpl->assign('LOGIN_ERROR_SECURITY', addslashes($nv_Lang->getGlobal('login_error_security', NV_GFX_NUM)));
     $tpl->assign('SV', $nv_Server);

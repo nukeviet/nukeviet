@@ -104,7 +104,8 @@ $(document).ready(function() {
                     setTimeout(function() {
                         window.location.href = hr
                     }, 3E3)
-                } else if (e.status == '2step') {
+                } else if (e.status == '2step' || e.status == 'captcha') {
+                    // 2step: sang bước 2, captcha: tài khoản cần captcha, tải lại để hiện captcha
                     location.reload()
                 } else {
                     if (typeof reCaptcha2 !== "undefined" && typeof grecaptcha !== "undefined") {
@@ -158,6 +159,9 @@ $(document).ready(function() {
                     setTimeout(function() {
                         window.location.href = hr
                     }, 3E3)
+                } else if (e.status == 'captcha') {
+                    // Sai mã 2 bước nhiều lần: máy chủ đã hủy bước 1, tải lại để đăng nhập lại kèm captcha
+                    location.reload()
                 } else {
                     $('input,button', form).prop('disabled', false);
                     $('.inner-message', form).text(e.mess).removeClass('normal success').addClass('error');

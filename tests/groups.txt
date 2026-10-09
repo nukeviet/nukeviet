@@ -1,5 +1,7 @@
+admin-login-captcha
 all
 cache
+captcha-providers
 db
 db-users
 install
@@ -8,6 +10,8 @@ off-mail
 sendmail
 smtp
 stat
+two-factor-captcha
 user-datadeletion
 user-datadeletion-only
+user-login-captcha
 users

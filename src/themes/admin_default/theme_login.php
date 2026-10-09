@@ -48,10 +48,20 @@ if (empty($admin_pre_data)) {
                 $xtpl->parse('pre_form.recaptcha.recaptcha3');
             }
             $xtpl->parse('pre_form.recaptcha');
+        } elseif ($captcha_type == 'turnstile') {
+            $xtpl->assign('TURNSTILE_SITEKEY', $global_config['turnstile_sitekey']);
+            $xtpl->parse('pre_form.turnstile');
         } elseif ($captcha_type == 'captcha') {
             $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
             $xtpl->parse('pre_form.captcha');
         }
+    }
+
+    // Tài khoản cần captcha do đăng nhập sai nhiều lần thì thay lời chào bằng thông báo
+    if ($captcha_notice) {
+        $xtpl->parse('pre_form.captcha_required');
+    } else {
+        $xtpl->parse('pre_form.login_info');
     }
 
     // Kiểm tra site có dùng SSL không

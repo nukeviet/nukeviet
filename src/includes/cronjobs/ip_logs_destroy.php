@@ -20,6 +20,8 @@ if (!defined('NV_MAINFILE') or !defined('NV_IS_CRON')) {
  */
 function cron_del_ip_logs()
 {
+    global $db, $global_config;
+
     $result = true;
     $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs';
 
@@ -37,6 +39,16 @@ function cron_del_ip_logs()
         closedir($dh);
         clearstatcache();
     }
+
+    // Dọn bộ đếm đăng nhập sai theo tài khoản đã hết hiệu lực
+    $loginTracker = new NukeViet\Core\LoginTracker(
+        $db,
+        NV_USERS_GLOBALTABLE . '_login_attempts',
+        (int) $global_config['login_number_tracking'],
+        (int) $global_config['login_time_tracking'],
+        (int) $global_config['login_time_ban']
+    );
+    $loginTracker->cleanup();
 
     return $result;
 }

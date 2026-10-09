@@ -418,6 +418,17 @@ $(function() {
                     window.location.href = response.redirect;
                     return;
                 }
+                if (response.status == 'captcha') {
+                    // Tài khoản cần captcha do đăng nhập sai nhiều lần: gắn captcha vào form, bấm đăng nhập lại sẽ hiện captcha
+                    if (response.captcha_attrs && 'object' == typeof response.captcha_attrs) {
+                        $.each(response.captcha_attrs, (name, value) => {
+                            form.attr(name, value);
+                        });
+                        loadCaptcha(form.parent());
+                    }
+                    $(selTor, form).prop('disabled', false);
+                    return nukeviet.toast(response.mess, 'warning');
+                }
                 if (response.status == '2step') {
                     form.removeAttr('data-captcha data-recaptcha2 data-recaptcha3 data-turnstile');
                     $(selTor, form).prop('disabled', false);

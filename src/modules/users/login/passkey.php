@@ -187,6 +187,7 @@ if ($nv_Request->isset_request('auth_assertion', 'post')) {
 
     $blocker->reset_trackLogin($row['username']);
     $blocker->reset_trackLogin($row['email']);
+    $loginTracker->reset(NukeViet\Core\LoginTracker::getKey((int) $row['userid'], $row['username']));
 
     // Nếu đăng nhập bằng forum hoặc sso
     if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {

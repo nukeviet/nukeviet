@@ -104,6 +104,7 @@ if (in_array($lang, $array_lang_module_setup, true) and $num_module_exists > 1) 
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_edit';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_login';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_deleted';
+    $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_login_attempts';
 }
 
 $sql_create_module = $sql_drop_module;
@@ -363,6 +364,15 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     KEY uniqid (uniqid),
     KEY md5username (md5username)
 ) ENGINE=InnoDB COMMENT 'Lưu trữ thông tin thành viên đã yêu cầu xóa dữ liệu cá nhân'";
+
+$sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_login_attempts (
+    keyname varchar(64) NOT NULL COMMENT 'Khóa đếm: u + userid hoặc n + md5 tên đăng nhập không tồn tại',
+    count smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Số lần đăng nhập sai',
+    starttime int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Thời điểm bắt đầu cửa sổ đếm',
+    lasttime int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Thời điểm sai gần nhất',
+    PRIMARY KEY (keyname),
+    KEY lasttime (lasttime)
+) ENGINE=InnoDB COMMENT 'Đếm số lần đăng nhập sai theo tài khoản, độc lập với IP'";
 
 $sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_config (config, content, edit_time) VALUES
 ('access_admin', 'a:8:{s:15:\"access_viewlist\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:17:\"access_editcensor\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', " . NV_CURRENTTIME . "),

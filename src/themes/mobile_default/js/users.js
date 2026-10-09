@@ -264,8 +264,18 @@ function login_validForm(a) {
                 $(".nv-info", a).html("<a href=\"" + d.redirect + "\">" + d.mess + "</a>").removeClass("error").removeClass("success").addClass("info").show();
             } else if (d.status == 'remove2step') {
                 window.location.href = d.redirect
+            } else if (d.status == "captcha") {
+                // Tài khoản cần captcha do đăng nhập sai nhiều lần: gắn captcha vào form, bấm đăng nhập lại sẽ hiện captcha
+                if ("object" == typeof d.captcha_attrs && d.captcha_attrs) {
+                    $.each(d.captcha_attrs, function(name, value) {
+                        $(a).attr(name, value)
+                    });
+                    loadCaptcha($(a).parent())
+                }
+                $("input,button", a).prop("disabled", !1);
+                $(".nv-info", a).html(d.mess).addClass("error").show()
             } else if (d.status == "2step") {
-                $(a).removeAttr('data-captcha data-recaptcha2 data-recaptcha3');
+                $(a).removeAttr('data-captcha data-recaptcha2 data-recaptcha3 data-turnstile');
                 $("input,button", a).prop("disabled", !1);
 
                 // Trình duyệt không hỗ trợ passkey

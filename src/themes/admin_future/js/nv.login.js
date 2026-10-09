@@ -133,7 +133,8 @@ $(function() {
                     return;
                 }
 
-                if (e.status == '2step') {
+                // 2step: sang bước 2, captcha: tài khoản cần captcha, tải lại để hiện captcha
+                if (e.status == '2step' || e.status == 'captcha') {
                     location.reload();
                     return;
                 }
@@ -204,6 +205,12 @@ $(function() {
                     setTimeout(() => {
                         window.location.href = hr;
                     }, 3000);
+                    return;
+                }
+
+                // Sai mã 2 bước nhiều lần: máy chủ đã hủy bước 1, tải lại để đăng nhập lại kèm captcha
+                if (e.status == 'captcha') {
+                    location.reload();
                     return;
                 }
 

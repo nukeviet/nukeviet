@@ -68,8 +68,19 @@ if ($tokend_confirm_password != $tokend) {
 
         $nv_password = $nv_Request->get_title('password', 'post', '');
 
+        // Bộ đếm sai mật khẩu xác nhận theo tài khoản, độc lập với IP
+        $loginTracker = new NukeViet\Core\LoginTracker(
+            $db,
+            NV_USERS_GLOBALTABLE . '_login_attempts',
+            (int) $global_config['login_number_tracking'],
+            (int) $global_config['login_time_tracking'],
+            (int) $global_config['login_time_ban']
+        );
+        $pwd_key = NukeViet\Core\LoginTracker::getScopeKey('pwd', (int) $user_info['userid']);
+
         if ($crypt->validate_password($nv_password, $db_password)) {
             $blocker->reset_trackLogin($user_info['username']);
+            $loginTracker->reset($pwd_key);
             $nv_Request->set_Session($tokend_key, $tokend);
             nv_json_result([
                 'status' => 'ok',
@@ -80,6 +91,21 @@ if ($tokend_confirm_password != $tokend) {
 
         if ($global_config['login_number_tracking'] and !empty($nv_password)) {
             $blocker->set_loginFailed($user_info['username'], NV_CURRENTTIME);
+        }
+
+        // Sai đủ ngưỡng thì đăng xuất phiên này, phiên bị chiếm sẽ không dò tiếp được mật khẩu
+        if (!empty($nv_password)) {
+            $loginTracker->fail($pwd_key);
+            if ($loginTracker->isRequired($pwd_key)) {
+                $loginTracker->reset($pwd_key);
+                $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_login WHERE userid=' . (int) $user_info['userid'] . ' AND clid=' . $db->quote($client_info['clid']));
+                NukeViet\Core\User::unset_userlogin_hash();
+                nv_json_result([
+                    'status' => 'error',
+                    'input' => '',
+                    'mess' => $nv_Lang->getGlobal('login_relogin_required')
+                ]);
+            }
         }
 
         nv_json_result([

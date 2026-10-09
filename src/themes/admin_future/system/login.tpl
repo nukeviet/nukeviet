@@ -16,15 +16,19 @@
                             {if empty($PRE_DATA)}
                             {* Form đăng nhập bằng tài khoản (bước 1) *}
                             <form method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php" data-toggle="preForm" data-passkey-allowed="{$PASSKEY_ALLOWED ? 1 : 0}">
+                                {if $CAPTCHA_REQUIRED}
+                                <div class="mb-3 border-3 border-start ps-2 border-danger text-danger" data-toggle="message">{$LANG->getGlobal('login_captcha_required')}</div>
+                                {else}
                                 <div class="mb-3 border-3 border-start ps-2" data-toggle="message">{$LANG->getGlobal('adminlogininfo')}</div>
+                                {/if}
                                 <div data-toggle="form">
                                     <div class="mb-3">
-                                        <label for="nv_login" class="form-label text-dark fw-medium">{$LANG->getGlobal('login_name')}</label>
+                                        <label for="nv_login" class="form-label text-body-emphasis fw-medium">{$LANG->getGlobal('login_name')}</label>
                                         <input class="form-control" name="nv_login" type="text" id="nv_login" value="{$V_LOGIN}" data-error-mess="{$LANG->getGlobal('username_empty')}" autocomplete="off">
                                     </div>
                                     <div class="mb-3">
                                         <div class="d-flex gap-2">
-                                            <label for="nv_password" class="form-label text-dark fw-medium">{$LANG->getGlobal('password')}</label>
+                                            <label for="nv_password" class="form-label text-body-emphasis fw-medium">{$LANG->getGlobal('password')}</label>
                                             <div class="ms-auto">
                                                 <a title="{$LANG->getGlobal('lostpass')}" href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$GCONFIG.site_lang}&amp;{$smarty.const.NV_NAME_VARIABLE}=users&amp;{$smarty.const.NV_OP_VARIABLE}=lostpass" tabindex="-1">{$LANG->getGlobal('lostpass')}?</a>
                                             </div>
@@ -34,7 +38,7 @@
                                     {if $GFX_CHK}
                                     {if $CAPTCHA_TYPE eq 'captcha'}
                                     <div class="mb-3">
-                                        <label for="seccode" class="form-label text-dark fw-medium">{$LANG->getGlobal('securitycode1')}</label>
+                                        <label for="seccode" class="form-label text-body-emphasis fw-medium">{$LANG->getGlobal('securitycode1')}</label>
                                         <div class="d-flex gap-2 align-items-center">
                                             <input name="nv_seccode" type="text" id="seccode" maxlength="{$smarty.const.NV_GFX_NUM}" class="form-control captcha" data-error-mess="{$LOGIN_ERROR_SECURITY}" autocomplete="off">
                                             <img id="vimg" class="captcha-img" alt="{$LANG->getGlobal('securitycode1')}" src="{$smarty.const.SRC_CAPTCHA}">

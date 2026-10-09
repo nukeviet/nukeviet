@@ -62,7 +62,12 @@
 
 <!-- BEGIN: pre_form -->
 <form class="loginform form-horizontal" method="post" action="{NV_BASE_ADMINURL}index.php" data-toggle="preForm">
+    <!-- BEGIN: captcha_required -->
+    <div class="inner-message error">{GLANG.login_captcha_required}</div>
+    <!-- END: captcha_required -->
+    <!-- BEGIN: login_info -->
     <div class="inner-message normal">{GLANG.adminlogininfo}</div>
+    <!-- END: login_info -->
     <div class="form-detail">
         <div class="form-group">
             <label for="nv_login" class="col-xs-9 control-label form-label">{GLANG.login_name}:</label>
@@ -116,6 +121,30 @@
         <script>var sitekey = '{RECAPTCHA_SITEKEY}';</script>
         <!-- END: recaptcha3 -->
         <!-- END: recaptcha -->
+        <!-- BEGIN: turnstile -->
+        <div class="m-bottom">
+            <div id="cf-turnstile" class="cf-turnstile"></div>
+            <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"></script>
+            <script type="text/javascript">
+                turnstile.ready(function() {
+                    $('[type=submit]').prop('disabled', true);
+                    turnstile.render('#cf-turnstile', {
+                        'sitekey': '{TURNSTILE_SITEKEY}',
+                        'callback': function(res) {
+                            $('[type=submit]').prop('disabled', false);
+                        },
+                        'expired-callback': function() {
+                            $('[type=submit]').prop('disabled', true);
+                        },
+                        'error-callback': function() {
+                            $('[type=submit]').prop('disabled', true);
+                        },
+                        'language': '{SITELANG}'
+                    });
+                });
+            </script>
+        </div>
+        <!-- END: turnstile -->
         <!-- BEGIN: warning_ssl -->
         <div class="form-group">
             <small><strong class="error">{GLANG.warning_ssl}:</strong> {GLANG.content_ssl}</small>

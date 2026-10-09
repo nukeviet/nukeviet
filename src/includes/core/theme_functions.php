@@ -525,6 +525,7 @@ function nv_xmlSitemapIndex_generate()
                 if (!empty($sitemaps)) {
                     foreach ($sitemaps as $filename) {
                         if (preg_match('/^sitemap(\.*)([a-zA-Z0-9\-]*)\.php$/', $filename, $m)) {
+                            $link = '';
                             if ($m[0] == 'sitemap.php') {
                                 $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap';
                             } elseif ($m[1] == '.' and $m[2] != '') {
@@ -547,6 +548,7 @@ function nv_xmlSitemapIndex_generate()
                 if (!empty($sitemaps)) {
                     foreach ($sitemaps as $filename) {
                         if (preg_match('/^sitemap(\.*)([a-zA-Z0-9\-]*)\.php$/', $filename, $m)) {
+                            $link = '';
                             if ($m[0] == 'sitemap.php') {
                                 $link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=sitemap';
                             } elseif ($m[1] == '.' and $m[2] != '') {
@@ -982,9 +984,10 @@ function nv_get_blocks(string $theme, bool $cache = true)
  *
  * @param string $code_ipt Name của ô input captcha hình truyền thống
  * @param string $captcha Để trống thì lấy $module_captcha
- * @return string Có dạng data-recaptcha3="1" data-recaptcha2="1" data-turnstile="1" data-captcha="secode"
+ * @param bool $as_array Trả về mảng [tên thuộc tính => giá trị]
+ * @return string|array Chuỗi có dạng data-recaptcha3="1" data-recaptcha2="1" data-turnstile="1" data-captcha="secode"
  */
-function nv_captcha_form_attrs(string $code_ipt, string $captcha = ''): string
+function nv_captcha_form_attrs(string $code_ipt, string $captcha = '', bool $as_array = false): string|array
 {
     global $module_captcha, $global_config;
     empty($captcha) && $captcha = $module_captcha;
@@ -992,17 +995,26 @@ function nv_captcha_form_attrs(string $code_ipt, string $captcha = ''): string
     $attrs = [];
     if ($captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
         // Nếu dùng reCaptcha v3
-        $attrs[] = ' data-recaptcha3="1"';
+        $attrs['data-recaptcha3'] = '1';
     } elseif ($captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
         // Nếu dùng reCaptcha v2
-        $attrs[] = ' data-recaptcha2="1"';
+        $attrs['data-recaptcha2'] = '1';
     } elseif ($captcha == 'turnstile') {
         // Nếu dùng Cloudflare Turnstile
-        $attrs[] = ' data-turnstile="1"';
+        $attrs['data-turnstile'] = '1';
     } elseif ($captcha == 'captcha') {
         // Nếu dùng Captcha hình truyền thống
-        $attrs[] = ' data-captcha="' . $code_ipt . '"';
+        $attrs['data-captcha'] = $code_ipt;
     }
 
-    return implode(' ', $attrs);
+    if ($as_array) {
+        return $attrs;
+    }
+
+    $html = [];
+    foreach ($attrs as $name => $value) {
+        $html[] = ' ' . $name . '="' . $value . '"';
+    }
+
+    return implode(' ', $html);
 }
