@@ -265,6 +265,8 @@ $lang_module['updatemod_notexist'] = 'Ce module n\'est pas installé sur votre s
 $lang_module['updatemod_notcertified'] = 'Ce module n\'est pas certifié et le système ne peut pas contrôler les risques';
 $lang_module['dbcheck_error_files'] = 'Pour installer Nukeviet avec ce type de CSDL, vous devez télécharger en plus un programme';
 $lang_module['dbcheck_error_driver'] = 'Erreur: Systeme n\'est pas compatible a ce type de CSDL, veuillez utiliser un autre type';
+$lang_module['dbcheck_error_version'] = 'Erreur: La version %1$s du serveur de base de données n\'est pas prise en charge. NukeViet nécessite au minimum %2$s (MySQL 5.7.9 ou MariaDB 10.2.2)';
+$lang_module['dbcheck_error_rowformat'] = 'Erreur: Le serveur de base de données utilise innodb_default_row_format = %s. NukeViet nécessite DYNAMIC, veuillez ajuster la configuration du serveur de base de données';
 $lang_module['update_error_check_version_sys'] = 'Erreur: Impossible de vérifier la version du système';
 $lang_module['update_error_check_version_ext'] = 'Erreur: Impossible de vérifier la version de l\'application';
 $lang_module['thanks_text'] = 'gestion NuKeViets denvoyer nos sincères Muon grâce à nos collègues ainsi que la contribution au développement pour chung de NukeViet jusqu à présent, espérons que vous continuerez à promouvoir et soutenir toujours aussi bien que continuer à bâtir NuKeViets croissance mains.';

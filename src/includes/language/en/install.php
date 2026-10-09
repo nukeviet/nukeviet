@@ -265,6 +265,8 @@ $lang_module['updatemod_notexist'] = 'You did not install this module on system 
 $lang_module['updatemod_notcertified'] = 'This module is not certificated so that system could not control risks which could occur';
 $lang_module['dbcheck_error_files'] = 'To install NukeViet for this kind database, you need to download program additional support. Click here to learn about the program additional support and the appropriate download . After downloading, extract and upload the files and folders on your website ,reload this page and choose  this database to test.';
 $lang_module['dbcheck_error_driver'] = 'Error: System does not support this kind of database, please select the kind other.';
+$lang_module['dbcheck_error_version'] = 'Error: Database server version %1$s is not supported. NukeViet requires at least %2$s (MySQL 5.7.9 or MariaDB 10.2.2)';
+$lang_module['dbcheck_error_rowformat'] = 'Error: The database server has innodb_default_row_format = %s. NukeViet requires DYNAMIC, please adjust the database server configuration';
 $lang_module['update_error_check_version_sys'] = 'Error: Unable to check the version of the system';
 $lang_module['update_error_check_version_ext'] = 'Error: Unable to check the version of the extension';
 $lang_module['thanks_text'] = 'NuKeViets management would like to send our sincere thanks to our fellow members as well as for their contribution to the development of NuKeViet so far, hope you continue to promote and always support As well as continue building hands NuKeViets growing.';

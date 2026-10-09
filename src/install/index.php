@@ -395,10 +395,8 @@ if ($step == 1) {
     // Hàm nội bộ: kết nối CSDL và thiết lập charset (dùng cho cả 3 ajax action)
     // -------------------------------------------------------------------
     $nv_install_db_connect = function () use (&$db, &$db_config, $sys_info, $nv_Lang) {
-        $db_config['autosetcollation'] = false;
         if (empty($db_config['collation'])) {
-            $db_config['collation'] = 'utf8_general_ci';
-            $db_config['autosetcollation'] = true;
+            $db_config['collation'] = 'utf8mb4_unicode_ci';
         }
         $db_config['charset'] = strstr($db_config['collation'], '_', true);
 
@@ -442,15 +440,22 @@ if ($step == 1) {
         }
 
         if ($db_config['dbtype'] == 'mysql') {
-            if ($db_config['autosetcollation']) {
-                $mysql_server_version = $db->getAttribute(PDO::ATTR_SERVER_VERSION);
-                if (version_compare($mysql_server_version, '5.5.3') >= 0 && $db_config['charset'] != 'utf8mb4') {
-                    $db_config['charset'] = 'utf8mb4';
-                    $db_config['collation'] = 'utf8mb4_unicode_ci';
-                } elseif (version_compare($mysql_server_version, '5.5.3') < 0 && $db_config['charset'] != 'utf8') {
-                    $db_config['charset'] = 'utf8';
-                    $db_config['collation'] = 'utf8_general_ci';
-                }
+            /*
+             * Yêu cầu server hỗ trợ index đến 3072 bytes (MySQL 5.7.9+, MariaDB 10.2.2+, row format DYNAMIC/COMPRESSED)
+             * vì các cột VARCHAR(250) utf8mb4 có index cần 1000 bytes, vượt giới hạn 767 bytes của server cũ.
+             * Dùng SELECT VERSION() thay cho PDO::ATTR_SERVER_VERSION vì MariaDB cũ trả về dạng 5.5.5-10.x.x-MariaDB
+             */
+            $server_version = (string) $db->query('SELECT VERSION()')->fetchColumn();
+            $min_version = stripos($server_version, 'mariadb') !== false ? '10.2.2' : '5.7.9';
+            if (version_compare(preg_replace('/[^0-9\.].*$/', '', $server_version), $min_version, '<')) {
+                $db_config['error'] = $nv_Lang->getModule('dbcheck_error_version', $server_version, $min_version);
+                return false;
+            }
+
+            $row_format = strtolower((string) $db->query('SELECT @@innodb_default_row_format')->fetchColumn());
+            if (!in_array($row_format, ['dynamic', 'compressed'], true)) {
+                $db_config['error'] = $nv_Lang->getModule('dbcheck_error_rowformat', $row_format);
+                return false;
             }
 
             try {
@@ -463,20 +468,6 @@ if ($step == 1) {
             if ($row['character_set_database'] != $db_config['charset'] || $row['collation_database'] != $db_config['collation']) {
                 $db_config['error'] = 'Error character set database';
                 return false;
-            }
-        }
-
-        if ($db_config['charset'] == 'utf8mb4') {
-            $db = new NukeViet\Core\Database($db_config);
-            if (empty($db->connect)) {
-                $db_config['charset'] = 'utf8';
-                $db_config['collation'] = 'utf8_general_ci';
-                $db = new NukeViet\Core\Database($db_config);
-                try {
-                    $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
-                } catch (Throwable $e) {
-                    trigger_error($e);
-                }
             }
         }
 

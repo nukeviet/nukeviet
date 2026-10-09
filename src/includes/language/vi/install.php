@@ -265,6 +265,8 @@ $lang_module['updatemod_notexist'] = 'Bạn chưa cài đặt module này lên h
 $lang_module['updatemod_notcertified'] = 'Module này chưa được chứng nhận do đó hệ thống có thể sẽ không kiểm soát được những rủi ro có thể gặp phải.';
 $lang_module['dbcheck_error_files'] = 'Để cài đặt NukeViet với loại CSDL này, bạn cần tải thêm trình hỗ trợ. Nhấp vào đây để tìm hiểu về trình hỗ trợ và tải về bản phù hợp. Sau khi tải về, giải nén và upload các tệp và thư mục lên website của bạn, tải lại trang này và chọn loại CSDL để kiểm tra. Nếu không có thông báo này hiện lên nữa, điều đó có nghĩa là bạn đã sẵn sàng để tiến hành bước tiếp theo. Bên dưới liệt kê danh sách các file cần có để tiến hành cài đặt với loại CSDL này.';
 $lang_module['dbcheck_error_driver'] = 'Lỗi: Hệ thống không hỗ trợ loại CSDL này. Vui lòng chọn loại khác';
+$lang_module['dbcheck_error_version'] = 'Lỗi: Phiên bản máy chủ CSDL %1$s không được hỗ trợ. NukeViet yêu cầu tối thiểu %2$s (MySQL 5.7.9 hoặc MariaDB 10.2.2)';
+$lang_module['dbcheck_error_rowformat'] = 'Lỗi: Máy chủ CSDL đang đặt innodb_default_row_format = %s. NukeViet yêu cầu giá trị DYNAMIC, vui lòng điều chỉnh cấu hình máy chủ CSDL';
 $lang_module['update_error_check_version_sys'] = 'Lỗi: Không thể kiểm tra phiên bản hệ thống';
 $lang_module['update_error_check_version_ext'] = 'Lỗi: Không thể kiểm tra phiên bản các ứng dụng';
 $lang_module['thanks_text'] = 'Ban quản trị NuKeViet xin được gửi lời cảm ơn chân thành đến các thành viên đã đồng hành cũng như đóng góp công sức của mình cho công cuộc phát triển NuKeViet từ trước cho đến nay, mong các bạn tiếp tục phát huy và luôn luôn ủng hộ cũng như tiếp tục chung tay xây dựng NuKeViet ngày càng lớn mạnh.';
