@@ -187,3 +187,20 @@ $lang_module['widget_no'] = 'Không còn tiện ích khả dụng nào';
 $lang_module['widget_swap_success'] = 'Đổi vị trí thành công';
 
 $lang_module['open_link'] = 'Mở liên kết';
+
+$lang_module['warn_title'] = 'Cảnh báo thiết lập không an toàn';
+$lang_module['warn_fix'] = 'Thiết lập';
+$lang_module['warn_debug'] = 'Chế độ gỡ lỗi (debug) đang bật, thông tin lỗi và cấu trúc hệ thống có thể bị lộ ra ngoài. Chỉ nên bật khi đang phát triển.';
+$lang_module['warn_closed_site'] = 'Website đang ở trạng thái đóng cửa, khách truy cập không thể xem nội dung.';
+$lang_module['warn_http'] = 'Bạn đang truy cập khu vực quản trị qua HTTP không mã hóa, mật khẩu và phiên đăng nhập có thể bị đánh cắp. Hãy cài đặt chứng chỉ SSL và sử dụng HTTPS.';
+$lang_module['warn_ssl_https'] = 'Website có HTTPS nhưng chưa bật chuyển hướng toàn bộ HTTP sang HTTPS, cookie sẽ không được gắn cờ Secure.';
+$lang_module['warn_robots'] = 'Tệp robots.txt đang chặn máy tìm kiếm lập chỉ mục toàn bộ website (Disallow: /).';
+$lang_module['warn_csp'] = 'Chính sách bảo mật nội dung (CSP) đang tắt, website dễ bị tấn công XSS và chèn mã độc hơn.';
+$lang_module['warn_rp'] = 'Referrer-Policy đang tắt, địa chỉ trang có thể bị gửi kèm sang website bên ngoài.';
+$lang_module['warn_pp'] = 'Permissions-Policy và Feature-Policy đều đang tắt, trình duyệt không bị giới hạn quyền truy cập camera, micro, vị trí... từ mã nhúng.';
+$lang_module['warn_anti_iframe'] = 'Chống iframe đang tắt và CSP không khai báo frame-ancestors, website có thể bị nhúng vào trang khác để tấn công clickjacking.';
+$lang_module['warn_login_blocker'] = 'Chức năng chặn dò mật khẩu khi đăng nhập đang tắt.';
+$lang_module['warn_flood_blocker'] = 'Chức năng chống flood đang tắt.';
+$lang_module['warn_admin_captcha'] = 'Trang đăng nhập quản trị chưa sử dụng captcha.';
+$lang_module['warn_cross_restrict'] = 'Chức năng chặn truy vấn chéo site hoặc chéo khu vực quản trị đang tắt, website dễ bị tấn công CSRF hơn.';
+$lang_module['warn_null_origin'] = 'Đang cho phép truy vấn có Origin null nhưng không giới hạn IP nào.';

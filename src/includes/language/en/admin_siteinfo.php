@@ -187,3 +187,20 @@ $lang_module['widget_no'] = 'There are no more available widget';
 $lang_module['widget_swap_success'] = 'Changed position successfully';
 
 $lang_module['open_link'] = 'Open link';
+
+$lang_module['warn_title'] = 'Insecure settings warning';
+$lang_module['warn_fix'] = 'Settings';
+$lang_module['warn_debug'] = 'Debug mode is enabled, error details and system structure may be exposed. Only enable it during development.';
+$lang_module['warn_closed_site'] = 'The website is closed, visitors cannot view the content.';
+$lang_module['warn_http'] = 'You are accessing the admin area over unencrypted HTTP, passwords and login sessions may be stolen. Install an SSL certificate and use HTTPS.';
+$lang_module['warn_ssl_https'] = 'The website supports HTTPS but redirecting all HTTP requests to HTTPS is not enabled, cookies will not get the Secure flag.';
+$lang_module['warn_robots'] = 'robots.txt is blocking search engines from indexing the entire website (Disallow: /).';
+$lang_module['warn_csp'] = 'Content Security Policy (CSP) is disabled, the website is more vulnerable to XSS and code injection.';
+$lang_module['warn_rp'] = 'Referrer-Policy is disabled, page URLs may be sent to external websites.';
+$lang_module['warn_pp'] = 'Permissions-Policy and Feature-Policy are both disabled, embedded code is not restricted from accessing camera, microphone, location...';
+$lang_module['warn_anti_iframe'] = 'Anti-iframe is disabled and CSP does not declare frame-ancestors, the website can be embedded in other pages for clickjacking attacks.';
+$lang_module['warn_login_blocker'] = 'Login brute-force blocking is disabled.';
+$lang_module['warn_flood_blocker'] = 'Flood blocking is disabled.';
+$lang_module['warn_admin_captcha'] = 'The admin login page does not use captcha.';
+$lang_module['warn_cross_restrict'] = 'Cross-site or cross-admin request restriction is disabled, the website is more vulnerable to CSRF attacks.';
+$lang_module['warn_null_origin'] = 'Requests with a null Origin are allowed without any IP restriction.';

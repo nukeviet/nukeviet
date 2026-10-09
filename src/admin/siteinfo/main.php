@@ -26,6 +26,83 @@ if (defined('NV_IS_GODADMIN') and file_exists(NV_ROOTDIR . '/install/update_data
 }
 $tpl->assign('PACKAGE_UPDATE', $package_update);
 
+// Cảnh báo các thiết lập nguy hiểm, chỉ hiển thị cho admin có quyền sửa thiết lập tương ứng
+$security_warnings = [];
+$site_fulladmin = (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['idsite'] > 0));
+$base_url_mod = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=';
+$url_system = $base_url_mod . 'settings&amp;' . NV_OP_VARIABLE . '=system';
+$url_security = $base_url_mod . 'settings&amp;' . NV_OP_VARIABLE . '=security&amp;selectedtab=';
+
+if ($site_fulladmin) {
+    if (NV_DEBUG) {
+        $security_warnings[] = ['danger', 'warn_debug', $url_system];
+    }
+    if (!empty($global_config['closed_site'])) {
+        $security_warnings[] = ['danger', 'warn_closed_site', $url_system];
+    }
+    if ($nv_Server->getOriginalProtocol() !== 'https') {
+        $security_warnings[] = ['danger', 'warn_http', $url_system];
+    } elseif ((int) $global_config['ssl_https'] !== 1) {
+        $security_warnings[] = ['danger', 'warn_ssl_https', $url_system];
+    }
+}
+
+// robots.txt chặn toàn bộ site
+if (isset($admin_mods['seotools'])) {
+    $robots_block_all = (function () {
+        $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
+        if (!file_exists($cache_file)) {
+            return false;
+        }
+        include $cache_file;
+        foreach ([$cache ?? '', $cache_other ?? ''] as $data) {
+            $data = empty($data) ? [] : unserialize($data, NV_UNSERIALIZE_SAFE);
+            if (is_array($data) and isset($data['/']) and (int) $data['/'] === 0) {
+                return true;
+            }
+        }
+        return false;
+    })();
+    if ($robots_block_all) {
+        $security_warnings[] = ['danger', 'warn_robots', $base_url_mod . 'seotools&amp;' . NV_OP_VARIABLE . '=robots'];
+    }
+}
+
+if ($site_fulladmin) {
+    if (empty($global_config['nv_csp_act']) or empty($global_config['nv_csp'])) {
+        $security_warnings[] = ['warning', 'warn_csp', $url_security . '5'];
+    }
+    if (empty($global_config['nv_rp_act']) or empty($global_config['nv_rp'])) {
+        $security_warnings[] = ['warning', 'warn_rp', $url_security . '6'];
+    }
+    if ((empty($global_config['nv_pp_act']) or empty($global_config['nv_pp'])) and (empty($global_config['nv_fp_act']) or empty($global_config['nv_fp']))) {
+        $security_warnings[] = ['warning', 'warn_pp', $url_security . '7'];
+    }
+}
+
+// Các tab 0-4 của thiết lập an ninh chỉ admin tối cao được sửa
+if (defined('NV_IS_GODADMIN')) {
+    if (!NV_ANTI_IFRAME and empty($global_config['frame_ancestors'])) {
+        $security_warnings[] = ['warning', 'warn_anti_iframe', $url_security . '0'];
+    }
+    if (empty($global_config['is_login_blocker'])) {
+        $security_warnings[] = ['warning', 'warn_login_blocker', $url_security . '0'];
+    }
+    if (empty($global_config['is_flood_blocker'])) {
+        $security_warnings[] = ['warning', 'warn_flood_blocker', $url_security . '1'];
+    }
+    if (!in_array('a', explode(',', (string) ($global_config['captcha_area'] ?? '')), true)) {
+        $security_warnings[] = ['warning', 'warn_admin_captcha', $url_security . '2'];
+    }
+    if (empty($global_config['crosssite_restrict']) or empty($global_config['crossadmin_restrict'])) {
+        $security_warnings[] = ['warning', 'warn_cross_restrict', $url_security . '4'];
+    }
+    if (!empty($global_config['allow_null_origin']) and empty($global_config['ip_allow_null_origin'])) {
+        $security_warnings[] = ['warning', 'warn_null_origin', $url_security . '4'];
+    }
+}
+$tpl->assign('SECURITY_WARNINGS', $security_warnings);
+
 // Cấu hình giao diện
 $theme_config = get_theme_config();
 

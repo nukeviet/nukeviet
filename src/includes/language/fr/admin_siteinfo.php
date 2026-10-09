@@ -187,3 +187,20 @@ $lang_module['widget_no'] = 'Il n\'y a plus de widget disponible';
 $lang_module['widget_swap_success'] = 'Changement de position réussi';
 
 $lang_module['open_link'] = 'Ouvrir le lien';
+
+$lang_module['warn_title'] = 'Avertissement de paramètres non sécurisés';
+$lang_module['warn_fix'] = 'Paramètres';
+$lang_module['warn_debug'] = 'Le mode débogage est activé, les détails des erreurs et la structure du système peuvent être exposés. Ne l\'activez que pendant le développement.';
+$lang_module['warn_closed_site'] = 'Le site est fermé, les visiteurs ne peuvent pas voir le contenu.';
+$lang_module['warn_http'] = 'Vous accédez à l\'administration via HTTP non chiffré, les mots de passe et les sessions peuvent être volés. Installez un certificat SSL et utilisez HTTPS.';
+$lang_module['warn_ssl_https'] = 'Le site prend en charge HTTPS mais la redirection de toutes les requêtes HTTP vers HTTPS n\'est pas activée, les cookies n\'auront pas l\'attribut Secure.';
+$lang_module['warn_robots'] = 'robots.txt empêche les moteurs de recherche d\'indexer l\'ensemble du site (Disallow: /).';
+$lang_module['warn_csp'] = 'La politique de sécurité du contenu (CSP) est désactivée, le site est plus vulnérable aux attaques XSS et à l\'injection de code.';
+$lang_module['warn_rp'] = 'Referrer-Policy est désactivée, l\'adresse des pages peut être envoyée aux sites externes.';
+$lang_module['warn_pp'] = 'Permissions-Policy et Feature-Policy sont toutes deux désactivées, le code intégré n\'est pas limité dans l\'accès à la caméra, au microphone, à la localisation...';
+$lang_module['warn_anti_iframe'] = 'L\'anti-iframe est désactivé et la CSP ne déclare pas frame-ancestors, le site peut être intégré dans d\'autres pages pour des attaques de clickjacking.';
+$lang_module['warn_login_blocker'] = 'Le blocage des tentatives de connexion par force brute est désactivé.';
+$lang_module['warn_flood_blocker'] = 'Le blocage du flood est désactivé.';
+$lang_module['warn_admin_captcha'] = 'La page de connexion de l\'administration n\'utilise pas de captcha.';
+$lang_module['warn_cross_restrict'] = 'La restriction des requêtes intersites ou inter-administration est désactivée, le site est plus vulnérable aux attaques CSRF.';
+$lang_module['warn_null_origin'] = 'Les requêtes avec une Origin null sont autorisées sans aucune restriction d\'IP.';

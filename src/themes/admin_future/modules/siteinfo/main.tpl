@@ -13,6 +13,19 @@
     </div>
 </div>
 {/if}
+{if not empty($SECURITY_WARNINGS)}
+<div class="card border-danger mb-4" id="security-warnings">
+    <div class="card-header text-bg-danger fw-medium"><i class="fa-solid fa-triangle-exclamation"></i> {$LANG->getModule('warn_title')}</div>
+    <ul class="list-group list-group-flush">
+        {foreach from=$SECURITY_WARNINGS item=warn}
+        <li class="list-group-item list-group-item-{$warn[0]} d-flex align-items-center gap-2">
+            <div class="flex-grow-1">{$LANG->getModule($warn[1])}</div>
+            <a href="{$warn[2]}" class="btn btn-sm btn-{$warn[0]} flex-shrink-0"><i class="fa-solid fa-gear"></i> {$LANG->getModule('warn_fix')}</a>
+        </li>
+        {/foreach}
+    </ul>
+</div>
+{/if}
 {if $IS_EDIT}
 <link type="text/css" href="{$smarty.const.ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet">
 <script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
