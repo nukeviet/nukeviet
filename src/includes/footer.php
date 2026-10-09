@@ -61,10 +61,6 @@ $html_headers['Cache-Control'] = 'max-age=0, no-cache, no-store, must-revalidate
 $html_headers['Pragma'] = 'no-cache'; // HTTP 1.0.
 $html_headers['Expires'] = '-1'; // Proxies.
 
-if (str_contains(NV_USER_AGENT, 'MSIE')) {
-    $html_headers['X-UA-Compatible'] = 'IE=edge,chrome=1';
-}
-
 /*
  * Xuất cấu hình robot vào header
  * Chú ý kiểm tra biến $nv_BotManager vì có trường hợp undefined $nv_BotManager

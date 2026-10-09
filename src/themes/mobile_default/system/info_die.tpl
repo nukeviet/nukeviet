@@ -4,7 +4,6 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset={SITE_CHARSET}" />
         <meta http-equiv="expires" content="0" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{PAGE_TITLE}</title>
         <link rel="shortcut icon" href="{SITE_FAVICON}" />

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="expires" content="0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <style>body{padding-top:20px;margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-size:16px;font-weight:400;line-height:1.5;color:#212529;background-color:#6c757d}a,a:hover,a:active,a:visited{color:#0d6efd;text-decoration:underline}.wrap{display:flex;justify-content:center}.card{width:90%;max-width:500px;text-align:center;border-radius:5px;border:1px solid #dee2e6;background-color:#fff}@media (min-width:768px){.card{width:450px}}.card-body{padding:15px 20px}.card-footer{padding:10px 20px;background-color:#f8f9fa;font-size:14px;border-top:1px solid #dee2e6;border-bottom:1px solid #dee2e6;border-bottom-left-radius:5px;border-bottom-right-radius:5px}.img{margin-bottom:10px}.title{font-size:18px;margin-bottom:8px}.message{margin-bottom:6px}.code{font-size:12px;color:#6c757d}.img-color-1{fill:#dc3545}.img-color-2{fill:#0d6efd}</style>
 </head>
 

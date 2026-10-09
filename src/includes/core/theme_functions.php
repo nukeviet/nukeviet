@@ -170,10 +170,6 @@ function nv_htmlOutput($html, $type = 'html', $custom_headers = [])
     $html_headers['X-Content-Type-Options'] = 'nosniff';
     $html_headers['X-XSS-Protection'] = '1; mode=block';
 
-    if (str_contains(NV_USER_AGENT, 'MSIE')) {
-        $html_headers['X-UA-Compatible'] = 'IE=edge,chrome=1';
-    }
-
     if (!empty($headers)) {
         // $headers sẽ ghi đè $html_headers
         $html_headers = array_merge($html_headers, $headers);

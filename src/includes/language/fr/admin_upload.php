@@ -30,7 +30,6 @@ $lang_module['upload_file_created'] = 'Le fichier a été créé avec succès';
 $lang_module['upload_file_maxsize'] = 'Le fichier dépasse la limite de taille';
 $lang_module['upload_file_error_movefile'] = 'Erreur: impossible de créer le fichier, merci de vérifier les permissions (chmod) du répertoire';
 $lang_module['upload_file_error_invalidurl'] = 'Chemin d\'accès au fichier invalide';
-$lang_module['upload_error_browser_ie6'] = 'Erreur: Le système ne prend pas en charge cette fonctionnalité sur Internet Explorer 6, vous devez mettre à jour votre navigateur vers une version plus récente ou de passer à d\'autres navigateurs tels que Mozilla Firefox, Safari, Opera, Chrome ...';
 $lang_module['upload_empty_path'] = 'Avis: Vous devez sélectionner le dossier';
 $lang_module['upload_size'] = 'Taille';
 $lang_module['upload_width'] = 'Largeur';

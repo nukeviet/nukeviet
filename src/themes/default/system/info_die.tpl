@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="content-type" content="text/html; charset={SITE_CHARSET}">
     <meta http-equiv="expires" content="0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <style>body{padding-top:20px;margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-size:16px;font-weight:400;line-height:1.5;color:#212529;background-color:#6c757d}a,a:hover,a:active,a:visited{color:#0d6efd;text-decoration:none}.wrap{display:flex;justify-content:center}.card{width:90%;max-width:500px;text-align:center;border-radius:5px;border:1px solid #dee2e6;background-color:#fff}@media (min-width:768px){.card{width:450px}}.card-body{padding:15px 20px}.card-footer{background-color:#f8f9fa;border-top:1px solid #dee2e6;border-bottom:1px solid #dee2e6;border-bottom-left-radius:5px;border-bottom-right-radius:5px}.card-footer a{display:inline-flex;justify-content:center;align-items:center;padding:10px 15px}.img{margin-bottom:10px}.title{font-size:18px;margin-bottom:8px}.img-color-1{fill:#dc3545;fill-rule:nonzero}.img-color-2{fill:#495057;fill-rule:nonzero}.img-color-3{fill:#fd7e14;fill-rule:nonzero}.img-color-4{fill:#0d6efd;fill-rule:nonzero}.icon{display:inline-block;width:16px;height:16px;margin-right:3px}</style>
 </head>
 
