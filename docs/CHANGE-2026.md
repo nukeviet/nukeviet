@@ -24,7 +24,14 @@ Các bước này lấy tệp từ giao diện cũ nên phải làm trước khi
     - `themes/default/js/bootstrap.min.js` sang `themes/admin_dauthau/js/bootstrap.min.js`
     - `themes/default/images/users/no_avatar.png` sang `themes/admin_dauthau/images/users/no_avatar.png`
 
-Site không cần giữ giao diện quản trị cũ thì bỏ qua 2 bước trên, chỉ làm bước sau: vào Quản trị > Cấu hình > Thiết lập Plugin, xóa 2 plugin `get_global_admin_theme` và `get_module_admin_theme`. Bước này phải làm trước khi MR, vì MR xóa 2 tệp plugin, nếu plugin còn khai báo thì toàn site báo lỗi và không vào được quản trị để xóa.
+Site không cần giữ giao diện quản trị cũ thì bỏ qua 2 bước trên, chỉ làm các bước sau:
+
+1. Đăng nhập quản trị tối cao, mở sẵn trang Quản trị > Công cụ web > Dọn dẹp hệ thống
+2. Chạy SQL sau, thay `nv5` bằng tiền tố CSDL của site:
+    ```sql
+    DELETE FROM nv5_plugins WHERE plugin_file IN ('get_global_admin_theme.php', 'get_module_admin_theme.php') AND plugin_module_file = '';
+    ```
+3. Quay lại trang Dọn dẹp hệ thống, chọn "Làm sạch cache" rồi bấm thực hiện
 
 **Giao diện ngoài site**
 
