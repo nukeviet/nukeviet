@@ -365,7 +365,6 @@ $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions
 (281, 'module', 'comment', 1, 0, 'comment', 'comment', '" . $global_config['version'] . " " . $global_config['version_time'] . "', " . NV_CURRENTTIME . ", 'VINADES.,JSC <contact@vinades.vn>', ''),
 (327, 'module', 'two-step-verification', 1, 0, 'two-step-verification', 'two_step_verification', '" . $global_config['version'] . " " . $global_config['version_time'] . "', " . NV_CURRENTTIME . ", 'VINADES.,JSC <contact@vinades.vn>', ''),
 (307, 'theme', 'default', 0, 0, 'default', 'default', '" . $global_config['version'] . " " . $global_config['version_time'] . "', " . NV_CURRENTTIME . ", 'VINADES.,JSC <contact@vinades.vn>', ''),
-(311, 'theme', 'mobile_default', 0, 0, 'mobile_default', 'mobile_default', '" . $global_config['version'] . " " . $global_config['version_time'] . "', " . NV_CURRENTTIME . ", 'VINADES.,JSC <contact@vinades.vn>', ''),
 (22, 'module', 'inform', 1, 0, 'inform', 'inform', '" . $global_config['version'] . " " . $global_config['version_time'] . "', " . NV_CURRENTTIME . ", 'VINADES.,JSC <contact@vinades.vn>', ''),
 (22, 'module', 'myapi', 1, 0, 'myapi', 'myapi', '" . $global_config['version'] . " " . $global_config['version_time'] . "', " . NV_CURRENTTIME . ", 'VINADES.,JSC <contact@vinades.vn>', '')";
 

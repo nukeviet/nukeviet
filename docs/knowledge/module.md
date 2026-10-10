@@ -24,11 +24,6 @@ src/
     │   ├── images/ten-module/
     │   ├── js/ten-module.js
     │   └── modules/ten-module/   # Chứa các file .tpl
-    ├── mobile_default/           # Giao diện mobile mặc định ngoài site
-    │   ├── css/ten-module.css
-    │   ├── images/ten-module/
-    │   ├── js/ten-module.js
-    │   └── modules/ten-module/   # Chứa các file .tpl
     ├── admin_default/            # Giao diện Admin mặc định
     │   ├── css/ten-module.css
     │   ├── images/ten-module/

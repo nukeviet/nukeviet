@@ -52,7 +52,7 @@ DIRS=()
 for P in "src/modules/$MODULE" "src/admin/modules/$MODULE" "src/admin/$MODULE"; do
     [ -d "$P" ] && DIRS+=("$P")
 done
-for THEME in default mobile_default admin_default admin_future; do
+for THEME in default admin_default admin_future; do
     D="src/themes/$THEME/modules/$MODULE"
     [ -d "$D" ] && DIRS+=("$D")
 done

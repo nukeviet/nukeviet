@@ -1,6 +1,6 @@
 ---
 name: migrate2future-block
-description: Chuyển một block NukeViet 5 từ XTemplate sang NVSmarty/Bootstrap 5 cho theme future. Hỗ trợ cả block `global.*` và `module.*`. Sửa PHP shared block + tạo template future, không đụng đến override của default/mobile_default.
+description: Chuyển một block NukeViet 5 từ XTemplate sang NVSmarty/Bootstrap 5 cho theme future. Hỗ trợ cả block `global.*` và `module.*`. Sửa PHP shared block + tạo template future, không đụng đến override của default.
 argument-hint: <module/block_name>
 disable-model-invocation: false
 allowed-tools: Read, Grep, Glob, Edit, Write, Bash
@@ -21,7 +21,7 @@ Ví dụ: `/migrate2future-block contact/contact_list` → tự phát hiện pre
 - **Được sửa:** `src/modules/{MODULE}/blocks/{PREFIX}.{BLOCK}.php`
 - **Được tạo/sửa:** `src/themes/future/modules/{MODULE}/{PREFIX}.{BLOCK}.tpl`
 - **Được tạo/sửa (nếu có config function):** `src/themes/future/modules/{MODULE}/{PREFIX}.{BLOCK}.config.tpl`
-- **KHÔNG ĐƯỢC đụng vào:** bất kỳ file nào trong `src/themes/default/` hoặc `src/themes/mobile_default/` — các theme đó có override riêng.
+- **KHÔNG ĐƯỢC đụng vào:** bất kỳ file nào trong `src/themes/default/` — theme đó có override riêng.
 
 ### Code style
 
@@ -66,7 +66,6 @@ Ví dụ: `/migrate2future-block contact/contact_list` → tự phát hiện pre
 
 2. **PHP override theo theme (chỉ ĐỌC, không sửa):**
    - `src/themes/default/modules/{MODULE}/{PREFIX}.{BLOCK}.php` (nếu tồn tại)
-   - `src/themes/mobile_default/modules/{MODULE}/{PREFIX}.{BLOCK}.php` (nếu tồn tại)
    - Mục đích: hiểu cấu trúc dữ liệu, icon class, các assign `CD`/`OTHER` đang dùng.
 
 3. **Template cũ (chỉ ĐỌC):**
@@ -307,7 +306,7 @@ Báo cáo:
 ## Checklist tự kiểm tra trước khi hoàn thành
 
 **Phạm vi:**
-- [ ] **Không** sửa bất kỳ file nào trong `src/themes/default/` hoặc `src/themes/mobile_default/`
+- [ ] **Không** sửa bất kỳ file nào trong `src/themes/default/`
 
 **PHP shared block:**
 - [ ] Dùng `get_block_tpl_dir()`, không dùng `get_tpl_dir()` hay `get_module_tpl_dir()`

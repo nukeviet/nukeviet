@@ -619,7 +619,7 @@ class NvUpdate
     {
         $mods = [];
         foreach ($exts as $mod) {
-            if (($mod['type'] == 'module' and in_array($mod['name'], ['banners', 'comment', 'contact', 'feeds', 'menu', 'news', 'page', 'seek', 'statistics', 'users', 'voting', 'two-step-verification'], true)) or ($mod['type'] == 'theme' and in_array($mod['name'], ['default', 'mobile_default'], true))) {
+            if (($mod['type'] == 'module' and in_array($mod['name'], ['banners', 'comment', 'contact', 'feeds', 'menu', 'news', 'page', 'seek', 'statistics', 'users', 'voting', 'two-step-verification'], true)) or ($mod['type'] == 'theme' and in_array($mod['name'], ['default'], true))) {
                 $mod['note'] = $this->lang->getModule('update_mod_uptodate');
             } else {
                 $mod['note'] = $this->lang->getModule('update_mod_othermod');

@@ -30,8 +30,7 @@ $installMods['about'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'sitemap' => [],
         'rss' => []
@@ -50,34 +49,28 @@ $installMods['news'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'viewcat' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'topic' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'content' => [
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'detail' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'tag' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'rss' => [
             'show_func' => 1,
@@ -87,18 +80,15 @@ $installMods['news'] = [
         'search' => [
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'groups' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'author' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'sitemap' => [],
         'print' => [],
@@ -120,68 +110,58 @@ $installMods['users'] = [
         'main' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['main'],
             'show_func' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'login' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['login'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'register' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['register'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'lostpass' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['lostpass'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'active' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['active'],
             'show_func' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'lostactivelink' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['lostactivelink'],
             'show_func' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'r2s' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['r2s'],
             'show_func' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'editinfo' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['editinfo'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'memberlist' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['memberlist'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'groups' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['groups'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'avatar' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['avatar'],
@@ -192,30 +172,26 @@ $installMods['users'] = [
             'func_custom_name' => $install_lang['modfuncs']['users']['logout'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'oauth' => [],
         'datadeletion' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['datadeletion'],
             'show_func' => 1,
             'in_submenu' => 0,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'security-privacy' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['security-privacy'],
             'show_func' => 1,
             'in_submenu' => 0,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'verify-password' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['verify-password'],
             'show_func' => 1,
             'in_submenu' => 0,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ]
     ],
     'icon' => 'fa-solid fa-users'
@@ -232,8 +208,7 @@ $installMods['myapi'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'main'
         ]
     ],
     'icon' => 'fa-brands fa-nfc-symbol'
@@ -248,8 +223,7 @@ $installMods['inform'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ]
     ],
     'icon' => 'fa-solid fa-bell'
@@ -265,8 +239,7 @@ $installMods['contact'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ]
     ],
     'icon' => 'fa-solid fa-phone'
@@ -283,49 +256,42 @@ $installMods['statistics'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'allreferers' => [
             'func_custom_name' => $install_lang['modfuncs']['statistics']['allreferers'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'allcountries' => [
             'func_custom_name' => $install_lang['modfuncs']['statistics']['allcountries'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'allbrowsers' => [
             'func_custom_name' => $install_lang['modfuncs']['statistics']['allbrowsers'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'allos' => [
             'func_custom_name' => $install_lang['modfuncs']['statistics']['allos'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'allbots' => [
             'func_custom_name' => $install_lang['modfuncs']['statistics']['allbots'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'referer' => [
             'func_custom_name' => $install_lang['modfuncs']['statistics']['referer'],
             'show_func' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ]
     ],
     'icon' => 'fa-solid fa-chart-simple'
@@ -342,8 +308,7 @@ $installMods['voting'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ]
     ],
     'icon' => 'fa-solid fa-square-poll-vertical'
@@ -359,23 +324,19 @@ $installMods['banners'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'addads' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'clientinfo' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'stats' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'cledit' => [],
         'click' => [],
@@ -395,8 +356,7 @@ $installMods['seek'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'opensearch' => []
     ],
@@ -421,8 +381,7 @@ $installMods['feeds'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ]
     ],
     'icon' => 'fa-solid fa-rss'
@@ -438,8 +397,7 @@ $installMods['page'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main'
         ],
         'sitemap' => [],
         'rss' => []
@@ -456,23 +414,19 @@ $installMods['comment'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'post' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'like' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'delete' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'down' => [
             'show_func' => 1
@@ -494,13 +448,11 @@ $installMods['siteterms'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'rss' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'sitemap' => []
     ],
@@ -518,18 +470,15 @@ $installMods['two-step-verification'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'confirm' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'setup' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right',
-            'theme_mobile' => 'main'
+            'theme_default' => 'left-main-right'
         ],
         'qrimg' => []
     ],
@@ -867,123 +816,6 @@ $blockGroups = [
                 'config' => 'a:1:{s:14:"module_in_menu";a:8:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";}}'
             ]
         ]
-    ],
-    'mobile_default' => [ // Theme Mobile_Default
-        'MENU_SITE' => [
-            [
-                'module' => 'menu',
-                'file_name' => 'global.metismenu.php',
-                'title' => 'Menu Site',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:0;}'
-            ],
-            [
-                'module' => 'inform',
-                'file_name' => 'global.inform.php',
-                'title' => $install_lang['blocks_groups']['inform']['global.inform'],
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
-            ],
-            [
-                'module' => 'users',
-                'file_name' => 'global.user_button.php',
-                'title' => 'Sign In',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
-            ]
-        ],
-        'SOCIAL_ICONS' => [
-            [
-                'module' => 'contact',
-                'file_name' => 'global.contact_default.php',
-                'title' => 'Contact Default',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
-            ],
-            [
-                'module' => 'contact',
-                'file_name' => 'global.contact_form.php',
-                'title' => 'Feedback',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
-            ],
-            [
-                'module' => 'theme',
-                'file_name' => 'global.social.php',
-                'title' => 'Social icon',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => $social
-            ],
-            [
-                'module' => 'theme',
-                'file_name' => 'global.QR_code.php',
-                'title' => 'QR code',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
-            ]
-        ],
-        'FOOTER_SITE' => [
-            [
-                'module' => 'theme',
-                'file_name' => 'global.copyright.php',
-                'title' => 'Copyright',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => $copyright
-            ]
-        ],
-        'MENU_FOOTER' => [
-            [
-                'module' => 'theme',
-                'file_name' => 'global.menu_footer.php',
-                'title' => $install_lang['blocks_groups']['theme']['global.menu_footer'],
-                'template' => 'primary',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => 'a:1:{s:14:"module_in_menu";a:9:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";i:8;s:9:"siteterms";}}'
-            ]
-        ],
-        'COMPANY_INFO' => [
-            [
-                'module' => 'theme',
-                'file_name' => 'global.company_info.php',
-                'title' => $install_lang['blocks_groups']['theme']['global.company_info'],
-                'template' => 'primary',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => $company
-            ]
-        ]
     ]
 ];
 
@@ -1036,7 +868,6 @@ $func_id = 0;
 $array_funcid = [];
 $array_funcid_mod = [];
 $theme_default = [];
-$theme_mobile = [];
 foreach ($installMods as $mod_name => $vals) {
     if (isset($vals['funcs'])) {
         $subweight = 0;
@@ -1047,9 +878,6 @@ foreach ($installMods as $mod_name => $vals) {
             $array_funcid_mod[$mod_name][$func_name] = $func_id;
             if (!empty($func_vals['theme_default'])) {
                 $theme_default[$func_id] = $func_vals['theme_default'];
-            }
-            if (!empty($func_vals['theme_mobile'])) {
-                $theme_mobile[$func_id] = $func_vals['theme_mobile'];
             }
 
             $show_func = !empty($func_vals['show_func']) ? 1 : 0;
@@ -1079,17 +907,10 @@ foreach ($installMods as $mod_name => $vals) {
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes');
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)');
 $sth->execute([0, 'left-main-right', 'default']);
-$sth->execute([0, 'main', 'mobile_default']);
 
 if (!empty($theme_default)) {
     foreach ($theme_default as $funcid => $_key) {
         $sth->execute([$funcid, $_key, 'default']);
-    }
-}
-
-if (!empty($theme_mobile)) {
-    foreach ($theme_mobile as $funcid => $_key) {
-        $sth->execute([$funcid, $_key, 'mobile_default']);
     }
 }
 

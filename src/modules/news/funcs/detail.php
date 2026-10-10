@@ -531,8 +531,8 @@ if (isset($site_mods['comment']) and isset($module_config[$module_name]['activec
     $content_comment = '';
 }
 
-// Xu ly Layout tuy chinh (khong ap dung cho theme mobile_default)
-$module_info['layout_funcs'][$op_file] = (!empty($news_contents['layout_func']) and 'mobile_default' != $global_config['module_theme']) ? $news_contents['layout_func'] : $module_info['layout_funcs'][$op_file];
+// Xu ly Layout tuy chinh (khong ap dung cho giao dien mobile)
+$module_info['layout_funcs'][$op_file] = (!empty($news_contents['layout_func']) and !preg_match($global_config['check_theme_mobile'], $global_config['module_theme'])) ? $news_contents['layout_func'] : $module_info['layout_funcs'][$op_file];
 
 // Xử lý giọng đọc nếu có
 $voicedata = empty($news_contents['voicedata']) ? [] : json_decode($news_contents['voicedata'], true);

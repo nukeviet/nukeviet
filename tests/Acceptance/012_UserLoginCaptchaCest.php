@@ -222,23 +222,7 @@ class UserLoginCaptchaCest
     }
 
     /**
-     * 8. Giao diện mobile_default
-     *
-     * @group user-login-captcha
-     */
-    public function mobileThemeThroughCaptcha(AcceptanceTester $I, Scenario $scenario)
-    {
-        $I->amOnUrl($I->getDomain() . '/vi/?nvvithemever=m');
-        $I->amOnUrl($I->getDomain() . '/vi/users/login/');
-        if (!$I->executeJS('return !!document.querySelector(\'script[src*="themes/mobile_default/"]\');')) {
-            $scenario->skip('Site không bật giao diện mobile_default');
-        }
-
-        $this->loginThroughCaptcha($I);
-    }
-
-    /**
-     * 9. Giao diện future
+     * 8. Giao diện future
      *
      * @group user-login-captcha
      */
@@ -255,7 +239,7 @@ class UserLoginCaptchaCest
     }
 
     /**
-     * 10. Tài khoản bật 2FA bị yêu cầu captcha: giải captcha xong sang bước 2FA,
+     * 9. Tài khoản bật 2FA bị yêu cầu captcha: giải captcha xong sang bước 2FA,
      * bước 2FA không hỏi lại captcha, nhập đúng mã thì đăng nhập được
      *
      * @group user-login-captcha
