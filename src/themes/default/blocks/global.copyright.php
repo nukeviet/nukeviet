@@ -15,41 +15,23 @@ if (!defined('NV_MAINFILE')) {
 
 if (!nv_function_exists('nv_copyright_info')) {
     /**
-     * nv_copyright_info_config()
-     *
+     * @param string $module
+     * @param array $data_block
      * @return string
      */
-    function nv_copyright_info_config()
+    function nv_copyright_info_config($module, $data_block)
     {
-        global $nv_Lang, $data_block;
+        global $nv_Lang;
 
-        $html = '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('copyright_by') . ':</label>';
-        $html .= '<div class="col-sm-9"><input class="form-control" type="text" name="copyright_by" value="' . nv_htmlspecialchars($data_block['copyright_by']) . '"></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('copyright_url') . ':</label>';
-        $html .= '<div class="col-sm-9"><input class="form-control" type="text" name="copyright_url" value="' . nv_htmlspecialchars($data_block['copyright_url']) . '"></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('design_by') . ':</label>';
-        $html .= '<div class="col-sm-9"><input class="form-control" type="text" name="design_by" value="' . nv_htmlspecialchars($data_block['design_by']) . '"></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('design_url') . ':</label>';
-        $html .= '<div class="col-sm-9"><input class="form-control" type="text" name="design_url" value="' . nv_htmlspecialchars($data_block['design_url']) . '"></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('siteterms_url') . ':</label>';
-        $html .= '<div class="col-sm-9"><input class="form-control" type="text" name="siteterms_url" value="' . nv_htmlspecialchars($data_block['siteterms_url']) . '"></div>';
-        $html .= '</div>';
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir(__DIR__);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('CONFIG', $data_block);
 
-        return $html;
+        return $tpl->fetch('global.copyright.config.tpl');
     }
 
     /**
-     * nv_copyright_info_submit()
-     *
      * @return array
      */
     function nv_copyright_info_submit()
@@ -68,8 +50,6 @@ if (!nv_function_exists('nv_copyright_info')) {
     }
 
     /**
-     * nv_copyright_info()
-     *
      * @param array $block_config
      * @return string
      */
@@ -80,12 +60,12 @@ if (!nv_function_exists('nv_copyright_info')) {
         empty($block_config['copyright_by']) && $block_config['copyright_by'] = $global_config['site_name'];
         empty($block_config['copyright_url']) && $block_config['copyright_url'] = 'http://' . $global_config['my_domains'][0];
 
-        $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir($block_config['real_path'] . '/smarty');
-        $stpl->assign('LANG', $nv_Lang);
-        $stpl->assign('DATA', $block_config);
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($block_config['real_path']);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('DATA', $block_config);
 
-        return $stpl->fetch('global.copyright.tpl');
+        return $tpl->fetch('global.copyright.tpl');
     }
 }
 

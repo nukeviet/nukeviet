@@ -1,51 +1,32 @@
-<!-- BEGIN: tree -->
-<li>
-    <a title="{MENUTREE.note}" href="{MENUTREE.link}" rel="dofollow" {MENUTREE.target}>{MENUTREE.title}</a>
-    <!-- BEGIN: tree_content -->
-    <ul>
-        {TREE_CONTENT}
+{function writeTrees menus=[] parent=''}
+{foreach from=$menus item=menu}
+<li{if not empty($menu.css)} class="{$menu.css}"{/if}>
+    <div class="d-flex align-items-center gap-1">
+        {if not empty($menu.sub)}
+        <button type="button" class="tree-toggle btn btn-link link-secondary p-0 lh-1 flex-shrink-0{if not $menu.is_active} collapsed{/if}" data-bs-toggle="collapse" data-bs-target="#treeview-{$CONFIG.bid}-{$menu.id}" aria-expanded="{if $menu.is_active}true{else}false{/if}" aria-controls="treeview-{$CONFIG.bid}-{$menu.id}" aria-label="{$LANG->getGlobal('toggle_submenu')}">
+            <i class="icon-collapsed fa-regular fa-square-plus fa-fw"></i>
+            <i class="icon-expanded fa-regular fa-square-minus fa-fw"></i>
+        </button>
+        {else}
+        <span class="fa-fw text-secondary flex-shrink-0"><i class="fa-solid fa-angle-right fa-xs"></i></span>
+        {/if}
+        <a href="{$menu.link}" {$menu.target} title="{$menu.note}" class="d-flex align-items-center gap-2 py-1 overflow-hidden {if $menu.is_active}link-primary fw-medium{else}link-body-emphasis{/if}">
+            {if not empty($menu.icon) and not empty($CONFIG.show_icon)}
+            <img src="{$menu.icon}" alt="{$menu.title}" class="fw-20 fh-20 object-fit-contain flex-shrink-0">
+            {/if}
+            <span class="text-truncate">{$menu.title_trim}</span>
+        </a>
+    </div>
+    {if not empty($menu.sub)}
+    <ul class="list-unstyled mb-0 ms-2 ps-3 border-start collapse{if $menu.is_active} show{/if}" id="treeview-{$CONFIG.bid}-{$menu.id}" data-bs-parent="#{$parent}">
+        {writeTrees menus=$menu.sub parent="treeview-{$CONFIG.bid}-{$menu.id}"}
     </ul>
-    <!-- END: tree_content -->
+    {/if}
 </li>
-<!-- END: tree -->
-<!-- BEGIN: main -->
-<link rel="stylesheet" href="{ASSETS_STATIC_URL}/js/jquery/jquery.treeview.css" type="text/css" />
-<script src="{ASSETS_STATIC_URL}/js/jquery/jquery.cookie.js" type="text/javascript"></script>
-<script src="{ASSETS_STATIC_URL}/js/jquery/jquery.treeview.min.js" type="text/javascript"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-    $("#navigation{MENUID}").treeview({
-    collapsed: true,
-    unique: true,
-    persist: "location"
-    });
-    });
-</script>
-<style type="text/css">
-    #navigation{MENUID} a {
-    background-color: transparent !important
-    }
-
-    #navigation .current,
-    #navigation .current a {
-        font-weight: bold
-    }
-
-    #navigation .current ul a {
-        font-weight: normal
-    }
-</style>
-<ul id="navigation{MENUID}">
-    <!-- BEGIN: loopcat1 -->
-    <li {CAT1.class}>
-        <a title="{CAT1.note}" href="{CAT1.link}" rel="dofollow" {CAT1.target}>{CAT1.title}</a>
-        <!-- BEGIN: cat2 -->
-        <ul>
-            {HTML_CONTENT}
-        </ul>
-        <!-- END: cat2 -->
-    </li>
-    <!-- END: loopcat1 -->
-</ul>
-<div class="clear"></div>
-<!-- END: main -->
+{/foreach}
+{/function}
+<nav>
+    <ul class="treeview-menu list-unstyled mb-0" id="treeview-{$CONFIG.bid}">
+        {writeTrees menus=$MENUS parent="treeview-{$CONFIG.bid}"}
+    </ul>
+</nav>

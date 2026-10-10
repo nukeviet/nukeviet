@@ -1,10 +1,8 @@
-<!-- BEGIN: main -->
-<span class="visible-xs-inline-block"><a title="{LANG.joinnow}" class="pointer button" data-toggle="tip" data-target="#social_btns" data-click="y"><em class="fa fa-share-alt fa-lg"></em><span class="hidden">{LANG.joinnow}</span></a></span>
-<div id="social_btns" class="content">
-    <ul class="social_btns">
-        <!-- BEGIN: item -->
-        <li><a href="{DATA.url}" title="{DATA.name}"<!-- BEGIN: target --> target="_blank"<!-- END: target --> style="--hover-color:#{DATA.color}"><i class="{DATA.icon}"></i></a></li>
-        <!-- END: item -->
-    </ul>
-</div>
-<!-- END: main -->
+<div class="h4 mt-3 d-lg-none socal-icons-title">{$LANG->getGlobal('joinnow')}</div>
+<ul class="socal-icons list-unstyled d-flex align-items-center gap-2 mb-0">
+    {foreach from=$SOCIALS item=icon}
+    <li>
+        <a href="{$icon.url}" title="{$icon.name}" aria-label="{$icon.name}" style="--hover-color:#{$icon.color}"><i class="{$icon.icon}"></i></a>
+    </li>
+    {/foreach}
+</ul>

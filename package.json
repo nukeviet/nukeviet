@@ -18,9 +18,9 @@
   },
   "scripts": {
     "admin-css": "npm-run-all admin-compile admin-css-prefix admin-css-rtl",
-    "admin-css-prefix": "postcss --config build/postcss.config.mjs --replace \"src/themes/admin_future/css/*.css\" \"!src/themes/admin_future/css/*.rtl*.css\" \"!src/themes/admin_future/css/*.min.css\"",
-    "admin-css-rtl": "cross-env NODE_ENV=RTL postcss --config build/postcss.config.mjs --dir \"src/themes/admin_future/css\" --ext \".rtl.css\" \"src/themes/admin_future/css/*.css\" \"!src/themes/admin_future/css/*.rtl*.css\" \"!src/themes/admin_future/css/*.min.css\"",
-    "admin-compile": "sass --style expanded --source-map --embed-sources scss/admin_future/:src/themes/admin_future/css/",
+    "admin-css-prefix": "postcss --config build/postcss.config.mjs --replace \"src/themes/admin_default/css/*.css\" \"!src/themes/admin_default/css/*.rtl*.css\" \"!src/themes/admin_default/css/*.min.css\"",
+    "admin-css-rtl": "cross-env NODE_ENV=RTL postcss --config build/postcss.config.mjs --dir \"src/themes/admin_default/css\" --ext \".rtl.css\" \"src/themes/admin_default/css/*.css\" \"!src/themes/admin_default/css/*.rtl*.css\" \"!src/themes/admin_default/css/*.min.css\"",
+    "admin-compile": "sass --style expanded --source-map --embed-sources scss/admin_default/:src/themes/admin_default/css/",
     "watch-admin-css": "nodemon --watch scss/ --ext scss --exec \"npm-run-all admin-compile admin-css-prefix admin-css-rtl\"",
     "watch-admin": "npm-run-all --parallel watch-admin-*",
     "core-css-prefix": "postcss --config build/postcss.config.mjs --replace \"src/assets/css/core.*.css\" \"!src/assets/css/*.rtl*.css\" \"!src/assets/css/*.min.css\"",
@@ -33,9 +33,9 @@
     "install-compile": "sass --style expanded --no-source-map scss/install/install.scss src/install/css/install.css",
     "install-css-prefix": "postcss --config build/postcss.config.mjs --replace \"src/install/css/install.css\"",
     "site-css": "npm-run-all site-compile site-css-prefix site-css-rtl",
-    "site-css-prefix": "postcss --config build/postcss.config.mjs --replace \"src/themes/future/css/*.css\" \"!src/themes/future/css/*.rtl*.css\" \"!src/themes/future/css/*.min.css\"",
-    "site-css-rtl": "cross-env NODE_ENV=RTL postcss --config build/postcss.config.mjs --dir \"src/themes/future/css\" --ext \".rtl.css\" \"src/themes/future/css/*.css\" \"!src/themes/future/css/*.rtl*.css\" \"!src/themes/future/css/*.min.css\"",
-    "site-compile": "sass --style expanded --source-map --embed-sources scss/future/:src/themes/future/css/",
+    "site-css-prefix": "postcss --config build/postcss.config.mjs --replace \"src/themes/default/css/*.css\" \"!src/themes/default/css/*.rtl*.css\" \"!src/themes/default/css/*.min.css\"",
+    "site-css-rtl": "cross-env NODE_ENV=RTL postcss --config build/postcss.config.mjs --dir \"src/themes/default/css\" --ext \".rtl.css\" \"src/themes/default/css/*.css\" \"!src/themes/default/css/*.rtl*.css\" \"!src/themes/default/css/*.min.css\"",
+    "site-compile": "sass --style expanded --source-map --embed-sources scss/default/:src/themes/default/css/",
     "watch-site-css": "nodemon --watch scss/ --ext scss --exec \"npm-run-all site-compile site-css-prefix site-css-rtl\"",
     "watch-site": "npm-run-all --parallel watch-site-*"
   }

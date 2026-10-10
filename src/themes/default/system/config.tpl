@@ -1,384 +1,218 @@
-<!-- BEGIN: main -->
-<script src="{NV_STATIC_URL}themes/{NV_ADMIN_THEME}/js/colpick.js"></script>
-<link rel="stylesheet" href="{NV_STATIC_URL}themes/{NV_ADMIN_THEME}/js/colpick.css">
-<div class="alert alert-warning"><i class="fa fa-fw fa-info-circle"></i>{LANG.note}</div>
-<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
-    <ul class="nav nav-tabs" role="tablist" id="cfgThemeTabs">
-        <li role="presentation" class="{TAB0_ACTIVE}"><a href="#configThemeAll" aria-controls="configThemeAll" aria-offsets="0" role="tab" data-toggle="tab">{LANG.allpages}</a></li>
-        <li role="presentation" class="{TAB1_ACTIVE}"><a href="#configThemeContent" aria-controls="configThemeContent" aria-offsets="1" role="tab" data-toggle="tab">{LANG.content}</a></li>
-        <li role="presentation" class="{TAB2_ACTIVE}"><a href="#configThemeBlock" aria-controls="configThemeBlock" aria-offsets="2" role="tab" data-toggle="tab">{LANG.block}</a></li>
-        <li role="presentation" class="{TAB3_ACTIVE}"><a href="#configThemeHeader" aria-controls="configThemeHeader" aria-offsets="3" role="tab" data-toggle="tab">{LANG.header}</a></li>
-        <li role="presentation" class="{TAB4_ACTIVE}"><a href="#configThemeFooter" aria-controls="configThemeFooter" aria-offsets="4" role="tab" data-toggle="tab">{LANG.footer}</a></li>
-        <li role="presentation" class="{TAB5_ACTIVE}"><a href="#configThemeCSS" aria-controls="configThemeCSS" aria-offsets="5" role="tab" data-toggle="tab">CSS</a></li>
-        <li role="presentation" class="{TAB6_ACTIVE}"><a href="#configThemeGFont" aria-controls="configThemeGFont" aria-offsets="6" role="tab" data-toggle="tab">Google Fonts</a></li>
-    </ul>
-    <div class="tab-content theme-config-tabpanel">
-        <div role="tabpanel" id="configThemeAll" class="tab-pane{TAB0_ACTIVE}">
-            <div class="panel-body theme-config-basic">
-                <div class="form-group">
-                    <label class="cname">{LANG.color}</label>
-                    <input type="text" value="{CONFIG_THEME_BODY.color}" name="body_color" id="picker_body_color" class="form-control input-sm sizem" />
-                </div>
-                <div class="form-group">
-                    <label class="cname">{LANG.font_size}</label>
-                    <input type="text" value="{CONFIG_THEME_BODY.font_size}" name="body_font_size" class="form-control input-sm sizem" />
-                </div>
-                <div class="form-group">
-                    <label class="cname">{LANG.font_family}</label>
-                    <input type="text" value="{CONFIG_THEME_BODY.font_family}" name="body_font_family" class="form-control input-sm" />
-                </div>
-                <div class="form-group">
-                    <label class="cname">{LANG.font_style}</label>
-                    <label class="cval"><input type="checkbox" name="body_font_weight" {CONFIG_THEME_BODY.font_weight} /><strong>{LANG.font_style_bold}</strong></label>
-                    <label class="cval"><input type="checkbox" name="body_font_italic" {CONFIG_THEME_BODY.font_style} /><em>{LANG.font_style_italic}</em></label>
-                </div>
-                <div class="form-group">
-                    <label class="cname">{LANG.background}</label>
-                    <input type="text" value="{CONFIG_THEME_BODY.background_color}" name="body_background_color" id="picker_body_background" class="form-control input-sm sizem" />
-                    <div class="input-group-wrap">
-                        <div class="input-group input-group-sm">
-                            <input type="text" id="body_bg_image" value="{CONFIG_THEME_BODY.background_image}" name="body_background_image" placeholder="{LANG.background_imgage}" class="form-control input-sm" />
-                            <div class="input-group-btn">
-                                <button data-toggle="nv_open_filemanage" data-area="body_bg_image" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
+<script type="text/javascript" src="{$smarty.const.ASSETS_STATIC_URL}/js/codemirror/css.bundle.js"></script>
+<script src="{$smarty.const.ASSETS_STATIC_URL}/js/pickr/pickr.min.js"></script>
+{if not empty($ERROR)}
+<div class="alert alert-danger" role="alert">{join($ERROR, '<br />')}</div>
+{elseif not empty($WARNING)}
+<div class="alert alert-warning" role="alert">
+    <div class="mb-2 fw-medium fs-5">{$LANG->getModule('tconf_warning')}:</div>
+    {join($WARNING, '<br />')}
+</div>
+{elseif not empty($CLEAN_TAB)}
+<div class="alert alert-info" role="alert">{$LANG->getModule('tconf_cleaned')}</div>
+{elseif not empty($SUCCESS)}
+<div class="alert alert-success" role="alert">{$LANG->getModule('tconf_success')}</div>
+{/if}
+<form method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}" novalidate>
+    <div class="card">
+        <div class="card-header card-header-tabs">
+            <ul class="nav nav-tabs nav-justified" id="tab-tconf">
+                <li class="nav-item">
+                    <a class="nav-link text-truncate{$TAB eq 'color' ? ' active' : ''}" data-bs-toggle="tab" id="link-color" data-tab="color" data-bs-target="#tab-color" aria-current="{$TAB eq 'color' ? 'true' : 'false'}" role="tab" aria-controls="tab-color" aria-selected="{$TAB eq 'color' ? 'true' : 'false'}" href="#" data-location="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}&amp;tab=color">{$LANG->getModule('tconf_color_mode')}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-truncate{$TAB eq 'variables' ? ' active' : ''}" data-bs-toggle="tab" id="link-variables" data-tab="variables" data-bs-target="#tab-variables" aria-current="{$TAB eq 'variables' ? 'true' : 'false'}" role="tab" aria-controls="tab-variables" aria-selected="{$TAB eq 'variables' ? 'true' : 'false'}" href="#" data-location="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}&amp;tab=variables">{$LANG->getModule('tconf_customize_variables')}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-truncate{$TAB eq 'css' ? ' active' : ''}" data-bs-toggle="tab" id="link-css" data-tab="css" data-bs-target="#tab-css" aria-current="{$TAB eq 'css' ? 'true' : 'false'}" role="tab" aria-controls="tab-css" aria-selected="{$TAB eq 'css' ? 'true' : 'false'}" href="#" data-location="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}&amp;tab=css">{$LANG->getModule('tconf_css')}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-truncate{$TAB eq 'gfonts' ? ' active' : ''}" data-bs-toggle="tab" id="link-gfonts" data-tab="gfonts" data-bs-target="#tab-gfonts" aria-current="{$TAB eq 'gfonts' ? 'true' : 'false'}" role="tab" aria-controls="tab-gfonts" aria-selected="{$TAB eq 'gfonts' ? 'true' : 'false'}" href="#" data-location="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}&amp;tab=gfonts">{$LANG->getModule('tconf_gfonts')}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+                <div class="tab-pane fade{$TAB eq 'color' ? ' show active' : ''}" id="tab-color" role="tabpanel" aria-labelledby="link-color" tabindex="0">
+                    <div class="form-contents">
+                        <div class="mb-3">
+                            <div class="hstack gap-2">
+                                <div>
+                                    <input type="radio" class="btn-check" name="color_mode" value="light" id="color_mode_light" autocomplete="off"{if not isset($CONFIG.color, $CONFIG.color.mode) or $CONFIG.color.mode eq 'light'} checked{/if}>
+                                    <label class="btn btn-outline-primary" for="color_mode_light"><i class="fa-solid fa-sun"></i> {$LANG->getModule('tconf_cm_light')}</label>
+                                </div>
+                                <div>
+                                    <input type="radio" class="btn-check" name="color_mode" value="dark" id="color_mode_dark" autocomplete="off"{if isset($CONFIG.color, $CONFIG.color.mode) and $CONFIG.color.mode eq 'dark'} checked{/if}>
+                                    <label class="btn btn-outline-dark" for="color_mode_dark"><i class="fa-solid fa-moon"></i> {$LANG->getModule('tconf_cm_dark')}</label>
+                                </div>
+                                <div>
+                                    <input type="radio" class="btn-check" name="color_mode" value="auto" id="color_mode_auto" autocomplete="off"{if isset($CONFIG.color, $CONFIG.color.mode) and $CONFIG.color.mode eq 'auto'} checked{/if}>
+                                    <label class="btn btn-outline-success" for="color_mode_auto"><i class="fa-solid fa-wand-magic-sparkles"></i> {$LANG->getModule('tconf_cm_auto')}</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <input type="text" value="{CONFIG_THEME_BODY.background_repeat}" name="body_background_repeat" class="form-control input-sm sizem" placeholder="{LANG.background_imgage_repeat}" />
-                    <input type="text" value="{CONFIG_THEME_BODY.background_position}" name="body_background_position" class="form-control input-sm sizem" placeholder="{LANG.background_imgage_postion}" />
-                </div>
-                <div class="form-group">
-                    <label class="cname">{LANG.margin}</label>
-                    <input type="text" name="body_margin" value="{CONFIG_THEME_BODY.margin}" placeholder="{LANG.margin_all}" class="form-control input-sm sizem" />
-                    <input type="text" name="body_margin_top" value="{CONFIG_THEME_BODY.margin_top}" placeholder="{LANG.margin_top}" class="form-control input-sm sizem" />
-                    <input type="text" name="body_margin_bottom" value="{CONFIG_THEME_BODY.margin_bottom}" placeholder="{LANG.margin_bottom}" class="form-control input-sm sizem" />
-                    <input type="text" name="body_margin_left" value="{CONFIG_THEME_BODY.margin_left}" placeholder="{LANG.margin_left}" class="form-control input-sm sizem" />
-                    <input type="text" name="body_margin_right" value="{CONFIG_THEME_BODY.margin_right}" placeholder="{LANG.margin_right}" class="form-control input-sm sizem" />
-                </div>
-                <div class="form-group">
-                    <label class="cname">{LANG.padding}</label>
-                    <input type="text" name="body_padding" value="{CONFIG_THEME_BODY.padding}" placeholder="{LANG.padding_all}" class="form-control input-sm sizem" />
-                    <input type="text" name="body_padding_top" value="{CONFIG_THEME_BODY.padding_top}" placeholder="{LANG.padding_top}" class="form-control input-sm sizem" />
-                    <input type="text" name="body_padding_bottom" value="{CONFIG_THEME_BODY.padding_bottom}" placeholder="{LANG.padding_bottom}" class="form-control input-sm sizem" />
-                    <input type="text" name="body_padding_left" value="{CONFIG_THEME_BODY.padding_left}" placeholder="{LANG.padding_left}" class="form-control input-sm sizem" />
-                    <input type="text" name="body_padding_right" value="{CONFIG_THEME_BODY.padding_right}" placeholder="{LANG.padding_right}" class="form-control input-sm sizem" />
-                </div>
-                <div class="form-group">
-                    <label class="cname">{LANG.link}</label>
-                    <input type="text" value="{CONFIG_THEME_A_LINK.color}" name="link_a_color" id="picker_link_color" class="form-control input-sm sizem" placeholder="{LANG.color}" />
-                    <label class="cval"><input type="checkbox" name="link_a_font_weight" {CONFIG_THEME_A_LINK.font_weight} /><strong>{LANG.font_style_bold}</strong></label>
-                    <label class="cval"><input type="checkbox" name="link_a_font_italic" {CONFIG_THEME_A_LINK.font_style} /><em>{LANG.font_style_italic}</em></label>
-                </div>
-                <div class="form-group">
-                    <label class="cname">{LANG.link} (hover)</label>
-                    <input type="text" value="{CONFIG_THEME_A_LINK_HOVER.color}" name="link_a_hover_color" id="picker_link_hover_color" class="form-control input-sm sizem" placeholder="{LANG.color}" />
-                    <label class="cval"><input type="checkbox" name="link_a_hover_font_weight" {CONFIG_THEME_A_LINK_HOVER.font_weight} /><strong>{LANG.font_style_bold}</strong></label>
-                    <label class="cval"><input type="checkbox" name="link_a_hover_font_italic" {CONFIG_THEME_A_LINK_HOVER.font_style} /><em>{LANG.font_style_italic}</em></label>
-                </div>
-                <div class="clearfix rowTextarea">
-                    <label class="cname">{LANG.customcss}</label>
-                    <div class="wrp">
-                        <textarea name="body_customcss" class="form-control" rows="4">{CONFIG_THEME_BODY.customcss}</textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div role="tabpanel" id="configThemeContent" class="tab-pane{TAB1_ACTIVE}">
-            <div class="panel-body theme-config-basic">
-                <div class="form-group">
-                    <label class="cname">{LANG.margin}</label>
-                    <input type="text" name="content_margin" value="{CONFIG_THEME_CONTENT.margin}" placeholder="{LANG.margin_all}" class="form-control input-sm sizem" />
-                    <input type="text" name="content_margin_top" value="{CONFIG_THEME_CONTENT.margin_top}" placeholder="{LANG.margin_top}" class="form-control input-sm sizem" />
-                    <input type="text" name="content_margin_bottom" value="{CONFIG_THEME_CONTENT.margin_bottom}" placeholder="{LANG.margin_bottom}" class="form-control input-sm sizem" />
-                    <input type="text" name="content_margin_left" value="{CONFIG_THEME_CONTENT.margin_left}" placeholder="{LANG.margin_left}" class="form-control input-sm sizem" />
-                    <input type="text" name="content_margin_right" value="{CONFIG_THEME_CONTENT.margin_right}" placeholder="{LANG.margin_right}" class="form-control input-sm sizem" />
-                </div>
-
-                <div class="form-group">
-                    <label class="cname">{LANG.padding}</label>
-                    <input type="text" name="content_padding" value="{CONFIG_THEME_CONTENT.padding}" placeholder="{LANG.padding_all}" class="form-control input-sm sizem" />
-                    <input type="text" name="content_padding_top" value="{CONFIG_THEME_CONTENT.padding_top}" placeholder="{LANG.padding_top}" class="form-control input-sm sizem" />
-                    <input type="text" name="content_padding_bottom" value="{CONFIG_THEME_CONTENT.padding_bottom}" placeholder="{LANG.padding_bottom}" class="form-control input-sm sizem" />
-                    <input type="text" name="content_padding_left" value="{CONFIG_THEME_CONTENT.padding_left}" placeholder="{LANG.padding_left}" class="form-control input-sm sizem" />
-                    <input type="text" name="content_padding_right" value="{CONFIG_THEME_CONTENT.padding_right}" placeholder="{LANG.padding_right}" class="form-control input-sm sizem" />
-                </div>
-
-                <div class="form-group">
-                    <label class="cname">{LANG.size}</label>
-                    <input type="text" name="content_width" value="{CONFIG_THEME_CONTENT.width}" placeholder="{LANG.size_width}" class="form-control input-sm sizem" />
-                    <input type="text" name="content_height" value="{CONFIG_THEME_CONTENT.height}" placeholder="{LANG.size_height}" class="form-control input-sm sizem" />
-                </div>
-
-                <div class="clearfix rowTextarea">
-                    <label class="cname">{LANG.customcss}</label>
-                    <div class="wrp">
-                        <textarea name="content_customcss" class="form-control" rows="4">{CONFIG_THEME_CONTENT.customcss}</textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div role="tabpanel" id="configThemeBlock" class="tab-pane{TAB2_ACTIVE}">
-            <div class="panel-body theme-config-basic">
-                <p><i>{LANG.block_note}</i></p>
-
-                <div class="form-group">
-                    <label class="cname">{LANG.background}</label>
-                    <input type="text" value="{CONFIG_THEME_BLOCK.background_color}" name="block_background_color" id="picker_block_header_bg" class="form-control input-sm sizem" />
-                    <div class="input-group-wrap">
-                        <div class="input-group input-group-sm">
-                            <input type="text" id="block_bg_image" value="{CONFIG_THEME_BLOCK.background_image}" name="block_background_image" placeholder="{LANG.background_imgage}" class="form-control input-sm" />
-                            <div class="input-group-btn">
-                                <button data-toggle="nv_open_filemanage" data-area="block_bg_image" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
+                        <div class="fs-5 fw-medium mb-2">{$LANG->getModule('tconf_light_theme')}</div>
+                        <div class="row g-3">
+                            <div class="col-6 col-sm-4 col-lg-3 col-xl-2 col-xxl-1">
+                                <input type="radio" class="btn-check" name="light_theme" value="light" id="light_theme_default" autocomplete="off" checked>
+                                <label class="btn d-grid btn-outline-primary" for="light_theme_default">
+                                    <img src="{$smarty.const.NV_BASE_SITEURL}themes/{$TEMPLATE}/default.jpg" class="img-fluid mb-2 mx-auto" alt="{$TEMPLATE}">
+                                    <span>{$LANG->getModule('tconf_default')}</span>
+                                </label>
                             </div>
                         </div>
-                    </div>
-                    <input type="text" value="{CONFIG_THEME_BLOCK.background_repeat}" name="block_background_repeat" class="form-control input-sm sizem" placeholder="{LANG.background_imgage_repeat}" />
-                    <input type="text" value="{CONFIG_THEME_BLOCK.background_position}" name="block_background_position" class="form-control input-sm sizem" placeholder="{LANG.background_imgage_postion}" />
-                </div>
-
-                <div class="form-group">
-                    <label class="cname">{LANG.margin}</label>
-                    <input type="text" name="block_margin" value="{CONFIG_THEME_BLOCK.margin}" placeholder="{LANG.margin_all}" class="form-control input-sm sizem" />
-                    <input type="text" name="block_margin_top" value="{CONFIG_THEME_BLOCK.margin_top}" placeholder="{LANG.margin_top}" class="form-control input-sm sizem" />
-                    <input type="text" name="block_margin_bottom" value="{CONFIG_THEME_BLOCK.margin_bottom}" placeholder="{LANG.margin_bottom}" class="form-control input-sm sizem" />
-                    <input type="text" name="block_margin_left" value="{CONFIG_THEME_BLOCK.margin_left}" placeholder="{LANG.margin_left}" class="form-control input-sm sizem" />
-                    <input type="text" name="block_margin_right" value="{CONFIG_THEME_BLOCK.margin_right}" placeholder="{LANG.margin_right}" class="form-control input-sm sizem" />
-                </div>
-
-                <div class="form-group">
-                    <label class="cname">{LANG.padding}</label>
-                    <input type="text" name="block_padding" value="{CONFIG_THEME_BLOCK.padding}" placeholder="{LANG.padding_all}" class="form-control input-sm sizem" />
-                    <input type="text" name="block_padding_top" value="{CONFIG_THEME_BLOCK.padding_top}" placeholder="{LANG.padding_top}" class="form-control input-sm sizem" />
-                    <input type="text" name="block_padding_bottom" value="{CONFIG_THEME_BLOCK.padding_bottom}" placeholder="{LANG.padding_bottom}" class="form-control input-sm sizem" />
-                    <input type="text" name="block_padding_left" value="{CONFIG_THEME_BLOCK.padding_left}" placeholder="{LANG.padding_left}" class="form-control input-sm sizem" />
-                    <input type="text" name="block_padding_right" value="{CONFIG_THEME_BLOCK.padding_right}" placeholder="{LANG.padding_right}" class="form-control input-sm sizem" />
-                </div>
-
-                <div class="form-group">
-                    <label class="cname">{LANG.border}</label>
-                    <input type="text" value="{CONFIG_THEME_BLOCK.border_color}" name="block_border_color" id="picker_block_background" class="form-control input-sm sizem" />
-                    <select name="block_border_style" class="form-control input-sm sizem">
-                        <option value="">&nbsp;</option>
-                        <!-- BEGIN: block_border_style -->
-                        <option value="{BLOCK_BORDER_STYLE.key}" {BLOCK_BORDER_STYLE.selected}>{BLOCK_BORDER_STYLE.value}</option>
-                        <!-- END: block_border_style -->
-                    </select>
-                    <input type="text" name="block_border_width" value="{CONFIG_THEME_BLOCK.border_width}" placeholder="{LANG.size_width}" class="form-control input-sm sizem" />
-                    <input type="text" name="block_border_radius" value="{CONFIG_THEME_BLOCK.border_radius}" placeholder="{LANG.radius}" class="form-control input-sm sizem" />
-                </div>
-
-                <div class="form-group">
-                    <label class="cname">{LANG.heading}</label>
-                    <input type="text" value="{CONFIG_THEME_BLOCK_HEADING.background_color}" name="block_heading_background_color" id="picker_block_header_bg" class="form-control input-sm sizem" />
-                    <div class="input-group-wrap">
-                        <div class="input-group input-group-sm">
-                            <input type="text" id="block_heading_bg_image" value="{CONFIG_THEME_BLOCK_HEADING.background_image}" name="block_heading_background_image" placeholder="{LANG.background_imgage}" class="form-control input-sm" />
-                            <div class="input-group-btn">
-                                <button data-toggle="nv_open_filemanage" data-area="block_heading_bg_image" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
-                            </div>
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary">{$LANG->getGlobal('save')}</button>
                         </div>
                     </div>
-                    <input type="text" value="{CONFIG_THEME_BLOCK_HEADING.background_repeat}" name="block_heading_background_repeat" class="form-control input-sm sizem" placeholder="{LANG.background_imgage_repeat}" />
-                    <input type="text" value="{CONFIG_THEME_BLOCK_HEADING.background_position}" name="block_heading_background_position" class="form-control input-sm sizem" placeholder="{LANG.background_imgage_postion}" />
                 </div>
-
-                <div class="clearfix rowTextarea">
-                    <label class="cname">{LANG.customcss}</label>
-                    <div class="wrp">
-                        <textarea name="block_customcss" class="form-control" rows="4">{CONFIG_THEME_BLOCK.customcss}</textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div role="tabpanel" id="configThemeHeader" class="tab-pane{TAB3_ACTIVE}">
-            <div class="panel-body theme-config-basic">
-                <div class="form-group">
-                    <label class="cname">{LANG.background}</label>
-                    <input type="text" value="{CONFIG_THEME_HEADER.background_color}" name="header_background_color" id="picker_header_background" class="form-control input-sm sizem" />
-                    <div class="input-group-wrap">
-                        <div class="input-group input-group-sm">
-                            <input type="text" id="header_bg_image" value="{CONFIG_THEME_HEADER.background_image}" name="header_background_image" placeholder="{LANG.background_imgage}" class="form-control input-sm" />
-                            <div class="input-group-btn">
-                                <button data-toggle="nv_open_filemanage" data-area="header_bg_image" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
+                <div class="tab-pane fade{$TAB eq 'variables' ? ' show active' : ''}" id="tab-variables" role="tabpanel" aria-labelledby="link-variables" tabindex="0">
+                    <div class="form-contents vstack gap-3">
+                        {foreach from=$VARIABLES key=confcat item=vals}
+                        <div class="config-sections">
+                            <div class="fw-medium fs-5 mb-1"><i class="fa-solid fa-palette"></i> {$LANG->getModule("tconf_var_`$confcat`")}</div>
+                            <div class="row g-2">
+                                {foreach from=$vals key=ckey item=cvonf}
+                                {if isset($CONFIG.variables, $CONFIG.variables[$confcat], $CONFIG.variables[$confcat][$ckey])}
+                                {assign var="vconf_value" value=$CONFIG.variables[$confcat][$ckey] nocache}
+                                {else}
+                                {assign var="vconf_value" value="" nocache}
+                                {/if}
+                                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 col-xxl-2">
+                                    <label class="form-label fw-medium" for="{$confcat}_{$ckey}">{$LANG->getModule("tconf_vari_`$ckey`")}:</label>
+                                    {if $cvonf.type eq 'color'}
+                                    {* Chọn màu sắc *}
+                                    <div class="input-group">
+                                        <input type="text" name="{$confcat}_{$ckey}" id="{$confcat}_{$ckey}" value="{$vconf_value}" maxlength="7" class="form-control" data-toggle="colpick" autocomplete="off">
+                                        <div class="input-group-text" id="{$confcat}_{$ckey}_preview"{if not empty($vconf_value)} style="background-color: {$vconf_value}; border-color: {$vconf_value};"{/if}>&nbsp; &nbsp;</div>
+                                    </div>
+                                    {elseif $cvonf.type eq 'text'}
+                                    {* Nhập text *}
+                                    <input type="text" name="{$confcat}_{$ckey}" id="{$confcat}_{$ckey}" value="{$vconf_value}" class="form-control" maxlength="250">
+                                    {elseif $cvonf.type eq 'number'}
+                                    {* Nhập số *}
+                                    <input type="number" step=".1" name="{$confcat}_{$ckey}" id="{$confcat}_{$ckey}" value="{$vconf_value}" class="form-control" maxlength="250">
+                                    {elseif $cvonf.type eq 'size'}
+                                    {* Nhập kích thước *}
+                                    {assign var="unit" value=$vconf_value|substr:-3 nocache}
+                                    <div class="input-group">
+                                        <input type="text" name="{$confcat}_{$ckey}" id="{$confcat}_{$ckey}" value="{if $unit eq 'rem'}{$vconf_value|substr:0:($vconf_value|strlen - 3)}{elseif $vconf_value|strlen gt 2}{$vconf_value|substr:0:($vconf_value|strlen - 2)}{/if}" class="form-control">
+                                        <select class="form-select fw-75 flex-grow-0 flex-shrink-0" name="unit_{$confcat}_{$ckey}" aria-label="{$LANG->getModule('tconf_unit')} {$LANG->getModule("tconf_vari_`$ckey`")}">
+                                            <option value="rem"{if $unit eq 'rem'} selected{/if}>rem</option>
+                                            <option value="px"{if $vconf_value|substr:-2 eq 'px'} selected{/if}>px</option>
+                                        </select>
+                                    </div>
+                                    {elseif $cvonf.type eq 'font_weight'}
+                                    {* Độ đậm của chữ *}
+                                    <select class="form-select" name="{$confcat}_{$ckey}" id="{$confcat}_{$ckey}">
+                                        <option value="0">{$LANG->getModule('tconf_ignore')}</option>
+                                        {for $w=100 to 900 step 100}
+                                        <option value="{$w}"{if $vconf_value eq $w} selected{/if}>{$LANG->getModule("tconf_fw_`$w`")}</option>
+                                        {/for}
+                                    </select>
+                                    {elseif $cvonf.type eq 'border_style'}
+                                    {* Đường viền *}
+                                    <select class="form-select" name="{$confcat}_{$ckey}" id="{$confcat}_{$ckey}">
+                                        <option value="">{$LANG->getModule('tconf_ignore')}</option>
+                                        {foreach from=$BORDER_STYLES item=value}
+                                        <option value="{$value}"{if $vconf_value eq $value} selected{/if}>{$LANG->getModule("tconf_border_style_`$value`")}</option>
+                                        {/foreach}
+                                    </select>
+                                    {elseif $cvonf.type eq 'text_decoration'}
+                                    {* Trang trí chữ *}
+                                    <select class="form-select" name="{$confcat}_{$ckey}" id="{$confcat}_{$ckey}">
+                                        <option value="">{$LANG->getModule('tconf_ignore')}</option>
+                                        {foreach from=$TEXT_DECORATIONS item=value}
+                                        <option value="{$value}"{if $vconf_value eq $value} selected{/if}>{$LANG->getModule("tconf_deco_`$value`")}</option>
+                                        {/foreach}
+                                    </select>
+                                    {/if}
+                                </div>
+                                {/foreach}
                             </div>
                         </div>
+                        {/foreach}
                     </div>
-                    <input type="text" value="{CONFIG_THEME_HEADER.background_repeat}" name="header_background_repeat" class="form-control input-sm sizem" placeholder="{LANG.background_imgage_repeat}" />
-                    <input type="text" value="{CONFIG_THEME_HEADER.background_position}" name="header_background_position" class="form-control input-sm sizem" placeholder="{LANG.background_imgage_postion}" />
-                </div>
-
-                <div class="form-group">
-                    <label class="cname">{LANG.margin}</label>
-                    <input type="text" name="header_margin" value="{CONFIG_THEME_HEADER.margin}" placeholder="{LANG.margin_all}" class="form-control input-sm sizem" />
-                    <input type="text" name="header_margin_top" value="{CONFIG_THEME_HEADER.margin_top}" placeholder="{LANG.margin_top}" class="form-control input-sm sizem" />
-                    <input type="text" name="header_margin_bottom" value="{CONFIG_THEME_HEADER.margin_bottom}" placeholder="{LANG.margin_bottom}" class="form-control input-sm sizem" />
-                    <input type="text" name="header_margin_left" value="{CONFIG_THEME_HEADER.margin_left}" placeholder="{LANG.margin_left}" class="form-control input-sm sizem" />
-                    <input type="text" name="header_margin_right" value="{CONFIG_THEME_HEADER.margin_right}" placeholder="{LANG.margin_right}" class="form-control input-sm sizem" />
-                </div>
-
-                <div class="form-group">
-                    <label class="cname">{LANG.padding}</label>
-                    <input type="text" name="header_padding" value="{CONFIG_THEME_HEADER.padding}" placeholder="{LANG.padding_all}" class="form-control input-sm sizem" />
-                    <input type="text" name="header_padding_top" value="{CONFIG_THEME_HEADER.padding_top}" placeholder="{LANG.padding_top}" class="form-control input-sm sizem" />
-                    <input type="text" name="header_padding_bottom" value="{CONFIG_THEME_HEADER.padding_bottom}" placeholder="{LANG.padding_bottom}" class="form-control input-sm sizem" />
-                    <input type="text" name="header_padding_left" value="{CONFIG_THEME_HEADER.padding_left}" placeholder="{LANG.padding_left}" class="form-control input-sm sizem" />
-                    <input type="text" name="header_padding_right" value="{CONFIG_THEME_HEADER.padding_right}" placeholder="{LANG.padding_right}" class="form-control input-sm sizem" />
-                </div>
-
-                <div class="form-group">
-                    <label class="cname">{LANG.size}</label>
-                    <input type="text" name="header_width" value="{CONFIG_THEME_HEADER.width}" placeholder="{LANG.size_width}" class="form-control input-sm sizem" />
-                    <input type="text" name="header_height" value="{CONFIG_THEME_HEADER.height}" placeholder="{LANG.size_height}" class="form-control input-sm sizem" />
-                </div>
-
-                <div class="clearfix rowTextarea">
-                    <label class="cname">{LANG.customcss}</label>
-                    <div class="wrp">
-                        <textarea name="header_customcss" class="form-control" rows="4">{CONFIG_THEME_HEADER.customcss}</textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div role="tabpanel" id="configThemeFooter" class="tab-pane{TAB4_ACTIVE}">
-            <div class="panel-body theme-config-basic">
-                <div class="form-group">
-                    <label class="cname">{LANG.background}</label>
-                    <input type="text" value="{CONFIG_THEME_FOOTER.background_color}" name="footer_background_color" id="picker_footer_background" class="form-control input-sm sizem" />
-                    <div class="input-group-wrap">
-                        <div class="input-group input-group-sm">
-                            <input type="text" id="footer_bg_image" value="{CONFIG_THEME_FOOTER.background_image}" name="footer_background_image" placeholder="{LANG.background_imgage}" class="form-control input-sm" />
-                            <div class="input-group-btn">
-                                <button data-toggle="nv_open_filemanage" data-area="footer_bg_image" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
-                            </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="clean_variables" value="1" id="clean_variables">
+                            <label class="form-check-label" for="clean_variables">
+                                {$LANG->getModule('tconf_clean')}
+                            </label>
                         </div>
                     </div>
-                    <input type="text" value="{CONFIG_THEME_FOOTER.background_repeat}" name="footer_background_repeat" class="form-control input-sm sizem" placeholder="{LANG.background_imgage_repeat}" />
-                    <input type="text" value="{CONFIG_THEME_FOOTER.background_position}" name="footer_background_position" class="form-control input-sm sizem" placeholder="{LANG.background_imgage_postion}" />
+                    <div class="text-center mt-2">
+                        <button type="submit" class="btn btn-primary">{$LANG->getGlobal('save')}</button>
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label class="cname">{LANG.margin}</label>
-                    <input type="text" name="footer_margin" value="{CONFIG_THEME_FOOTER.margin}" placeholder="{LANG.margin_all}" class="form-control input-sm sizem" />
-                    <input type="text" name="footer_margin_top" value="{CONFIG_THEME_FOOTER.margin_top}" placeholder="{LANG.margin_top}" class="form-control input-sm sizem" />
-                    <input type="text" name="footer_margin_bottom" value="{CONFIG_THEME_FOOTER.margin_bottom}" placeholder="{LANG.margin_bottom}" class="form-control input-sm sizem" />
-                    <input type="text" name="footer_margin_left" value="{CONFIG_THEME_FOOTER.margin_left}" placeholder="{LANG.margin_left}" class="form-control input-sm sizem" />
-                    <input type="text" name="footer_margin_right" value="{CONFIG_THEME_FOOTER.margin_right}" placeholder="{LANG.margin_right}" class="form-control input-sm sizem" />
+                <div class="tab-pane fade{$TAB eq 'css' ? ' show active' : ''}" id="tab-css" role="tabpanel" aria-labelledby="link-css" tabindex="0">
+                    <div class="form-contents">
+                        <div data-toggle="tconf-css"></div>
+                        <textarea name="css" class="d-none" data-toggle="tconf-css-textarea">{$CONFIG.css ?? ''}</textarea>
+                        <div class="d-flex justify-content-center mt-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="clean_css" value="1" id="clean_css">
+                                <label class="form-check-label" for="clean_css">
+                                    {$LANG->getModule('tconf_clean')}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="text-center mt-2">
+                            <button type="submit" class="btn btn-primary">{$LANG->getGlobal('save')}</button>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label class="cname">{LANG.padding}</label>
-                    <input type="text" name="footer_padding" value="{CONFIG_THEME_FOOTER.padding}" placeholder="{LANG.padding_all}" class="form-control input-sm sizem" />
-                    <input type="text" name="footer_padding_top" value="{CONFIG_THEME_FOOTER.padding_top}" placeholder="{LANG.padding_top}" class="form-control input-sm sizem" />
-                    <input type="text" name="footer_padding_bottom" value="{CONFIG_THEME_FOOTER.padding_bottom}" placeholder="{LANG.padding_bottom}" class="form-control input-sm sizem" />
-                    <input type="text" name="footer_padding_left" value="{CONFIG_THEME_FOOTER.padding_left}" placeholder="{LANG.padding_left}" class="form-control input-sm sizem" />
-                    <input type="text" name="footer_padding_right" value="{CONFIG_THEME_FOOTER.padding_right}" placeholder="{LANG.padding_right}" class="form-control input-sm sizem" />
-                </div>
-
-                <div class="form-group">
-                    <label class="cname">{LANG.size}</label>
-                    <input type="text" name="footer_width" value="{CONFIG_THEME_FOOTER.width}" placeholder="{LANG.size_width}" class="form-control input-sm sizem" />
-                    <input type="text" name="footer_height" value="{CONFIG_THEME_FOOTER.height}" placeholder="{LANG.size_height}" class="form-control input-sm sizem" />
-                </div>
-
-                <div class="clearfix rowTextarea">
-                    <label class="cname">{LANG.customcss}</label>
-                    <div class="wrp">
-                        <textarea name="footer_customcss" class="form-control" rows="4">{CONFIG_THEME_FOOTER.customcss}</textarea>
+                <div class="tab-pane fade{$TAB eq 'gfonts' ? ' show active' : ''}" id="tab-gfonts" role="tabpanel" aria-labelledby="link-gfonts" tabindex="0">
+                    <div class="form-contents">
+                        <p class="mb-2">{$LANG->getModule('tconf_gfonts_note')}</p>
+                        <div class="row mb-3">
+                            <div class="col-lg-6 col-xl-4 col-xxl-3">
+                                <label class="form-label fw-medium" for="gfonts_family">{$LANG->getModule('tconf_font_family')}:</label>
+                                <input type="text" class="form-control" name="gfonts_family" id="gfonts_family" value="{if isset($CONFIG.gfont, $CONFIG.gfont.family)}{$CONFIG.gfont.family}{/if}">
+                            </div>
+                        </div>
+                        <p class="mb-2">{$LANG->getModule('tconf_gfonts_stylechoose')}:</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item ps-0">
+                                <div class="hstack gap-2">
+                                    <div class="fw-150">&nbsp;</div>
+                                    <div class="fw-medium fw-75 text-center">{$LANG->getModule('tconf_font_normal')}</div>
+                                    <div class="fw-medium fw-75 text-center">{$LANG->getModule('tconf_font_italic')}</div>
+                                </div>
+                            </li>
+                            {for $w=100 to 900 step 100}
+                            <li class="list-group-item ps-0">
+                                <div class="hstack gap-2">
+                                    <div class="fw-150 fw-medium">{$LANG->getModule("tconf_fw_`$w`")}</div>
+                                    <div class="fw-75 text-center d-flex justify-content-center">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" role="switch" name="gfonts_n{$w}" value="1" aria-label="{$LANG->getModule('tconf_font_normal')}"{if isset($CONFIG.gfont, $CONFIG.gfont.styles, $CONFIG.gfont.styles[$w]) and not empty($CONFIG.gfont.styles[$w].n)} checked{/if}>
+                                        </div>
+                                    </div>
+                                    <div class="fw-75 text-center d-flex justify-content-center">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" role="switch" name="gfonts_i{$w}" value="1" aria-label="{$LANG->getModule('tconf_font_normal')}"{if isset($CONFIG.gfont, $CONFIG.gfont.styles, $CONFIG.gfont.styles[$w]) and not empty($CONFIG.gfont.styles[$w].i)} checked{/if}>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {/for}
+                        </ul>
+                        <div class="d-flex justify-content-center mt-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="clean_gfonts" value="1" id="clean_gfonts">
+                                <label class="form-check-label" for="clean_gfonts">
+                                    {$LANG->getModule('tconf_clean')}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="text-center mt-2">
+                            <button type="submit" class="btn btn-primary">{$LANG->getGlobal('save')}</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div role="tabpanel" id="configThemeCSS" class="tab-pane{TAB5_ACTIVE}">
-            <div class="panel-body">
-                <label><i>{LANG.general_css_note}:</i></label>
-                <textarea name="generalcss" class="form-control" rows="20">{CONFIG_THEME_GENERCSS}</textarea>
-            </div>
-        </div>
-
-        <div role="tabpanel" id="configThemeGFont" class="tab-pane{TAB6_ACTIVE}">
-            <div class="panel-body theme-config-gfont">
-                <p>{LANG.gfont_note}</p>
-                <div class="form-group">
-                    <label class="cname">Family</label>
-                    <input type="text" name="gfont_family" value="{CONFIG_THEME_GFONT.family}" placeholder="family" class="form-control input-sm" />
-                    <span>({LANG.exp}, Roboto)</span>
-                </div>
-                <div class="form-group">
-                    <label class="cname">Styles</label>
-                    <input type="text" name="gfont_styles" value="{CONFIG_THEME_GFONT.styles}" placeholder="styles" class="form-control input-sm" />
-                    <span>({LANG.exp}, 400,400italic)</span>
-                </div>
-                <div class="clearfix">
-                    <label class="cname">Subset</label>
-                    <input type="text" name="gfont_subset" value="{CONFIG_THEME_GFONT.subset}" placeholder="subset" class="form-control input-sm" />
-                    <span>({LANG.exp}, latin,vietnamese)</span>
-                </div>
-            </div>
-        </div>
-
     </div>
-    <div class="theme-config-submit-area">
-        <input type="hidden" name="selectedtab" value="{SELECTEDTAB}" />
-        <input type="hidden" name="save" value="1">
-        <button type="submit" value="submit" class="btn btn-primary"><i class="fa fa-fw fa-save"></i>{LANG.save}</button>
-    </div>
+    <input type="hidden" name="tab" value="{$TAB}">
+    <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
 </form>
-
-<script>
-    $(document).ready(function() {
-        $('#picker_body_color').css({
-            'background-color': $('#picker_body_color').val()
-        });
-        $('#picker_body_background').css({
-            'background-color': $('#picker_body_background').val()
-        });
-        $('#picker_content_background').css({
-            'background-color': $('#picker_content_background').val()
-        });
-        $('#picker_link_color').css({
-            'background-color': $('#picker_link_color').val()
-        });
-        $('#picker_link_hover_color').css({
-            'background-color': $('#picker_link_hover_color').val()
-        });
-        $('#picker_header_background').css({
-            'background-color': $('#picker_header_background').val()
-        });
-        $('#picker_footer_background').css({
-            'background-color': $('#picker_footer_background').val()
-        });
-        $('#picker_block_background').css({
-            'background-color': $('#picker_block_background').val()
-        });
-        $('#picker_block_header_bg').css({
-            'background-color': $('#picker_block_header_bg').val()
-        });
-        $('#cfgThemeTabs a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-            $('[name="selectedtab"]').val($(this).attr('aria-offsets'));
-        });
-
-        $('[data-toggle=nv_open_filemanage][data-area]').on('click', function(e) {
-            var alt = "backgroundimgalt",
-                path = "{UPLOADS_DIR}",
-                type = "image";
-            nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + $(this).data('area') + "&alt=" + alt + "&path=" + path + "&type=" + type, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no")
-        })
-    });
-
-    $('#picker_block_header_bg, #picker_body_color, #picker_body_background, #picker_content_background, #picker_link_color, #picker_link_hover_color, #picker_header_background, #picker_footer_background, #picker_block_background').colpick({
-        layout: 'hex',
-        submit: 0,
-        colorScheme: 'dark',
-        onChange: function(hsb, hex, rgb, el, bySetColor) {
-            $(el).css('background-color', '#' + hex);
-            if (!bySetColor) $(el).val('#' + hex);
-        }
-    }).keyup(function() {
-        $(this).colpickSetColor(this.value);
-    });
-</script>
-<!-- END:main -->

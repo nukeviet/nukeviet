@@ -7,61 +7,25 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-// Voting functions
-// Gioi han phuong an bau chon
-function votingAcceptNumber(obj) {
-    var form = $(obj).parents('form');
-    if ($('[name*=option]:checked', form).length >= parseInt(form.data('accept'))) {
-        $('[name*=option]', form).not(':checked').prop('disabled', true)
-    } else {
-        $('[name*=option]', form).prop('disabled', false)
-    }
-}
+'use strict';
 
-// Kiểm tra chọn đáp án trước khi submit form
-function votingPrecheck(form) {
-    let vals = "0";
-    let num = parseInt($(form).data('accept'));
-    $('[name*=option]:checked', form).each(function() {
-        vals = (num == 1) ? $(this).val() : vals + ("," + $(this).val())
-    });
-    if ("0" === vals) {
-        nukeviet.toast($(form).data('errmsg'), 'error');
-        return 0;
+/**
+ * @param {Object} data
+ * @param {JQuery} data
+ * @returns {number}
+ */
+function votingProcessResult(data, form) {
+    $('input, textarea, select, button', form).prop('disabled', false);
+    modalShow(form.data('result-title'), data.html);
+    if (form.data('related-btn')) {
+        $(`#${form.data('related-btn')}`).prop('disabled', false);
     }
-    return 1;
-}
-
-// Voting functions
-function votingSend(form) {
-    $.ajax({
-        type: "POST",
-        cache: !1,
-        url: $(form).attr("action"),
-        data: $(form).serialize(),
-        dataType: "json",
-        success: function(res) {
-            if (res.status !== 'ok') {
-                nukeviet.toast(res.mess, 'error');
-                return 0;
-            }
-            if ($(form).data('related-btn')) {
-                $(`#${$(form).data('related-btn')}`).prop('disabled', false);
-            }
-            modalShow($(form).data('result-title'), res.html);
-        }
-    });
+    return 0;
 }
 
 $(function() {
-    // Voting form submit
-    $('body').on('submit', '[data-toggle=votingSend]', function(e) {
-        e.preventDefault();
-        votingSend(this);
-    });
-
     // Xem kết quả bình chọn
-    $('body').on('click', '[data-toggle=votingResult]', function(e) {
+    $('body').on('click', '[data-toggle="votingResult"]', function(e) {
         e.preventDefault();
         const btn = $(this);
         btn.prop('disabled', true);
@@ -79,7 +43,8 @@ $(function() {
         const cForm = oForm[0].cloneNode(true);
         cForm.id = cFormID;
         cForm.style.display = 'none';
-        cForm.removeAttribute('data-precheck');
+        cForm.querySelectorAll('[data-valid]').forEach(el => el.removeAttribute('data-valid'));
+        cForm.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
         cForm.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
         cForm.dataset.relatedBtn = btn.attr('id');
 
@@ -93,10 +58,5 @@ $(function() {
         // Submit form mới
         document.body.appendChild(cForm);
         $('[type=submit]', $(`#${cFormID}`)).click();
-    });
-
-    // Giới hạn số phương án bình chọn
-    $('body').on('click', '[data-toggle=votingAcceptNumber]', function() {
-        votingAcceptNumber(this)
     });
 });

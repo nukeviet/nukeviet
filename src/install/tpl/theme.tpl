@@ -8,7 +8,7 @@
     <link rel="shortcut icon" href="{$smarty.const.NV_BASE_SITEURL}favicon.ico">
     <link rel="stylesheet" href="{$smarty.const.NV_BASE_SITEURL}install/css/install.css">
     <script src="{$smarty.const.ASSETS_STATIC_URL}/js/jquery/jquery.min.js"></script>
-    <script src="{$smarty.const.NV_BASE_SITEURL}themes/admin_future/js/bootstrap.bundle.min.js"></script>
+    <script src="{$smarty.const.NV_BASE_SITEURL}themes/admin_default/js/bootstrap.bundle.min.js"></script>
     <script src="{$smarty.const.NV_BASE_SITEURL}install/js/install.js"></script>
     {foreach from=$SCRIPTS item=script}
     <script src="{$script}"></script>

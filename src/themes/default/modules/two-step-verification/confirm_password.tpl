@@ -1,34 +1,32 @@
-<!-- BEGIN: main -->
-<div class="centered">
-    <div class="login-box">
-        <div class="page panel panel-default margin-top-lg box-shadow bg-lavender">
-            <div class="panel-body">
-                <h2 class="text-center margin-bottom-lg">{LANG.confirm_password}</h2>
-                <form action="{FORM_ACTION}" method="post" data-toggle="confirmpass_validForm" autocomplete="off" novalidate>
-                    <div class="nv-info margin-bottom" data-default="{LANG.confirm_password_info}">{LANG.confirm_password_info}</div>
-                    <div class="form-detail">
-                        <div class="step1">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><em class="fa fa-key fa-lg"></em></span>
-                                    <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="100" data-pattern="/^(.){1,}$/" data-toggle="valid2faErrorHidden" data-mess="">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="text-center margin-bottom-lg">
-                             <input type="hidden" name="checkss" value="{NV_CHECK_SESSION}" />
-                            <button class="bsubmit btn btn-primary" type="submit">{LANG.confirm}</button>
-                       	</div>
+{if $IS_PASS_VALID}
+<div class="d-flex justify-content-center mt-4">
+    <div class="card shadow-sm w-100 maxw-360">
+        <div class="card-body p-4">
+            <h4 class="text-center mb-3">{$LANG->getModule('confirm_password')}</h4>
+            <form action="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}={$OP}"
+                  method="post" data-toggle="ajax-form" data-precheck="nv_precheck_form"
+                  data-callback="confirmPassCallback" autocomplete="off" novalidate>
+                <p class="text-muted mb-3">{$LANG->getModule('confirm_password_info')}</p>
+                <div class="mb-3 position-relative">
+                    <label class="form-label" for="password">{$LANG->getGlobal('password')} <span class="text-danger">(*)</span></label>
+                    <div class="position-relative">
+                        <input type="password" class="form-control ps-with-fw-icon required" id="password"
+                               name="password" maxlength="100" minlength="1" autocomplete="off"
+                               data-valid data-error-type="tooltip"
+                               data-error-mess="">
+                        <i class="text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
                     </div>
-                </form>
-            </div>
+                </div>
+                <div class="text-center">
+                    <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-check"></i> {$LANG->getModule('confirm')}
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-<!-- END: main -->
-<!-- BEGIN: pass_empty -->
-<div class="centered">
-    <div class="alert alert-danger margin-top-lg">{CHANGE_2STEP_NOTVALID}</div>
-</div>
-<!-- END: pass_empty -->
+{else}
+<div class="alert alert-danger">{$LANG->getModule('change_2step_notvalid', $USERS_PASS_URL)}</div>
+{/if}

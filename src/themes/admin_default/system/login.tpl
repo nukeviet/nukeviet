@@ -1,241 +1,204 @@
-<!-- BEGIN: main -->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset={CHARSET}" />
-    <meta http-equiv="expires" content="0" />
-    <meta name="resource-type" content="document" />
-    <meta name="distribution" content="global" />
-    <meta name="copyright" content="Copyright (c) {SITE_NAME}" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="viewport" content="width=device-width">
-    <title>{SITE_NAME} {NV_TITLEBAR_DEFIS} {GLANG.admin_page}</title>
-    <link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{ASSETS_STATIC_URL}/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/style.css">
-    <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/login.css" />
-    <script type="text/javascript">
-        var base_siteurl = '{NV_BASE_SITEURL}';
-    </script>
-    <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/global{AUTO_MINIFIED}.js"></script>
-    <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/js/login.js"></script>
-    <!-- BEGIN: passshow_button -->
-    <link rel="stylesheet" href="{ASSETS_STATIC_URL}/js/show-pass-btn/bootstrap3-show-pass.css">
-    <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/show-pass-btn/bootstrap3-show-pass.js"></script>
-    <!-- END: passshow_button -->
-</head>
-
-<body>
-    <div class="wrapper" style="display:none;">
-        <div class="login-content">
-            <div class="login-header"><em class="fa fa-sign-in"></em> {ADMIN_LOGIN_TITLE}</div>
-            <div class="login-body" id="login-content">
-            [-CONTENT-]
-            </div>
-            <div class="login-footer">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <!-- BEGIN: lang_multi -->
-                        <select id="langinterface" name="langinterface" data-toggle="changeLang" class="form-control input-sm muti-lang">
-                            <!-- BEGIN: option -->
-                            <option value="{LANGOP}" {SELECTED}>{LANGVALUE} </option>
-                            <!-- END: option -->
-                        </select>
-                        <!-- END: lang_multi -->
-                        <a id="adm-redirect" class="btn btn-default btn-sm hidden" href="#"><em class="fa fa-star"></em> {GLANG.acp}</a>
+{include file='header.tpl'}
+<div class="login-page bg-body-tertiary">
+    <div class="d-flex flex-column min-vh-100">
+        <div class="flex-shrink-1 flex-grow-1 d-flex justify-content-center align-items-center">
+            <div>
+                <div class="card card-login">
+                    <div class="login-header card-header text-center fw-medium fs-4 text-bg-primary border-bottom-0">
+                        {if empty($PRE_DATA)}
+                        <i class="fa-solid fa-right-to-bracket"></i> {$LANG->getGlobal('adminlogin')}
+                        {else}
+                        <i class="fa-solid fa-unlock-keyhole"></i> {$LANG->getGlobal('2teplogin')}
+                        {/if}
                     </div>
-                    <div class="col-xs-12 text-right">
-                        <a class="btn btn-default btn-sm" href="{SITEURL}"><em class="fa fa-home"></em> {GLANG.go_clientsector}</a>
+                    <div class="card-body">
+                        <div class="login-box">
+                            {if empty($PRE_DATA)}
+                            {* Form đăng nhập bằng tài khoản (bước 1) *}
+                            <form method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php" data-toggle="preForm" data-passkey-allowed="{$PASSKEY_ALLOWED ? 1 : 0}">
+                                {if $CAPTCHA_REQUIRED}
+                                <div class="mb-3 border-3 border-start ps-2 border-danger text-danger" data-toggle="message">{$LANG->getGlobal('login_captcha_required')}</div>
+                                {else}
+                                <div class="mb-3 border-3 border-start ps-2" data-toggle="message">{$LANG->getGlobal('adminlogininfo')}</div>
+                                {/if}
+                                <div data-toggle="form">
+                                    <div class="mb-3">
+                                        <label for="nv_login" class="form-label text-body-emphasis fw-medium">{$LANG->getGlobal('login_name')}</label>
+                                        <input class="form-control" name="nv_login" type="text" id="nv_login" value="{$V_LOGIN}" data-error-mess="{$LANG->getGlobal('username_empty')}" autocomplete="off">
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex gap-2">
+                                            <label for="nv_password" class="form-label text-body-emphasis fw-medium">{$LANG->getGlobal('password')}</label>
+                                            <div class="ms-auto">
+                                                <a title="{$LANG->getGlobal('lostpass')}" href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$GCONFIG.site_lang}&amp;{$smarty.const.NV_NAME_VARIABLE}=users&amp;{$smarty.const.NV_OP_VARIABLE}=lostpass" tabindex="-1">{$LANG->getGlobal('lostpass')}?</a>
+                                            </div>
+                                        </div>
+                                        <input class="form-control" name="nv_password" type="password" id="nv_password" value="{$V_PASSWORD}" data-error-mess="{$LANG->getGlobal('password_empty')}" autocomplete="off">
+                                    </div>
+                                    {if $GFX_CHK}
+                                    {if $CAPTCHA_TYPE eq 'captcha'}
+                                    <div class="mb-3">
+                                        <label for="seccode" class="form-label text-body-emphasis fw-medium">{$LANG->getGlobal('securitycode1')}</label>
+                                        <div class="d-flex gap-2 align-items-center">
+                                            <input name="nv_seccode" type="text" id="seccode" maxlength="{$smarty.const.NV_GFX_NUM}" class="form-control captcha" data-error-mess="{$LOGIN_ERROR_SECURITY}" autocomplete="off">
+                                            <img id="vimg" class="captcha-img" alt="{$LANG->getGlobal('securitycode1')}" src="{$smarty.const.SRC_CAPTCHA}">
+                                            <a href="#" data-toggle="nv_change_captcha" title="{$LANG->getGlobal('refresh')}" aria-label="{$LANG->getGlobal('refresh')}"><i class="fa-solid fa-rotate fa-lg"></i></a>
+                                        </div>
+                                    </div>
+                                    {elseif $CAPTCHA_TYPE eq 'recaptcha'}
+                                    {if $GCONFIG.recaptcha_ver eq 2}
+                                    <div class="mb-3">
+                                        <div id="reCaptcha" class="recaptcha-holder"></div>
+                                        <script src="https://www.google.com/recaptcha/api.js?hl={$smarty.const.NV_LANG_INTERFACE}&amp;onload=onloadCallback&amp;render=explicit"></script>
+                                        <script type="text/javascript">
+                                        var reCaptcha2,
+                                            onloadCallback = function() {
+                                            $('[type=submit]').prop('disabled', true);
+                                            reCaptcha2 = grecaptcha.render('reCaptcha', {
+                                                'sitekey': '{$GCONFIG.recaptcha_sitekey}',
+                                                'type': '{$GCONFIG.recaptcha_type}',
+                                                'callback': function(res) {
+                                                    $('[type=submit]').prop('disabled', false);
+                                                },
+                                                'expired-callback': function() {
+                                                    $('[type=submit]').prop('disabled', true);
+                                                },
+                                                'error-callback': function() {
+                                                    $('[type=submit]').prop('disabled', true);
+                                                }
+                                            });
+                                        };
+                                        </script>
+                                    </div>
+                                    {elseif $GCONFIG.recaptcha_ver eq 3}
+                                    <input type="hidden" name="g-recaptcha-response" value="">
+                                    <script src="https://www.google.com/recaptcha/api.js?hl={$smarty.const.NV_LANG_INTERFACE}&amp;render={$GCONFIG.recaptcha_sitekey}"></script>
+                                    <script>
+                                        var sitekey = '{$GCONFIG.recaptcha_sitekey}';
+                                        grecaptcha.ready(() => {
+                                            window.recaptcha3Ready = true;
+                                            document.dispatchEvent(new Event('nv.recaptcha3.ready'));
+                                        });
+                                    </script>
+                                    {/if}
+                                    {elseif $CAPTCHA_TYPE eq 'turnstile'}
+                                    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"></script>
+                                    <div class="mb-3">
+                                        <div id="cf-turnstile" class="cf-turnstile"></div>
+                                    </div>
+                                    <script>
+                                    turnstile.ready(function () {
+                                        $('[type=submit]').prop('disabled', true);
+                                        turnstile.render("#cf-turnstile", {
+                                            'sitekey': "{$GCONFIG.turnstile_sitekey}",
+                                            'callback': function(res) {
+                                                $('[type=submit]').prop('disabled', false);
+                                            },
+                                            'expired-callback': function() {
+                                                $('[type=submit]').prop('disabled', true);
+                                            },
+                                            'error-callback': function() {
+                                                $('[type=submit]').prop('disabled', true);
+                                            },
+                                            'language': "{$smarty.const.NV_LANG_INTERFACE}"
+                                        });
+                                    });
+                                    </script>
+                                    {/if}
+                                    {/if}
+                                    <div class="d-grid">
+                                        <input class="btn btn-primary" type="submit" value="{$LANG->getGlobal('loginsubmit')}">
+                                    </div>
+                                    <div class="d-none" data-toggle="passkey-btn">
+                                        <div class="d-flex align-items-center my-2">
+                                            <div class="flex-grow-1 border-top"></div>
+                                            <span class="mx-3">{$LANG->getGlobal('or')}</span>
+                                            <div class="flex-grow-1 border-top"></div>
+                                        </div>
+                                        <div class="d-grid">
+                                            <button type="button" class="btn btn-secondary"><i class="fa-solid fa-user-shield" data-icon="fa-user-shield"></i> {$LANG->getGlobal('passkey_login')}</button>
+                                        </div>
+                                        <div class="text-danger mt-2 d-none" data-toggle="passkey-error"></div>
+                                    </div>
+                                    <div class="mt-2 text-center d-none" data-toggle="passkey-link">
+                                        <a href="#">{$LANG->getGlobal('passkey_login')}</a>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="checkss" value="{$CHECKSS}">
+                                {if $SV->getOriginalProtocol() neq 'https'}
+                                <div class="mt-3">
+                                    <small><strong class="text-danger">{$LANG->getGlobal('warning_ssl')}:</strong> {$LANG->getGlobal('content_ssl')}</small>
+                                </div>
+                                {/if}
+                            </form>
+                            {else}
+                            {* Step xác thực hai bước *}
+                            <form method="post" action="{$smarty.const.NV_BASE_ADMINURL}index.php" data-toggle="step2Form" data-passkey-allowed="{$PASSKEY_ALLOWED ? 1 : 0}">
+                                {if empty($ERROR)}
+                                <div class="mb-3 border-3 border-start ps-2" data-toggle="message">{$LANG->getGlobal('admin_hello_2step', $PRE_DATA.full_name)}.</div>
+                                {else}
+                                <div class="{if not empty($CFG_2STEP.opts)}mb-3 {/if}border-3 border-start ps-2 border-danger text-danger" data-toggle="message">{$ERROR}.</div>
+                                {/if}
+                                <div data-toggle="form">
+                                    {if not empty($CFG_2STEP.opts)}
+                                    {if $CFG_2STEP.count_active lt 1}
+                                    <p class="text-danger">{$LANG->getGlobal('admin_mactive_2step')}. {$LANG->getGlobal($CFG_2STEP.count_opts gt 1 ? 'admin_mactive_2step_choose1' : 'admin_mactive_2step_choose0')}:</p>
+                                    <div class="d-grid gap-2 mb-3">
+                                        {assign var="isRegularMethod" value=0 nocache}
+                                        {foreach from=$CFG_2STEP.opts item=opt}
+                                        {if ($opt eq 'code' or $opt eq 'key')}
+                                        {if $isRegularMethod eq 0}
+                                        {assign var="isRegularMethod" value=($isRegularMethod + 1) nocache}
+                                        {if in_array('code', $CFG_2STEP.opts) and in_array('key', $CFG_2STEP.opts)}
+                                            {assign var="setupTitle" value=$LANG->getGlobal('admin_setup_2fa_keycode') nocache}
+                                        {else}
+                                            {assign var="setupTitle" value={$LANG->getGlobal("admin_2step_opt_`$opt`")} nocache}
+                                        {/if}
+                                        <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?auth={$opt}" class="btn btn-secondary">{$setupTitle}</a>
+                                        {/if}
+                                        {else}
+                                        <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?auth={$opt}" class="btn btn-info btn-{$opt}">{$LANG->getGlobal("admin_2step_opt_`$opt`")}</a>
+                                        {/if}
+                                        {/foreach}
+                                    </div>
+                                    {else}
+                                    <div class="d-grid gap-2 mb-3">
+                                        {$HTML_DEFAULT}
+                                    </div>
+                                    {if not empty($HTML_OTHER)}
+                                    <p class="mb-2"><strong>{$LANG->getGlobal('admin_2step_other')}:</strong></p>
+                                    <div class="d-grid gap-2 mb-3">
+                                        {$HTML_OTHER}
+                                    </div>
+                                    {/if}
+                                    {/if}
+                                    {/if}
+                                    <div class="text-center">
+                                        <a href="#" data-href="{$smarty.const.NV_BASE_ADMINURL}index.php?pre_logout=1&amp;checkss={$CHECKSS}" data-toggle="preLogout">{$LANG->getGlobal('admin_pre_logout')}</a>
+                                    </div>
+                                </div>
+                            </form>
+                            {/if}
+                        </div>
+                    </div>
+                    <div class="login-footer card-footer bg-body-tertiary d-flex gap-2">
+                        {if not empty($GCONFIG.lang_multi)}
+                        <select id="langinterface" name="langinterface" data-toggle="changeLang" class="form-select form-select-sm w-auto mw-100">
+                            {foreach from=$LANGS item=lmuti}
+                            <option value="{$smarty.const.NV_BASE_ADMINURL}index.php?langinterface={$lmuti.lang}"{if $lmuti.lang eq $smarty.const.NV_LANG_INTERFACE} selected{/if}>{$lmuti.name}</option>
+                            {/foreach}
+                        </select>
+                        {/if}
+                        <a id="adm-redirect" class="btn btn-secondary btn-sm d-none" href="#"><i class="fa-solid fa-star"></i> {$LANG->getGlobal('acp')}</a>
+                        <a class="btn btn-secondary btn-sm ms-auto" href="{$GCONFIG.site_url}"><i class="fa-solid fa-house"></i> {$LANG->getGlobal('go_clientsector')}</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="copyright">
-            <p>Copyright &copy; <a href="{SITEURL}">{SITE_NAME}</a>. All rights reserved.</p>
-        </div>
-    </div>
-</body>
-
-</html>
-<!-- END: main -->
-
-<!-- BEGIN: pre_form -->
-<form class="loginform form-horizontal" method="post" action="{NV_BASE_ADMINURL}index.php" data-toggle="preForm">
-    <!-- BEGIN: captcha_required -->
-    <div class="inner-message error">{GLANG.login_captcha_required}</div>
-    <!-- END: captcha_required -->
-    <!-- BEGIN: login_info -->
-    <div class="inner-message normal">{GLANG.adminlogininfo}</div>
-    <!-- END: login_info -->
-    <div class="form-detail">
-        <div class="form-group">
-            <label for="nv_login" class="col-xs-9 control-label form-label">{GLANG.login_name}:</label>
-            <div class="col-xs-15"><input autocomplete="off" class="form-control" name="nv_login" type="text" id="nv_login" value="{V_LOGIN}" data-error-mess="{GLANG.username_empty}" /></div>
-        </div>
-        <div class="form-group">
-            <label for="nv_password" class="col-xs-9 control-label form-label">{GLANG.password}:</label>
-            <div class="col-xs-15"><input autocomplete="off" class="form-control" name="nv_password" type="password" id="nv_password" value="{V_PASSWORD}" data-error-mess="{GLANG.password_empty}" /></div>
-        </div>
-        <!-- BEGIN: captcha -->
-        <div class="form-group">
-            <div class="col-xs-12 col-xs-offset-12 text-right">
-                <img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
-                <em class="fa fa-refresh fa-lg" data-toggle="nv_change_captcha">&nbsp;</em>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="seccode" class="col-xs-9 control-label form-label">{N_CAPTCHA}:</label>
-            <div class="col-xs-15"><input autocomplete="off" name="nv_seccode" type="text" id="seccode" maxlength="{GFX_NUM}" class="form-control captcha" data-error-mess="{LOGIN_ERROR_SECURITY}" /></div>
-        </div>
-        <!-- END: captcha -->
-        <!-- BEGIN: recaptcha -->
-        <!-- BEGIN: recaptcha2 -->
-        <div class="m-bottom">
-            <div id="reCaptcha"></div>
-            <script src="https://www.google.com/recaptcha/api.js?hl={SITELANG}&onload=onloadCallback&render=explicit"></script>
-            <script type="text/javascript">
-                var reCaptcha2,
-                    onloadCallback = function() {
-                    $('[type=submit]').prop('disabled', true);
-                    reCaptcha2 = grecaptcha.render('reCaptcha', {
-                        'sitekey': '{RECAPTCHA_SITEKEY}',
-                        'type': '{RECAPTCHA_TYPE}',
-                        'callback': function(res) {
-                            $('[type=submit]').prop('disabled', false);
-                        },
-                        'expired-callback': function() {
-                            $('[type=submit]').prop('disabled', true);
-                        },
-                        'error-callback': function() {
-                            $('[type=submit]').prop('disabled', true);
-                        }
-                    });
-                };
-            </script>
-        </div>
-        <!-- END: recaptcha2 -->
-        <!-- BEGIN: recaptcha3 -->
-        <input type="hidden" name="g-recaptcha-response" value="" />
-        <script src="https://www.google.com/recaptcha/api.js?hl={SITELANG}&amp;render={RECAPTCHA_SITEKEY}"></script>
-        <script>var sitekey = '{RECAPTCHA_SITEKEY}';</script>
-        <!-- END: recaptcha3 -->
-        <!-- END: recaptcha -->
-        <!-- BEGIN: turnstile -->
-        <div class="m-bottom">
-            <div id="cf-turnstile" class="cf-turnstile"></div>
-            <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"></script>
-            <script type="text/javascript">
-                turnstile.ready(function() {
-                    $('[type=submit]').prop('disabled', true);
-                    turnstile.render('#cf-turnstile', {
-                        'sitekey': '{TURNSTILE_SITEKEY}',
-                        'callback': function(res) {
-                            $('[type=submit]').prop('disabled', false);
-                        },
-                        'expired-callback': function() {
-                            $('[type=submit]').prop('disabled', true);
-                        },
-                        'error-callback': function() {
-                            $('[type=submit]').prop('disabled', true);
-                        },
-                        'language': '{SITELANG}'
-                    });
-                });
-            </script>
-        </div>
-        <!-- END: turnstile -->
-        <!-- BEGIN: warning_ssl -->
-        <div class="form-group">
-            <small><strong class="error">{GLANG.warning_ssl}:</strong> {GLANG.content_ssl}</small>
-        </div>
-        <!-- END: warning_ssl -->
-        <div class="form-group">
-            <div class="col-xs-10 col-xs-offset-9">
-                <input type="hidden" name="checkss" value="{NV_CHECK_SESSION}">
-                <input class="btn btn-primary btn-block" type="submit" value="{GLANG.loginsubmit}">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-15 col-xs-offset-9 text-right">
-                <a title="{LANGLOSTPASS}" href="{LINKLOSTPASS}">{LANGLOSTPASS}?</a>
-            </div>
-        </div>
-    </div>
-</form>
-<!-- END: pre_form -->
-
-<!-- BEGIN: 2step_form -->
-<form class="loginform form-horizontal" method="post" action="{NV_BASE_ADMINURL}index.php" data-toggle="step2Form">
-    <!-- BEGIN: hello -->
-    <div class="inner-message normal">{ADMIN_2STEP_HELLO}.</div>
-    <!-- END: hello -->
-    <!-- BEGIN: error -->
-    <div class="inner-message error">{ERROR}.</div>
-    <!-- END: error -->
-    <div class="form-detail">
-        <!-- BEGIN: must_activate -->
-        <p class="text-danger">{GLANG.admin_mactive_2step}. {LANG_CHOOSE}:</p>
-        <!-- BEGIN: loop -->
-        <a href="{BTN.link}" class="btn btn-block m-bottom btn-info btn-{BTN.key}">{BTN.title}</a>
-        <!-- END: loop -->
-        <!-- END: must_activate -->
-
-        <!-- BEGIN: choose_method -->
-        {HTML_DEFAULT}
-        <!-- BEGIN: others -->
-        <p class="login-2step-others"><strong>{GLANG.admin_2step_other}:</strong></p>
-        {HTML_OTHER}
-        <!-- END: others -->
-        <!-- END: choose_method -->
-
-        <div class="text-center">
-            <a class="btn btn-link" href="#" data-href="{ADMIN_PRE_LOGOUT}" data-toggle="preLogout">{GLANG.admin_pre_logout}</a>
-        </div>
-    </div>
-</form>
-<!-- END: 2step_form -->
-
-<!-- BEGIN: code -->
-<div class="m-bottom">
-    <div class="stepipt m-bottom{SHOW_TOTPPIN}">
-        <p>{GLANG.2teplogin_totppin_label} <a class="label label-default" href="#" data-toggle="login2step_change">{GLANG.2teplogin_other_menthod}</a></p>
-    </div>
-    <div class="stepipt m-bottom{SHOW_BACKUPCODEPIN}">
-        <p>{GLANG.2teplogin_code_label} <a class="label label-default" href="#" data-toggle="login2step_change">{GLANG.2teplogin_other_menthod}</a></p>
-    </div>
-    <div class="form-group">
-        <div class="col-xs-16">
-            <div class="stepipt{SHOW_TOTPPIN}">
-                <input type="text" class="form-control" placeholder="{GLANG.2teplogin_totppin_placeholder}" value="" name="nv_totppin" id="nv_totppin" maxlength="6" autocomplete="off" data-error-mess="{GLANG.2teplogin_error_opt}">
-            </div>
-            <div class="stepipt{SHOW_BACKUPCODEPIN}">
-                <input type="text" class="form-control" placeholder="{GLANG.2teplogin_code_placeholder}" value="" name="nv_backupcodepin" id="nv_backupcodepin" maxlength="8" autocomplete="off" data-error-mess="{GLANG.2teplogin_error_backup}">
-            </div>
-        </div>
-        <div class="col-xs-8">
-            <input type="hidden" name="checkss" value="{NV_CHECK_SESSION}">
-            <input type="hidden" name="submit2scode" value="1">
-            <input class="btn btn-primary btn-block" type="submit" value="{GLANG.confirm}">
+        <div class="text-center p-3">
+            Copyright &copy; <a href="{$GCONFIG.site_url}">{$GCONFIG.site_name}</a>. All rights reserved.
         </div>
     </div>
 </div>
-<!-- END: code -->
-
-<!-- BEGIN: facebook -->
-<div class="oauth-facebook m-bottom">
-    <a class="btn btn-facebook btn-block" href="{URL}">{GLANG.admin_2step_opt_facebook}</a>
-</div>
-<!-- END: facebook -->
-
-<!-- BEGIN: google -->
-<div class="oauth-google m-bottom">
-    <a class="btn btn-google btn-block" href="{URL}">{GLANG.admin_2step_opt_google}</a>
-</div>
-<!-- END: google -->
-
-<!-- BEGIN: zalo -->
-<div class="oauth-zalo m-bottom">
-    <a class="btn btn-zalo btn-block" href="{URL}">{GLANG.admin_2step_opt_zalo}</a>
-</div>
-<!-- END: zalo -->
+<script type="text/javascript" src="{$smarty.const.NV_BASE_SITEURL}themes/{$ADMIN_THEME}/js/nv.login.js"></script>
+{include file='footer.tpl'}

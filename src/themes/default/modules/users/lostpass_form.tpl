@@ -1,54 +1,73 @@
-<form action="{FORM_ACTION}" method="post" data-toggle="lostPass" autocomplete="off" novalidate<!-- BEGIN: captcha --> data-captcha="nv_seccode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 --><!-- BEGIN: turnstile --> data-turnstile="1"<!-- END: turnstile -->>
-    <div class="nv-info margin-bottom" data-default="{LANG.lostpass_info1}">{LANG.lostpass_info1}</div>
-    <div class="form-detail">
-        <div class="step1">
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><em class="fa fa-user fa-lg"></em></span>
-                    <input type="text" class="required form-control" placeholder="{LANG.username_or_email}" value="" name="userField" maxlength="100" data-pattern="/^(.){3,}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{LANG.lostpass_no_info1}">
-                </div>
+<form action="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;{$smarty.const.NV_OP_VARIABLE}=lostpass" method="post" class="fw-300"
+    data-toggle="usersLostPass" data-precheck="nv_precheck_form"
+    autocomplete="off" novalidate {$CAPTCHA_ATTRS}
+>
+    <input type="hidden" name="step" value="step1">
+    <input type="hidden" name="checkss" value="{$DATA.checkss}">
+    {if not empty($NV_REDIRECT)}
+    <input type="hidden" name="nv_redirect" value="{$NV_REDIRECT}">
+    {/if}
+    <div class="alert alert-info mb-3" data-area="info" data-default="{$LANG->getModule('lostpass_info1')|escape}">{$LANG->getModule('lostpass_info1')}</div>
+    <div data-area="form">
+        {* Bước 1: Tên đăng nhập hoặc email *}
+        <div class="mb-3" data-step="step1">
+            <div class="position-relative">
+                <input type="text" class="form-control ps-with-fw-icon" name="userField" maxlength="100" value=""
+                    placeholder="{$LANG->getModule('username_or_email')}" aria-label="{$LANG->getModule('username_or_email')}"
+                    minlength="3" data-valid data-error-type="tooltip"
+                >
+                <i class="text-center fa-fw fa-solid fa-user position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
             </div>
         </div>
 
-        <div class="step2" style="display:none">
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><em class="fa fa-pencil-square-o fa-lg"></em></span>
-                    <input type="text" class="form-control" placeholder="{LANG.answer_question}" value="" name="answer" maxlength="255" data-toggle="validErrorHidden" data-event="keypress" data-mess="{LANG.answer_empty}">
-                </div>
+        {* Bước 2: Trả lời câu hỏi bảo mật *}
+        <div class="mb-3 d-none" data-step="step2">
+            <div class="position-relative">
+                <input type="text" class="form-control ps-with-fw-icon" name="answer" maxlength="255" value=""
+                    placeholder="{$LANG->getModule('answer_question')}" aria-label="{$LANG->getModule('answer_question')}"
+                    data-valid data-error-type="tooltip"
+                    data-error-mess="{$LANG->getModule('answer_empty')}"
+                >
+                <i class="text-center fa-fw fa-solid fa-pen-to-square position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
             </div>
         </div>
 
-        <div class="step3" style="display:none">
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><em class="fa fa-shield fa-lg"></em></span>
-                    <input type="text" class="form-control" placeholder="{LANG.lostpass_key}" value="" name="verifykey" maxlength="10" data-pattern="/^[a-zA-Z0-9]{10,10}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{LANG.lostpass_active_error}">
-                </div>
+        {* Bước 3: Mã xác minh gửi qua email *}
+        <div class="mb-3 d-none" data-step="step3">
+            <div class="position-relative">
+                <input type="text" class="form-control ps-with-fw-icon" name="verifykey" maxlength="10" value=""
+                    placeholder="{$LANG->getModule('lostpass_key')}" aria-label="{$LANG->getModule('lostpass_key')}"
+                    data-pattern="/^[a-zA-Z0-9]{literal}{10}{/literal}$/" data-valid data-error-type="tooltip"
+                    data-error-mess="{$LANG->getModule('lostpass_active_error')}"
+                >
+                <i class="text-center fa-fw fa-solid fa-shield-halved position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
             </div>
         </div>
 
-        <div class="step4" style="display:none">
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
-                    <input type="password" autocomplete="off" class="form-control" placeholder="{LANG.pass_new}" value="" name="new_password" maxlength="{PASS_MAXLENGTH}" data-pattern="{PASSWORD_PATTERN}" data-toggle="validErrorHidden" data-event="keypress" data-mess="{PASSWORD_RULE}">
-                </div>
+        {* Bước 4: Mật khẩu mới *}
+        <div class="d-none" data-step="step4">
+            <div class="mb-3 position-relative">
+                <input type="password" autocomplete="new-password" class="form-control ps-with-fw-icon" name="new_password" maxlength="{$GCONFIG.nv_upassmax}" value=""
+                    placeholder="{$LANG->getModule('pass_new')}" aria-label="{$LANG->getModule('pass_new')}"
+                    data-pattern="{$PASSWORD_PATTERN}" data-valid data-error-type="tooltip"
+                    data-error-mess="{$PASSWORD_RULE}"
+                >
+                <i class="text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
             </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
-                    <input type="password" autocomplete="off" class="form-control" placeholder="{LANG.pass_new_re}" value="" name="re_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){1,}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.re_password_empty}">
-                </div>
+            <div class="mb-3 position-relative">
+                <input type="password" autocomplete="new-password" class="form-control ps-with-fw-icon" name="re_password" maxlength="{$GCONFIG.nv_upassmax}" value=""
+                    placeholder="{$LANG->getModule('pass_new_re')}" aria-label="{$LANG->getModule('pass_new_re')}"
+                    data-valid data-error-type="tooltip" data-valid-callback="userLostpassRepassCheck"
+                    data-error-mess="{$LANG->getGlobal('passwordsincorrect')}"
+                >
+                <i class="text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
             </div>
         </div>
 
-        <div class="text-center margin-bottom-lg">
-             <input type="hidden" name="step" value="step1" />
-             <input type="hidden" name="checkss" value="{DATA.checkss}" />
-            <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->
-            <button class="bsubmit btn btn-primary" type="submit">{LANG.lostpass_submit}</button>
-       	</div>
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">
+                {$LANG->getModule('lostpass_submit')} <i class="fa-solid fa-arrow-right-long align-baseline-xs ms-1"></i>
+            </button>
+        </div>
     </div>
 </form>

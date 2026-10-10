@@ -1,88 +1,96 @@
-<!-- BEGIN: main -->
-<span><a title="{GLANG.signin} - {GLANG.register}" class="pa pointer button" data-toggle="tip" data-target="#guestBlock_{BLOCKID}" data-click="y" data-callback="loginFormLoad"><em class="fa fa-user fa-lg"></em><span class="hidden">{GLANG.signin}</span></a></span>
-<!-- START FORFOOTER -->
-<div id="guestBlock_{BLOCKID}" class="hidden">
-    <div class="log-area" style="margin:-15px"></div>
-</div>
-<script>
-function loginFormLoad() {
-    $.ajax({
-        type: 'POST',
-        url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login',
-        cache: !1,
-        data: {
-            nv_ajax: 1,
-            nv_redirect: '{NV_REDIRECT}'
-        },
-        dataType: "json"
-    }).done(function(res) {
-        if (res.sso) {
-            window.location.href = res.sso;
-            return !1;
-        }
-        if (res.reload) {
-            location.reload();
-            return !1;
-        }
-        $("#tip .log-area").html(res.html);
-        change_captcha();
-    });
-}
-</script>
-<!-- END FORFOOTER -->
-<!-- END: main -->
-
-<!-- BEGIN: signed -->
-<span><a title="{USER.full_name}" class="pointer button user" data-toggle="tip" data-target="#userBlock_{BLOCKID}" data-click="y" style="background-image:url({AVATA})"><span class="hidden">{USER.full_name}</span></a></span>
-<!-- START FORFOOTER -->
-<div id="userBlock_{BLOCKID}" class="hidden">
-    <div class="nv-info" style="display: none;"></div>
-    <div class="userBlock clearfix">
-        <div class="h3 margin-bottom"><span class="lev-{LEVEL} text-normal">{WELCOME}:</span> <strong>{USER.full_name}</strong></div>
-        <div class="row">
-            <div class="col-xs-8 text-center">
-                <a title="{LANG.edituser}" href="#" data-toggle="changeAvatar" data-action="upd" data-title="{LANG.change_avatar}" data-url="{URL_AVATAR}"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
-            </div>
-            <div class="col-xs-16">
-                <ul class="nv-list-item sm">
-                    <li class="active"><a href="{URL_MODULE}">{LANG.user_info}</a></li>
-                    <li><a href="{URL_HREF}editinfo">{LANG.editinfo}</a></li>
-                    <!-- BEGIN: allowopenid --><li><a href="{URL_HREF}editinfo/openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->
-                    <!-- BEGIN: myapis --><li><a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=myapi">{GLANG.myapis}</a></li><!-- END: myapis -->
+{assign var='iconUserLevel' value=[
+    '1' => '<i class="fa-solid fa-star text-warning"></i><i class="fa-solid fa-star text-warning"></i><i class="fa-solid fa-star text-warning"></i>',
+    '2' => '<i class="fa-regular fa-star text-warning"></i><i class="fa-solid fa-star text-warning"></i><i class="fa-solid fa-star text-warning"></i>',
+    '3' => '<i class="fa-regular fa-star text-warning"></i><i class="fa-regular fa-star text-warning"></i><i class="fa-solid fa-star text-warning"></i>',
+    'user' => '<i class="fa-solid fa-user"></i>'
+]}
+<div class="site-user-button dropdown">
+    {if $smarty.const.NV_IS_USER}
+    {* Đã đăng nhập *}
+    <a class="user-button" title="{$USER.full_name}" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-offset="8,0" aria-expanded="false">
+        {if empty($USER.avata)}
+        <span class="avatar-letters no-avatar w-100 h-100" style="background-color:{$USER.avatar_color}" aria-hidden="true">{$USER.avatar_letters}</span>
+        {else}
+        <img src="{$USER.avata}" alt="{$USER.full_name}">
+        {/if}
+    </a>
+    <div class="dropdown-menu dropdown-menu-end p-0" data-toggle="form">
+        <div class="user-bldropdown">
+            <div class="alert alert-info mb-0 d-none" role="alert" data-toggle="message"></div>
+            <div data-toggle="ct">
+                <div class="mb-1 fw-medium text-break">
+                    <span class="text-nowrap">{$iconUserLevel[$smarty.const.NV_IS_ADMIN ? $ADMIN.level : 'user']}</span>
+                    {$LANG->getGlobal($smarty.const.NV_IS_ADMIN ? 'admin_account' : 'your_account')}: <strong>{$USER.full_name}</strong>
+                </div>
+                <div class="d-flex gap-2 mb-2">
+                    <div class="u-avatar mt-2">
+                        <a title="{$LANG->getModule('avatar')}" href="#" data-toggle="changeAvatar"
+                            data-url="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE}&amp;{$smarty.const.NV_OP_VARIABLE}=avatar/upd"
+                            data-action="upd"
+                            data-title="{$LANG->getModule('change_avatar')}"
+                        >
+                            {if empty($USER.avata)}
+                            <span class="avatar-letters avatar-letters-lg no-avatar" style="background-color:{$USER.avatar_color}" aria-hidden="true">{$USER.avatar_letters}</span>
+                            {else}
+                            <img src="{$USER.avata}" alt="{$USER.full_name}" width="80" height="80">
+                            {/if}
+                        </a>
+                    </div>
+                    <div class="u-info">
+                        <ul class="list-unstyled mb-0">
+                            <li><a href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE}" class="link-body-emphasis">{$LANG->getModule('user_info')}</a></li>
+                            <li><a href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE}&amp;{$smarty.const.NV_OP_VARIABLE}=editinfo" class="link-body-emphasis">{$LANG->getModule('editinfo')}</a></li>
+                            {if $smarty.const.NV_OPENID_ALLOWED}
+                            <li><a href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE}&amp;{$smarty.const.NV_OP_VARIABLE}=editinfo/openid" class="link-body-emphasis">{$LANG->getModule('openid_administrator')}</a></li>
+                            {/if}
+                            {if not empty($SITE_MODS.myapi)}
+                            <li><a href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=myapi" class="link-body-emphasis">{$LANG->getGlobal('myapis')}</a></li>
+                            {/if}
+                        </ul>
+                    </div>
+                </div>
+                {if $smarty.const.NV_IS_ADMIN}
+                <hr class="my-2">
+                <div class="fw-medium">{$LANG->getGlobal('for_admin')}:</div>
+                <ul class="list-unstyled mb-2">
+                    <li><a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}" class="link-body-emphasis"><i class="fa-solid fa-gear text-muted text-center fa-fw"></i> {$LANG->getGlobal('admin_page')}</a></li>
+                    {if $smarty.const.NV_IS_MODADMIN and not empty($MODULE_INFO.admin_file)}
+                    <li><a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}" class="link-body-emphasis"><i class="fa-solid fa-key text-muted text-center fa-fw"></i> {$LANG->getGlobal('admin_module_sector')} {$MODULE_INFO.admin_title ?: $MODULE_INFO.custom_title}</a></li>
+                    {/if}
+                    {if $smarty.const.NV_IS_SPADMIN}
+                    <li><a href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}&amp;drag_block={$smarty.const.NV_IS_DRAG_BLOCK ? 0 : 1}" class="link-body-emphasis"><i class="fa-solid fa-arrows-up-down-left-right text-muted text-center fa-fw"></i> {$LANG->getGlobal($smarty.const.NV_IS_DRAG_BLOCK ? 'no_drag_block' : 'drag_block')}</a></li>
+                    {/if}
+                    <li><a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=authors&amp;id={$ADMIN.admin_id}" class="link-body-emphasis"><i class="fa-solid fa-user text-muted text-center fa-fw"></i> {$LANG->getGlobal('admin_view')}</a></li>
                 </ul>
+                {/if}
             </div>
         </div>
-        <!-- BEGIN: admintoolbar -->
-        <div class="margin-top boder-top padding-top">
-            <p class="margin-bottom-sm"><strong>{GLANG.for_admin}</strong></p>
-            <ul class="nv-list-item sm">
-                <li><em class="fa fa-cog fa-horizon margin-right-sm"></em><a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}" title="{GLANG.admin_page}"><span>{GLANG.admin_page}</span></a></li>
-                <!-- BEGIN: is_modadmin -->
-                <li><em class="fa fa-key fa-horizon margin-right-sm"></em><a href="{URL_ADMINMODULE}" title="{GLANG.admin_module_sector} {MODULENAME}"><span>{GLANG.admin_module_sector} {MODULENAME}</span></a></li>
-                <!-- END: is_modadmin -->
-                <!-- BEGIN: is_spadadmin -->
-                <li><em class="fa fa-arrows fa-horizon margin-right-sm"></em><a href="{URL_DBLOCK}" title="{LANG_DBLOCK}"><span>{LANG_DBLOCK}</span></a></li>
-                <!-- END: is_spadadmin -->
-                <li><em class="fa fa-user fa-horizon margin-right-sm"></em><a href="{URL_AUTHOR}" title="{GLANG.admin_view}"><span>{GLANG.admin_view}</span></a></li>
-            </ul>
-        </div>
-        <!-- END: admintoolbar -->
-    </div>
-    <div class="tip-footer">
-        <div class="row">
-            <div class="col-xs-16 small">
-                <em class="button btn-sm icon-enter" title="{LANG.current_login}"></em>{USER.current_login_txt}
+        <div class="bg-body-tertiary px-3 py-2 rounded-bottom-2 d-flex justify-content-between align-items-center gap-2">
+            <div class="u-current-login">
+                {$USER.current_login|ddatetime}
             </div>
-            <div class="col-xs-8 text-right">
-                <button type="button" class="btn btn-default btn-sm active" data-toggle="{URL_LOGOUT}"><em class="icon-exit"></em>&nbsp;{LANG.logout_title}&nbsp;</button>
+            <div class="u-btn-logout">
+                <button type="button" class="btn btn-secondary btn-sm" data-toggle="{$smarty.const.NV_IS_ADMIN ? 'nv_admin_logout' : 'bt_logout'}" data-module="{$MODULE}"><i class="fa-solid fa-arrow-right-from-bracket" data-icon="fa-arrow-right-from-bracket"></i> {$LANG->getModule('logout_title')}</button>
             </div>
         </div>
     </div>
+    {elseif $smarty.const.SSO_SERVER and ($smarty.const.NV_IS_USER_FORUM or $smarty.const.NV_MY_DOMAIN neq $smarty.const.SSO_REGISTER_DOMAIN)}
+    {* Nút đăng nhập SSO *}
+    <a href="{$LINK_LOGIN}" class="btn btn-primary btn-sm text-nowrap">{$LANG->getGlobal('signin')}</a>
+    {else}
+    {* Nút đăng nhập thành viên *}
+    <button type="button" class="btn btn-primary btn-sm text-nowrap" title="{$LANG->getGlobal('signin')} - {$LANG->getGlobal('register')}"
+        data-toggle="userLoginBlButton" data-bs-toggle="dropdown"
+        data-bs-auto-close="outside" data-bs-offset="8,0" aria-expanded="false"
+        data-loaded="0" data-url="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE}&amp;{$smarty.const.NV_OP_VARIABLE}=login"
+        data-redirect="{$NV_REDIRECT}"
+    >{$LANG->getGlobal('signin')}</button>
+    <div class="dropdown-menu dropdown-menu-end p-3">
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">{$LANG->getGlobal('wait_page_load')}</span>
+            </div>
+        </div>
+    </div>
+    {/if}
 </div>
-<!-- END FORFOOTER -->
-<script src="{NV_STATIC_URL}themes/{BLOCK_JS}/js/users.js"></script>
-<!-- END: signed -->
-
-<!-- BEGIN: sso -->
-<span><a title="{GLANG.signin}" class="pa pointer button" href="{LINK_LOGIN}" rel="nofollow"><em class="fa fa-user fa-lg"></em><span class="hidden">{GLANG.signin}</span></a></span>
-<!-- END: sso -->

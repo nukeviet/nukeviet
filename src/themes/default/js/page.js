@@ -7,40 +7,48 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-$(window).on('load resize', function() {
-    var postHtml = $('#page-bodyhtml'),
-        postHtmlW, w, h;
-    if (postHtml.length) {
-        var postHtmlW = postHtml.innerWidth();
-        $.each($('img', postHtml), function() {
-            if (typeof $(this).data('width') == "undefined") {
-                w = $(this).innerWidth();
-                h = $(this).innerHeight();
-                $(this).data('width', w);
-                $(this).data('height', h);
-            } else {
-                w = $(this).data('width');
-                h = $(this).data('height');
-            }
-
-            if (w > postHtmlW) {
-                $(this).prop('width', postHtmlW);
-                $(this).prop('height', h * postHtmlW / w);
-            }
-        })
-    }
-});
+'use strict';
 
 $(function() {
-    $('body').on('click', '[data-toggle=nv_del_content]', function(e) {
+    // Admin xóa tin
+    $('body').on('click', '[data-toggle="nv_del_content"]', function(e) {
         e.preventDefault();
-        if (confirm(nv_is_del_confirm[0])) {
-            $.post($(this).data('adminurl') + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'id=' + $(this).data('id') + '&checkss=' + $(this).data('ss'), function(res) {
-                if (!res.success) {
-                    return nukeviet.alert(res.text);
-                }
-                location.reload();
-            })
+
+        const btn = $(this);
+        const icon = $('i', btn);
+        if (icon.is('.fa-spinner')) {
+            return;
         }
-    })
-})
+
+        nukeviet.confirm(nv_is_del_confirm[0], () => {
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                type: 'POST',
+                cache: false,
+                url: btn.data('adminurl') + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(),
+                data: {
+                    id: btn.data('id'),
+                    checkss: btn.data('checkss')
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (!response.success) {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nukeviet.alert(response.text);
+                        return;
+                    }
+                    if (btn.data('detail')) {
+                        window.location.href = nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name;
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function(xhr, text, err) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    nukeviet.toast(err || text, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        });
+    });
+});

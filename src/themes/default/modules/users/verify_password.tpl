@@ -1,34 +1,31 @@
-<!-- BEGIN: main -->
-<div class="centered">
-    <div class="login-box">
-        <div class="page panel panel-default margin-top-lg box-shadow bg-lavender">
-            <div class="panel-body">
-                <h2 class="text-center margin-bottom-lg">{LANG.verify_password_title}</h2>
-                <form action="{DATA.form_action}" method="post" data-toggle="verify_password_validForm" data-precheck="verify_password_precheck"
-                    <!-- BEGIN: captcha -->data-captcha="nv_seccode"<!-- END: captcha -->
-                    <!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha -->
-                    <!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->
-                    <!-- BEGIN: turnstile --> data-turnstile="1"<!-- END: turnstile -->
-                >
-                    <input type="hidden" name="_csrf" value="{CHECKSS}">
-                    <input type="hidden" name="nv_redirect" value="{DATA.redirect}">
-                    <input type="hidden" name="area" value="{DATA.area}">
-                    <div class="nv-info margin-bottom" data-default="{LANG.verify_password_note}.">{LANG.verify_password_note}.</div>
-                    <div class="form-detail">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
-                                <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="100" data-pattern="/^(.){3,}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.password_empty}">
-                            </div>
-                        </div>
-                        <div class="text-center margin-bottom-lg">
-                            <button class="bsubmit btn btn-primary" type="submit">{GLANG.verify}</button>
-                            <button type="button" class="btn btn-default" data-toggle="validReset">{GLANG.reset}</button>
-                        </div>
-                    </div>
-                </form>
+<div class="d-flex justify-content-center">
+    <div class="rounded-4 border shadow-lg p-4">
+        <div class="mb-2 d-flex justify-content-center">
+            <div class="d-flex fw-40 fh-40 align-items-center rounded-circle justify-content-center bg-primary-subtle text-primary-emphasis">
+                <i class="fa-solid fa-user-shield"></i>
             </div>
         </div>
+        <h1 class="h2 text-center mb-3">{$LANG->getModule('verify_password_title')}</h1>
+        <form action="{$DATA.form_action}" method="post" class="fw-300"
+            data-toggle="ajax-form" data-precheck="nv_precheck_form"
+            autocomplete="off" novalidate {$CAPTCHA_ATTRS}
+        >
+            <input type="hidden" name="_csrf" value="{$CHECKSS}">
+            <input type="hidden" name="nv_redirect" value="{$DATA.redirect}">
+            <input type="hidden" name="area" value="{$DATA.area}">
+            <div class="alert alert-info mb-3">{$LANG->getModule('verify_password_note')}.</div>
+            <div class="mb-3 position-relative">
+                <input type="password" autocomplete="current-password" class="form-control ps-with-fw-icon" name="password" maxlength="100" value=""
+                    placeholder="{$LANG->getGlobal('password')}" aria-label="{$LANG->getGlobal('password')}"
+                    minlength="3" data-valid data-error-type="tooltip"
+                >
+                <i class="text-center fa-fw fa-solid fa-key position-absolute top-50 start-0 ms-2 translate-middle-y"></i>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">
+                    {$LANG->getGlobal('verify')} <i class="fa-solid fa-arrow-right-long align-baseline-xs ms-1"></i>
+                </button>
+            </div>
+        </form>
     </div>
 </div>
-<!-- END: main -->

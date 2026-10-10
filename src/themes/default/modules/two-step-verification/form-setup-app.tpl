@@ -1,35 +1,45 @@
-<h3>{LANG.cfg_step1}</h3>
+<h6>{$LANG->getModule('cfg_step1')}</h6>
 <div class="text-center">
-    <img alt="QR" src="{QR_SRC}" class="twostep-qrimg img-thumbnail">
+    <img alt="QR" src="{$QR_SRC}" class="twostep-qrimg img-thumbnail">
 </div>
-<hr />
-<p>{LANG.cfg_step1_manual} <a href="#manualsecretkey" data-toggle="manualsecretkey">{LANG.cfg_step1_manual1}</a> {LANG.cfg_step1_manual2}.</p>
-<p>{LANG.cfg_step2_info}</p>
-<h3 class="margin-bottom-sm">{LANG.cfg_step2}</h3>
-<form action="{FORM_ACTION}" method="post" data-toggle="opt_validForm" autocomplete="off" novalidate>
-    <div class="nv-info margin-bottom" data-default="" style="display: none"></div>
-    <div class="form-detail">
-        <div class="step1">
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><em class="fa fa-key fa-lg"></em></span>
-                    <input type="text" class="required form-control" placeholder="123456" value="" name="opt" maxlength="6" data-pattern="/^(.){6,}$/" data-toggle="valid2faErrorHidden" data-mess="">
-                </div>
-            </div>
+<hr>
+<p>
+    {$LANG->getModule('cfg_step1_manual')}
+    <a href="#" data-bs-toggle="modal" data-bs-target="#manualsecretkey-modal">{$LANG->getModule('cfg_step1_manual1')}</a>
+    {$LANG->getModule('cfg_step1_manual2')}.
+</p>
+<p>{$LANG->getModule('cfg_step2_info')}</p>
+<h6 class="mb-2">{$LANG->getModule('cfg_step2')}</h6>
+<form action="{$FORM_ACTION}" method="post" data-toggle="ajax-form" data-precheck="nv_precheck_form" autocomplete="off" novalidate>
+    <div class="mb-3">
+        <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-key fa-fw"></i></span>
+            <input type="text" class="required form-control" placeholder="123456"
+                   value="" data-valid name="opt" minlength="6" maxlength="6">
         </div>
-        <div class="text-center">
-            <input type="hidden" name="checkss" value="{NV_CHECK_SESSION}">
-            <input type="hidden" name="nv_redirect" value="{NV_REDIRECT}">
-            <button class="bsubmit btn btn-primary" type="submit">{LANG.confirm}</button>
-        </div>
+        <div class="invalid-feedback"></div>
+    </div>
+    <div class="text-center">
+        <input type="hidden" name="checkss" value="{$smarty.const.NV_CHECK_SESSION}">
+        <input type="hidden" name="nv_redirect" value="{$NV_REDIRECT}">
+        <button class="btn btn-primary" type="submit">
+            <i class="fa-solid fa-check"></i> {$LANG->getModule('confirm')}
+        </button>
     </div>
 </form>
-<div class="hidden" id="manualsecretkey" title="{LANG.setup_key}">
-    <div class="twostep-manualsecretkey">
-        <div class="text-center">
-            <strong>{SECRETKEY}</strong>
+<div class="modal fade" id="manualsecretkey-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{$LANG->getModule('setup_key')}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$LANG->getGlobal('close')}"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <strong class="h4">{$SECRETKEY}</strong>
+                </div>
+                <p class="text-muted">{$LANG->getModule('cfg_step1_note')}</p>
+            </div>
         </div>
-        <hr />
-        {LANG.cfg_step1_note}
     </div>
 </div>

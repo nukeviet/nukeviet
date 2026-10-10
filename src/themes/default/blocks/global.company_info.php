@@ -15,8 +15,6 @@ if (!defined('NV_MAINFILE')) {
 
 if (!nv_function_exists('nv_company_info')) {
     /**
-     * nv_company_info_config()
-     *
      * @param string $module
      * @param array  $data_block
      * @return string
@@ -25,93 +23,15 @@ if (!nv_function_exists('nv_company_info')) {
     {
         global $nv_Lang;
 
-        $html = '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('company_name') . ':</label>';
-        $html .= '<div class="col-sm-9"><input type="text" class="form-control" name="config_company_name" value="' . $data_block['company_name'] . '"></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('company_sortname') . ':</label>';
-        $html .= '<div class="col-sm-9"><input type="text" class="form-control" name="config_company_sortname" value="' . $data_block['company_sortname'] . '"></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('company_regcode') . ':</label>';
-        $html .= '<div class="col-sm-9"><input type="text" class="form-control" name="config_company_regcode" value="' . $data_block['company_regcode'] . '"></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('company_regplace') . ':</label>';
-        $html .= '<div class="col-sm-9"><input type="text" class="form-control" name="config_company_regplace" value="' . $data_block['company_regplace'] . '"></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('company_licensenumber') . ':</label>';
-        $html .= '<div class="col-sm-9"><input type="text" class="form-control" name="config_company_licensenumber" value="' . $data_block['company_licensenumber'] . '"></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('company_responsibility') . ':</label>';
-        $html .= '<div class="col-sm-9"><input type="text" class="form-control" name="config_company_responsibility" value="' . $data_block['company_responsibility'] . '"></div>';
-        $html .= '</div>';
-        $html .= '<div class="row">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('company_address') . ':</label>';
-        $html .= '<div class="col-sm-9">';
-        $html .= '<div class="row g-2 mb-3">';
-        $html .= '<div class="col-8">';
-        $html .= '<input type="text" class="form-control" name="config_company_address" id="config_company_address" value="' . $data_block['company_address'] . '">';
-        $html .= '</div>';
-        $html .= '<div class="col-4">';
-        $html .= '<select name="config_company_showmap" id="config_company_mapshow" class="form-select">
-                    <option value="0"' . (empty($data_block['company_showmap']) ? ' selected="selected"' : '') . '>' . $nv_Lang->getModule('cominfo_map_no') . '</option>
-                    <option value="1"' . (!empty($data_block['company_showmap']) ? ' selected="selected"' : '') . '>' . $nv_Lang->getModule('cominfo_map_yes') . '</option>
-                  </select>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '<div id="config_company_maparea"' . (!empty($data_block['company_showmap']) ? '' : ' class="d-none"') . '>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getModule('cominfo_mapurl') . ':</label>';
-        $html .= '<div class="col-sm-9">';
-        $html .= '<input type="text" class="form-control" name="config_company_mapurl" id="config_company_mapurl" value="' . $data_block['company_mapurl'] . '">';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('company_phone') . ':</label>';
-        $html .= '<div class="col-sm-9">
-                      <input type="text" class="form-control mb-2" name="config_company_phone" value="' . $data_block['company_phone'] . '">
-                      <button class="btn btn-secondary btn-sm" onclick="modalShow(\'' . $nv_Lang->getGlobal('phone_note_title') . '\',\'' . $nv_Lang->getGlobal('phone_note_content') . '\');return!1;">' . $nv_Lang->getGlobal('phone_note_title') . '</button>
-                  </div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('company_fax') . ':</label>';
-        $html .= '<div class="col-sm-9"><input type="text" class="form-control" name="config_company_fax" value="' . $data_block['company_fax'] . '"></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('company_email') . ':</label>';
-        $html .= '<div class="col-sm-9"><input type="text" class="form-control" name="config_company_email" value="' . $data_block['company_email'] . '"><span class="form-text">' . $nv_Lang->getGlobal('multi_note') . '</span></div>';
-        $html .= '</div>';
-        $html .= '<div class="row mb-3">';
-        $html .= '<label class="col-sm-3 col-form-label text-sm-end text-truncate fw-medium">' . $nv_Lang->getGlobal('company_website') . ':</label>';
-        $html .= '<div class="col-sm-9"><input type="text" class="form-control" name="config_company_website" value="' . $data_block['company_website'] . '"><span class="form-text">' . $nv_Lang->getGlobal('multi_note') . '</span></div>';
-        $html .= '</div>';
-        $html .= '<tr class="hide">';
-        $html .= '<div class="col-sm-9" colspan="2"><script type="text/javascript">
-        $(document).ready(function() {
-            $("#config_company_mapshow").on("change", function() {
-                if ($(this).val() == "1") {
-                    $("#config_company_maparea").removeClass("d-none");
-                } else {
-                    $("#config_company_maparea").addClass("d-none");
-                }
-            });
-        });
-        </script></div>';
-        $html .= '</div>';
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir(__DIR__);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('CONFIG', $data_block);
 
-        return $html;
+        return $tpl->fetch('global.company_info.config.tpl');
     }
 
     /**
-     * nv_company_info_submit()
-     *
      * @return array
      */
     function nv_company_info_submit()
@@ -138,14 +58,40 @@ if (!nv_function_exists('nv_company_info')) {
     }
 
     /**
-     * nv_company_info()
-     *
      * @param array $block_config
      * @return string
      */
     function nv_company_info($block_config)
     {
-        global $global_config, $nv_Lang;
+        global $global_config, $nv_Lang, $nv_schemas;
+
+        // JSON-LD LocalBusiness
+        $ld_json = [
+            '@context' => 'https://schema.org',
+            '@type' => 'LocalBusiness',
+            'priceRange' => 'N/A',
+            'image' => [NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']],
+        ];
+        !empty($block_config['company_name']) && $ld_json['name'] = $block_config['company_name'];
+        !empty($block_config['company_sortname']) && $ld_json['alternateName'] = $block_config['company_sortname'];
+        if (!empty($block_config['company_responsibility'])) {
+            $ld_json['founder'] = [
+                '@type' => 'Person',
+                'name' => $block_config['company_responsibility'],
+            ];
+        }
+        if (!empty($block_config['company_address'])) {
+            $ld_json['address'] = [
+                '@type' => 'PostalAddress',
+                'addressLocality' => $block_config['company_address'],
+                'postalCode' => 'N/A',
+                'streetAddress' => 'N/A',
+                'addressCountry' => NV_LANG_DATA
+            ];
+        }
+        if (!empty($block_config['company_showmap']) && !empty($block_config['company_mapurl'])) {
+            $ld_json['hasMap'] = $block_config['company_mapurl'];
+        }
 
         $company_regcode = '';
         if (!empty($block_config['company_regcode'])) {
@@ -155,7 +101,7 @@ if (!nv_function_exists('nv_company_info')) {
             }
         }
         if (!empty($block_config['company_licensenumber'])) {
-            $company_regcode .= (!empty($company_regcode) ? '<br />' : '') . $nv_Lang->getGlobal('company_licensenumber') . ': ' . $block_config['company_licensenumber'];
+            $company_regcode .= ', ' . $nv_Lang->getGlobal('company_licensenumber') . ': ' . $block_config['company_licensenumber'];
         }
 
         $block_config['company_regcode'] = $company_regcode;
@@ -169,12 +115,20 @@ if (!nv_function_exists('nv_company_info')) {
             return $url;
         }, $block_config['company_website']);
 
-        $stpl = new \NukeViet\Template\NVSmarty();
-        $stpl->setTemplateDir($block_config['real_path'] . '/smarty');
-        $stpl->assign('LANG', $nv_Lang);
-        $stpl->assign('SITE_LOGO', NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']);
-        $stpl->assign('DATA', $block_config);
-        return $stpl->fetch('global.company_info.tpl');
+        if (!empty($block_config['company_phone'])) {
+            $ld_json['telephone'] = $block_config['company_phone'][0][1] ?? $block_config['company_phone'][0][0];
+        }
+        !empty($block_config['company_email']) && $ld_json['email'] = $block_config['company_email'][0];
+        !empty($block_config['company_website']) && $ld_json['url'] = $block_config['company_website'][0];
+        !empty($block_config['company_fax']) && $ld_json['faxNumber'] = $block_config['company_fax'];
+
+        $nv_schemas[] = $ld_json;
+
+        $tpl = new \NukeViet\Template\NVSmarty();
+        $tpl->setTemplateDir($block_config['real_path']);
+        $tpl->assign('LANG', $nv_Lang);
+        $tpl->assign('DATA', $block_config);
+        return $tpl->fetch('global.company_info.tpl');
     }
 }
 

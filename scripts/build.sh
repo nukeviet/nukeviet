@@ -16,11 +16,11 @@ DIR_PATH=$PWD
 
 npm run admin-css
 
-rm -f "$DIR_PATH/src/themes/admin_future/js/bootstrap.bundle.min.js"
-rm -f "$DIR_PATH/src/themes/admin_future/js/bootstrap.bundle.min.js.map"
+rm -f "$DIR_PATH/src/themes/admin_default/js/bootstrap.bundle.min.js"
+rm -f "$DIR_PATH/src/themes/admin_default/js/bootstrap.bundle.min.js.map"
 
-cp "$DIR_PATH/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" "$DIR_PATH/src/themes/admin_future/js/bootstrap.bundle.min.js"
-cp "$DIR_PATH/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js.map" "$DIR_PATH/src/themes/admin_future/js/bootstrap.bundle.min.js.map"
+cp "$DIR_PATH/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" "$DIR_PATH/src/themes/admin_default/js/bootstrap.bundle.min.js"
+cp "$DIR_PATH/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js.map" "$DIR_PATH/src/themes/admin_default/js/bootstrap.bundle.min.js.map"
 
-find "$DIR_PATH/src/themes/admin_future/webfonts" -type f -name "fa-*" | xargs /bin/rm -f
-cp -r "$DIR_PATH/node_modules/@fortawesome/fontawesome-free/webfonts/." "$DIR_PATH/src/themes/admin_future/webfonts/"
+find "$DIR_PATH/src/themes/admin_default/webfonts" -type f -name "fa-*" | xargs /bin/rm -f
+cp -r "$DIR_PATH/node_modules/@fortawesome/fontawesome-free/webfonts/." "$DIR_PATH/src/themes/admin_default/webfonts/"

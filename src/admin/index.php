@@ -18,8 +18,6 @@ require NV_ROOTDIR . '/includes/mainfile.php';
 
 // Admin dang nhap
 if (!defined('NV_IS_ADMIN') or !isset($admin_info) or empty($admin_info)) {
-    // FIXME xóa sau khi dev giao diện admin xong
-    $global_config['admin_theme'] = 'admin_future';
     require NV_ROOTDIR . '/includes/core/admin_access.php';
     require NV_ROOTDIR . '/includes/core/admin_login.php';
     exit(0);

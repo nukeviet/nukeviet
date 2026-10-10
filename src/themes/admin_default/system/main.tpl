@@ -1,232 +1,353 @@
-<!-- BEGIN: main -->
-{FILE "header.tpl"}
-<div class="container-fluid nvwrap">
-    <div id="left-menu-bg"></div>
-    <header id="header" class="row">
-        <div class="logo">
-            <a title="{NV_SITE_NAME}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}">
-                <img class="logo-md" alt="{NV_SITE_NAME}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/logo_small.png" width="189" height="49"/>
-                <img class="logo-xs" alt="{NV_SITE_NAME}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/logo-xs.png" width="50" height="50"/>
+{include file='header.tpl'}
+<header class="header-outer border-bottom">
+    <div class="header-inner d-flex">
+        <div class="site-brand text-center ms-2 ms-md-0">
+            <a class="logo" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}">
+                <img src="{$smarty.const.ASSETS_STATIC_URL}/images/logo.svg" alt="{$GCONFIG.site_name}">
+            </a>
+            <a class="logo-sm" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}">
+                <img src="{$smarty.const.ASSETS_STATIC_URL}/images/logo-xs.svg" alt="{$GCONFIG.site_name}">
             </a>
         </div>
-        <ul class="menu pull-right">
-            <!-- BEGIN: lang -->
-            <li title="{LANG.langinterface}" class="menu-lang menu-lang-interface">
-                <a href="javascript:void(0);" data-toggle="dropdown">Lang Interface: {NV_LANGINTERFACE_CURRENT} <em class="fa fa-caret-down"></em></a>
-                <ul class="dropdown-menu" role="menu">
-                    <!-- BEGIN: interface -->
-                    <li{INTERFACE_DISABLED}><a href="{INTERFACE_LANGOP}">{LANGVALUE}</a></li>
-                    <!-- END: interface -->
-                </ul>
-            </li>
-            <li title="{LANG.langdata}" class="menu-lang menu-lang-data">
-                <a href="javascript:void(0);" data-toggle="dropdown">Lang Data: {NV_LANGDATA_CURRENT} <em class="fa fa-caret-down"></em></a>
-                <ul class="dropdown-menu" role="menu">
-                    <!-- BEGIN: data -->
-                    <li{DATA_DISABLED}><a href="{DATA_LANGOP}">{LANGVALUE}</a></li>
-                    <!-- END: data -->
-                </ul>
-            </li>
-            <!-- END: lang -->
-            <li class="tip" data-toggle="tooltip" data-placement="bottom" title="{NV_GO_CLIENTSECTOR}">
-                <a href="{NV_GO_CLIENTSECTOR_URL}"> <em class="fa fa-home fa-2x fix"></em></a>
-            </li>
-            <!-- BEGIN: lang1 -->
-            <li class="menu-lang-mobile">
-                <a data-btn="toggleLang" href="#"><em class="fa fa-2x fa-magic fix" aria-hidden="true"></em></a>
-            </li>
-            <!-- END: lang1 -->
-            <li class="admin-info">
-                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-                    <img src="{ADMIN_PHOTO}" alt="{ADMIN_USERNAME}" width="32" height="32" class="bg-gainsboro"/>
-                </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <span><img alt="" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{ADMIN.level}.png"> {ADMIN.username}</span>
-                    </li>
-                    <li>
-                        <span><i class="fa fa-caret-right fa-fw"></i> {ADMIN.hello_admin2}</span>
-                    </li>
-                    <!-- BEGIN: admin_login_duration -->
-                    <li>
-                        <span><i class="fa fa-globe fa-spin fa-fw"></i> {LANG.login_session_expire} <span id="countdown" data-duration="{DURATION}"></span></span>
-                    </li>
-                    <!-- END: admin_login_duration -->
-                    <!-- BEGIN: hello_admin1 -->
-                    <li>
-                        <span><i class="fa fa-caret-right fa-fw"></i> {ADMIN.hello_admin1}</span>
-                    </li>
-                    <!-- END: hello_admin1 -->
-                    <li>
-                        <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=users">
-                        <i class="fa fa-arrow-circle-right fa-fw"></i> {LANG.account_settings}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=authors&amp;id={ADMIN.admin_id}">
-                        <i class="fa fa-arrow-circle-right fa-fw"></i> {LANG.your_admin_account}
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <!-- BEGIN: notification -->
-            <li class="dropdown" id="notification-area" data-checksess="{NV_CHECK_SESSION}">
-                <span id="notification" style="display: none"></span>
-                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"> <em class="fa fa-bell-o fa-2x fix"></em></a>
-                <div class="dropdown-menu">
-                    <div>
-                        <div id="notification_load"></div>
-                        <div id="notification_waiting">
-                            <div class="text-center">
-                                <i class="fa fa-spin fa-spinner"></i>
+        <div class="site-header flex-grow-1 flex-shrink-1 d-flex align-items-center justify-content-between px-2 px-sm-4">
+            <div class="header-left">
+                <a href="#" class="left-sidebar-toggle fs-4" data-toggle="left-sidebar" aria-label="{$LANG->getGlobal('toggle_left_sidebar')}" title="{$LANG->getGlobal('toggle_left_sidebar')}"><i class="fas fa-bars ico-vc"></i></a>
+            </div>
+            <div class="header-right d-flex position-relative ms-auto">
+                <nav class="main-icons">
+                    <ul class="d-flex list-unstyled my-0 ms-0 me-3">
+                        <li>
+                            <a title="{$LANG->getGlobal('go_clientsector')}" aria-label="{$LANG->getGlobal('go_clientsector')}" href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={if empty($SITE_MODS)}{$smarty.const.NV_LANG_DATA}{else}{$GCONFIG.site_lang}{/if}" class="fs-3"><i class="fas fa-home ico-vc"></i></a>
+                        </li>
+                        {if not empty($GCONFIG.notification_active) and !($MODULE_NAME eq 'siteinfo' and $OP eq 'notification')}
+                        <li class="dropdown-center site-noti" id="main-notifications" data-enable="true">
+                            <a title="{$LANG->getGlobal('site_info')}" aria-label="{$LANG->getGlobal('site_info')}" href="#" class="fs-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" data-bs-offset="0,11"><i class="fas fa-bell ico-vc"></i><span class="indicator"></span></a>
+                            <div class="dropdown-menu dropdown-menu-end pb-0">
+                                <div class="noti-heading text-center border-bottom pb-2 fw-medium">
+                                    {$LANG->getGlobal('inform_unread')} <span class="badge rounded-pill text-bg-info" data-count="0">..</span>
+                                </div>
+                                <div class="noti-body site-notis position-relative">
+                                    <div class="position-relative noti-lists">
+                                        <div class="noti-lists-inner">
+                                        </div>
+                                    </div>
+                                    <div class="loader position-absolute bottom-0 start-50 translate-middle-x d-none"><i class="fa-solid fa-spinner fa-spin-pulse"></i></div>
+                                </div>
+                                <div class="noti-footer border-top d-flex flex-nowrap">
+                                    <a class="w-50 fw-medium border-end text-center text-truncate p-2" href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=siteinfo&amp;{$smarty.const.NV_OP_VARIABLE}=notification">{$LANG->getGlobal('view_all')}</a>
+                                    <a class="w-50 fw-medium text-center text-truncate p-2 markall" href="#">{$LANG->getGlobal('mark_read_all')}</a>
+                                </div>
                             </div>
-                        </div>
-                        <div id="notification_more">
-                            <div class="text-center">
-                                <a href="{NV_GO_ALL_NOTIFICATION}">{LANG.view_all}</a>
-                                <a href="#" data-toggle="markallnoti">{LANG.mark_read_all}</a>
+                        </li>
+                        {/if}
+                        <li class="menu-sys" id="menu-sys">
+                            <a title="{$LANG->getGlobal('sys_mods')}" aria-label="{$LANG->getGlobal('sys_mods')}" href="#" class="fs-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" data-bs-display="static"><i class="fas fa-th ico-vc"></i></a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <div class="menu-sys-inner position-relative">
+                                    <div class="menu-sys-items">
+                                        <div class="row">
+                                            {foreach from=$ADMIN_MODS key=mname item=mvalue}
+                                            {if not empty($mvalue.custom_title)}
+                                            {assign var=submenu value=submenu($mname) nocache}
+                                            <div class="col-md-3 col-sm-6">
+                                                <ul class="list-unstyled mb-4">
+                                                    <li class="fs-4 fw-medium mb-2 border-bottom pb-1"><a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$mname}">{$mvalue.custom_title}</a></li>
+                                                    {foreach from=$submenu key=mop item=mopname}
+                                                    <li class="mb-1"><a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$mname}&amp;{$smarty.const.NV_OP_VARIABLE}={$mop}">{$mopname}</a></li>
+                                                    {/foreach}
+                                                </ul>
+                                            </div>
+                                            {/if}
+                                            {/foreach}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </li>
+                        <li>
+                            <a title="{$LANG->getGlobal('theme_settings')}" aria-label="{$LANG->getGlobal('theme_settings')}" href="#" class="fs-3" data-toggle="right-sidebar"><i class="fas fa-cog ico-vc"></i></a title="{$LANG->getGlobal('sys_mods')}">
+                        </li>
+                    </ul>
+                </nav>
+                <div class="admin-info">
+                    <a title="{$LANG->getGlobal('admin_account')}" aria-label="{$LANG->getGlobal('admin_account')}" href="#" class="admin-icon" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" data-bs-display="static">
+                        <span>
+                            {if not empty($ADMIN_INFO.avata)}
+                            <img alt="{$ADMIN_INFO.full_name}" src="{$ADMIN_INFO.avata}">
+                            {elseif not empty($ADMIN_INFO.avatar_letters)}
+                            <span class="avatar-letters" style="background-color:{$ADMIN_INFO.avatar_color}" aria-hidden="true">{$ADMIN_INFO.avatar_letters}</span>
+                            {else}
+                            <i class="fa-solid fa-circle-user ico-vc"></i>
+                            {/if}
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <li class="px-2">
+                            <div class="fw-medium fs-3 mb-2">{$ADMIN_INFO.full_name}</div>
+                            <img alt="{$ADMIN_INFO.username}" src="{$smarty.const.NV_BASE_SITEURL}themes/{$ADMIN_INFO.admin_theme}/images/admin{$ADMIN_INFO.level}.png"> {$ADMIN_INFO.username}
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="px-2">
+                            <i class="fa fa-caret-right fa-fw"></i> {$LANG->getGlobal('hello_admin2', date('H:i d/m/Y', $ADMIN_INFO.current_login), $ADMIN_INFO.current_ip)}
+                        </li>
+                        {if not empty($GCONFIG.admin_login_duration)}
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="px-2">
+                            <i class="fa fa-globe fa-spin fa-fw"></i> {$LANG->getGlobal('login_session_expire')} <span id="countdown" data-duration="{($ADMIN_INFO.current_login + $GCONFIG.admin_login_duration - $smarty.const.NV_CURRENTTIME) * 1000}"></span>
+                        </li>
+                        {/if}
+                        {if not empty($ADMIN_INFO.last_login)}
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="px-2">
+                            <i class="fa fa-caret-right fa-fw"></i> {$LANG->getGlobal('hello_admin1', date('H:i d/m/Y', $ADMIN_INFO.last_login), $ADMIN_INFO.last_ip)}
+                        </li>
+                        {/if}
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="px-2">
+                            <a href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=users">
+                                <i class="fa fa-arrow-circle-right fa-fw"></i> {$LANG->getGlobal('account_settings')}
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="px-2">
+                            <a href="{$smarty.const.NV_BASE_ADMINURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=authors&amp;id={$ADMIN_INFO.admin_id}">
+                                <i class="fa fa-arrow-circle-right fa-fw"></i> {$LANG->getGlobal('your_admin_account')}
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="px-2">
+                            <a href="#" data-toggle="admin-logout">
+                                <i class="fa fa-power-off text-danger"></i> {$LANG->getGlobal('admin_logout_title')}
+                            </a>
+                        </li>
                     </div>
                 </div>
-            </li>
-            <!-- END: notification -->
-            <li class="tip" data-toggle="tooltip" data-placement="bottom" title="{NV_LOGOUT}">
-                <a href="javascript:void(0);" onclick="nv_admin_logout();"> <em class="fa fa-power-off fa-2x fix logout"></em></a>
-            </li>
-        </ul>
-    </header>
-    <div class="row">
-        <div class="navbar navbar-inverse navbar-static-top" role="navigation" id="menu-site-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-horizontal">
-                        <span class="sr-only"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <button id="left-menu-toggle" type="button" class="navbar-toggle" data-target="#left-menu">
-                        <span class="sr-only"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
+            </div>
+        </div>
+    </div>
+</header>
+<nav class="left-sidebar border-end" id="left-sidebar">
+    <div class="left-sidebar-wrapper">
+        <div class="left-sidebar-in-sm border-bottom">
+            <div class="d-flex mx-2 mx-sm-4 align-items-center fs-3">
+                <div class="me-auto text-truncate fw-medium">
+                    {$PAGE_TITLE}
                 </div>
-                <div class="collapse navbar-collapse" id="menu-horizontal">
-                    <ul class="nav navbar-nav">
-                        <li class="hidden-md hidden-sm hidden-xs">
-                            <a title="{LANG.Home}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}"><em class="fa fa-lg fa-home"></em> {LANG.Home}</a>
-                        </li>
-                        <!-- BEGIN: top_menu_loop -->
-                        <li {TOP_MENU_CLASS}>
-                            <a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={TOP_MENU_HREF}">{TOP_MENU_NAME}<!-- BEGIN: has_sub --> <strong class="caret"></strong><!-- END: has_sub --></a>
-                            <!-- BEGIN: submenu -->
-                            <ul class="dropdown-menu">
-                                <!-- BEGIN: submenu_loop --><li><a href="{SUBMENULINK}" title="{SUBMENUTITLE}">{SUBMENUTITLE}</a></li><!-- END: submenu_loop -->
+                <div class="ms-3">
+                    <a href="#" data-toggle="left-sidebar-sm"><i class="fa-solid fa-bars"></i></a>
+                </div>
+                {if not empty($BREADCRUMBS) or isset($HELP_URLS[$OP]) or (isset($SITE_MODS[$MODULE_NAME]) and not empty($SITE_MODS[$MODULE_NAME].main_file))}
+                <div class="ms-3">
+                    <a href="#" data-toggle="breadcrumb"><i class="fa-solid fa-square-caret-down"></i></a>
+                </div>
+                {/if}
+            </div>
+        </div>
+        <div class="left-sidebar-spacer">
+            <div class="left-sidebar-scroll">
+                <div class="left-sidebar-content">
+                    <ul class="sidebar-elements">
+                        {if !empty($SELECT_OPTIONS)}
+                        <li class="parent open">
+                            <a href="#"><i class="fas fa-hand-pointer icon" title="{$LANG->get('please_select')}" data-bs-trigger="hover" data-bs-placement="right"></i><span>{$LANG->get('please_select')}</span><span class="toggle"><i class="fas"></i></span></a>
+                            <ul class="sub-menu">
+                                <li class="title">{$LANG->get('please_select')}</li>
+                                <li class="nav-items">
+                                    <div class="nv-left-sidebar-scroller">
+                                        <div class="content">
+                                            <ul>
+                                                {foreach from=$SELECT_OPTIONS key=seloptlink item=selopttitle}
+                                                <li><a href="{$seloptlink}" title="{$selopttitle}"><span>{$selopttitle}</span></a></li>
+                                                {/foreach}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
                             </ul>
-                            <!-- END: submenu -->
+                        <li>
+                        {/if}
+                        {if !empty($MOD_CURRENT)}
+                        <li class="divider">{$LANG->get('interface_current_menu')}</li>
+                        <li class="{if !empty($MOD_CURRENT['subs'])}parent {/if}active{if empty($CONFIG_THEME['collapsed_leftsidebar'])} open{/if}">
+                            <a href="{$MOD_CURRENT.link}" title="{$MOD_CURRENT.title}"><i class="{$MOD_CURRENT.icon} icon" title="{$MOD_CURRENT.title}" data-bs-trigger="hover" data-bs-placement="right"></i><span>{$MOD_CURRENT.title}</span>{if !empty($MOD_CURRENT['subs'])}<span class="toggle"><i class="fas"></i></span>{/if}</a>
+                            {if !empty($MOD_CURRENT['subs'])}
+                            <ul class="sub-menu">
+                                <li class="title">{$MOD_CURRENT.title}</li>
+                                <li class="nav-items">
+                                    <div class="nv-left-sidebar-scroller">
+                                        <div class="content">
+                                            <ul>
+                                                <li class="f-link{if $MOD_CURRENT['active']} active{/if}" title="{$LANG->get('Home')}"><a href="{$MOD_CURRENT.link}">{$LANG->get('Home')}</a></li>
+                                                {foreach from=$MOD_CURRENT['subs'] item=crrsub}
+                                                {if not empty($crrsub['subs'])}
+                                                <li class="parent{if $crrsub['active']} active{/if}{if $crrsub['open']} open{/if}">
+                                                    <a href="{$crrsub.link}" title="{$crrsub.title}"><span>{$crrsub.title}</span><span class="toggle"><i class="fas"></i></span></a>
+                                                    <ul class="sub-menu">
+                                                        {foreach from=$crrsub['subs'] item=crrsublv2}
+                                                        <li{if $crrsublv2['active']} class="active"{/if}><a href="{$crrsublv2.link}" title="{$crrsublv2.title}"><span>{$crrsublv2.title}</span></a></li>
+                                                        {/foreach}
+                                                    </ul>
+                                                </li>
+                                                {else}
+                                                <li{if $crrsub['active']} class="active"{/if}><a href="{$crrsub.link}" title="{$crrsub.title}"><span>{$crrsub.title}</span></a></li>
+                                                {/if}
+                                                {/foreach}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            {/if}
                         </li>
-                        <!-- END: top_menu_loop -->
+                        {/if}
+                        {if !empty($MOD_MENU)}
+                        <li class="divider">{$LANG->get('interface_other_menu')}</li>
+                        {foreach from=$MOD_MENU item=rowmenu}
+                        <li{if !empty($rowmenu['subs'])} class="parent"{/if}>
+                            <a href="{$rowmenu.link}" title="{$rowmenu.title}"><i class="{$rowmenu.icon} icon" title="{$rowmenu.title}" data-bs-trigger="hover" data-bs-placement="right"></i><span>{$rowmenu.title}</span>{if !empty($rowmenu['subs'])}<span class="toggle"><i class="fas"></i></span>{/if}</a>
+                            {if !empty($rowmenu['subs'])}
+                            <ul class="sub-menu">
+                                <li class="title">{$rowmenu.title}</li>
+                                <li class="nav-items">
+                                    <div class="nv-left-sidebar-scroller">
+                                        <div class="content">
+                                            <ul>
+                                                <li class="f-link"><a href="{$rowmenu.link}">{$LANG->get('Home')}</a></li>
+                                                {foreach from=$rowmenu['subs'] item=smenutitle key=smenukey}
+                                                {if is_array($smenutitle)}
+                                                <li class="parent">
+                                                    <a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$rowmenu.name}&amp;{$NV_OP_VARIABLE}={$smenukey}" title="{$smenutitle.title}"><span>{$smenutitle.title}</span><span class="toggle"><i class="fas"></i></span></a>
+                                                    <ul class="sub-menu">
+                                                        {foreach from=$smenutitle.submenu item=sublv2 key=keysublv2}
+                                                        <li><a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$rowmenu.name}&amp;{$NV_OP_VARIABLE}={$keysublv2}" title="{$sublv2}"><span>{$sublv2}</span></a></li>
+                                                        {/foreach}
+                                                    </ul>
+                                                </li>
+                                                {else}
+                                                <li><a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$rowmenu.name}&amp;{$NV_OP_VARIABLE}={$smenukey}" title="{$smenutitle}">{$smenutitle}</a></li>
+                                                {/if}
+                                                {/foreach}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            {/if}
+                        </li>
+                        {/foreach}
+                        {/if}
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-    <section id="middle" class="row">
-        <aside id="left-menu">
-            <div id="bg-left-menu">
-                <ul class="nav nav-pills nav-stacked text-color">
-                    <!-- BEGIN: menu_loop -->
-                        <li {MENU_CLASS}>
-                            <a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_HREF}">{MENU_NAME}</a>
-                            <!-- BEGIN: submenu -->
-                            <ul class="dropdown-menu">
-                                <!-- BEGIN: loop -->
-                                <li>
-                                    <a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
-                                </li>
-                                <!-- END: loop -->
-                            </ul>
-                            <!-- END: submenu -->
-                            <span class="arrow"></span>
-                        </li>
-                        <!-- BEGIN: current -->
-                        <li {MENU_CLASS}>
-                            <a class="{MENU_SUB_CURRENT}" href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
-                            <!-- BEGIN: submenu -->
-                            <ul class="dropdown-menu">
-                                <!-- BEGIN: loop -->
-                                <li>
-                                    <a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={CUR_SUB_OP}">{CUR_SUB_NAME}</a>
-                                </li>
-                                <!-- END: loop -->
-                            </ul>
-                            <!-- END: submenu -->
-                        </li>
-                        <!-- END: current -->
-                    <!-- END: menu_loop -->
-                </ul>
-                <div class="clearfix"> </div>
-            </div>
-        </aside>
-        <div id="container" class="clearfix">
-            <div id="info_tab" class="clearfix">
-                <!-- BEGIN: breadcrumbs -->
-                <ol class="breadcrumb">
-                    <!-- BEGIN: loop -->
-                    <li<!-- BEGIN: active --> class="active"<!-- END: active -->><!-- BEGIN: text -->{BREADCRUMBS.title}<!-- END: text --><!-- BEGIN: linked --><a href="{BREADCRUMBS.link}">{BREADCRUMBS.title}</a><!-- END: linked --></li>
-                    <!-- END: loop -->
+</nav>
+<div class="body">
+    <section class="main-content">
+        <div class="breadcrumb-wrap px-4 d-flex align-items-center justify-content-between">
+            {if empty($BREADCRUMBS)}
+            <h1 class="h3 page-title mb-0 text-truncate" title="{$PAGE_TITLE}">{$PAGE_TITLE}</h1>
+            {else}
+            <nav aria-label="breadcrumb" class="site-breadcrumb pe-1" id="breadcrumb">
+                <ol class="breadcrumb flex-nowrap mb-0">
+                    {foreach from=$BREADCRUMBS item=brcrb}
+                    <li class="breadcrumb-item fw-medium{if not empty($brcrb.active)}" aria-current="page"{else}"{/if}>
+                        {if not empty($brcrb.link)}
+                        <a href="{$brcrb.link}">{$brcrb.title}</a>
+                        {else}
+                        {$brcrb.title}
+                        {/if}
+                    </li>
+                    {/foreach}
+                    <li class="breadcrumb-dropdown d-none ps-2">
+                        <a href="#" data-toggle="popover" data-bs-content="&nbsp;" data-bs-custom-class="breadcrumb-popover" data-bs-html="true"><i class="fa-solid fa-circle-chevron-down"></i></a>
+                    </li>
                 </ol>
-                <!-- END: breadcrumbs -->
-
-                <ul class="pull-right list-inline btncontrol">
-                    <!-- BEGIN: url_instruction -->
-                    <li><a target="_blank" href="{NV_URL_INSTRUCTION}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{NV_INSTRUCTION}"><em class="fa fa-book fa-lg"></em></a></li>
-                    <!-- END: url_instruction -->
-
-                    <!-- BEGIN: site_mods -->
-                    <li><a target="_blank" href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{NV_GO_CLIENTMOD}"><em class="fa fa-globe fa-lg"></em></a></li>
-                    <!-- END: site_mods -->
-                </ul>
-
-                <!-- BEGIN: select_option -->
-                <div class="pull-right btn-group">
-                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
-                        {PLEASE_SELECT} <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <!-- BEGIN: select_option_loop -->
-                        <li><a href="{SELECT_VALUE}">{SELECT_NAME}</a></li>
-                        <!-- END: select_option_loop -->
-                    </ul>
+            </nav>
+            {/if}
+            <div class="go-clients d-flex align-items-center" id="go-clients">
+                {if isset($HELP_URLS[$OP])}
+                <div class="ms-3">
+                    <a href="{$HELP_URLS[$OP]}" title="{$LANG->getGlobal('go_instrucion')}" target="_blank" data-bs-toggle="tooltip"><i class="fa-solid fa-book fa-lg"></i></a>
                 </div>
-                <!-- END: select_option -->
+                {/if}
+                {if isset($SITE_MODS[$MODULE_NAME]) and not empty($SITE_MODS[$MODULE_NAME].main_file)}
+                <div class="ms-3">
+                    <a href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}" title="{$LANG->getGlobal('go_clientmod')}" target="_blank" data-bs-toggle="tooltip"><i class="fa-solid fa-globe fa-lg"></i></a>
+                </div>
+                {/if}
             </div>
-            <div id="contentmod">
-                {THEME_ERROR_INFO}
-                {MODULE_CONTENT}
-            </div>
+        </div>
+        <div class="p-4">
+            {$MODULE_CONTENT}
         </div>
     </section>
-    <footer id="footer" class="row">
-        <div class="footer-content">
-            <div class="copyright">
-                <!-- BEGIN: memory_time_usage -->
-                [MEMORY_TIME_USAGE]
-                <br/>
-                <!-- END: memory_time_usage -->
-                <strong>{NV_COPYRIGHT}</strong>
+</div>
+<aside class="right-sidebar border-start" id="right-sidebar">
+    <div class="right-sidebar-inner">
+        <div class="px-3">
+            {if not empty($LANG_ADMIN)}
+            <div class="mb-4">
+                <div class="fw-medium border-bottom pb-2 mb-2">{$LANG->getGlobal('langinterface')}</div>
+                {foreach from=$LANG_ADMIN key=lang item=langname}
+                <div class="form-check mb-1">
+                    <input class="form-check-input" type="radio" id="langinterface-{$lang}" value="{$lang}" name="gsitelanginterface"{if $lang eq $smarty.const.NV_LANG_INTERFACE} checked="checked"{/if}>
+                    <label class="form-check-label" for="langinterface-{$lang}">{$langname}</label>
+                </div>
+                {/foreach}
             </div>
-            <div class="imgstat">
-                <a title="NUKEVIET CMS" href="https://nukeviet.vn" target="_blank"><img alt="NUKEVIET CMS" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/banner_nukeviet_88x15.jpg" width="88" height="15" class="imgstatnkv"/></a>
-                <br/>
+            <div class="mb-4">
+                <div class="fw-medium border-bottom pb-2 mb-3">{$LANG->getGlobal('langdata')}</div>
+                {foreach from=$LANG_ADMIN key=lang item=langname}
+                <div class="form-check mb-1">
+                    <input class="form-check-input" type="radio" id="langdata-{$lang}" value="{$lang}" name="gsitelangdata"{if $lang eq $smarty.const.NV_LANG_DATA} checked="checked"{/if}>
+                    <label class="form-check-label" for="langdata-{$lang}">{$langname}</label>
+                </div>
+                {/foreach}
+            </div>
+            {/if}
+            <div class="mb-4 color-mode" id="site-color-mode" data-busy="0">
+                <div class="fw-medium border-bottom pb-2 mb-3">{$LANG->getGlobal('color_mode')}</div>
+                <div class="mb-2">
+                    <a href="#" class="d-block{if $TCONFIG.color_mode eq 'light'} active{/if}" data-mode="light"><i class="fa-solid fa-sun fa-fw" data-icon="fa-sun"></i> {$LANG->getGlobal('color_mode_light')}</a>
+                </div>
+                <div class="mb-2">
+                    <a href="#" class="d-block{if $TCONFIG.color_mode eq 'dark'} active{/if}" data-mode="dark"><i class="fa-solid fa-moon fa-fw" data-icon="fa-moon"></i> {$LANG->getGlobal('color_mode_dark')}</a>
+                </div>
+                <div class="mb-2">
+                    <a href="#" class="d-block{if $TCONFIG.color_mode eq 'auto'} active{/if}" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-fw" data-icon="fa-circle-half-stroke"></i> {$LANG->getGlobal('color_mode_auto')}</a>
+                </div>
+            </div>
+            <div class="mb-4 color-mode" id="site-text-direction" data-busy="0">
+                <div class="fw-medium border-bottom pb-2 mb-3">{$LANG->getGlobal('text_direction')}</div>
+                <div class="mb-2">
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="radio" name="g_themedir" value="ltr" class="btn-check" id="theme-dir-ltr" autocomplete="off"{if $TCONFIG.dir eq 'ltr'} checked="checked"{/if}>
+                            <label class="btn btn-outline-primary d-block" for="theme-dir-ltr"><i class="fa-solid fa-align-left" data-icon="fa-align-left"></i> {$LANG->getGlobal('text_direction_ltr')}</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="radio" name="g_themedir" value="rtl" class="btn-check" id="theme-dir-rtl" autocomplete="off"{if $TCONFIG.dir eq 'rtl'} checked="checked"{/if}>
+                            <label class="btn btn-outline-primary d-block" for="theme-dir-rtl"><i class="fa-solid fa-align-right" data-icon="fa-align-right"></i> {$LANG->getGlobal('text_direction_rtl')}</label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </footer>
+    </div>
+</aside>
+<footer class="site-footer border-top px-4 d-flex align-items-center justify-content-between">
+    <div class="site-copyright text-truncate me-3">
+        {if $smarty.const.NV_IS_SPADMIN and $ADMIN_INFO.level eq 1}
+        <div class="memory-time-usage text-truncate" title="[MEMORY_TIME_USAGE]">[MEMORY_TIME_USAGE]</div>
+        {/if}
+        <div class="fw-medium text-truncate" title="{$LANG->getGlobal('copyright', $GCONFIG.site_name)}">{$LANG->getGlobal('copyright', $GCONFIG.site_name)}</div>
+    </div>
+    <div class="img-stat">
+        <a title="NUKEVIET CMS" href="https://nukeviet.vn" target="_blank"><img alt="NUKEVIET CMS" src="{$smarty.const.NV_BASE_SITEURL}{$smarty.const.NV_ASSETS_DIR}/images/banner_nukeviet_88x15.jpg" width="88" height="15" class="imgstatnkv"></a>
+    </div>
+</footer>
+<div id="admin-session-timeout" class="nv-offcanvas text-bg-warning p-3">
+    {$LANG->getGlobal('timeoutsess_nouser')}, <a data-toggle="cancel" href="#">{$LANG->getGlobal('timeoutsess_click')}</a>. {$LANG->getGlobal('timeoutsess_timeout')}: <span data-toggle="sec"> 60 </span> {$LANG->getGlobal('sec')}
 </div>
-<div id="timeoutsess" class="chromeframe">
-    {LANG.timeoutsess_nouser}, <a onclick="timeoutsesscancel();" href="#">{LANG.timeoutsess_click}</a>. {LANG.timeoutsess_timeout}: <span id="secField"> 60 </span> {LANG.sec}
-</div>
-{FILE "footer.tpl"}
-<!-- END: main -->
+{include file='footer.tpl'}

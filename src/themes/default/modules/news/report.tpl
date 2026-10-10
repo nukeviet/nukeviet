@@ -1,49 +1,38 @@
-<!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_STATIC_URL}themes/default/js/report.js"></script>
 <!-- START FORFOOTER -->
-<div class="modal fade error-report-modal" tabindex="-1" role="dialog" data-toggle="error-report-modal" data-info="{LANG.text_truncated}" data-samevalues="{LANG.report_same_values}">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <div class="modal-title">{LANG.report_error_content}</div>
+<div class="modal fade" tabindex="-1" aria-labelledby="newsReportModalLabel" aria-hidden="true" data-toggle="newsReportModal" data-truncated="{$LANG->getModule('text_truncated')}">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}={$MODULE_NAME}" method="post" data-form="newsReport" data-toggle="ajax-form" data-precheck="nv_precheck_form" data-callback="newsReportCallback"{$CAPTCHA_ATTRS} novalidate>
+            <div class="modal-header">
+                <div class="fs-5 fww-medium modal-title" id="newsReportModalLabel">{$LANG->getModule('report_error_content')}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$LANG->getGlobal('close')}"></button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label>{LANG.error_text}</label>
-                    <textarea class="form-control report_content auto-resize" maxlength="250" readonly></textarea>
+                <div class="mb-3">
+                    <label for="newsReportContent" class="form-label">{$LANG->getModule('error_text')}</label>
+                    <textarea rows="1" class="form-control" id="newsReportContent" name="report_content" maxlength="250" data-toggle="newsReportAutoResize" readonly></textarea>
                 </div>
-                <div class="form-group has-feedback">
-                    <label>{LANG.proposal_text}</label>
-                    <textarea class="form-control report_fix auto-resize" maxlength="250"></textarea>
-                    <div class="invalid-feedback text-danger small" style="margin-top:5px;display:none"></div>
+                <div class="mb-3">
+                    <label for="newsReportFix" class="form-label">{$LANG->getModule('proposal_text')}</label>
+                    <textarea rows="1" class="form-control" id="newsReportFix" name="report_fix" maxlength="250" data-toggle="newsReportAutoResize" data-valid data-allowed-empty="1" data-valid-callback="newsReportFixCheck" data-error-type="feedback" data-error-mess="{$LANG->getModule('report_same_values')}"></textarea>
+                    <div class="invalid-feedback"></div>
                 </div>
-                <div<!-- BEGIN: report_email_none --> style="display:none"<!-- END: report_email_none -->>
-                    <div class="small help-block">{LANG.post_email_note}</div>
-                    <div class="form-group">
-                        <div class="input-group has-feedback">
-                            <span class="input-group-addon"><strong>{LANG.post_email}</strong></span>
-                            <input type="text" class="form-control report_email" maxlength="100" value="">
-                            <div class="invalid-feedback text-danger small" style="margin-top:5px;display:none">{LANG.post_email_error}</div>
-                        </div>
-                    </div>
+                {if empty($smarty.const.NV_IS_USER)}
+                <div class="form-text mb-2">{$LANG->getModule('post_email_note')}</div>
+                <div class="input-group">
+                    <label class="input-group-text fw-bold" for="newsReportEmail">{$LANG->getModule('post_email')}</label>
+                    <input type="email" class="form-control" id="newsReportEmail" name="report_email" maxlength="100" value="" data-valid data-allowed-empty="1" data-error-type="feedback" data-error-mess="{$LANG->getModule('post_email_error')}">
                 </div>
+                <div class="invalid-feedback"></div>
+                {/if}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.close}</button>
-                <button type="button" class="btn btn-primary submit">{GLANG.submit}</button>
+                <input type="hidden" name="newsid" value="{$NEWSID}">
+                <input type="hidden" name="_csrf" value="{$NEWSCHECKSS}">
+                <input type="hidden" name="action" value="report">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$LANG->getGlobal('close')}</button>
+                <button type="submit" class="btn btn-primary">{$LANG->getGlobal('submit')}</button>
             </div>
-        </div>
+        </form>
     </div>
 </div>
-<form method="post" action="{REPORT_URL}" class="hidden" data-toggle="error-report-form" <!-- BEGIN: captcha --> data-captcha="captcha"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 --><!-- BEGIN: turnstile --> data-turnstile="1"<!-- END: turnstile -->>
-    <input type="hidden" name="report_content" value="">
-    <input type="hidden" name="report_fix" value="">
-    <input type="hidden" name="report_email" value="">
-    <input type="hidden" name="newsid" value="{NEWSID}">
-    <input type="hidden" name="_csrf" value="{NEWSCHECKSS}">
-    <input type="hidden" name="action" value="report">
-    <button type="submit"></button>
-</form>
 <!-- END FORFOOTER -->
-<!-- END: main -->

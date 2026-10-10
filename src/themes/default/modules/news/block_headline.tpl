@@ -1,83 +1,44 @@
-<!-- BEGIN: main -->
-<link type="text/css" rel="stylesheet" href="{NV_STATIC_URL}themes/{TEMPLATE}/css/jquery.ui.tabs.css" />
-<link type="text/css" rel="stylesheet" href="{NV_STATIC_URL}themes/{TEMPLATE}/css/contentslider.css" />
-<script src="{ASSETS_STATIC_URL}/js/jquery/jquery.imgpreload.min.js"></script>
-<script src="{NV_STATIC_URL}themes/{TEMPLATE}/js/contentslider.js"></script>
-<script src="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
-<div id="topnews" class="panel panel-default clearfix" style="display:none">
-    <div class="row">
-        <!-- BEGIN: hots_news_img -->
-        <div class="col-md-12">
-            <div id="slider1" class="sliderwrapper">
-                <!-- BEGIN: loop -->
-                <div class="contentdiv clearfix">
-                    <a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}" {HOTSNEWS.target_blank}><img class="img-responsive" id="slImg{HOTSNEWS.imgID}" src="{PIX_IMG}" alt="{HOTSNEWS.image_alt}" /></a>
-                    <div class="content-title"><a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}" {HOTSNEWS.target_blank}>{HOTSNEWS.title}</a></div>
+<div class="article-headline">
+    <div class="item-big{if not isset($DATA[3])} item-big-only{/if}">
+        <div class="item">
+            {if isset($DATA[0])}
+            {assign var="row" value=$DATA[0]}
+            <div class="item-inner">
+                <div class="item-content">
+                    {if not empty($row.imgsource)}
+                    <img class="item-img" alt="{$row.homeimgalt}" src="{$row.imgsource}">
+                    {/if}
+                    <div class="item-texts">
+                        <div>
+                            <a class="cat-link" href="{$row.cat_link}">{$row.cat_name}</a>
+                        </div>
+                        <a class="article-link fw-medium link-light" href="{$row.link}"{if $row.external_link} target="_blank"{/if} title="{$row.title}">{$row.title}</a>
+                    </div>
                 </div>
-                <!-- END: loop -->
             </div>
-            <div id="paginate-slider1" class="slider-pagination">&nbsp;</div>
-        </div>
-        <!-- END: hots_news_img -->
-        <div class="col-md-12">
-            <div id="tabs" class="tabs">
-                <ul class="clearfix list-none list-items">
-                    <!-- BEGIN: loop_tabs_title -->
-                    <li>
-                        <a href="#tabs-{TAB_TITLE.id}"><span><span>{TAB_TITLE.title}</span></span></a>
-                    </li>
-                    <!-- END: loop_tabs_title -->
-                </ul>
-                <!-- BEGIN: loop_tabs_content -->
-                <div id="tabs-{TAB_TITLE.id}">
-                    <!-- BEGIN: content -->
-                    <ul class="lastest-news list-none list-items">
-                        <!-- BEGIN: loop -->
-                        <li>
-                            <a {TITLE} class="show" href="{LASTEST.link}" {LASTEST.target_blank} data-content="{LASTEST.hometext_clean}" data-img="{LASTEST.homeimgfile}" data-rel="block_headline_tooltip">{LASTEST.title}</a>
-                        </li>
-                        <!-- END: loop -->
-                    </ul>
-                    <!-- END: content -->
-                </div>
-                <!-- END: loop_tabs_content -->
-            </div>
+            {/if}
         </div>
     </div>
+    <div class="item-small">
+        {if isset($DATA[1])}
+        {for $i=1 to count($DATA)-1}
+        {assign var="row" value=$DATA[$i]}
+        <div class="item">
+            <div class="item-inner">
+                <div class="item-content">
+                    {if not empty($row.imgsource)}
+                    <img class="item-img" alt="{$row.homeimgalt}" src="{$row.imgsource}">
+                    {/if}
+                    <div class="item-texts">
+                        <div>
+                            <a class="cat-link" href="{$row.cat_link}">{$row.cat_name}</a>
+                        </div>
+                        <a class="article-link fw-medium link-light" href="{$row.link}"{if $row.external_link} target="_blank"{/if} title="{$row.title}">{$row.title}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {/for}
+        {/if}
+    </div>
 </div>
-<script>
-$(function() {
-<!-- BEGIN: imgpreload -->
-    var b = [{IMGPRELOAD}];
-    $.imgpreload(b, function() {
-        for (var c = b.length, a = 0; a < c; a++) $("#slImg" + a).attr("src", b[a]);
-        featuredcontentslider.init({
-            id: "slider1",
-            contentsource: ["inline", ""],
-            toc: "#increment",
-            nextprev: ["&nbsp;", "&nbsp;"],
-            revealtype: "click",
-            enablefade: [true, 0.2],
-            autorotate: [true, 3E3],
-            onChange: function() {}
-        });
-        $("#tabs").tabs({
-            ajaxOptions: {
-                error: function(e, f, g, d) {
-                    $(d.hash).html("Couldnt load this tab.")
-                }
-            }
-        });
-        $("#topnews").show()
-    });
-<!-- END: imgpreload -->
-<!-- BEGIN: tooltip -->
-    $("[data-rel='block_headline_tooltip'][data-content!='']").tooltip({
-        placement: "{TOOLTIP_POSITION}",
-        html: true,
-        title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
-    });
-<!-- END: tooltip -->
-});
-</script>
-<!-- END: main -->

@@ -1,53 +1,39 @@
-<!-- BEGIN: main -->
-<!-- BEGIN: data -->
 <div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped align-middle mb-0">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>{LANG.username}/{LANG.email}</th>
-                <th>{LANG.regdate}</th>
-                <th class="text-center">{LANG.funcs}</th>
+                <th>{$LANG->getModule('username')}/{$LANG->getModule('email')}</th>
+                <th>{$LANG->getModule('regdate')}</th>
+                <th style="width:1%"></th>
             </tr>
         </thead>
         <tbody>
-            <!-- BEGIN: row -->
+            {foreach from=$USERS item=user}
             <tr>
-                <td><strong>{ROW.userid}</strong></td>
-                <td>
-                    {ROW.username}<br />
-                    <small>{ROW.email}</small>
+                <td class="text-break">
+                    <strong>{$user.username}</strong> <span class="text-muted">#{$user.userid}</span><br>
+                    <small class="text-muted">{$user.email}</small>
                 </td>
-                <td>{ROW.regdate}</td>
-                <td class="text-center text-nowrap">
-                    <a data-toggle="nv_active" data-userid="{ROW.userid}" href="#">
-                        <i class="fa fa-edit" data-icon="fa-edit"></i> {LANG.active}
-                    </a>
-                </td>
-            </tr>
-            <!-- END: row -->
-        </tbody>
-        <!-- BEGIN: generate_page -->
-        <tfoot>
-            <tr>
-                <td colspan="4" style="text-align: center">
-                    <div class="fr generatePage">{GENERATE_PAGE}</div>
+                <td><small>{$user.regdate}</small></td>
+                <td class="text-end">
+                    <button type="button" class="btn btn-sm btn-primary" data-toggle="groupActiveUser" data-userid="{$user.userid}"
+                        title="{$LANG->getModule('active')}" aria-label="{$LANG->getModule('active')}">
+                        <i class="fa-solid fa-check" data-icon="fa-check"></i>
+                    </button>
                 </td>
             </tr>
-        </tfoot>
-        <!-- END: generate_page -->
-    </table>
-</div>
-<!-- END: data -->
-<!-- BEGIN: nodata -->
-<div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover">
-        <tbody>
+            {foreachelse}
             <tr>
-                <td class="text-center">{LANG.noresult}</td>
+                <td colspan="3" class="text-center text-muted py-4">
+                    <i class="fa-solid fa-circle-info me-1"></i>{$LANG->getModule('noresult')}
+                </td>
             </tr>
+            {/foreach}
         </tbody>
     </table>
 </div>
-<!-- END: nodata -->
-<!-- END: main -->
+{if $GENERATE_PAGE}
+<div class="pagination-wrap text-center mt-3">
+    {$GENERATE_PAGE}
+</div>
+{/if}

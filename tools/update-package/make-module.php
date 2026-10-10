@@ -41,9 +41,9 @@ if ($from === '' or $from === true) {
     $from = $m[1];
 }
 
-// Mặc định chép funcs, language của module và giao diện module trong theme future, admin_future
+// Mặc định chép funcs, language của module và giao diện module trong theme default, admin_default
 $paths = [];
-foreach (['modules/' . $module . '/funcs', 'modules/' . $module . '/language', 'themes/future/modules/' . $module, 'themes/admin_future/modules/' . $module] as $path) {
+foreach (['modules/' . $module . '/funcs', 'modules/' . $module . '/language', 'themes/default/modules/' . $module, 'themes/admin_default/modules/' . $module] as $path) {
     if (is_dir(UPK_SRCDIR . '/' . $path)) {
         $paths[] = $path;
     }

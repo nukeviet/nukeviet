@@ -1,17 +1,20 @@
-<!-- BEGIN: main  -->
-<!-- BEGIN: loop -->
-<div class="nv-block-banners">
-    <!-- BEGIN: type_image_link -->
-    <a rel="nofollow" href="{DATA.link}" data-target="{DATA.target}" title="{DATA.file_alt}"><img alt="{DATA.file_alt}" src="{DATA.file_image}" width="{DATA.file_width}"></a>
-    <!-- END: type_image_link -->
-    <!-- BEGIN: type_image -->
-    <img alt="{DATA.file_alt}" src="{DATA.file_image}" width="{DATA.file_width}">
-    <!-- END: type_image -->
-    <!-- BEGIN: bannerhtml -->
-    <div class="clearfix text-left">
-        {DATA.bannerhtml}
+<div class="vstack gap-2 nv-block-banners">
+    {foreach from=$DATA item=banner}
+    <div class="item text-center">
+        {if $banner.file_name neq 'no_image'}
+        {if not empty($banner.file_click)}
+        <a rel="nofollow" href="{$banner.link}" data-target="{$banner.target}" title="{$banner.file_alt}">
+            <img alt="{$banner.file_alt}" src="{$banner.file_image}" width="{$banner.file_width}" class="img-fluid">
+        </a>
+        {else}
+        <img alt="{$banner.file_alt}" src="{$banner.file_image}" width="{$banner.file_width}" class="img-fluid">
+        {/if}
+        {/if}
+        {if not empty($banner.bannerhtml)}
+        <div class="bannerhtml">
+            {$banner.bannerhtml}
+        </div>
+        {/if}
     </div>
-    <!-- END: bannerhtml -->
+    {/foreach}
 </div>
-<!-- END: loop -->
-<!-- END: main -->

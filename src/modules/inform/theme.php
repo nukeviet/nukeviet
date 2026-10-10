@@ -114,7 +114,7 @@ function notifications_manager_theme($contents, $page_url, $filter, $checkss)
     $tpl->assign('MANAGER_PAGE_URL', $page_url);
     $tpl->assign('CHECKSS', $checkss);
     $tpl->assign('CURRENT_FILTER', $filter);
-    $tpl->assign('INFORM_MANAGER_THEME', get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'future', 'js/inform-manager.js'));
+    $tpl->assign('INFORM_MANAGER_THEME', get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', 'js/inform-manager.js'));
 
     $filters = [
         ['key' => 'active', 'name' => $nv_Lang->getModule('active')],

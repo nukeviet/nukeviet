@@ -13,28 +13,23 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-use NukeViet\Core\Language;
-
 /*
  * Các biến sẵn có ngoài biến hệ thống:
  * - $mail_tpl full_path của tệp tpl
  * - $gconfigs tương đương $global_config của ngôn ngữ dùng để gửi email
  * - $subject tiêu đề email
  * - $body nội dung email
+ * - $nv_Lang
  *
  * Tệp này không bắt buộc trong giao diện, nếu bạn không phát triển thì hệ thống nạp từ themes/default/theme_email.php
  */
-$xtpl = new XTemplate($mail_tpl);
-$xtpl->assign('SITE_URL', NV_MY_DOMAIN);
-$xtpl->assign('GCONFIG', $gconfigs);
-$xtpl->assign('LANG', Language::$tmplang_global ?: Language::$lang_global);
-$xtpl->assign('MESSAGE_TITLE', $subject);
-$xtpl->assign('MESSAGE_CONTENT', $body);
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(dirname($mail_tpl));
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('TEMPLATE', $template_tpl);
 
-if (!empty($gconfigs['site_phone'])) {
-    $xtpl->parse('main.phonenumber');
-}
+$tpl->assign('GCONFIG', $gconfigs);
+$tpl->assign('MESSAGE_TITLE', $subject);
+$tpl->assign('MESSAGE_CONTENT', $body);
 
-$xtpl->parse('main');
-
-return $xtpl->text('main');
+return $tpl->fetch(basename($mail_tpl));

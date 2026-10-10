@@ -1,49 +1,37 @@
-<!-- BEGIN: tree -->
-<li>
-    <a title="{MENUTREE.note}" href="{MENUTREE.link}" rel="dofollow" class="sf-with-ul" {MENUTREE.target}><strong>{MENUTREE.title}</strong></a>
-    <!-- BEGIN: tree_content -->
-    <ul>
-        {TREE_CONTENT}
+{function writeTrees menus=[] parent=''}
+{foreach from=$menus item=menu}
+<li{if not empty($menu.css)} class="{$menu.css}"{/if}>
+    <div class="d-flex align-items-center">
+        <a href="{$menu.link}" {$menu.target} title="{$menu.note}" class="d-flex align-items-center gap-2 flex-grow-1 px-3 py-2 {if $menu.is_active}link-primary fw-medium{else}link-body-emphasis{/if}">
+            {if not empty($menu.icon) and not empty($CONFIG.show_icon)}
+            <img src="{$menu.icon}" alt="{$menu.title}" class="fw-20 fh-20 object-fit-contain flex-shrink-0">
+            {/if}
+            <span class="hmenu-text">{$menu.title_trim}</span>
+        </a>
+        {if not empty($menu.sub)}
+        <button type="button" class="collapse-caret btn btn-link link-secondary ps-0 pe-2 py-1 lh-1 flex-shrink-0 collapsed" data-bs-toggle="collapse" data-bs-target="#superfish-{$CONFIG.bid}-{$menu.id}" aria-expanded="false" aria-controls="superfish-{$CONFIG.bid}-{$menu.id}" aria-label="{$LANG->getGlobal('toggle_submenu')}">
+            <i class="fa-solid fa-caret-down fa-fw"></i>
+        </button>
+        {/if}
+    </div>
+    {if not empty($menu.sub)}
+    <ul class="hmenu-sub list-unstyled mb-0 ps-3 ps-lg-0 collapse" id="superfish-{$CONFIG.bid}-{$menu.id}" data-bs-parent="#{$parent}">
+        {writeTrees menus=$menu.sub parent="superfish-{$CONFIG.bid}-{$menu.id}"}
     </ul>
-    <!-- END: tree_content -->
+    {/if}
 </li>
-<!-- END: tree -->
-<!-- BEGIN: main -->
-<link rel="stylesheet" type="text/css" media="screen" href="{NV_STATIC_URL}themes/{BLOCK_THEME}/css/superfish.css" />
-<link rel="stylesheet" type="text/css" media="screen" href="{NV_STATIC_URL}themes/{BLOCK_THEME}/css/superfish-navbar.css" />
-<link rel="stylesheet" type="text/css" media="screen" href="{NV_STATIC_URL}themes/{BLOCK_THEME}/css/superfish-vertical.css" />
-<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/superfish/hoverIntent.js"></script>
-<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/superfish/superfish.js"></script>
-<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/superfish/supersubs.js"></script>
-<style type="text/css">
-    .style_nav {
-        position: relative;
-        background: url("{NV_STATIC_URL}themes/{BLOCK_THEME}/images/menu/nen.png") repeat-x;
-        height: 60px;
-        line-height: 32px;
-        z-index: 990
-    }
-</style>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("ul.sf-menu").superfish({
-            pathClass: 'current'
-        });
-    });
-</script>
-<div class="style_nav">
-    <ul id="sample-menu-4" class="sf-menu sf-navbar sf-js-enabled sf-shadow">
-        <!-- BEGIN: loopcat1 -->
-        <li {CAT1.class}>
-            <a title="{CAT1.note}" class="sf-with-ul" href="{CAT1.link}" rel="dofollow" {CAT1.target}><strong>{CAT1.title}</strong></a>
-            <!-- BEGIN: cat2 -->
-            <ul>
-                {HTML_CONTENT}
-            </ul>
-            <!-- END: cat2 -->
+{/foreach}
+{/function}
+<nav class="hmenu bg-body-tertiary border rounded" data-toggle="hmenu">
+    <ul class="hmenu-list list-unstyled mb-0" id="superfish-{$CONFIG.bid}">
+        {if not empty($CONFIG.show_home)}
+        <li>
+            <a href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}" title="{$LANG->getGlobal('Home')}" class="d-flex align-items-center gap-2 px-3 py-2 {if not empty($HOME)}link-primary fw-medium{else}link-body-emphasis{/if}">
+                <i class="fa-solid fa-house fa-fw"></i>
+                <span class="hmenu-text">{$LANG->getGlobal('Home')}</span>
+            </a>
         </li>
-        <!-- END: loopcat1 -->
+        {/if}
+        {writeTrees menus=$MENUS parent="superfish-{$CONFIG.bid}"}
     </ul>
-</div>
-<div class="clear"></div>
-<!-- END: main -->
+</nav>

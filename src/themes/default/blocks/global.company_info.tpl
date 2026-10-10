@@ -1,27 +1,64 @@
-<!-- BEGIN: main -->
-<ul class="company_info" itemscope itemtype="http://schema.org/LocalBusiness">
-    <li class="hide hidden">
-        <span itemprop="image">{SITE_LOGO}</span>
-        <span itemprop="priceRange">N/A</span>
+<ul class="list-unstyled vstack gap-1 mb-0">
+    {if !empty($DATA.company_name)}
+    <li class="h4">
+        {$DATA.company_name}{if !empty($DATA.company_sortname)} ({$DATA.company_sortname}){/if}
     </li>
-    <!-- BEGIN: company_name --><li class="company_name"><span itemprop="name">{DATA.company_name}</span><!-- BEGIN: company_sortname --> (<span itemprop="alternateName">{DATA.company_sortname}</span>)<!-- END: company_sortname --></li><!-- END: company_name -->
-    <!-- BEGIN: company_regcode --><li><em class="fa fa-file-text"></em><span>{LICENSE}</span></li><!-- END: company_regcode -->
-    <!-- BEGIN: company_responsibility --><li><em class="fa fa-flag"></em><span>{LANG.company_responsibility}: <span itemprop="founder" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{DATA.company_responsibility}</span></span></span></li><!-- END: company_responsibility -->
-    <!-- BEGIN: company_address --><li><a<!-- BEGIN: company_map_triger --> class="pointer" data-toggle="modal" data-target="#company-map-modal-{DATA.bid}"<!-- END: company_map_triger -->><em class="fa fa-map-marker"></em><span>{LANG.company_address}: <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span itemprop="addressLocality" class="company-address">{DATA.company_address}</span></span></span></a></li><!-- END: company_address -->
-    <!-- BEGIN: company_phone --><li><em class="fa fa-phone"></em><span>{LANG.company_phone}: <!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><!-- BEGIN: href --><a href="tel:{PHONE.href}"><!-- END: href --><span itemprop="telephone">{PHONE.number}</span><!-- BEGIN: href2 --></a><!-- END: href2 --><!-- END: item --></span></li><!-- END: company_phone -->
-    <!-- BEGIN: company_fax --><li><em class="fa fa-fax"></em><span>{LANG.company_fax}: <span itemprop="faxNumber">{DATA.company_fax}</span></span></li><!-- END: company_fax -->
-    <!-- BEGIN: company_email --><li><em class="fa fa-envelope"></em><span>{LANG.company_email}: <!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="mailto:{EMAIL}"><span itemprop="email">{EMAIL}</span></a><!-- END: item --></span></li><!-- END: company_email -->
-    <!-- BEGIN: company_website --><li><em class="fa fa-globe"></em><span>{LANG.company_website}: <!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="{WEBSITE}" target="_blank"><span itemprop="url">{WEBSITE}</span></a><!-- END: item --></span></li><!-- END: company_website -->
+    {/if}
+    {if !empty($DATA.company_regcode)}
+    <li>
+        <i class="fa-solid fa-file-lines fa-fw text-center"></i> {$DATA.company_regcode}
+    </li>
+    {/if}
+    {if !empty($DATA.company_responsibility)}
+    <li>
+        <i class="fa-solid fa-flag fa-fw text-center"></i> {$LANG->get('company_responsibility')}: {$DATA.company_responsibility}
+    </li>
+    {/if}
+    {if !empty($DATA.company_address)}
+    <li>
+        <i class="fa-solid fa-map-location-dot fa-fw text-center"></i>
+        {if not empty($DATA.company_showmap)}
+        <a href="#" data-bs-toggle="modal" data-bs-target="#company-map-modal-{$DATA.bid}">{$LANG->get('company_address')}: {$DATA.company_address}</a>
+        {else}
+        {$LANG->get('company_address')}: {$DATA.company_address}
+        {/if}
+    </li>
+    {/if}
+    {if !empty($DATA.company_phone)}
+    <li>
+        <i class="fa-solid fa-phone-volume fa-fw text-center"></i>
+        {$LANG->get('company_phone')}: {foreach $DATA.company_phone as $key => $value}{if $key > 0}&nbsp; {/if}{if isset($value[1])}<a href="tel:{$value[1]}">{/if}{$value[0]}{if isset($value[1])}</a>{/if}{/foreach}
+    </li>
+    {/if}
+    {if !empty($DATA.company_fax)}
+    <li>
+        <i class="fa-solid fa-fax fa-fw text-center"></i> {$LANG->get('company_fax')}: {$DATA.company_fax}
+    </li>
+    {/if}
+    {if !empty($DATA.company_email)}
+    <li>
+        <i class="fa-solid fa-envelope fa-fw text-center"></i>
+        {$LANG->get('company_email')}: {foreach $DATA.company_email as $key=>$value}{if $key>0}&nbsp; {/if}<a href="mailto:{$value|escape:"hex"}">{$value|escape:"hexentity"}</a>{/foreach}
+    </li>
+    {/if}
+    {if !empty($DATA.company_website)}
+    <li>
+        <i class="fa-solid fa-globe fa-fw text-center"></i> {$LANG->get('company_website')}: {foreach $DATA.company_website as $key=>$value}{if $key>0}&nbsp; {/if}<a href="{$value}" target="_blank">{$value}</a>{/foreach}
+    </li>
+    {/if}
 </ul>
-<!-- BEGIN: company_map_modal -->
+{if not empty($DATA.company_address) and not empty($DATA.company_showmap)}
 <!-- START FORFOOTER -->
-<div class="modal fade company-map-modal" id="company-map-modal-{DATA.bid}" data-src="{DATA.company_mapurl}">
-    <div class="modal-dialog">
+<div class="modal fade company-map-modal" tabindex="-1" aria-labelledby="company-map-modal-{$DATA.bid}-label" aria-hidden="true" id="company-map-modal-{$DATA.bid}" data-src="{$DATA.company_mapurl}">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title fs-5" id="company-map-modal-{$DATA.bid}-label">{$LANG->getGlobal('company_map')}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$LANG->getGlobal('close')}"></button>
+            </div>
             <div class="modal-body"></div>
         </div>
     </div>
 </div>
 <!-- END FORFOOTER -->
-<!-- END: company_map_modal -->
-<!-- END: main -->
+{/if}

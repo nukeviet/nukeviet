@@ -1,23 +1,34 @@
-<!-- BEGIN: main -->
-<!-- BEGIN: google_identity_js -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<!-- END: google_identity_js -->
-<div class="centered">
-    <div class="login-box">
-        <div class="page panel panel-default margin-top-lg box-shadow<!-- BEGIN: not_redirect --> bg-lavender<!-- END: not_redirect -->">
-            <div class="panel-body">
-                <!-- BEGIN: redirect2 -->
-                <div class="text-center margin-bottom-lg">
-                    <a title="{SITE_NAME}" href="{THEME_SITE_HREF}"><img class="logo" src="{LOGO_SRC}" alt="{SITE_NAME}"></a>
-                </div>
-                <!-- END: redirect2 -->
-                <h2 class="text-center margin-bottom-lg">{LANG.login}</h2>
-                {FILE "login_form.tpl"}
-                <div class="text-center margin-top-lg" id="other_form">
-                    <!-- BEGIN: navbar --><a href="{NAVBAR.href}" class="margin-right-lg"><em class="fa fa-caret-right margin-right-sm"></em>{NAVBAR.title}</a><!-- END: navbar -->
-                </div>
+<div class="d-flex justify-content-center">
+    <div class="rounded-4 border shadow-lg p-4">
+        {if not empty($NV_HEADER)}
+        {* Hiển thị logo tại login box *}
+        <div class="text-center mb-3">
+            <a title="{$GCONFIG.site_name}" href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}">
+                <img class="img-fluid" src="{$smarty.const.NV_STATIC_URL}{$GCONFIG.site_logo}" alt="{$GCONFIG.site_name}">
+            </a>
+        </div>
+        {else}
+        {* Icon đăng nhập *}
+        <div class="mb-2 d-flex justify-content-center">
+            <div class="d-flex fw-40 fh-40 align-items-center rounded-circle justify-content-center bg-primary-subtle text-primary-emphasis">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
             </div>
         </div>
+        {/if}
+        <h1 class="h2 text-center mb-3">{$LANG->getModule('login')}</h1>
+        {include file='login_form.tpl'}
+        {if not empty($NAVS)}
+        <div class="fw-300 mx-auto mt-4 text-center" data-area="other-form">
+            <ul class="list-inline mb-0">
+                {foreach from=$NAVS item=nav}
+                <li class="list-inline-item text-nowrap">
+                    <a href="{$nav.href}">
+                        <i class="fa-solid fa-caret-right"></i>&nbsp;{$nav.title}
+                    </a>
+                </li>
+                {/foreach}
+            </ul>
+        </div>
+        {/if}
     </div>
 </div>
-<!-- END: main -->

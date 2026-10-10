@@ -1,21 +1,15 @@
-<!-- BEGIN: main -->
-<ul class="block_tophits list-none list-items">
-    <!-- BEGIN: newloop -->
-    <li class="clearfix">
-        <!-- BEGIN: imgblock -->
-        <a title="{blocknews.title}" href="{blocknews.link}" {blocknews.target_blank}><img src="{blocknews.imgurl}" alt="{blocknews.title}" width="{blocknews.width}" class="img-thumbnail pull-left mr-1"/></a>
-        <!-- END: imgblock -->
-        <a {TITLE} class="show" href="{blocknews.link}" {blocknews.target_blank} data-content="{blocknews.hometext_clean}" data-img="{blocknews.imgurl}" data-rel="block_news_tooltip">{blocknews.title}</a>
+<ul class="list-unstyled vstack gap-2 mb-0 block-hits">
+    {foreach from=$LIST item=row}
+    <li>
+        <article class="d-flex gap-2"
+            {if not empty($CONFIG.showtooltip)}
+            data-toggle="tooltipArticle" data-hometext="{$row.hometext_clean}" data-alt="{$row.homeimgalt}" data-img="{$row.imgsource}"
+            data-bs-toggle="tooltip" data-bs-placement="{$CONFIG.tooltip_position}"
+            {/if}
+        >
+            <span class="mt-1"><span class="hit-indicate"></span></span>
+            <a class="bl-text link-body-emphasis text-truncate-3" href="{$row.link}"{if $row.external_link} target="_blank"{/if} title="{$row.title}">{$row.title}</a>
+        </article>
     </li>
-    <!-- END: newloop -->
+    {/foreach}
 </ul>
-<!-- BEGIN: tooltip -->
-<script type="text/javascript">
-$(document).ready(function() {$("[data-rel='block_news_tooltip'][data-content!='']").tooltip({
-    placement: "{TOOLTIP_POSITION}",
-    html: true,
-    title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
-});});
-</script>
-<!-- END: tooltip -->
-<!-- END: main -->

@@ -1,32 +1,61 @@
-<!-- BEGIN: submenu -->
-<ul class="dropdown-menu">
-    <!-- BEGIN: loop -->
-    <li<!-- BEGIN: submenu --> class="dropdown-submenu"<!-- END: submenu -->><!-- BEGIN: icon --><img src="{SUBMENU.icon}" alt="{SUBMENU.note}" />&nbsp;<!-- END: icon --><a href="{SUBMENU.link}" rel="dofollow" title="{SUBMENU.note}"{SUBMENU.target}>{SUBMENU.title_trim}</a><!-- BEGIN: item --> {SUB} <!-- END: item --></li>
-    <!-- END: loop -->
-</ul>
-<!-- END: submenu -->
-
-<!-- BEGIN: main -->
-<div class="navbar navbar-default navbar-static-top" role="navigation">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-site-default">
-            <span class="sr-only">&nbsp;</span> <span class="icon-bar">&nbsp;</span> <span class="icon-bar">&nbsp;</span> <span class="icon-bar">&nbsp;</span>
-        </button>
+{function writeTrees menus=[] lev=1}
+{foreach from=$menus item=menu}
+{assign var="mClasses" value=[]}
+{if $menu.is_active} {append mClasses 'active'} {/if}
+{if not empty($menu.css)} {append mClasses $menu.css} {/if}
+<li data-toggle="item-lev-{$lev}"{if not empty($mClasses)} class="{$mClasses|join:' '}"{/if}>
+    <div class="menu-item{if not empty($menu.sub)} has-submenu{/if}">
+        <a class="item-link" href="{$menu.link}"{$menu.target} title="{$menu.note}" aria-label="{$menu.note}">
+            {if not empty($menu.icon) and not empty($CONFIG.show_icon)}
+            <span class="item-icon">
+                <img src="{$menu.icon}" alt="{$menu.title}">
+            </span>
+            {/if}
+            <span class="item-name">{$menu.title_trim}</span>
+        </a>
+        {if not empty($menu.sub)}
+        <span class="item-arrow" data-toggle="subtg" aria-label="{$LANG->getGlobal('toggle_submenu')}">
+            <i class="fa-solid fa-caret-down"></i>
+        </span>
+        {/if}
     </div>
-    <div class="collapse navbar-collapse" id="menu-site-default">
-        <ul class="nav navbar-nav">
-            <li><a class="home" title="{LANG.Home}" href="{THEME_SITE_HREF}" rel="dofollow"><em class="fa fa-lg fa-home">&nbsp;</em><span class="visible-xs-inline-block"> {LANG.Home}</span></a></li>
-            <!-- BEGIN: top_menu -->
-            <li {TOP_MENU.current} role="presentation"><a class="dropdown-toggle" {TOP_MENU.dropdown_data_toggle} href="{TOP_MENU.link}" rel="dofollow" role="button" aria-expanded="false" title="{TOP_MENU.note}"{TOP_MENU.target}><!-- BEGIN: icon --> <img src="{TOP_MENU.icon}" alt="{TOP_MENU.note}" />&nbsp; <!-- END: icon --> {TOP_MENU.title_trim}<!-- BEGIN: has_sub --> <strong class="caret">&nbsp;</strong>
-                <!-- END: has_sub --></a> <!-- BEGIN: sub --> {SUB} <!-- END: sub --></li>
-            <!-- END: top_menu -->
-        </ul>
+    {if not empty($menu.sub)}
+    <ul data-toggle="submenu">
+        {writeTrees menus=$menu.sub lev=$lev+1}
+    </ul>
+    {/if}
+</li>
+{/foreach}
+{/function}
+<div class="main-nav" data-toggle="main-nav">
+    <ul>
+        {if $CONFIG.show_home}
+        <li class="main-nav-home{if not empty($HOME)} active{/if}" data-toggle="item-lev-1">
+            <div class="menu-item">
+                <a class="item-link" href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}" aria-label="{$LANG->getGlobal('Home')}">
+                    <span class="item-icon"><i class="fa-solid fa-house"></i></span>
+                    <span class="item-name">{$LANG->getGlobal('Home')}</span>
+                </a>
+            </div>
+        </li>
+        {/if}
+        {writeTrees menus=$MENUS lev=1}
+        <li class="nav-expanded" data-toggle="item-expanded">
+            <div class="menu-item">
+                <a class="item-link" href="#" aria-label="{$LANG->getGlobal('expand')}">
+                    <span class="item-icon">
+                        <i class="fa-solid fa-bars"></i>
+                    </span>
+                </a>
+            </div>
+        </li>
+    </ul>
+    <div class="nav-loader">
+        <div class="loader-mask h-100"></div>
+        <div class="loader-icon h-100 px-2 d-flex justify-content-center align-items-center">
+            <div class="spinner-grow spinner-grow-sm" role="status">
+                <span class="visually-hidden">{$LANG->getGlobal('wait_page_load')}</span>
+            </div>
+        </div>
     </div>
 </div>
-<script type="text/javascript" data-show="after">
-    $(function() {
-        checkWidthMenu();
-        $(window).resize(checkWidthMenu);
-    });
-</script>
-<!-- END: main -->

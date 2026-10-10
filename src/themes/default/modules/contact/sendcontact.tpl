@@ -1,38 +1,35 @@
-<!-- BEGIN: main -->
-<!-- BEGIN: sendinfo -->
-{LANG.sendinfo} <a href="{SITE_URL}">{SITE_NAME}</a>.<br />
-{LANG.sendinfo2}:<br />
+{if $SENDINFO}
+{$LANG->getModule('sendinfo')} <a href="{$SITE_URL}">{$SITE_NAME}</a>.<br />
+{$LANG->getModule('sendinfo2')}:<br />
 <ul>
-    <!-- BEGIN: cat -->
-    <li>{LANG.cat}: {CAT}</li>
-    <!-- END: cat -->
-    <li>{LANG.part}: {PART}</li>
-    <li>{LANG.fullname}: {FULLNAME}</li>
-    <li>{LANG.email}: {EMAIL}</li>
-    <!-- BEGIN: phone -->
-    <li>{LANG.phone}: {PHONE}</li>
-    <!-- END: phone -->
-    <li>IP: {IP}</li>
+    {if $FEEDBACK.category}
+    <li>{$LANG->getModule('cat')}: {$FEEDBACK.category}</li>
+    {/if}
+    <li>{$LANG->getModule('part')}: {$PART}</li>
+    <li>{$LANG->getModule('fullname')}: {$FEEDBACK.sender_name}</li>
+    <li>{$LANG->getModule('email')}: {$FEEDBACK.sender_email}</li>
+    {if $FEEDBACK.filter_sender_phone}
+    <li>{$LANG->getModule('phone')}: {$FEEDBACK.filter_sender_phone}</li>
+    {/if}
+    <li>IP: {$IP}</li>
 </ul>
 -------------------------------------<br /><br />
-<!-- END: sendinfo -->
-<!-- BEGIN: mysendinfo -->
-{LANG.hello} {FULLNAME},<br />
-{LANG.mysendinfo} <a href="{SITE_URL}">{SITE_NAME}</a>.<br />
-{LANG.mysendinfo2}:<br />
+{else}
+{$LANG->getModule('hello')} {$FEEDBACK.sender_name},<br />
+{$LANG->getModule('mysendinfo')} <a href="{$SITE_URL}">{$SITE_NAME}</a>.<br />
+{$LANG->getModule('mysendinfo2')}:<br />
 <ul>
-    <!-- BEGIN: cat -->
-    <li>{LANG.cat}: {CAT}</li>
-    <!-- END: cat -->
-    <li>{LANG.part}: {PART}</li>
-    <li>{LANG.fullname}: {FULLNAME}</li>
-    <li>{LANG.email}: {EMAIL}</li>
-    <!-- BEGIN: phone -->
-    <li>{LANG.phone}: {PHONE}</li>
-    <!-- END: phone -->
+    {if $FEEDBACK.category}
+    <li>{$LANG->getModule('cat')}: {$FEEDBACK.category}</li>
+    {/if}
+    <li>{$LANG->getModule('part')}: {$PART}</li>
+    <li>{$LANG->getModule('fullname')}: {$FEEDBACK.sender_name}</li>
+    <li>{$LANG->getModule('email')}: {$FEEDBACK.sender_email}</li>
+    {if $FEEDBACK.filter_sender_phone}
+    <li>{$LANG->getModule('phone')}: {$FEEDBACK.filter_sender_phone}</li>
+    {/if}
 </ul>
 -------------------------------------<br /><br />
-<!-- END: mysendinfo -->
-<strong>{TITLE}</strong><br /><br />
-{CONTENT}<br /><br />
-<!-- END: main -->
+{/if}
+<strong>{$FEEDBACK.filter_title}</strong><br /><br />
+{$FEEDBACK.filter_content}<br /><br />

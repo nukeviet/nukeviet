@@ -34,11 +34,6 @@ define('NV_BASE_MOD_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '
 $global_config['current_theme_type'] = 'r';
 
 if ($op != 'cleardata') {
-    // FIXME Xóa 3 dòng này sau khi đã hoàn thiện.
-    $module_info['module_theme'] = 'future';
-    $global_config['module_theme'] = 'future';
-    $global_config['site_theme'] = 'future';
-
     // Xử lý đoạn này để ép load js, css ngoài site
     $_module_name = $module_name;
     $module_name = 'admin_statistics';

@@ -7,69 +7,73 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-var informObject;
+let informObject;
 
 function informSetStatus(id, status, callback) {
-    var url = informObject.data('page-url');
-    url += ((-1 < url.indexOf("?")) ? '&' : '?') + 'nocache=' + new Date().getTime();
+    const baseUrl = informObject.data('page-url');
+    const url = baseUrl + (baseUrl.includes('?') ? '&' : '?') + 'nocache=' + Date.now();
     $.ajax({
         type: 'POST',
         url: url,
         data: 'setStatus=' + status + '&id=' + id,
+        dataType: 'json',
         success: function(result) {
-            if ('OK' == result.status) {
-                if (typeof callback === "function") {
-                    callback()
+            if ('OK' === result.status) {
+                if (typeof callback === 'function') {
+                    callback();
                 } else {
-                    $('[name=filter]', informObject).trigger('change')
+                    $('[name=filter]', informObject).trigger('change');
                 }
             }
         }
-    })
+    });
 }
 
 $(function() {
     informObject = $('#inform');
+    if (!informObject.length) return;
 
     $('[name=filter]', informObject).on('change', function() {
-        var url = informObject.data('page-url'),
-            filter = $('[name=filter]', informObject).val(),
-            query = (('' != filter && 'all' != filter) ? 'filter=' + filter + '&ajax=' : 'ajax=') + new Date().getTime();
-        url += ((-1 < url.indexOf("?")) ? '&' : '?') + query;
-        $.get(url, function(res) {
-            $('.load_content', informObject).html(res)
-        })
+        const url = informObject.data('page-url');
+        const filter = $('[name=filter]', informObject).val();
+        const query = ('' !== filter && 'all' !== filter ? 'filter=' + filter + '&ajax=' : 'ajax=') + Date.now();
+        const fullUrl = url + (url.includes('?') ? '&' : '?') + query;
+        $.get(fullUrl, function(res) {
+            $('.load_content', informObject).html(res);
+        });
     });
 
     $('[name=filter]', informObject).trigger('change');
 
     informObject.on('click', '[data-toggle=informNotifySetStatus]', function(e) {
         e.preventDefault();
-        var url = $(this).parents('.items').data('url');
-        informSetStatus($(this).parents('.item').data('id'), $(this).data('status'), function() {
+        const url = $(this).parents('.items').data('url');
+        const id = $(this).parents('.item').data('id');
+        const status = $(this).data('status');
+        informSetStatus(id, status, function() {
             $.get(url, function(res) {
-                $('.load_content', informObject).html(res)
-            })
-        })
+                $('.load_content', informObject).html(res);
+            });
+        });
     });
 
     informObject.on('click', '.message a', function(e) {
-        var item = $(this).parents('.item'),
-            href = $(this).attr('href');
+        const item = $(this).parents('.item');
+        const href = $(this).attr('href');
         if (item.is('.viewed-0')) {
             e.preventDefault();
             informSetStatus(item.data('id'), 'viewed', function() {
-                if ('' != href && '#' != href) {
-                    window.location.href = href
+                if ('' !== href && '#' !== href) {
+                    window.location.href = href;
                 }
-            })
+            });
         }
     });
 
     informObject.on('click', '[data-toggle=more]', function(e) {
         e.preventDefault();
-        var obj = $(this).parents('.item');
+        const obj = $(this).parents('.item');
         $('.more', obj).hide();
-        $('.morecontent', obj).show()
+        $('.morecontent', obj).show();
     });
 });

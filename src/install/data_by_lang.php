@@ -30,7 +30,7 @@ $installMods['about'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'sitemap' => [],
         'rss' => []
@@ -49,46 +49,46 @@ $installMods['news'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'viewcat' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'topic' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'content' => [
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'detail' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'tag' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'rss' => [
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'search' => [
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'groups' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'author' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'sitemap' => [],
         'print' => [],
@@ -110,88 +110,88 @@ $installMods['users'] = [
         'main' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['main'],
             'show_func' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'login' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['login'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'register' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['register'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'lostpass' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['lostpass'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'active' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['active'],
             'show_func' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'lostactivelink' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['lostactivelink'],
             'show_func' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'r2s' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['r2s'],
             'show_func' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'editinfo' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['editinfo'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'memberlist' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['memberlist'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'groups' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['groups'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'avatar' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['avatar'],
             'show_func' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'logout' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['logout'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'oauth' => [],
         'datadeletion' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['datadeletion'],
             'show_func' => 1,
             'in_submenu' => 0,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'security-privacy' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['security-privacy'],
             'show_func' => 1,
             'in_submenu' => 0,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'verify-password' => [
             'func_custom_name' => $install_lang['modfuncs']['users']['verify-password'],
             'show_func' => 1,
             'in_submenu' => 0,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ]
     ],
     'icon' => 'fa-solid fa-users'
@@ -208,7 +208,7 @@ $installMods['myapi'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'main'
+            'theme_default' => 'content'
         ]
     ],
     'icon' => 'fa-brands fa-nfc-symbol'
@@ -223,7 +223,7 @@ $installMods['inform'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ]
     ],
     'icon' => 'fa-solid fa-bell'
@@ -239,7 +239,7 @@ $installMods['contact'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ]
     ],
     'icon' => 'fa-solid fa-phone'
@@ -256,42 +256,42 @@ $installMods['statistics'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'allreferers' => [
             'func_custom_name' => $install_lang['modfuncs']['statistics']['allreferers'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'allcountries' => [
             'func_custom_name' => $install_lang['modfuncs']['statistics']['allcountries'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'allbrowsers' => [
             'func_custom_name' => $install_lang['modfuncs']['statistics']['allbrowsers'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'allos' => [
             'func_custom_name' => $install_lang['modfuncs']['statistics']['allos'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'allbots' => [
             'func_custom_name' => $install_lang['modfuncs']['statistics']['allbots'],
             'show_func' => 1,
             'in_submenu' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'referer' => [
             'func_custom_name' => $install_lang['modfuncs']['statistics']['referer'],
             'show_func' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ]
     ],
     'icon' => 'fa-solid fa-chart-simple'
@@ -308,7 +308,7 @@ $installMods['voting'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ]
     ],
     'icon' => 'fa-solid fa-square-poll-vertical'
@@ -324,19 +324,19 @@ $installMods['banners'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'addads' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'clientinfo' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'stats' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'cledit' => [],
         'click' => [],
@@ -356,7 +356,7 @@ $installMods['seek'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'opensearch' => []
     ],
@@ -381,7 +381,7 @@ $installMods['feeds'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ]
     ],
     'icon' => 'fa-solid fa-rss'
@@ -397,7 +397,7 @@ $installMods['page'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main'
+            'theme_default' => 'ssbar-content'
         ],
         'sitemap' => [],
         'rss' => []
@@ -414,19 +414,19 @@ $installMods['comment'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'post' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'like' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'delete' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'down' => [
             'show_func' => 1
@@ -448,11 +448,11 @@ $installMods['siteterms'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'rss' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'sitemap' => []
     ],
@@ -470,15 +470,15 @@ $installMods['two-step-verification'] = [
     'funcs' => [
         'main' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'confirm' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'setup' => [
             'show_func' => 1,
-            'theme_default' => 'left-main-right'
+            'theme_default' => 'ssbar-content-esbar'
         ],
         'qrimg' => []
     ],
@@ -505,15 +505,6 @@ $company['company_website'] = 'https://vinades.vn';
 $company = serialize($company);
 
 /**
- * Social
- */
-$social = [];
-$social['facebook'] = 'http://www.facebook.com/nukeviet';
-$social['youtube'] = 'https://www.youtube.com/user/nukeviet';
-$social['twitter'] = 'https://twitter.com/nukeviet';
-$social = serialize($social);
-
-/**
  * Copyright
  */
 $copyright = [];
@@ -529,7 +520,67 @@ $copyright = serialize($copyright);
  */
 $blockGroups = [
     'default' => [ // Theme Default
-        'TOP' => [
+        'START_TOPBAR' => [
+            [
+                'module' => 'contact',
+                'file_name' => 'global.contact_default.php',
+                'title' => 'Contact Default',
+                'template' => 'no_title',
+                'active' => '1',
+                'bot_visible' => '1',
+                'groups_view' => '6',
+                'all_func' => 1,
+                'config' => 'a:5:{s:12:"departmentid";i:1;s:5:"shows";a:4:{i:0;s:5:"phone";i:1;s:3:"fax";i:2;s:5:"email";i:3;s:5:"other";}s:11:"order_shows";a:4:{s:5:"phone";i:1;s:3:"fax";i:4;s:5:"email";i:2;s:5:"other";i:3;}s:11:"limit_shows";a:4:{s:5:"phone";i:1;s:3:"fax";i:0;s:5:"email";i:1;s:5:"other";i:0;}s:10:"show_clock";i:1;}'
+            ]
+        ],
+        'END_TOPBAR' => [
+            [
+                'module' => 'theme',
+                'file_name' => 'global.change_theme_mode.php',
+                'title' => 'Theme mode',
+                'template' => 'no_title',
+                'active' => '1',
+                'bot_visible' => '1',
+                'groups_view' => '6',
+                'all_func' => 1
+            ]
+        ],
+        'USER_BUTTON' => [
+            [
+                'module' => 'inform',
+                'file_name' => 'global.inform.php',
+                'title' => $install_lang['blocks_groups']['inform']['global.inform'],
+                'template' => 'no_title',
+                'active' => '1',
+                'bot_visible' => '1',
+                'groups_view' => '6',
+                'all_func' => 1
+            ],
+            [
+                'module' => 'users',
+                'file_name' => 'global.user_button.php',
+                'title' => $install_lang['blocks_groups']['users']['global.user_button'],
+                'template' => 'no_title',
+                'active' => '1',
+                'bot_visible' => '1',
+                'groups_view' => '6',
+                'all_func' => 1
+            ]
+        ],
+        'MAIN_NAV' => [
+            [
+                'module' => 'menu',
+                'file_name' => 'global.bootstrap.php',
+                'title' => 'Menu Site',
+                'template' => 'no_title',
+                'active' => '1',
+                'bot_visible' => '1',
+                'groups_view' => '6',
+                'all_func' => 1,
+                'config' => 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:0;}'
+            ]
+        ],
+        'HEADER' => [
             [
                 'module' => 'news',
                 'file_name' => 'module.block_newscenter.php',
@@ -561,7 +612,7 @@ $blockGroups = [
                 ]
             ]
         ],
-        'LEFT' => [
+        'START_SIDEBAR' => [
             [
                 'module' => 'news',
                 'file_name' => 'global.block_category.php',
@@ -586,40 +637,6 @@ $blockGroups = [
                 ]
             ],
             [
-                'module' => 'theme',
-                'file_name' => 'global.module_menu.php',
-                'title' => 'Module Menu',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'funcs' => [
-                    'users' => [
-                        'main',
-                        'login',
-                        'register',
-                        'lostpass',
-                        'active',
-                        'lostactivelink',
-                        'r2s',
-                        'editinfo',
-                        'memberlist',
-                        'groups',
-                        'avatar',
-                        'logout'
-                    ],
-                    'statistics' => [
-                        'main',
-                        'allreferers',
-                        'allcountries',
-                        'allbrowsers',
-                        'allos',
-                        'allbots',
-                        'referer'
-                    ]
-                ]
-            ],
-            [
                 'module' => 'banners',
                 'file_name' => 'global.banners.php',
                 'title' => $install_lang['blocks_groups']['banners']['global.banners2'],
@@ -634,19 +651,19 @@ $blockGroups = [
                 'module' => 'statistics',
                 'file_name' => 'global.counter.php',
                 'title' => $install_lang['blocks_groups']['statistics']['global.counter'],
-                'template' => 'primary',
+                'template' => 'default',
                 'active' => '1',
                 'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1
             ]
         ],
-        'RIGHT' => [
+        'END_SIDEBAR' => [
             [
                 'module' => 'about',
                 'file_name' => 'global.about.php',
                 'title' => $install_lang['blocks_groups']['about']['global.about'],
-                'template' => 'border',
+                'template' => 'default',
                 'active' => '1',
                 'bot_visible' => '1',
                 'groups_view' => '6',
@@ -665,19 +682,20 @@ $blockGroups = [
             ],
             [
                 'module' => 'voting',
-                'file_name' => 'global.voting_random.php',
+                'file_name' => 'global.voting.php',
                 'title' => $install_lang['blocks_groups']['voting']['global.voting_random'],
-                'template' => 'primary',
+                'template' => 'default',
                 'active' => '1',
                 'bot_visible' => '1',
                 'groups_view' => '6',
-                'all_func' => 1
+                'all_func' => 1,
+                'config' => 'a:2:{s:3:"vid";i:0;s:9:"show_type";s:6:"random";}'
             ],
             [
                 'module' => 'news',
                 'file_name' => 'global.block_tophits.php',
                 'title' => $install_lang['blocks_groups']['news']['global.block_tophits'],
-                'template' => 'primary',
+                'template' => 'default',
                 'active' => '1',
                 'bot_visible' => '1',
                 'groups_view' => '6',
@@ -685,18 +703,33 @@ $blockGroups = [
                 'config' => 'a:6:{s:10:"number_day";i:3650;s:6:"numrow";i:10;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:7:"nocatid";a:2:{i:0;i:10;i:1;i:11;}}'
             ]
         ],
-        'FOOTER_SITE' => [
+        'START_FOOTER' => [
             [
                 'module' => 'theme',
-                'file_name' => 'global.copyright.php',
-                'title' => 'Copyright',
-                'template' => 'no_title',
+                'file_name' => 'global.company_info.php',
+                'title' => $install_lang['blocks_groups']['theme']['global.company_info'],
+                'template' => 'simple',
                 'active' => '1',
                 'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
-                'config' => $copyright
-            ],
+                'config' => $company
+            ]
+        ],
+        'CENTER_FOOTER' => [
+            [
+                'module' => 'theme',
+                'file_name' => 'global.menu_footer.php',
+                'title' => $install_lang['blocks_groups']['theme']['global.menu_footer'],
+                'template' => 'simple',
+                'active' => '1',
+                'bot_visible' => '1',
+                'groups_view' => '6',
+                'all_func' => 1,
+                'config' => 'a:1:{s:14:"module_in_menu";a:8:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";}}'
+            ]
+        ],
+        'END_FOOTER' => [
             [
                 'module' => 'contact',
                 'file_name' => 'global.contact_form.php',
@@ -730,90 +763,17 @@ $blockGroups = [
                 'all_func' => 1
             ]
         ],
-        'PERSONALAREA' => [
-            [
-                'module' => 'inform',
-                'file_name' => 'global.inform.php',
-                'title' => $install_lang['blocks_groups']['inform']['global.inform'],
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
-            ],
-            [
-                'module' => 'users',
-                'file_name' => 'global.user_button.php',
-                'title' => $install_lang['blocks_groups']['users']['global.user_button'],
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
-            ]
-        ],
-        'COMPANY_INFO' => [
+        'FOOTER_COPYRIGHT' => [
             [
                 'module' => 'theme',
-                'file_name' => 'global.company_info.php',
-                'title' => $install_lang['blocks_groups']['theme']['global.company_info'],
-                'template' => 'simple',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => $company
-            ]
-        ],
-        'MENU_SITE' => [
-            [
-                'module' => 'menu',
-                'file_name' => 'global.bootstrap.php',
-                'title' => 'Menu Site',
+                'file_name' => 'global.copyright.php',
+                'title' => 'Copyright',
                 'template' => 'no_title',
                 'active' => '1',
                 'bot_visible' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
-                'config' => 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:0;}'
-            ]
-        ],
-        'CONTACT_DEFAULT' => [
-            [
-                'module' => 'contact',
-                'file_name' => 'global.contact_default.php',
-                'title' => 'Contact Default',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
-            ]
-        ],
-        'SOCIAL_ICONS' => [
-            [
-                'module' => 'theme',
-                'file_name' => 'global.social.php',
-                'title' => 'Social icon',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => $social
-            ]
-        ],
-        'MENU_FOOTER' => [
-            [
-                'module' => 'theme',
-                'file_name' => 'global.menu_footer.php',
-                'title' => $install_lang['blocks_groups']['theme']['global.menu_footer'],
-                'template' => 'simple',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => 'a:1:{s:14:"module_in_menu";a:8:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";}}'
+                'config' => $copyright
             ]
         ]
     ]
@@ -906,7 +866,7 @@ foreach ($installMods as $mod_name => $vals) {
  */
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes');
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)');
-$sth->execute([0, 'left-main-right', 'default']);
+$sth->execute([0, 'ssbar-content-esbar', 'default']);
 
 if (!empty($theme_default)) {
     foreach ($theme_default as $funcid => $_key) {

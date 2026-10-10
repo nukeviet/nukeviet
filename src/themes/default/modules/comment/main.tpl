@@ -1,59 +1,72 @@
-<!-- BEGIN: main -->
-<!-- BEGIN: header -->
-<script type="text/javascript" src="{NV_STATIC_URL}themes/{TEMPLATE_JS}/js/comment.js"></script>
-<link rel="StyleSheet" href="{NV_STATIC_URL}themes/{TEMPLATE_CSS}/css/comment.css" type="text/css" />
-<!-- END: header -->
-<div id="idcomment" class="nv-fullbg" data-module="{MODULE_COMM}" data-content="{MODULE_DATA}_commentcontent" data-area="{AREA_COMM}" data-id="{ID_COMM}">
-    <div class="row clearfix margin-bottom-lg">
-        <div class="col-xs-12 text-left">
-            <button type="button" class="btn btn-default btn-sm pull-right" data-toggle="commListShow" data-obj="#showcomment" title="{LANG.comment_hide_show}">
-                <em class="fa fa-eye-slash"></em>
-            </button>
-            <p class="comment-title">
-                <em class="fa fa-comments">&nbsp;</em> {LANG.comment}
-            </p>
+<div class="mt-3 comment-form-container border-top pt-4 pt-xl-5" id="idcomment"
+    data-module="{$MODULE_COMM}"
+    data-content="{$MODULE_DATA}_commentcontent"
+    data-area="{$AREA_COMM}"
+    data-id="{$ID_COMM}"
+>
+    <div class="d-flex align-items-center gap-3 justify-content-between mb-3 border-bottom pb-2">
+        <div class="h3 mb-0">
+            <i class="fa-regular fa-message me-1"></i> {$LANG->getModule('comment')}
         </div>
-        <div class="col-xs-12 text-right">
-            <select class="form-control" data-toggle="nv_comment_sort_change">
-                <!-- BEGIN: sortcomm -->
-                <option value="{OPTION.key}" {OPTION.selected}>{OPTION.title}</option>
-                <!-- END: sortcomm -->
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-sm btn-outline-input text-center" data-toggle="commListShow" data-obj="#showcomment" title="{$LANG->getModule('comment_hide_show')}" aria-label="{$LANG->getModule('comment_hide_show')}">
+                <i class="fa-regular fa-fw fa-eye"></i>
+            </button>
+            <select class="form-select form-select-sm flex-shrink-0 fw-125" data-toggle="nv_comment_sort_change" name="nv_comment_sort_change">
+                {for $i = 0 to 2}
+                <option value="{$i}"{$i eq $SORTCOMM ? ' selected' : ''}>{$LANG->getModule("sortcomm_`$i`")}</option>
+                {/for}
             </select>
         </div>
     </div>
-    <div id="showcomment" class="margin-bottom-lg">{COMMENTCONTENT}</div>
-    <div id="formcomment" class="comment-form">
-        <!-- BEGIN: allowed_comm -->
-        <form method="post" role="form" target="submitcommentarea" action="{FORM_ACTION}" data-precheck="commFormSubmit" autocomplete="off" novalidate data-gfxnum="{GFX_NUM}" data-editor="{EDITOR_COMM}" {ENCTYPE}<!-- BEGIN: captcha --> data-captcha="code"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 --><!-- BEGIN: turnstile --> data-turnstile="1"<!-- END: turnstile -->>
-            <input type="hidden" name="module" value="{MODULE_COMM}" />
-            <input type="hidden" name="area" value="{AREA_COMM}" />
-            <input type="hidden" name="id" value="{ID_COMM}" />
-            <input type="hidden" name="pid" value="0" />
-            <input type="hidden" name="checkss" value="{CHECKSS_COMM}" />
-            <div class="form-group clearfix">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <input type="text" name="name" value="{NAME}" {DISABLED} class="form-control" placeholder="{LANG.comment_name}" />
-                    </div>
-                    <div class="col-xs-12">
-                        <input type="email" name="email" value="{EMAIL}" {DISABLED} class="form-control" placeholder="{LANG.comment_email}" />
-                    </div>
+    <div id="showcomment" class="mb-3">{$COMMENTCONTENT}</div>
+    <div id="formcomment">
+        {if $ALLOWED_COMM_BOOL}
+        {* Form bình luận *}
+        <form method="post" role="form" target="submitcommentarea"
+            action="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=comment&amp;{$smarty.const.NV_OP_VARIABLE}=post"
+            data-precheck="nv_precheck_form" autocomplete="off" novalidate
+            data-gfxnum="{GFX_NUM}"
+            data-editor="{(empty($MCONFIG.alloweditorcomm) or not $HEADER) ? 0 : 1}"
+            {if not empty($MCONFIG.allowattachcomm)} enctype="multipart/form-data"{/if}
+            {if $CAPTCHA_VALUE eq 'captcha'} data-captcha="code"{/if}
+            {if $CAPTCHA_VALUE eq 'recaptcha2'} data-recaptcha2="1"{/if}
+            {if $CAPTCHA_VALUE eq 'recaptcha3'} data-recaptcha3="1"{/if}
+            {if $CAPTCHA_VALUE eq 'turnstile'} data-turnstile="1"{/if}
+            data-reset-extend="commReset"
+        >
+            <input type="hidden" name="module" value="{$MODULE_COMM}">
+            <input type="hidden" name="area" value="{$AREA_COMM}">
+            <input type="hidden" name="id" value="{$ID_COMM}">
+            <input type="hidden" name="pid" value="0">
+            <input type="hidden" name="checkss" value="{$CHECKSS_COMM}">
+            {assign var="DISABLED" value=($smarty.const.NV_IS_USER ? ' disabled' : '')}
+            <div class="mb-3 row g-3">
+                <div class="col-lg-6 position-relative">
+                    <input type="text" data-valid name="name" value="{$NAME}"{$DISABLED} class="form-control" placeholder="{$LANG->getModule('comment_name')}" autocomplete="name">
+                </div>
+                <div class="col-lg-6 position-relative">
+                    <input type="email" data-valid name="email" value="{$EMAIL}"{$DISABLED} class="form-control" placeholder="{$LANG->getModule('comment_email')}" autocomplete="email">
                 </div>
             </div>
-            <div class="form-group clearfix">
-                <textarea class="form-control" style="width: 100%" name="content" id="commentcontent" cols="20" rows="5"></textarea>
-                <!-- BEGIN: editor -->
-                <link rel="stylesheet" href="{NV_STATIC_URL}{NV_EDITORSDIR}/ckeditor5-classic/ckeditor.css?t={TIMESTAMP}">
-                <script type="text/javascript" src="{NV_STATIC_URL}{NV_EDITORSDIR}/ckeditor5-classic/ckeditor.js?t={TIMESTAMP}"></script>
-                <script type="text/javascript" src="{NV_STATIC_URL}{NV_EDITORSDIR}/ckeditor5-classic/language/{NV_LANG_INTERFACE}.js?t={TIMESTAMP}"></script>
+            <div class="mb-3">
+                <div class="position-relative">
+                    <div data-valid="editor" data-name="content" data-error-mess="{$LANG->getModule('comment_content_error')}" class="nv-ckeditor5classic" id="outer_commentcontent">
+                        <textarea class="form-control" name="content" id="commentcontent" rows="5"></textarea>
+                    </div>
+                </div>
+                {if not empty($MCONFIG.alloweditorcomm) and $HEADER}
+                <link rel="stylesheet" href="{$smarty.const.NV_STATIC_URL}{$smarty.const.NV_EDITORSDIR}/ckeditor5-classic/ckeditor.css?t={$GCONFIG.timestamp}">
+                <script type="text/javascript" src="{$smarty.const.NV_STATIC_URL}{$smarty.const.NV_EDITORSDIR}/ckeditor5-classic/ckeditor.js?t={$GCONFIG.timestamp}"></script>
+                <script type="text/javascript" src="{$smarty.const.NV_STATIC_URL}{$smarty.const.NV_EDITORSDIR}/ckeditor5-classic/language/{$smarty.const.NV_LANG_INTERFACE}.js?t={$GCONFIG.timestamp}"></script>
                 <script type="text/javascript">
                 (async () => {
                     await ClassicEditor
                     .create(document.getElementById("commentcontent"), {
-                        language: '{NV_LANG_INTERFACE}',
+                        language: '{$smarty.const.NV_LANG_INTERFACE}',
                         removePlugins: ["NVBox"],
-                        image: {insert: {integrations: ["url"]}},
-                        nvmedia: {insert: {integrations: ["url"]}},
+                        image: { insert: { integrations: ["url"] } },
+                        nvmedia: { insert: { integrations: ["url"] } },
                         toolbar: {
                             items: [
                                 'undo',
@@ -119,56 +132,60 @@
                     });
                 })();
                 </script>
-                <!-- END: editor -->
+                {/if}
             </div>
-            <!-- BEGIN: attach -->
-            <div class="form-group">
-                <div class="row">
-                    <label class="col-sm-8 col-md-6 control-label">{LANG.attach}</label>
-                    <div class="col-sm-16 col-md-18">
-                        <input type="file" name="fileattach" />
+
+            {if not empty($MCONFIG.allowattachcomm)}
+            <div class="mb-3">
+                <label for="commentFileAttach" class="form-label">{$LANG->getModule('attach')}:</label>
+                <input class="form-control" type="file" name="fileattach" id="commentFileAttach">
+            </div>
+            {/if}
+
+            {if not empty($GCONFIG.data_warning) or not empty($GCONFIG.antispam_warning)}
+            <div class="collapse" id="commentWarnings">
+                <div class="pb-3">
+                    <div class="alert alert-info mb-0 vstack gap-3">
+                        {if not empty($GCONFIG.data_warning)}
+                        <div class="form-check mb-0">
+                            <input type="checkbox" data-valid data-error-type="feedback" class="form-check-input mt-2" id="data_permission_confirm" name="data_permission_confirm" value="1" data-error="{$LANG->getGlobal('data_warning_error')}">
+                            <label for="data_permission_confirm" class="form-check-label">
+                                <small>{$GCONFIG.data_warning_content ?: $LANG->getGlobal('data_warning_content')}</small>
+                            </label>
+                            <div class="invalid-feedback">{$LANG->getGlobal('data_warning_error')}.</div>
+                        </div>
+                        {/if}
+                        {if not empty($GCONFIG.antispam_warning)}
+                        <div class="form-check mb-0">
+                            <input type="checkbox" data-valid data-error-type="feedback" class="form-check-input mt-2" id="antispam_confirm" name="antispam_confirm" value="1" data-error="{$LANG->getGlobal('antispam_warning_error')}">
+                            <label for="antispam_confirm" class="form-check-label">
+                                <small>{$GCONFIG.antispam_warning_content ?: $LANG->getGlobal('antispam_warning_content')}</small>
+                            </label>
+                            <div class="invalid-feedback">{$LANG->getGlobal('antispam_warning_error')}.</div>
+                        </div>
+                        {/if}
                     </div>
                 </div>
             </div>
-            <!-- END: attach -->
+            {/if}
 
-            <!-- BEGIN: confirm -->
-            <div class="alert alert-info confirm" style="padding:0 10px;display:none">
-                <!-- BEGIN: data_sending -->
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" class="form-control" style="margin-top:2px" name="data_permission_confirm" value="1" data-error="{GLANG.data_warning_error}"> <small>{DATA_USAGE_CONFIRM}</small>
-                    </label>
-                </div>
-                <!-- END: data_sending -->
-
-                <!-- BEGIN: antispam -->
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" class="form-control" style="margin-top:2px" name="antispam_confirm" value="1" data-error="{GLANG.antispam_warning_error}"> <small>{ANTISPAM_CONFIRM}</small>
-                    </label>
-                </div>
-                <!-- END: antispam -->
-            </div>
-            <!-- END: confirm -->
-
-            <div class="form-group text-center">
-                <input type="button" value="{GLANG.reset}" class="reset btn btn-default" data-toggle="commReset" />
-                <input type="submit" value="{LANG.comment_submit}" class="btn btn-primary" />
+            <div class="hstack gap-2 justify-content-center">
+                <button type="submit" class="btn btn-primary">{$LANG->getModule('comment_submit')}</button>
+                <button type="button" class="btn btn-outline-secondary" data-toggle="nv-reset-form">{$LANG->getGlobal('reset')}</button>
             </div>
         </form>
-        <iframe class="hidden" id="submitcommentarea" name="submitcommentarea"></iframe>
-        <!-- END: allowed_comm -->
-        <!-- BEGIN: form_login-->
-        <div class="alert alert-danger fade in">
-            <!-- BEGIN: message_login -->
-            <a title="{GLANG.loginsubmit}" href="#" data-toggle="loginForm">{LOGIN_MESSAGE}</a>
-            <!-- END: message_login -->
-            <!-- BEGIN: message_register_group -->
-            {LANG_REG_GROUPS}
-            <!-- END: message_register_group -->
+        <iframe class="d-none" id="submitcommentarea" name="submitcommentarea"></iframe>
+        {elseif $FORM_LOGIN.display}
+        {* Chưa có quyền bình luận nhưng có thể check quyền để bình luận *}
+        <div class="alert alert-danger">
+            {if $FORM_LOGIN.mode eq 'direct'}
+            {* Thành viên đăng nhập trực tiếp *}
+            <a title="{$LANG->getGlobal('loginsubmit')}" href="#" data-toggle="loginForm">{$LANG->getModule('comment_login', $FORM_LOGIN.groups.0)}</a>
+            {else}
+            {* Tham gia nhóm để bình luận *}
+            {$LANG->getModule('comment_register_groups', $FORM_LOGIN.groups|join:', ', $FORM_LOGIN.link)}
+            {/if}
         </div>
-        <!-- END: form_login -->
+        {/if}
     </div>
 </div>
-<!-- END: main -->

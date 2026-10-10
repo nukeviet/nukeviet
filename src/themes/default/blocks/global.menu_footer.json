@@ -6,7 +6,7 @@
         "description": ""
     },
     "config": {
-        "module_in_menu": ""
+        "module_in_menu": []
     },
     "datafunction": "nv_menu_theme_default_footer_config",
     "submitfunction": "nv_menu_theme_default_footer_submit",

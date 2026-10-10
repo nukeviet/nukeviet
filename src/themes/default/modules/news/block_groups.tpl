@@ -1,21 +1,21 @@
-<!-- BEGIN: main -->
-<ul class="block_groups list-none list-items">
-    <!-- BEGIN: loop -->
-    <li class="clearfix">
-        <!-- BEGIN: img -->
-        <a href="{ROW.link}" title="{ROW.title}" {ROW.target_blank} ><img src="{ROW.thumb}" alt="{ROW.title}" width="{ROW.blockwidth}" class="img-thumbnail pull-left mr-1"/></a>
-        <!-- END: img -->
-        <a {TITLE} class="show" href="{ROW.link}" {ROW.target_blank} data-content="{ROW.hometext_clean}" data-img="{ROW.thumb}" data-rel="block_tooltip">{ROW.title_clean}</a>
+<ul class="list-unstyled vstack gap-2 mb-0 block-news">
+    {foreach from=$LIST item=row}
+    <li>
+        <article class="d-flex gap-2"
+            {if not empty($CONFIG.showtooltip)}
+            data-toggle="tooltipArticle" data-hometext="{$row.hometext_clean}" data-alt="{$row.homeimgalt}" data-img="{$row.imgsource}"
+            data-bs-toggle="tooltip" data-bs-placement="{$CONFIG.tooltip_position}"
+            {/if}
+        >
+            {if not empty($row.thumb)}
+            <a class="thumbnail mt-2" href="{$row.link}"{if $row.external_link} target="_blank"{/if}>
+                <span style="--nv-width: {$MCONFIG.blockwidth}px; --nv-height: {$MCONFIG.blockheight}px;">
+                    <img src="{$row.thumb}" alt="{$row.homeimgalt}">
+                </span>
+            </a>
+            {/if}
+            <a class="bl-text link-body-emphasis text-truncate-3" href="{$row.link}"{if $row.external_link} target="_blank"{/if} title="{$row.title}">{$row.title_clean}</a>
+        </article>
     </li>
-    <!-- END: loop -->
+    {/foreach}
 </ul>
-<!-- BEGIN: tooltip -->
-<script type="text/javascript">
-$(document).ready(function() {$("[data-rel='block_tooltip'][data-content!='']").tooltip({
-    placement: "{TOOLTIP_POSITION}",
-    html: true,
-    title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
-});});
-</script>
-<!-- END: tooltip -->
-<!-- END: main -->

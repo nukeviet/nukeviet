@@ -41,7 +41,7 @@ upk_make([
     'paths' => [
         'admin/siteinfo',
         'includes/core/amlich.php',
-        'themes/admin_future/system'
+        'themes/admin_default/system'
     ],
     'options' => $options
 ]);

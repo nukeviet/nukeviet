@@ -1,65 +1,52 @@
-<!-- BEGIN: main -->
-<form id="sendmailForm" action="{SENDMAIL.action}" method="post" class="margin-lg" role="form" data-toggle="newsSendMail" data-precheck="newsSendMail_precheck" <!-- BEGIN: captcha --> data-captcha="nv_seccode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 --><!-- BEGIN: turnstile --> data-turnstile="1"<!-- END: turnstile -->>
-    <div class="form-horizontal">
-        <div class="form-group">
-            <label for="friend_email" class="col-sm-8 control-label">{LANG.sendmail_email}<em>*</em></label>
-            <div class="col-sm-16">
-                <input type="text" id="friend_email" name="friend_email" value="" class="form-control" maxlength="100" data-error="{LANG.sendmail_err_mail}" />
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="your_name" class="col-sm-8 control-label">{LANG.sendmail_name}<em>*</em></label>
-            <div class="col-sm-16">
-                <input id="your_name" type="text" name="your_name" value="{SENDMAIL.your_name}" class="form-control" maxlength="100" data-error="{LANG.sendmail_err_name}" />
-            </div>
-        </div>
-
-        <!-- BEGIN: sender_is_user -->
-        <div class="form-group">
-            <label for="your_email" class="col-sm-8 control-label">{LANG.sendmail_youremail}</label>
-            <div class="col-sm-16">
-                <input type="email" id="your_email" name="your_email" value="{SENDMAIL.your_email}" class="form-control" maxlength="100" readonly="readonly" />
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="your_message" class="col-sm-8 control-label">{LANG.sendmail_content}</label>
-            <div class="col-sm-16">
-                <textarea id="your_message" name="your_message" class="form-control" maxlength="500"></textarea>
-            </div>
-        </div>
-        <!-- END: sender_is_user -->
+<form class="modal-content" action="{$SENDMAIL.action}" method="post" data-toggle="ajax-form" data-precheck="nv_precheck_form" data-callback="newsSendMailCallback"{$CAPTCHA_ATTRS} novalidate>
+    <div class="modal-header">
+        <h5 class="modal-title">{$LANG->getModule('sendmail')}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$LANG->getGlobal('close')}"></button>
     </div>
-    <!-- BEGIN: confirm -->
-    <div class="alert alert-info confirm" style="padding:0 10px">
-        <!-- BEGIN: data_sending -->
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" class="form-control" style="margin-top:2px" name="data_permission_confirm" value="1" data-error="{GLANG.data_warning_error}"> <small>{DATA_USAGE_CONFIRM}</small>
-            </label>
+    <div class="modal-body">
+        <div class="mb-3">
+            <label for="newsSendMailFriendEmail" class="form-label">{$LANG->getModule('sendmail_email')} <span class="text-danger">(*)</span></label>
+            <input type="email" class="form-control" id="newsSendMailFriendEmail" name="friend_email" value="" maxlength="100" data-valid data-error-type="feedback">
+            <div class="invalid-feedback"></div>
         </div>
-        <!-- END: data_sending -->
-
-        <!-- BEGIN: antispam -->
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" class="form-control" style="margin-top:2px" name="antispam_confirm" value="1" data-error="{GLANG.antispam_warning_error}"> <small>{ANTISPAM_CONFIRM}</small>
-            </label>
+        <div class="mb-3">
+            <label for="newsSendMailYourName" class="form-label">{$LANG->getModule('sendmail_name')} <span class="text-danger">(*)</span></label>
+            <input type="text" class="form-control" id="newsSendMailYourName" name="your_name" value="{$SENDMAIL.your_name}" maxlength="100" data-valid data-error-type="feedback" data-error-mess="{$LANG->getModule('sendmail_err_name')}">
+            <div class="invalid-feedback"></div>
         </div>
-        <!-- END: antispam -->
-    </div>
-    <!-- END: confirm -->
-
-    <div class="form-horizontal">
-        <div class="form-group">
-            <div class="col-sm-16 col-sm-push-8">
-                <input type="hidden" name="checkss" value="{SENDMAIL.checkss}" />
-                <input type="hidden" name="send" value="1" />
-                <input type="submit" value="{LANG.sendmail_submit}" class="btn btn-primary" />
-                <button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.cancel}</button>
+        {if not empty($smarty.const.NV_IS_USER)}
+        <div class="mb-3">
+            <label for="newsSendMailYourEmail" class="form-label">{$LANG->getModule('sendmail_youremail')}</label>
+            <input type="email" class="form-control" id="newsSendMailYourEmail" name="your_email" value="{$SENDMAIL.your_email}" maxlength="100" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="newsSendMailYourMessage" class="form-label">{$LANG->getModule('sendmail_content')}</label>
+            <textarea class="form-control" id="newsSendMailYourMessage" name="your_message" rows="3" maxlength="500"></textarea>
+        </div>
+        {/if}
+        {if not empty($GCONFIG.data_warning) or not empty($GCONFIG.antispam_warning)}
+        <div class="alert alert-info vstack gap-2 mb-0">
+            {if not empty($GCONFIG.data_warning)}
+            <div class="form-check mb-0">
+                <input class="form-check-input" type="checkbox" name="data_permission_confirm" value="1" id="newsSendMailDataConfirm" data-valid="checkbox" data-min="1" data-max="1" data-error-type="feedback">
+                <label class="form-check-label" for="newsSendMailDataConfirm"><small>{$GCONFIG.data_warning_content|default:$LANG->getGlobal('data_warning_content')}</small></label>
+                <div class="invalid-feedback">{$LANG->getGlobal('data_warning_error')}</div>
             </div>
+            {/if}
+            {if not empty($GCONFIG.antispam_warning)}
+            <div class="form-check mb-0">
+                <input class="form-check-input" type="checkbox" name="antispam_confirm" value="1" id="newsSendMailAntispamConfirm" data-valid="checkbox" data-min="1" data-max="1" data-error-type="feedback">
+                <label class="form-check-label" for="newsSendMailAntispamConfirm"><small>{$GCONFIG.antispam_warning_content|default:$LANG->getGlobal('antispam_warning_content')}</small></label>
+                <div class="invalid-feedback">{$LANG->getGlobal('antispam_warning_error')}</div>
+            </div>
+            {/if}
         </div>
+        {/if}
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="checkss" value="{$SENDMAIL.checkss}">
+        <input type="hidden" name="send" value="1">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$LANG->getGlobal('cancel')}</button>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> {$LANG->getModule('sendmail_submit')}</button>
     </div>
 </form>
-<!-- END: main -->

@@ -20946,7 +20946,7 @@ textarea.form-control-lg {
   font-style: normal;
   font-weight: 900;
   font-display: block;
-  src: url("../../themes/admin_future/webfonts/fa-solid-900.woff2");
+  src: url("../../themes/admin_default/webfonts/fa-solid-900.woff2");
 }
 .fas {
   --fa-family: var(--fa-family-classic);
@@ -20963,21 +20963,21 @@ textarea.form-control-lg {
 
 @font-face {
   font-family: "Roboto";
-  src: url("../../themes/admin_future/webfonts/Roboto-Regular.woff2") format("woff2"), url("../../themes/admin_future/webfonts/Roboto-Regular.woff") format("woff");
+  src: url("../../themes/admin_default/webfonts/Roboto-Regular.woff2") format("woff2"), url("../../themes/admin_default/webfonts/Roboto-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Roboto";
-  src: url("../../themes/admin_future/webfonts/Roboto-Medium.woff2") format("woff2"), url("../../themes/admin_future/webfonts/Roboto-Medium.woff") format("woff");
+  src: url("../../themes/admin_default/webfonts/Roboto-Medium.woff2") format("woff2"), url("../../themes/admin_default/webfonts/Roboto-Medium.woff") format("woff");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Roboto";
-  src: url("../../themes/admin_future/webfonts/Roboto-Bold.woff2") format("woff2"), url("../../themes/admin_future/webfonts/Roboto-Bold.woff") format("woff");
+  src: url("../../themes/admin_default/webfonts/Roboto-Bold.woff2") format("woff2"), url("../../themes/admin_default/webfonts/Roboto-Bold.woff") format("woff");
   font-weight: 700;
   font-style: normal;
   font-display: swap;

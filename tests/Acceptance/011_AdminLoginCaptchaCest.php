@@ -24,7 +24,6 @@ use Tests\Support\LoginCaptchaTrait;
  * và hỏng các test đăng nhập phía sau.
  *
  * Điều kiện: login_number_tracking > 0, captcha_area không bật khu vực admin (a), captcha_type là captcha hình.
- * Trang đăng nhập admin luôn dùng admin_future (admin/index.php ép giao diện), nên không test được admin_default.
  */
 class AdminLoginCaptchaCest
 {

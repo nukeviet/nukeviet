@@ -14,11 +14,11 @@ $(function() {
     const pkForm = $('#passkey-form');
 
     if (nukeviet.WebAuthnSupported) {
-        $('[data-toggle="passkey-add"]', pkForm).removeClass('hidden');
-        $('[data-toggle="passkey-not-supported"]', pkForm).addClass('hidden');
+        $('[data-toggle="passkey-add"]', pkForm).removeClass('d-none');
+        $('[data-toggle="passkey-not-supported"]', pkForm).addClass('d-none');
     } else {
-        $('[data-toggle="passkey-add"]', pkForm).addClass('hidden');
-        $('[data-toggle="passkey-not-supported"]', pkForm).removeClass('hidden');
+        $('[data-toggle="passkey-add"]', pkForm).addClass('d-none');
+        $('[data-toggle="passkey-not-supported"]', pkForm).removeClass('d-none');
     }
 
     // Thêm passkey
@@ -30,7 +30,6 @@ $(function() {
             return false;
         }
         const form = btn.closest('form');
-        const ctn = btn.closest('[data-toggle="ctn"]');
         icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-pulse');
         $.ajax({
             url: form.attr('action'),
@@ -44,7 +43,7 @@ $(function() {
             success: function(response) {
                 if (response.status != 'ok') {
                     icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
-                    $('[data-toggle="error"]', ctn).text(response.mess).removeClass('hidden');
+                    $('[data-toggle="error"]', form).text(response.mess).removeClass('d-none');
                     return;
                 }
 
@@ -83,7 +82,7 @@ $(function() {
                         success: function (response) {
                             if (response.status != 'ok') {
                                 icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
-                                $('[data-toggle="error"]', ctn).text(response.mess).removeClass('hidden');
+                                $('[data-toggle="error"]', form).text(response.mess).removeClass('d-none');
                                 return;
                             }
                             if (!btn.data('enable-login')) {
@@ -96,18 +95,18 @@ $(function() {
                         error: function (xhr, status, error) {
                             console.error(xhr, status, error);
                             icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
-                            $('[data-toggle="error"]', ctn).text(nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                            $('[data-toggle="error"]', form).text(nukeviet.i18n.WebAuthnErrors.unknow).removeClass('d-none');
                         }
                     });
                 }).catch(error => {
                     icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
-                    $('[data-toggle="error"]', ctn).text(nukeviet.i18n.WebAuthnErrors.creat[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                    $('[data-toggle="error"]', form).text(nukeviet.i18n.WebAuthnErrors.creat[error.name] || nukeviet.i18n.WebAuthnErrors.unknow).removeClass('d-none');
                 });
             },
             error: function(xhr, status, error) {
                 console.error(xhr, status, error);
                 icon.removeClass('fa-spinner fa-pulse').addClass(icon.data('icon'));
-                $('[data-toggle="error"]', ctn).text(nukeviet.i18n.WebAuthnErrors.unknow).removeClass('hidden');
+                $('[data-toggle="error"]', form).text(nukeviet.i18n.WebAuthnErrors.unknow).removeClass('d-none');
             }
         });
     });

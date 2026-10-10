@@ -31,26 +31,17 @@ if (!defined('NV_MAINFILE')) {
 global $nv_Lang, $module_name, $client_info;
 
 $block_theme = get_tpl_dir($dir_basenames, 'default', '/system/admin_toolbar.tpl');
-$xtpl = new XTemplate('admin_toolbar.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/system');
-$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$xtpl->assign('NV_ADMINDIR', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
-$xtpl->assign('URL_AUTHOR', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $admin_info['admin_id']);
-$xtpl->assign('TEMPLATE', $block_theme);
+
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $block_theme . '/system');
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('MODULE_INFO', $module_info);
+$tpl->assign('MODULE_NAME', $module_name);
+$tpl->assign('ENABLE_DRAG', $enable_drag);
+$tpl->assign('URL_AUTHOR', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $admin_info['admin_id']);
 
 if ($enable_drag) {
-    $new_drag_block = (defined('NV_IS_DRAG_BLOCK')) ? 0 : 1;
-    $lang_drag_block = ($new_drag_block) ? $nv_Lang->getGlobal('drag_block') : $nv_Lang->getGlobal('no_drag_block');
-
-    $xtpl->assign('URL_DBLOCK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;drag_block=' . $new_drag_block . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
-    $xtpl->assign('LANG_DBLOCK', $lang_drag_block);
-    $xtpl->parse('main.is_spadmin');
+    $tpl->assign('URL_DBLOCK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;drag_block=' . intval(!defined('NV_IS_DRAG_BLOCK')) . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
 }
 
-if (defined('NV_IS_MODADMIN') and !empty($module_info['admin_file'])) {
-    $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
-    $xtpl->assign('MODULENAME', $module_info['custom_title']);
-    $xtpl->parse('main.is_modadmin');
-}
-
-$xtpl->parse('main');
-return $xtpl->text('main');
+return $tpl->fetch('admin_toolbar.tpl');

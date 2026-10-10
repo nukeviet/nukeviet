@@ -368,13 +368,10 @@ $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions
 (22, 'module', 'inform', 1, 0, 'inform', 'inform', '" . $global_config['version'] . " " . $global_config['version_time'] . "', " . NV_CURRENTTIME . ", 'VINADES.,JSC <contact@vinades.vn>', ''),
 (22, 'module', 'myapi', 1, 0, 'myapi', 'myapi', '" . $global_config['version'] . " " . $global_config['version_time'] . "', " . NV_CURRENTTIME . ", 'VINADES.,JSC <contact@vinades.vn>', '')";
 
-// FIXME số 999 dùng để develop, sau sẽ xóa
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_plugins (pid, plugin_file, plugin_area, plugin_module_name, plugin_module_file, weight) VALUES
 (1, 'qrcode.php', 'get_qr_code', '', '', 1),
 (2, 'cdn_js_css_image.php', 'change_site_buffer', '', '', 1),
 (3, 'emf_code_user.php', 'get_email_merge_fields', 'users', 'users', 1),
 (4, 'emf_core_author.php', 'get_email_merge_fields', '', '', 2),
-(5, 'emf_all.php', 'get_email_merge_fields', '', '', 3),
-(998, 'get_module_admin_theme.php', 'get_module_admin_theme', '', '', 1),
-(999, 'get_global_admin_theme.php', 'get_global_admin_theme', '', '', 1)
+(5, 'emf_all.php', 'get_email_merge_fields', '', '', 3)
 ";

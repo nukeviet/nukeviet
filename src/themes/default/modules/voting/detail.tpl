@@ -1,9 +1,5 @@
-<!-- BEGIN: main -->
-<div class="panel panel-default">
-    <div class="panel-body">
-        <!-- BEGIN: content -->
-        {FILE "result.voting.tpl"}
-        <!-- END: content -->
+<div class="card">
+    <div class="card-body">
+        {include file='voting.result.tpl'}
     </div>
 </div>
-<!-- END: main -->

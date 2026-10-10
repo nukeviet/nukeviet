@@ -1,78 +1,78 @@
-<!-- BEGIN: main -->
-<!-- BEGIN: comment_result -->
-<div class="alert alert-info" id="alert-info">{STATUS_COMMENT}</div>
-<script type="text/javascript">$('#alert-info').delay(5000).fadeOut('slow');</script>
-<!-- END: comment_result -->
-<ul class="comment-list">
-    <!-- BEGIN: detail -->
-    <li class="media" id="cid_{COMMENT.cid}">
-        <div class="pull-left">
-            <img class="media-object bg-gainsboro" src="{COMMENT.photo}" alt="{COMMENT.post_name}" width="40" />
+{* Giao diện danh sách bình luận cấp 1 *}
+{if not empty($COMMENT_RESULT)}
+<div class="alert alert-info" id="comment-result-info" role="alert">{$COMMENT_RESULT}</div>
+<script type="text/javascript">$('#comment-result-info').delay(5000).fadeOut('slow');</script>
+{/if}
+<ul class="comment-list list-unstyled vstack gap-3">
+    {foreach from=$DATA.comment item=comment}
+    <li class="d-flex" id="cid_{$comment.cid}">
+        <div class="flex-shrink-0">
+            {if $comment.avata}
+            <img src="{$comment.avata}" alt="{$comment.post_name}" width="50" height="50" class="fw-50 fh-50 rounded-circle object-fit-cover">
+            {else}
+            <span class="avatar-letters fw-50 fh-50" style="background-color:{$comment.avatar_color}" aria-hidden="true">{$comment.avatar_letters}</span>
+            {/if}
         </div>
-        <div class="media-body">
-            <div class="margin-bottom">{COMMENT.content}</div>
-            <div class="comment-info clearfix">
-                <div class="clearfix">
-                    <em class="fa fa-user">&nbsp;</em> <strong class="cm_item">{COMMENT.post_name} </strong>
-                    <!-- BEGIN: emailcomm -->
-                    <em class="fa fa-envelope-o">&nbsp;</em> <a class="cm_item" title="mailto {COMMENT.post_email}" href="mailto:{COMMENT.post_email}">{COMMENT.post_email}</a>
-                    <!-- END: emailcomm -->
-                    <em class="fa fa-clock-o">&nbsp;</em> <span class="small">{LANG.pubtime} {COMMENT.post_time}</span>
+        <div class="flex-grow-1 ms-2">
+            <div class="p-2 rounded-3 bg-body-tertiary">
+                <div class="comment-info mb-0 small fw-medium">
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <i class="fa-solid fa-circle-user"></i> {$comment.post_name}
+                        </li>
+                        {if not empty($MCONFIG.emailcomm) and not empty($comment.post_email)}
+                        <li class="list-inline-item">
+                            <i class="fa-solid fa-at"></i> <a title="mailto {$comment.post_email}" href="mailto:{$comment.post_email}">{$comment.post_email}</a>
+                        </li>
+                        {/if}
+                        <li class="list-inline-item">
+                            <i class="fa-regular fa-clock"></i> {$comment.post_time|ddatetime}
+                        </li>
+                    </ul>
                 </div>
-                <ul class="comment-tool clearfix">
-                    <!-- BEGIN: delete -->
-                    <li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="#" data-toggle="commDelete" data-cid="{COMMENT.cid}" data-checkss="{COMMENT.check_like}">{LANG.delete}</a></li>
-                    <!-- END: delete -->
-                    <!-- BEGIN: allowed_comm -->
-                    <li><em class="fa fa-reply">&nbsp;</em> <a href="#" data-toggle="commFeedback" data-cid="{COMMENT.cid}" data-postname="{COMMENT.post_name}">{LANG.feedback}</a></li>
-                    <!-- END: allowed_comm -->
-                    <li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="#" data-toggle="commLike" data-cid="{COMMENT.cid}" data-checkss="{COMMENT.check_like}" data-like="1">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
-                    <li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="#" data-toggle="commLike" data-cid="{COMMENT.cid}" data-checkss="{COMMENT.check_like}" data-like="-1">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
-                    <!-- BEGIN: attach -->
-                    <li><a href="{COMMENT.attach}" rel="nofollow"><i class="fa fa-fw fa-download"></i>{LANG.attachdownload}</a></li>
-                    <!-- END: attach -->
+                <div class="richtext-container">{$comment.content}</div>
+            </div>
+            <div class="comment-tool mt-2 small">
+                <ul class="list-inline">
+                    {if not empty($ALLOWED_DELETE)}
+                    <li class="list-inline-item">
+                        <i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i>
+                        <a href="#" data-toggle="commDelete" data-cid="{$comment.cid}" data-checkss="{$comment.check_like}">{$LANG->getModule('delete')}</a>
+                    </li>
+                    {/if}
+                    {if not empty($ALLOWED_COMM)}
+                    <li class="list-inline-item">
+                        <i class="fa-solid fa-reply"></i>
+                        <a href="#" data-toggle="commFeedback" data-cid="{$comment.cid}" data-postname="{$comment.post_name}">{$LANG->getModule('feedback')}</a>
+                    </li>
+                    {/if}
+                    <li class="list-inline-item">
+                        <i class="fa-solid fa-thumbs-up" data-icon="fa-thumbs-up"></i>
+                        <a href="#" data-toggle="commLike" data-cid="{$comment.cid}" data-checkss="{$comment.check_like}" data-like="1">{$LANG->getModule('like')}</a>
+                        <span id="count-comment{$comment.cid}-like">{$comment.likes}</span>
+                    </li>
+                    <li class="list-inline-item">
+                        <i class="fa-solid fa-thumbs-down" data-icon="fa-thumbs-down"></i>
+                        <a href="#" data-toggle="commLike" data-cid="{$comment.cid}" data-checkss="{$comment.check_like}" data-like="-1">{$LANG->getModule('dislike')}</a>
+                        <span id="count-comment{$comment.cid}-dislike">{$comment.dislikes}</span>
+                    </li>
+                    {if not empty($comment.attach)}
+                    <li class="list-inline-item">
+                        <i class="fa-solid fa-paperclip"></i>
+                        <a href="{$comment.attach}" rel="nofollow">{$LANG->getModule('attachdownload')}</a>
+                    </li>
+                    {/if}
                 </ul>
             </div>
-            <!-- BEGIN: children -->
-            {CHILDREN}
-            <!-- END: children -->
+            {if not empty($comment.children)}
+            <div class="mt-3">
+                {$comment.children}
+            </div>
+            {/if}
         </div>
     </li>
-    <!-- END: detail -->
+    {/foreach}
 </ul>
-<div class="text-center">{PAGE}</div>
-<!-- END: main -->
-<!-- BEGIN: children -->
-<ul class="comment-list">
-    <!-- BEGIN: detail -->
-    <li class="media" id="cid_{COMMENT.cid}">
-        <div class="media-body">
-            <div class="margin-bottom">{COMMENT.content}</div>
-            <div class="comment-info clearfix">
-                <div class="clearfix">
-                    <em class="fa fa-user">&nbsp;</em> <strong class="cm_item">{COMMENT.post_name} </strong>
-                    <!-- BEGIN: emailcomm -->
-                    <em class="fa fa-envelope-o">&nbsp;</em> <a class="cm_item" title="mailto {COMMENT.post_email}" href="mailto:{COMMENT.post_email}">{COMMENT.post_email}</a>
-                    <!-- END: emailcomm -->
-                    <em class="fa fa-clock-o">&nbsp;</em> <span class="small">{LANG.pubtime} {COMMENT.post_time}</span>
-                </div>
-                <ul class="comment-tool">
-                    <!-- BEGIN: delete -->
-                    <li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="#" data-toggle="commDelete" data-cid="{COMMENT.cid}" data-checkss="{COMMENT.check_like}">{LANG.delete}</a></li>
-                    <!-- END: delete -->
-                    <!-- BEGIN: allowed_comm -->
-                    <li><em class="fa fa-reply">&nbsp;</em> <a href="#" data-toggle="commFeedback" data-cid="{COMMENT.cid}" data-postname="{COMMENT.post_name}">{LANG.feedback}</a></li>
-                    <!-- END: allowed_comm -->
-                    <li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="#" data-toggle="commLike" data-cid="{COMMENT.cid}" data-checkss="{COMMENT.check_like}" data-like="1">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
-                    <li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="#" data-toggle="commLike" data-cid="{COMMENT.cid}" data-checkss="{COMMENT.check_like}" data-like="-1">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
-                    <!-- BEGIN: attach -->
-                    <li><a href="{COMMENT.attach}" rel="nofollow"><i class="fa fa-fw fa-download"></i>{LANG.attachdownload}</a></li>
-                    <!-- END: attach -->
-                </ul>
-            </div>
-        </div> <!-- BEGIN: children --> {CHILDREN} <!-- END: children -->
-    </li>
-    <!-- END: detail -->
-</ul>
-<div class="text-center">{PAGE}</div>
-<!-- END: children -->
+{if not empty($DATA.page)}
+<div class="d-flex justify-content-center">{$DATA.page}</div>
+{/if}

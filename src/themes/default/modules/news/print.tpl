@@ -1,88 +1,59 @@
-<!-- BEGIN: main -->
-<style type="text/css">
-    body{background: #fff;}
-</style>
-
-<div id="print">
-    <div id="hd_print">
-        <h2 class="pull-left">{CONTENT.sitename}</h2>
-        <p class="pull-right"><a title="{CONTENT.sitename}" href="{CONTENT.url}/">{CONTENT.url}</a></p>
-    </div>
-    <div class="clear"></div>
-    <hr />
-    <div id="content">
-        <h1>{CONTENT.title}</h1>
-        <ul class="list-inline">
-            <li>{CONTENT.time}</li>
-            <li class="hidden-print txtrequired"><em class="fa fa-print">&nbsp;</em><a title="{LANG.print}" href="#" data-toggle="winCMD" data-cmd="print">{LANG.print}</a></li>
-            <li class="hidden-print txtrequired"><em class="fa fa-power-off">&nbsp;</em><a title="{LANG.print_close}" href="#"  data-toggle="winCMD" data-cmd="close">{LANG.print_close}</a></li>
-        </ul>
-        <div class="clear"></div>
-        <!-- BEGIN: no_public -->
-        <div class="alert alert-warning">
-            {LANG.no_public}
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-8">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 border-bottom py-3 mb-3">
+            <div class="h4 mb-0">{$CONTENT.sitename}</div>
+            <a href="{$CONTENT.url}/" title="{$CONTENT.sitename}">{$CONTENT.url}</a>
         </div>
-        <!-- END: no_public -->
-        <div id="hometext">
-            <!-- BEGIN: image -->
-            <div class="pull-left imghome">
-                <img alt="{CONTENT.image.alt}" src="{CONTENT.image.src}" width="{CONTENT.image.width}" class="img-thumbnail" />
-                <!-- BEGIN: note -->
-                <p>
-                    <em>{CONTENT.image.note}</em>
-                </p>
-                <!-- END: note -->
+        <h1 class="h3 mb-2">{$CONTENT.title}</h1>
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+            <span class="text-body-secondary"><i class="fa-regular fa-clock"></i> {$CONTENT.time}</span>
+            <div class="d-flex gap-2 ms-auto d-print-none">
+                <button type="button" class="btn btn-sm btn-primary" data-toggle="winCMD" data-cmd="print"><i class="fa-solid fa-print"></i> {$LANG->getModule('print')}</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="winCMD" data-cmd="close"><i class="fa-solid fa-power-off"></i> {$LANG->getModule('print_close')}</button>
             </div>
-            <!-- END: image -->
-            {CONTENT.hometext}
         </div>
-        <!-- BEGIN: imagefull -->
-        <div class="imghome">
-            <img alt="{CONTENT.image.alt}" src="{CONTENT.image.src}" width="{CONTENT.image.width}" class="img-thumbnail" />
-            <!-- BEGIN: note -->
-            <p>
-                <em>{CONTENT.image.note}</em>
-            </p>
-            <!-- END: note -->
+        {if $CONTENT.status != 1}
+        <div class="alert alert-warning">{$LANG->getModule('no_public')}</div>
+        {/if}
+        <div class="fw-bold mb-3 clearfix">
+            {if not empty($CONTENT.image.width) and $CONTENT.image.position == 1}
+            <figure class="figure float-start me-3 mb-2">
+                <img src="{$CONTENT.image.src}" alt="{$CONTENT.image.alt}" width="{$CONTENT.image.width}" class="figure-img img-thumbnail img-fluid mb-1">
+                {if not empty($CONTENT.image.note)}
+                <figcaption class="figure-caption fw-normal fst-italic">{$CONTENT.image.note}</figcaption>
+                {/if}
+            </figure>
+            {/if}
+            {$CONTENT.hometext}
         </div>
-        <div class="clear"></div>
-        <!-- END: imagefull -->
-        <div id="bodytext" class="clearfix">
-            {CONTENT.bodytext}
+        {if not empty($CONTENT.image.width) and $CONTENT.image.position == 2}
+        <figure class="figure d-block text-center mb-3">
+            <img src="{$CONTENT.image.src}" alt="{$CONTENT.image.alt}" width="{$CONTENT.image.width}" class="figure-img img-thumbnail img-fluid mb-1">
+            {if not empty($CONTENT.image.note)}
+            <figcaption class="figure-caption fst-italic">{$CONTENT.image.note}</figcaption>
+            {/if}
+        </figure>
+        {/if}
+        <div class="richtext-container clearfix mb-3">
+            {$CONTENT.bodytext}
         </div>
-        <!-- BEGIN: author -->
-        <div id="author">
-            <!-- BEGIN: name -->
-            <p>
-                <strong>{LANG.author}:</strong>
-                {CONTENT.author}
-            </p>
-            <!-- END: name -->
-            <!-- BEGIN: source -->
-            <p>
-                <strong>{LANG.source}:</strong>
-                {CONTENT.source}
-            </p>
-            <!-- END: source -->
+        {if not empty($CONTENT.author) or not empty($CONTENT.source)}
+        <div class="text-end mb-3">
+            {if not empty($CONTENT.author)}
+            <p class="mb-1"><strong>{$LANG->getModule('author')}:</strong> {$CONTENT.author}</p>
+            {/if}
+            {if not empty($CONTENT.source)}
+            <p class="mb-1"><strong>{$LANG->getModule('source')}:</strong> {$CONTENT.source}</p>
+            {/if}
         </div>
-        <!-- END: author -->
-        <!-- BEGIN: copyright -->
-        <div class="copyright">
-            {CONTENT.copyvalue}
-        </div>
-        <!-- END: copyright -->
-    </div>
-    <div id="footer" class="clearfix">
-        <div id="url">
-            <strong>{LANG.print_link}: </strong>{CONTENT.link}
-        </div>
-        <div class="clear"></div>
-        <div class="copyright">
-            &copy; {CONTENT.sitename}
-        </div>
-        <div id="contact">
-            <a href="mailto:{CONTENT.contact}">{CONTENT.contact}</a>
+        {/if}
+        {if $CONTENT.copyright == 1}
+        <div class="alert alert-info">{$CONTENT.copyvalue}</div>
+        {/if}
+        <div class="border-top pt-3 pb-3 small">
+            <p class="mb-1 text-break"><strong>{$LANG->getModule('print_link')}:</strong> {$CONTENT.link}</p>
+            <p class="mb-1">&copy; {$CONTENT.sitename}</p>
+            <a href="mailto:{$CONTENT.contact}">{$CONTENT.contact}</a>
         </div>
     </div>
 </div>
-<!-- END: main-->

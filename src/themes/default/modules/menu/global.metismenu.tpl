@@ -1,44 +1,29 @@
-<!-- BEGIN: tree -->
-<li>
-    <a title="{MENUTREE.note}" href="{MENUTREE.link}" rel="dofollow" class="sf-with-ul" {MENUTREE.target}>{MENUTREE.title_trim}</a>
-    <!-- BEGIN: tree_content -->
-    <ul>
-        {TREE_CONTENT}
+{function writeTrees menus=[] lev=1}
+{foreach from=$menus item=menu}
+<li class="{if $lev eq 1}list-group-item p-0{else}border-top{/if}{if not empty($menu.css)} {$menu.css}{/if}">
+    <div class="d-flex justify-content-between align-items-center gap-2 px-3">
+        <a href="{$menu.link}" {$menu.target} title="{$menu.note}" class="d-flex align-items-center gap-2 py-2 overflow-hidden {if $menu.is_active}link-primary fw-medium{else}link-body-emphasis{/if}">
+            {if not empty($menu.icon) and not empty($CONFIG.show_icon)}
+            <img src="{$menu.icon}" alt="{$menu.title}" class="fw-20 fh-20 object-fit-contain flex-shrink-0">
+            {/if}
+            <span class="text-truncate">{$menu.title_trim}</span>
+        </a>
+        {if not empty($menu.sub)}
+        <button type="button" class="collapse-caret btn btn-link link-secondary p-1 lh-1 flex-shrink-0{if not $menu.is_active} collapsed{/if}" data-bs-toggle="collapse" data-bs-target="#metismenu-{$CONFIG.bid}-{$menu.id}" aria-expanded="{if $menu.is_active}true{else}false{/if}" aria-controls="metismenu-{$CONFIG.bid}-{$menu.id}" aria-label="{$LANG->getGlobal('toggle_submenu')}">
+            <i class="fa-solid fa-angle-down fa-fw"></i>
+        </button>
+        {/if}
+    </div>
+    {if not empty($menu.sub)}
+    <ul class="list-unstyled mb-0 ps-3 bg-body-tertiary collapse{if $menu.is_active} show{/if}" id="metismenu-{$CONFIG.bid}-{$menu.id}">
+        {writeTrees menus=$menu.sub lev=$lev+1}
     </ul>
-    <!-- END: tree_content -->
+    {/if}
 </li>
-<!-- END: tree -->
-<!-- BEGIN: main -->
-<link rel="stylesheet" type="text/css" href="{NV_STATIC_URL}themes/{BLOCK_THEME}/css/jquery.metisMenu.css" />
-<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery/jquery.metisMenu.js"></script>
-
-<div class="clearfix panel metismenu">
-    <aside class="sidebar">
-        <nav class="sidebar-nav">
-            <ul id="menu_{MENUID}">
-                <!-- BEGIN: loopcat1 -->
-                <li>
-                    <a title="{CAT1.note}" href="{CAT1.link}" rel="dofollow" {CAT1.target}>{CAT1.title_trim}</a>
-                    <!-- BEGIN: expand -->
-                    <span class="fa arrow expand"></span>
-                    <!-- END: expand -->
-
-                    <!-- BEGIN: cat2 -->
-                    <ul>
-                        {HTML_CONTENT}
-                    </ul>
-                    <!-- END: cat2 -->
-                </li>
-                <!-- END: loopcat1 -->
-            </ul>
-        </nav>
-    </aside>
-</div>
-<script type="text/javascript">
-$(function() {
-    $('#menu_{MENUID}').metisMenu({
-    toggle: false
-    })
-});
-</script>
-<!-- END: main -->
+{/foreach}
+{/function}
+<nav>
+    <ul class="list-group overflow-hidden">
+        {writeTrees menus=$MENUS lev=1}
+    </ul>
+</nav>

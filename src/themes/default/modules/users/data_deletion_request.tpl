@@ -1,84 +1,95 @@
-<!-- BEGIN: main -->
-<form method="post" action="{DATA.form_action}">
-    <div class="centered user-delete-account" id="user-request-deletion-page" data-checkss="{CHECKSS}">
-        <div class="sm-container-box">
-            <!-- BEGIN: not_confirmed -->
-            <div class="usr-flex usr-justify-between usr-gap-2 margin-bottom-lg">
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-10 col-xl-8">
+        <form action="{$DATA.form_action}" method="post"
+            data-precheck="nv_precheck_form" data-area="usersDataDeletion" data-checkss="{$CHECKSS}"
+            autocomplete="off" novalidate
+        >
+            {if not $DATA.i_confirmed}
+            {* Bước 1: Đọc kỹ cảnh báo và xác nhận xóa tài khoản *}
+            <div class="d-flex flex-wrap flex-sm-nowrap justify-content-between align-items-start gap-2 mb-4">
                 <div>
-                    <h1>{LANG.delaccount_title}</h1>
-                    <p>{LANG.delaccount_note}.</p>
+                    <h1 class="h3 mb-2">{$LANG->getModule('delaccount_title')}</h1>
+                    <p class="text-muted mb-0">{$LANG->getModule('delaccount_note')}.</p>
                 </div>
-                <div>
-                    <a href="{DATA.link_back}" class="btn btn-default"><i class="fa fa-long-arrow-left" aria-hidden="true"></i> {LANG.delaccount_back}</a>
-                </div>
+                <a href="{$DATA.link_back}" class="btn btn-secondary text-nowrap"><i class="fa-solid fa-arrow-left-long"></i> {$LANG->getModule('delaccount_back')}</a>
             </div>
-            <div class="box-security box-shadow-lg">
+            <div class="rounded-4 border shadow-lg p-4">
                 <div class="alert alert-danger">
-                    <strong>{LANG.delaccount_warn1}</strong><br>
-                    {LANG.delaccount_warn2}
+                    <strong>{$LANG->getModule('delaccount_warn1')}</strong><br>
+                    {$LANG->getModule('delaccount_warn2')}
                 </div>
-                <h2 class="margin-bottom">{LANG.delaccount_explain1}</h2>
-                <p>{LANG.delaccount_explain2}.</p>
-                <p><strong>{LANG.delaccount_explain3}:</strong></p>
-                <p>{LANG.delaccount_explain4}.</p>
-                <p><strong>{LANG.delaccount_explain5}:</strong></p>
-                <p>{LANG.delaccount_explain6}:</p>
-                <ul class="list-default">
-                    <li>{LANG.delaccount_explain7}</li>
-                    <li>{LANG.delaccount_explain8}</li>
-                    <li>{HOLD_MESSAGE}</li>
+                <h2 class="h5 mb-3">{$LANG->getModule('delaccount_explain1')}</h2>
+                <p>{$LANG->getModule('delaccount_explain2')}.</p>
+                <p class="mb-1"><strong>{$LANG->getModule('delaccount_explain3')}:</strong></p>
+                <p>{$LANG->getModule('delaccount_explain4')}.</p>
+                <p class="mb-1"><strong>{$LANG->getModule('delaccount_explain5')}:</strong></p>
+                <p class="mb-1">{$LANG->getModule('delaccount_explain6')}:</p>
+                <ul class="mb-0">
+                    <li>{$LANG->getModule('delaccount_explain7')}</li>
+                    <li>{$LANG->getModule('delaccount_explain8')}</li>
+                    <li>{$HOLD_MESSAGE}</li>
                 </ul>
-                <hr>
-                <div class="usr-flex usr-gap-1 margin-bottom-lg">
-                    <input type="checkbox" id="i_confirmed" name="i_confirmed" value="1">
-                    <div>
-                        <label for="i_confirmed" class="margin-bottom-sm">{LANG.delaccount_confirm1}</label>
-                        <div><small>{LANG.delaccount_confirm2}</small></div>
-                    </div>
+                <hr class="my-4">
+                <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" id="usersDelIConfirmed" name="i_confirmed" value="1" data-toggle="usersDelConfirm">
+                    <label class="form-check-label" for="usersDelIConfirmed">
+                        <strong>{$LANG->getModule('delaccount_confirm1')}</strong>
+                        <span class="d-block small text-muted">{$LANG->getModule('delaccount_confirm2')}</span>
+                    </label>
                 </div>
                 <div class="text-center">
                     <input type="hidden" name="submit_confirmed" value="1">
-                    <button type="submit" class="btn btn-danger" disabled>{LANG.delaccount_confirm3}</button>
+                    <button type="submit" class="btn btn-danger" data-area="usersDelSubmit" disabled>
+                        <i class="fa-solid fa-trash"></i> {$LANG->getModule('delaccount_confirm3')}
+                    </button>
                 </div>
             </div>
-            <!-- END: not_confirmed -->
-            <!-- BEGIN: verification_page -->
+            {else}
+            {* Bước 2: Nhập mã xác minh gửi qua email *}
             <input type="hidden" name="i_confirmed" value="1">
-            <input type="hidden" name="checkss" value="{CHECKSS}">
-            <div class="usr-flex usr-justify-between usr-gap-2 margin-bottom-lg">
+            <input type="hidden" name="checkss" value="{$CHECKSS}">
+            <div class="d-flex flex-wrap flex-sm-nowrap justify-content-between align-items-start gap-2 mb-4">
                 <div>
-                    <h1>{LANG.delaccount_veremail_title}</h1>
-                    <p>{LANG.delaccount_veremail_note}.</p>
+                    <h1 class="h3 mb-2">{$LANG->getModule('delaccount_veremail_title')}</h1>
+                    <p class="text-muted mb-0">{$LANG->getModule('delaccount_veremail_note')}.</p>
                 </div>
-                <div>
-                    <a href="{DATA.link_back}" class="btn btn-default"><i class="fa fa-long-arrow-left" aria-hidden="true"></i> {LANG.delaccount_back}</a>
-                </div>
+                <a href="{$DATA.link_back}" class="btn btn-secondary text-nowrap"><i class="fa-solid fa-arrow-left-long"></i> {$LANG->getModule('delaccount_back')}</a>
             </div>
-            <div class="box-security box-shadow-lg">
-                <!-- BEGIN: error -->
-                <div class="alert alert-danger" role="alert">{DATA.error}</div>
-                <!-- END: error -->
+            <div class="rounded-4 border shadow-lg p-4">
+                {if not empty($DATA.error)}
+                <div class="alert alert-danger" role="alert">{$DATA.error}</div>
+                {/if}
                 <div class="text-center">
-                    <p class="margin-bottom-lg"><i class="fa fa-envelope-o fa-3x text-primary" aria-hidden="true"></i></p>
-                    <h2 class="margin-bottom">{LANG.delaccount_veremail_checkmail}</h2>
-                    <p>{DATA.message_checkmail}.</p>
+                    <div class="mb-3 d-flex justify-content-center">
+                        <div class="d-flex fw-60 fh-60 align-items-center rounded-circle justify-content-center bg-primary-subtle text-primary-emphasis fs-3">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                    </div>
+                    <h2 class="h4 mb-2">{$LANG->getModule('delaccount_veremail_checkmail')}</h2>
+                    <p>{$DATA.message_checkmail}.</p>
                 </div>
-                <div class="form-group">
-                    <input type="text" maxlength="10" name="verification_code" value="" class="form-control text-center input-confirm-code" placeholder="_ _ _ _ _ _ _ _ _ _" autocomplete="off">
+                <div class="mb-3 text-center">
+                    <input type="text" class="form-control text-center maxw-250 mx-auto" name="verification_code" value=""
+                        minlength="10" maxlength="10" placeholder="_ _ _ _ _ _ _ _ _ _" autocomplete="off"
+                        aria-label="{$LANG->getModule('delaccount_veremail_checkmail')}"
+                        data-valid data-error-type="feedback"
+                    >
+                    <div class="invalid-feedback"></div>
                 </div>
                 <div class="text-center">
-                    <button type="submit" disabled class="btn btn-danger">{LANG.delaccount_veremail_title}</button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa-solid fa-trash"></i> {$LANG->getModule('delaccount_veremail_title')}
+                    </button>
                 </div>
-                <hr>
+                <hr class="my-4">
                 <div class="text-center small">
-                    {LANG.not_received_code}
-                    <span data-toggle="timer-code" class="text-primary text-bold"<!-- BEGIN: timing_code --> style="display: none;"<!-- END: timing_code -->>{LANG.try_received_code} <span data-toggle="time-code-remain">{DATA.time_code_remain}</span>s</span>
-                    <a href="#" class="text-bold"<!-- BEGIN: request_new_code --> style="display: none;"<!-- END: request_new_code --> data-toggle="request-new-code">{LANG.send_received_code}</a>
-                    <span data-toggle="recode-loader" class="text-primary" style="display: none;"><i class="fa fa-spinner fa-pulse"></i></span>
+                    {$LANG->getModule('not_received_code')}
+                    <span class="text-primary fw-bold{if $DATA.time_code_remain <= 0} d-none{/if}" data-area="usersDelTimer">{$LANG->getModule('try_received_code')} <span data-area="usersDelTimeRemain">{$DATA.time_code_remain}</span>s</span>
+                    <button type="button" class="btn btn-link btn-sm p-0 align-baseline fw-bold{if $DATA.time_code_remain > 0} d-none{/if}" data-toggle="usersDelResendCode">{$LANG->getModule('send_received_code')}</button>
+                    <span class="text-primary d-none" data-area="usersDelResendLoader"><i class="fa-solid fa-spinner fa-spin-pulse"></i></span>
                 </div>
             </div>
-            <!-- END: verification_page -->
-        </div>
+            {/if}
+        </form>
     </div>
-</form>
-<!-- END: main -->
+</div>

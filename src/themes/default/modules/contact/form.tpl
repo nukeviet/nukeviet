@@ -1,116 +1,107 @@
-<!-- BEGIN: main -->
-<div class="nv-fullbg">
-    <form method="post" action="{ACTION_FILE}" data-toggle="feedback" data-precheck="feedback_precheck" novalidate<!-- BEGIN: captcha --> data-captcha="fcode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 --><!-- BEGIN: turnstile --> data-turnstile="1"<!-- END: turnstile -->>
-        <!-- BEGIN: cats -->
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon"><em class="fa fa-folder-open fa-lg fa-fw"></em></span>
-                <select class="form-control" name="fcat">
-                    <option value="">{LANG.selectCat}</option>
-                    <!-- BEGIN: optgroup -->
-                    <optgroup label="{CATNAME}">
-                        <!-- BEGIN: option -->
-                        <option value="{OPT.val}">
-                            {OPT.name}
-                        </option>
-                        <!-- END: option -->
-                    </optgroup>
-                    <!-- END: optgroup -->
-                    <!-- BEGIN: option2 -->
-                    <option value="{OPT.val}">
-                        {OPT.name}
-                    </option>
-                    <!-- END: option2 -->
-                </select>
-            </div>
-        </div>
-        <!-- END: cats -->
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon"><em class="fa fa-file-text fa-lg fa-fw"></em></span>
-                <input type="text" maxlength="255" class="form-control required" value="{CONTENT.ftitle}" name="ftitle" placeholder="{LANG.title}" data-pattern="/^(.){3,}$/" data-toggle="fb_validErrorHidden" data-mess="{LANG.error_title}" />
-            </div>
-        </div>
-        <!-- BEGIN: iguest -->
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon"><em class="fa fa-user fa-lg fa-fw"></em></span>
-                <input type="text" maxlength="100" value="" name="fname" class="form-control required" placeholder="{LANG.fullname}" data-toggle="fb_validErrorHidden" data-mess="{LANG.error_fullname}" data-callback="nv_uname_check" />
-                <span class="input-group-addon pointer" title="{GLANG.loginsubmit}" data-toggle="loginForm"><em class="fa fa-sign-in fa-lg"></em></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon"><em class="fa fa-envelope fa-lg fa-fw"></em></span>
-                <input type="email" maxlength="60" value="" name="femail" class="form-control required" placeholder="{LANG.email}" data-toggle="fb_validErrorHidden" data-mess="{LANG.error_email}" />
-            </div>
-        </div>
-        <!-- END: iguest -->
-        <!-- BEGIN: iuser -->
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon"><em class="fa fa-user fa-lg fa-fw"></em></span>
-                <input type="text" maxlength="100" value="{CONTENT.fname}" name="fname" class="form-control required disabled" disabled="disabled" placeholder="{LANG.fullname}" data-pattern="/^(.){3,}$/" data-toggle="fb_validErrorHidden" data-mess="{LANG.error_fullname}" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon"><em class="fa fa-envelope fa-lg fa-fw"></em></span>
-                <input type="text" maxlength="60" value="{CONTENT.femail}" name="femail" class="form-control required disabled" disabled="disabled" placeholder="{LANG.email}" data-toggle="fb_validErrorHidden" data-mess="{LANG.error_email}" />
-            </div>
-        </div>
-        <!-- END: iuser -->
-        <!-- BEGIN: feedback_phone -->
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon"><em class="fa fa-phone fa-lg fa-fw"></em></span>
-                <input type="text" maxlength="60" value="{CONTENT.fphone}" name="fphone" class="form-control{CONTENT.phone_required}" placeholder="{LANG.phone}" data-pattern="/^(.){3,}$/" data-toggle="fb_validErrorHidden" data-mess="{LANG.phone_error}" />
-            </div>
-        </div>
-        <!-- END: feedback_phone -->
-        <!-- BEGIN: feedback_address -->
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon"><em class="fa fa-home fa-lg fa-fw"></em></span>
-                <input type="text" maxlength="60" value="{CONTENT.faddress}" name="faddress" class="form-control{CONTENT.address_required}" placeholder="{LANG.address}" data-pattern="/^(.){3,}$/" data-toggle="fb_validErrorHidden" data-mess="{LANG.address_error}" />
-            </div>
-        </div>
-        <!-- END: feedback_address -->
-        <div class="form-group">
-            <div>
-                <textarea name="fcon" class="form-control required" style="height:130px" maxlength="1000" placeholder="{LANG.content}" data-toggle="fb_validErrorHidden" data-mess="{LANG.error_content}"></textarea>
-            </div>
-        </div>
-        <!-- BEGIN: sendcopy -->
-        <div class="checkbox">
-            <label><input type="checkbox" class="form-control" style="margin-top:2px" name="sendcopy" value="1" checked="checked" /><span>{LANG.sendcopy}</span></label>
-        </div>
-        <!-- END: sendcopy -->
-        <!-- BEGIN: confirm -->
-        <div class="alert alert-info confirm" style="padding:0 10px">
-            <!-- BEGIN: data_sending -->
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" class="form-control required" style="margin-top:2px" name="data_permission_confirm" value="1" data-mess="{GLANG.data_warning_error}" data-toggle="fb_errorHidden"> <small>{DATA_USAGE_CONFIRM}</small>
-                </label>
-            </div>
-            <!-- END: data_sending -->
+<form method="post" action="{$ACTION_FILE}" data-toggle="ajax-form" data-precheck="nv_precheck_form" novalidate{$CAPTCHA_ATTRS}>
+    {if !empty($CATS)}
+    {$count=count($CATS)}
+    <div class="mb-3">
+        <label class="form-label" for="fcat">{$LANG->getModule('selectCat')}</label>
+        <select class="form-select" name="fcat" id="fcat">
+            <option value="">{$LANG->getModule('selectCat')}</option>
+            {foreach $CATS as $cat}
+            {if $count > 1}
+            <optgroup label="{$cat.name}">
+                {foreach $cat.items as $item}
+                <option value="{$item.val}">{$item.name}</option>
+                {/foreach}
+            </optgroup>
+            {else}
+            {foreach $cat.items as $item}
+            <option value="{$item.val}">{$item.name}</option>
+            {/foreach}
+            {/if}
+            {/foreach}
+        </select>
+    </div>
+    {/if}
 
-            <!-- BEGIN: antispam -->
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" class="form-control required" style="margin-top:2px" name="antispam_confirm" value="1" data-mess="{GLANG.antispam_warning_error}" data-toggle="fb_errorHidden"> <small>{ANTISPAM_CONFIRM}</small>
-                </label>
+    <div class="mb-3">
+        <label class="form-label" for="ftitle">{$LANG->getModule('title')} <span class="text-danger">(*)</span></label>
+        <input class="form-control" type="text" name="ftitle" id="ftitle" value="{$CONTENT.ftitle|default:''}" data-valid data-error-type="feedback" data-allowed-empty="0" minlength="3" maxlength="255" placeholder="{$LANG->getModule('title')}">
+        <div class="invalid-feedback">{$LANG->getModule('error_title')} {$LANG->getModule('minlength3')}</div>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <label class="form-label" for="fname">{$LANG->getModule('fullname')} <span class="text-danger">(*)</span></label>
+            {if !$smarty.const.NV_IS_USER}<small class="ms-2"><a href="#" role="button" title="{$LANG->getGlobal('loginsubmit')}" data-toggle="loginForm" aria-label="{$LANG->getGlobal('loginsubmit')}"><i class="fa-solid fa-right-to-bracket"></i></a></small>{/if}
+            <input class="form-control" {if $smarty.const.NV_IS_USER}disabled{/if} type="text" name="fname" id="fname" value="{$CONTENT.fname|default:''}" data-valid data-error-type="feedback" minlength="3" maxlength="100" placeholder="{$LANG->getModule('fullname')}">
+            <div class="invalid-feedback">{$LANG->getModule('error_fullname')} {$LANG->getModule('minlength3')}</div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="femail">{$LANG->getModule('email')} <span class="text-danger">(*)</span></label>
+            <input class="form-control" {if $smarty.const.NV_IS_USER}disabled{/if} type="email" name="femail" id="femail" value="{$CONTENT.femail|default:''}" data-valid="email" data-error-type="feedback" maxlength="60" placeholder="{$LANG->getModule('email')}">
+            <div class="invalid-feedback">{$LANG->getModule('error_email')}</div>
+        </div>
+    </div>
+
+    {if !empty($MCONFIG.feedback_phone) or !empty($MCONFIG.feedback_address)}
+    <div class="row g-3 mb-3">
+        {if !empty($MCONFIG.feedback_phone)}
+        <div class="{if !empty($MCONFIG.feedback_address)}col-md-6{else}col-12{/if}">
+            <label class="form-label" for="fphone">{$LANG->getModule('phone')}{if $CONTENT.sender_phone_required} <span class="text-danger">(*)</span>{/if}</label>
+            <input class="form-control" type="tel" name="fphone" id="fphone" value="{$CONTENT.fphone|default:''}" data-valid="phone" data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_phone_required}0{else}1{/if}" minlength="3" maxlength="20" placeholder="{$LANG->getModule('phone')}">
+            <div class="invalid-feedback">{$LANG->getModule('phone_error')}</div>
+        </div>
+        {/if}
+        {if !empty($MCONFIG.feedback_address)}
+        <div class="{if !empty($MCONFIG.feedback_phone)}col-md-6{else}col-12{/if}">
+            <label class="form-label" for="faddress">{$LANG->getModule('address')}{if $CONTENT.sender_address_required} <span class="text-danger">(*)</span>{/if}</label>
+            <input class="form-control" type="text" name="faddress" id="faddress" value="{$CONTENT.faddress|default:''}" data-valid data-error-type="feedback" data-allowed-empty="{if $CONTENT.sender_address_required}0{else}1{/if}" minlength="3" maxlength="250" placeholder="{$LANG->getModule('address')}">
+            <div class="invalid-feedback">{$LANG->getModule('address_error')} {$LANG->getModule('minlength3')}</div>
+        </div>
+        {/if}
+    </div>
+    {/if}
+
+    <div class="mb-3">
+        <label class="form-label" for="fcon">{$LANG->getModule('content')} <span class="text-danger">(*)</span></label>
+        <textarea class="form-control" name="fcon" id="fcon" data-valid data-error-type="feedback" data-allowed-empty="0" minlength="3" maxlength="65535" placeholder="{$LANG->getModule('content')}" rows="5"></textarea>
+        <div class="invalid-feedback">{$LANG->getModule('error_content')} {$LANG->getModule('minlength3')}</div>
+    </div>
+
+    {if !empty($CONTENT.sendcopy)}
+    <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" name="sendcopy" value="1" id="sendcopy" checked>
+        <label class="form-check-label" for="sendcopy">{$LANG->getModule('sendcopy')}</label>
+    </div>
+    {/if}
+
+    {if !empty($GCONFIG.data_warning) || !empty($GCONFIG.antispam_warning)}
+    <div class="alert alert-info confirm">
+        {if !empty($GCONFIG.data_warning)}
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="data_permission_confirm" value="1" id="data_permission_confirm" data-valid="checkbox" data-min="1" data-max="1" data-error-type="feedback">
+            <label class="form-check-label" for="data_permission_confirm"><small>{$GCONFIG.data_warning_content|default:$LANG->getGlobal('data_warning_content')}</small></label>
+            <div class="invalid-feedback">{$LANG->getGlobal('data_warning_error')}</div>
+        </div>
+        {/if}
+        {if !empty($GCONFIG.antispam_warning)}
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="antispam_confirm" value="1" id="antispam_confirm" data-valid="checkbox" data-min="1" data-max="1" data-error-type="feedback">
+            <label class="form-check-label" for="antispam_confirm"><small>{$GCONFIG.antispam_warning_content|default:$LANG->getGlobal('antispam_warning_content')}</small></label>
+            <div class="invalid-feedback">{$LANG->getGlobal('antispam_warning_error')}</div>
+        </div>
+        {/if}
+    </div>
+    {/if}
+
+    <div class="mt-4">
+        <input type="hidden" name="checkss" value="{$CHECKSS}">
+        <div class="row g-2">
+            <div class="col-6">
+                <button type="reset" class="btn btn-outline-secondary w-100"><i class="fa-solid fa-rotate-left me-2"></i>{$LANG->getModule('reset')}</button>
             </div>
-            <!-- END: antispam -->
+            <div class="col-6">
+                <button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-paper-plane me-2"></i>{$LANG->getModule('sendcontact')}</button>
+            </div>
         </div>
-        <!-- END: confirm -->
-        <div class="text-center form-group">
-            <input type="hidden" name="checkss" value="{CHECKSS}" />
-            <input type="button" value="{LANG.reset}" class="btn btn-default" data-toggle="fb_validReset" />
-            <input type="submit" value="{LANG.sendcontact}" class="btn btn-primary" />
-        </div>
-    </form>
-    <div class="contact-result alert"></div>
-</div>
-<!-- END: main -->
+    </div>
+</form>

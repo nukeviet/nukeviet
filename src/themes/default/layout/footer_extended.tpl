@@ -1,62 +1,46 @@
-                </div>
-            </section>
-        </div>
+{if $OUTDATED_BROWSER}
+<div class="offcanvas offcanvas-top show text-bg-warning" tabindex="-1" aria-label="{$LANG->getGlobal('chromeframe_title')}" data-bs-backdrop="static">
+    <div class="offcanvas-body">
+        {$LANG->getGlobal('chromeframe')}
     </div>
-    <footer class="section-footer-top" id="footer">
-        <div class="wraper">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-24 col-sm-24 col-md-6">
-                        [MENU_FOOTER]
-                    </div>
-                    <div class="col-xs-24 col-sm-24 col-md-10">
-                        [FEATURED_PRODUCT]
-                    </div>
-                    <div class="col-xs-24 col-sm-24 col-md-8">
-                        [COMPANY_INFO]
+</div>
+{/if}
+{if $COOKIE_NOTICE}
+<div class="cookie-notice">
+    <button type="button" class="btn-close" aria-label="{$LANG->getGlobal('close')}" data-toggle="cookie_notice_hide"></button>
+    {$LANG->getGlobal('cookie_notice', "{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}&amp;{$smarty.const.NV_NAME_VARIABLE}=siteterms&amp;{$smarty.const.NV_OP_VARIABLE}=privacy{$GCONFIG.rewrite_exturl}")}
+</div>
+{/if}
+<footer class="site-footer">
+    <div class="footer-top">
+        <div class="container gx-4 pt-4">
+            <div class="row gx-4">
+                <div class="footer-start mb-4">
+                    <div class="vstack vstack-blocks">
+                        [START_FOOTER]
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-24 col-sm-24 col-md-8">
-                        <div class="qr-code-wraper">
-                            [QR_CODE]
-                        </div>
-                        <div id="ftip" data-content="">
-                            <div class="bg"></div>
-                        </div>
+                <div class="footer-center mb-4">
+                    <div class="vstack vstack-blocks">
+                        [CENTER_FOOTER]
                     </div>
-                    <div class="col-xs-24 col-sm-24 col-md-16">
-                        [FOOTER_SITE]
+                </div>
+                <div class="footer-end">
+                    <div class="vstack vstack-blocks mb-4">
+                        [END_FOOTER]
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 align-items-center mb-4">
+                        [QR_CODE]
                     </div>
                 </div>
             </div>
         </div>
-    </footer>
-    <nav class="section-footer-bottom footerNav2">
-        <div class="wraper">
-            <div class="container">
-                <!-- BEGIN: theme_type -->
-                <div class="theme-change">
-                <!-- BEGIN: loop -->
-                    <!-- BEGIN: other -->
-                    <a href="{STHEME_TYPE}" rel="nofollow" title="{STHEME_INFO}"><i class="fa fa-{STHEME_ICON}"></i></a>
-                    <!-- END: other -->
-                    <!-- BEGIN: current -->
-                    <span title="{LANG.theme_type_select}: {STHEME_TITLE}"><i class="fa fa-{STHEME_ICON}"></i></span>
-                    <!-- END: current -->
-                <!-- END: loop -->
-                </div>
-                <!-- END: theme_type -->
-                <div class="bttop">
-                    <a class="pointer"><i class="fa fa-eject fa-lg"></i></a>
-                </div>
+    </div>
+    <div class="footer-bar">
+        <div class="container">
+            <div class="vstack vstack-blocks">
+                [FOOTER_COPYRIGHT]
             </div>
         </div>
-    </nav>
-    {ADMINTOOLBAR}
-    <div class="fix_banner_left">
-        [FIX_BANNER_LEFT]
     </div>
-    <div class="fix_banner_right">
-        [FIX_BANNER_RIGHT]
-    </div>
+</footer>

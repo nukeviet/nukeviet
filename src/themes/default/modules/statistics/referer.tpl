@@ -1,14 +1,23 @@
-<!-- BEGIN: main -->
-<script src="{ASSETS_STATIC_URL}/js/chart/chart.min.js"></script>
-<script src="{NV_STATIC_URL}themes/{TEMPLATE}/js/chartstat.js"></script>
+<link rel="stylesheet" href="{$smarty.const.ASSETS_STATIC_URL}/js/apexcharts/apexcharts.css">
+<script src="{$smarty.const.ASSETS_STATIC_URL}/js/apexcharts/apexcharts.min.js"></script>
 
-<div class="panel panel-primary">
-    <div class="panel-heading"><i class="fa fa-line-chart fa-fw me-1"></i>{CTS.caption}</div>
-    <div class="panel-body">
-        <canvas style="max-width:100%" id="canvas_month" data-chart-type="line" data-caption="{CTS.chart_caption}" data-xtitle="{LANG.month}" data-ytitle="{LANG.access_times}" data-bg="54, 162, 235" data-border="54, 162, 235" data-labels="{CTS.dataLabel}" data-values="{CTS.dataValue}"></canvas>
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2">
+            <i class="fa-solid fa-chart-line text-primary"></i>
+            <h2 class="h6 mb-0">{$CHART.caption}</h2>
+        </div>
+        <span class="badge bg-primary rounded-pill">{$CHART.total}</span>
     </div>
-    <div class="panel-footer">
-        {LANG.hits_total}: <strong>{CTS.total}</strong>
+    <div class="card-body py-2">
+        <div id="chart-referer-month"
+             data-nv-stat-chart
+             data-labels='{$CHART.labels|json_encode}'
+             data-values='{$CHART.values|json_encode}'
+             data-values-formatted='{$CHART.values_formatted|json_encode}'
+             data-xtitle="{$LANG->getModule('month')}"
+             data-ytitle="{$LANG->getModule('access_times')}"
+             data-type="area">
+        </div>
     </div>
 </div>
-<!-- END: main -->

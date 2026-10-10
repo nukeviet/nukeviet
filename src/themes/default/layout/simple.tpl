@@ -1,7 +1,5 @@
-<!-- BEGIN: main -->
-{FILE "header_only.tpl"}
-<div class="container-fluid"style="background-color:#fff;">
-{MODULE_CONTENT}
+{include file='header_only.tpl'}
+<div class="container-fluid">
+    {$MODULE_CONTENT}
 </div>
-{FILE "footer_only.tpl"}
-<!-- END: main -->
+{include file='footer_only.tpl'}

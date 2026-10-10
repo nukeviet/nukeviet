@@ -1,31 +1,42 @@
-<!-- BEGIN: main -->
-<h2 class="margin-bottom-lg margin-top-lg">{LANG.group_manage}</h2>
-<div id="pageContent">
+<h1 class="h3 mb-3">{$LANG->getModule('group_manage')}</h1>
+<div class="card mb-3">
     <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
-            <col span="4" />
+        <table class="table table-striped align-middle mb-0">
             <thead>
                 <tr>
-                    <th> {LANG.title} </th>
-                    <th class="text-center"> {LANG.add_time} </th>
-                    <th class="text-center"> {LANG.exp_time} </th>
-                    <th class="text-center"> {LANG.users} </th>
+                    <th class="text-nowrap" style="width:46%">{$LANG->getModule('title')}</th>
+                    <th class="text-nowrap" style="width:18%">{$LANG->getModule('add_time')}</th>
+                    <th class="text-nowrap" style="width:18%">{$LANG->getModule('exp_time')}</th>
+                    <th class="text-nowrap text-center" style="width:18%">{$LANG->getModule('users')}</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- BEGIN: loop -->
+                {foreach from=$GROUPS item=group}
                 <tr>
-                    <td><a title="{LANG.users}" href="{LOOP.link_userlist}">{LOOP.title}</a></td>
-                    <td class="text-center">{LOOP.add_time}</td>
-                    <td class="text-center">{LOOP.exp_time}</td>
-                    <td class="text-center">{LOOP.number}</td>
+                    <td>
+                        <a href="{$group.link_userlist}" title="{$LANG->getModule('users')}" class="text-break">{$group.title}</a>
+                    </td>
+                    <td class="text-nowrap">{$group.add_time|ddatetime}</td>
+                    <td class="text-nowrap">
+                        {if $group.exp_time}{$group.exp_time|ddatetime}{else}{$LANG->getGlobal('indefinitely')}{/if}
+                    </td>
+                    <td class="text-nowrap text-center">{$group.numbers|dnumber}</td>
                 </tr>
-                <!-- END: loop -->
+                {foreachelse}
+                <tr>
+                    <td colspan="4" class="text-center text-muted py-4">
+                        <i class="fa-solid fa-circle-info me-1"></i>{$LANG->getModule('error_users_not_found')}
+                    </td>
+                </tr>
+                {/foreach}
             </tbody>
         </table>
     </div>
 </div>
-<ul class="nav navbar-nav">
-    <!-- BEGIN: navbar --><li><a href="{NAVBAR.href}"><em class="fa fa-caret-right margin-right-sm"></em>{NAVBAR.title}</a></li><!-- END: navbar -->
+{if not empty($NAVS)}
+<ul class="list-inline">
+    {foreach from=$NAVS item=nav}
+    <li class="list-inline-item text-nowrap me-3"><a href="{$nav.href}"><i class="fa-solid fa-caret-right"></i> {$nav.title}</a></li>
+    {/foreach}
 </ul>
-<!-- END: main -->
+{/if}

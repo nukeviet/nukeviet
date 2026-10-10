@@ -1,25 +1,29 @@
-<!-- BEGIN: main -->
-
-<!-- BEGIN: url_back -->
-<meta http-equiv="refresh" content="{TIME};{URL}">
-<!-- END: url_back -->
-
-<div class="nvform text-center">
-    <div class="alert alert-<!-- BEGIN: info -->info<!-- END: info --><!-- BEGIN: danger -->danger<!-- END: danger --><!-- BEGIN: warning -->warning<!-- END: warning --><!-- BEGIN: success -->success<!-- END: success -->">
-        <!-- BEGIN: title -->
-        <h3><strong>{TITLE}</strong></h3>
-        <!-- END: title -->
-
-        <div class="m-bottom">{CONTENT}</div>
-
-        <!-- BEGIN: loading_icon -->
-        <i class="fa fa-spinner fa-spin"></i>
-        <!-- END: loading_icon -->
-
-        <!-- BEGIN: url_back_button -->
-        <a class="show" href="{URL}" title="{LANG_BACK}">[{LANG_BACK}]</a>
-        <!-- END: url_back_button -->
+{*
+Xóa tệp này khỏi giao diện của bạn nếu không có nhu cầu phát triển giao diện thông báo inline
+Khi đó hệ thống sẽ lấy từ themes/default/system/alert.tpl
+*}
+<div class="text-center">
+    <div class="alert alert-{$TYPE}" role="alert">
+        {if not empty($TITLE)}
+        <div class="fs-5 fw-medium mb-2">{$TITLE}</div>
+        {/if}
+        <div>{$CONTENT}</div>
+        {if not empty($URL_BACK)}
+        <script>
+        setTimeout(() => {
+            window.location.href = "{$URL_BACK}";
+        }, {$TIME_BACK * 1000});
+        </script>
+        <div class="mt-2">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">{$LANG->getGlobal('wait_page_load')}</span>
+            </div>
+        </div>
+        {if not empty($LANG_BACK)}
+        <div class="mt-1">
+            <a href="{$URL_BACK}" title="{$LANG_BACK}">[{$LANG_BACK}]</a>
+        </div>
+        {/if}
+        {/if}
     </div>
 </div>
-
-<!-- END: main -->

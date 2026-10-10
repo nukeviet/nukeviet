@@ -10,11 +10,11 @@
 // CSS của trình cài đặt
 
 @use "../../node_modules/@fortawesome/fontawesome-free/scss/variables" with (
-  $font-path: "../../themes/admin_future/webfonts"
+  $font-path: "../../themes/admin_default/webfonts"
 );
 
 @import "../functions";
-@import "../admin_future/variables";
+@import "../admin_default/variables";
 
 // Cỡ chữ to thoải mái hơn so với admin
 $font-size-base: .875rem;
@@ -45,8 +45,8 @@ $install-max-width: 1140px;
 @each $weight, $name in (400: "Regular", 500: "Medium", 700: "Bold") {
   @font-face {
     font-family: "Roboto";
-    src: url("../../themes/admin_future/webfonts/Roboto-#{$name}.woff2") format("woff2"),
-      url("../../themes/admin_future/webfonts/Roboto-#{$name}.woff") format("woff");
+    src: url("../../themes/admin_default/webfonts/Roboto-#{$name}.woff2") format("woff2"),
+      url("../../themes/admin_default/webfonts/Roboto-#{$name}.woff") format("woff");
     font-weight: $weight;
     font-style: normal;
     font-display: swap;

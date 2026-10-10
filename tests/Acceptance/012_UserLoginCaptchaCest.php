@@ -27,7 +27,6 @@ use Tests\Support\LoginCaptchaTrait;
  * tránh để Blocker chặn IP của máy test.
  *
  * Điều kiện: login_number_tracking > 0, captcha_area không bật khu vực đăng nhập (l), captcha_type là captcha hình.
- * Case theme future tự skip nếu theme future chưa được thiết lập cho ngôn ngữ vi.
  */
 class UserLoginCaptchaCest
 {
@@ -222,24 +221,7 @@ class UserLoginCaptchaCest
     }
 
     /**
-     * 8. Giao diện future
-     *
-     * @group user-login-captcha
-     */
-    public function futureThemeThroughCaptcha(AcceptanceTester $I, Scenario $scenario)
-    {
-        if (!$I->grabNumRecords($this->prefix . '_vi_modthemes', ['theme' => 'future'])) {
-            $scenario->skip('Giao diện future chưa được thiết lập cho ngôn ngữ vi');
-        }
-        $this->changeConfig($I, ['site_theme' => 'future'], 'global', 'vi');
-        $I->amOnUrl($I->getDomain() . '/vi/users/login/');
-        $I->seeElementInDOM('script[src*="themes/future/"]');
-
-        $this->loginThroughCaptcha($I);
-    }
-
-    /**
-     * 9. Tài khoản bật 2FA bị yêu cầu captcha: giải captcha xong sang bước 2FA,
+     * 8. Tài khoản bật 2FA bị yêu cầu captcha: giải captcha xong sang bước 2FA,
      * bước 2FA không hỏi lại captcha, nhập đúng mã thì đăng nhập được
      *
      * @group user-login-captcha

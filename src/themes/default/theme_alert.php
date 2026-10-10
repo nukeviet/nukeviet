@@ -24,27 +24,24 @@ if (!defined('NV_MAINFILE')) {
  * - Và các biến trong hàm, truyền vào hàm nv_theme_alert()
  */
 
-$template = get_tpl_dir($dir_basenames, 'default', '/system/alert.tpl');
-$tpl_path = NV_ROOTDIR . '/themes/' . $template . '/system';
-$xtpl = new XTemplate('alert.tpl', $tpl_path);
-$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-$xtpl->assign('LANG_BACK', $lang_back);
-$xtpl->assign('CONTENT', $message_content);
+global $nv_Lang, $page_title;
 
-if ($type == 'success') {
-    $xtpl->parse('main.success');
-} elseif ($type == 'warning') {
-    $xtpl->parse('main.warning');
-} elseif ($type == 'danger') {
-    $xtpl->parse('main.danger');
-} else {
-    $xtpl->parse('main.info');
-}
+$template = get_tpl_dir($dir_basenames, 'default', '/system/alert.tpl');
+
+$tpl = new \NukeViet\Template\NVSmarty();
+$tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $template . '/system');
+$tpl->assign('LANG', $nv_Lang);
+$tpl->assign('TEMPLATE', $template);
+
+$tpl->assign('URL_BACK', $url_back);
+$tpl->assign('TIME_BACK', $time_back);
+$tpl->assign('TYPE', $type);
+$tpl->assign('CONTENT', $message_content);
+$tpl->assign('TITLE', $message_title);
+$tpl->assign('LANG_BACK', $lang_back);
 
 if (!empty($message_title)) {
     $page_title = $message_title;
-    $xtpl->assign('TITLE', $message_title);
-    $xtpl->parse('main.title');
 } elseif (!empty($module_info['site_title'])) {
     // For admin if use in admin area
     $page_title = $module_info['site_title'];
@@ -52,16 +49,4 @@ if (!empty($message_title)) {
     $page_title = $module_info['custom_title'];
 }
 
-if (!empty($url_back)) {
-    $xtpl->assign('TIME', $time_back);
-    $xtpl->assign('URL', $url_back);
-    $xtpl->parse('main.url_back');
-    $xtpl->parse('main.loading_icon');
-
-    if (!empty($lang_back)) {
-        $xtpl->parse('main.url_back_button');
-    }
-}
-
-$xtpl->parse('main');
-return $xtpl->text('main');
+return $tpl->fetch('alert.tpl');
