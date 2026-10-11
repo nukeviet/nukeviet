@@ -66,7 +66,11 @@ $(function() {
                         let html = '';
                         $.each(res, (k, v) => {
                             html += '<a href="javascript:void(0)" class="list-group-item list-group-item-action d-flex align-items-center gap-2" data-value="' + v.username + '">';
-                            html += '<img src="' + v.photo + '" width="32" height="32" class="rounded-circle flex-shrink-0">';
+                            if (v.photo) {
+                                html += '<img src="' + v.photo + '" width="32" height="32" class="rounded-circle flex-shrink-0">';
+                            } else {
+                                html += '<span class="avatar-letters avatar-letters-sm" style="width:32px;height:32px;background-color:' + v.avatar_color + '" aria-hidden="true">' + v.avatar_letters + '</span>';
+                            }
                             html += '<div><div class="fw-semibold">' + v.fullname + '</div><small class="text-muted">' + v.username + '</small></div>';
                             html += '</a>';
                         });

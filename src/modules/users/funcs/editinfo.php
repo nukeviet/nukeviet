@@ -1512,20 +1512,7 @@ $array_data['last_name'] = $row['last_name'];
 $array_data['gender'] = $row['gender'];
 $array_data['birthday'] = nv_u2d_post($row['birthday']);
 $array_data['view_mail'] = $row['view_mail'] ? ' checked="checked"' : '';
-$array_data['photo'] = (!empty($row['photo']) and file_exists(NV_ROOTDIR . '/' . $row['photo'])) ? nv_user_avatar_url($row['photo']) : '';
 $array_data['langinterface'] = $row['language'];
-
-if (empty($array_data['photo'])) {
-    $array_data['photo'] = NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png';
-    $array_data['photoWidth'] = 80;
-    $array_data['photoHeight'] = 80;
-    $array_data['imgDisabled'] = ' disabled="disabled"';
-} else {
-    $size = @getimagesize(NV_ROOTDIR . '/' . $row['photo']);
-    $array_data['photoWidth'] = $size[0];
-    $array_data['photoHeight'] = $size[1];
-    $array_data['imgDisabled'] = '';
-}
 
 $data_questions = [];
 $sql = 'SELECT qid, title FROM ' . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";

@@ -260,8 +260,6 @@ if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
     $username = $nv_Request->get_title('ajaxqueryusername', 'post', '');
     $return = [];
 
-    $default_photo = NV_STATIC_URL . 'themes/' . get_tpl_dir($global_config['site_theme'], 'default', '/images/users/no_avatar.png') . '/images/users/no_avatar.png';
-
     if (nv_strlen($username) >= 3) {
         if (preg_match('/^\=(.*)$/', $username, $m)) {
             $username = $m[1];
@@ -279,11 +277,9 @@ if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
         $stmt->execute();
 
         while ($row = $stmt->fetch()) {
-            if (!empty($row['photo'])) {
-                $row['photo'] = NV_BASE_SITEURL . $row['photo'];
-            } else {
-                $row['photo'] = $default_photo;
-            }
+            $row['photo'] = nv_user_avatar_url($row['photo']);
+            $row['avatar_letters'] = nv_user_avatar_letters($row['first_name'], $row['last_name'], $row['username']);
+            $row['avatar_color'] = nv_user_avatar_color($row['username']);
             $row['fullname'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
             $return[] = $row;
         }
