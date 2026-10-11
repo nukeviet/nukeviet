@@ -489,7 +489,7 @@ if ($admin_id != $admin_info['userid']) {
 
 foreach ($site_mods as $index => $value) {
     if ($value['admin_file']) {
-        if ($row['lev'] == 3 and !in_array($index, $old_modules, true)) {
+        if ($row['lev'] == 3 and !in_array($index, $old_modules[NV_LANG_DATA] ?? [], true)) {
             continue;
         }
         $array_module[$index] = [
