@@ -60,6 +60,11 @@ Muốn dùng giao diện default mới thì làm theo mục "Về sau: chuyển 
 
 ### Bước 3: Làm sau khi MR core
 
+**Chuyển tệp của module riêng**
+
+1. Chuyển toàn bộ những gì còn lại trong `themes/admin_future` sang `themes/admin_default` (ví dụ `themes/admin_future/modules/blog` sang `themes/admin_default/modules/blog`), sau đó xóa thư mục `themes/admin_future`
+2. Chuyển toàn bộ những gì còn lại trong `themes/future` sang `themes/default`, trùng tệp thì ghi đè, sau đó xóa thư mục `themes/future`
+
 **Cập nhật CSDL**
 
 Chạy SQL sau, thay `nv5` bằng tiền tố CSDL của site:
@@ -73,6 +78,21 @@ UPDATE nv5_authors SET admin_theme = 'admin_default' WHERE admin_theme = 'admin_
 -- Cấu hình bảng điều khiển của quản trị: bỏ cấu hình của admin_default cũ, chuyển cấu hình admin_future sang
 DELETE FROM nv5_authors_vars WHERE theme = 'admin_default';
 UPDATE nv5_authors_vars SET theme = 'admin_default' WHERE theme = 'admin_future';
+```
+
+Site đang dùng giao diện `future` ngoài site thì chạy thêm SQL sau, lặp lại cho từng ngôn ngữ đã cài (thay `vi`):
+```sql
+-- Bỏ cấu hình của default cũ
+DELETE FROM nv5_vi_blocks_weight WHERE bid IN (SELECT bid FROM nv5_vi_blocks_groups WHERE theme = 'default');
+DELETE FROM nv5_vi_blocks_groups WHERE theme = 'default';
+DELETE FROM nv5_vi_modthemes WHERE theme = 'default';
+
+-- Chuyển cấu hình future sang default
+UPDATE nv5_vi_blocks_groups SET theme = 'default' WHERE theme = 'future';
+UPDATE nv5_vi_modthemes SET theme = 'default' WHERE theme = 'future';
+UPDATE nv5_vi_modules SET theme = 'default' WHERE theme = 'future';
+UPDATE nv5_vi_modules SET mobile = 'default' WHERE mobile = 'future';
+UPDATE nv5_config SET config_value = 'default' WHERE lang = 'vi' AND module = 'global' AND config_name IN ('site_theme', 'mobile_theme') AND config_value = 'future';
 ```
 
 **Giao diện quản trị**
