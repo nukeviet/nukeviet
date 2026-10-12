@@ -34,6 +34,12 @@ Vui lòng sử dụng kênh riêng tư trước. Không tạo issue công khai c
 1. WhiteHub Bug Bounty
    - https://whitehub.net/programs/nukeviet/hacktivity
 
+### Security Contact / Liên hệ bảo mật
+
+1. Email: dungpt@vinades.vn
+   - Primary security contact of the NukeViet project, also used for automated security scanning reports.
+   - Đầu mối liên hệ bảo mật chính của dự án NukeViet, đồng thời nhận báo cáo từ các dịch vụ quét bảo mật tự động.
+
 ### What to include / Nội dung cần cung cấp
 
 1. Affected version(s) and deployment context.
