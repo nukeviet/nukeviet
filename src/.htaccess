@@ -22,6 +22,8 @@ FileETag None
   RewriteRule ^.* - [L,R=404]
   RewriteCond %{REQUEST_URI} ^/(install/(css|images)|modules|themes|assets|data/config|data/tmp|uploads)/.*\.((j|a)spx?|(p|s)html|cgi|inc|ini|php[0-9]?|phar|pl|py|sh|sql\.gz|tpl|xml)($|\?|\/|\.) [NC]
   RewriteRule ^.* - [L,R=404]
+  RewriteCond %{REQUEST_URI} ^/(admin)/.+/.*\.((j|a)spx?|(p|s)html|cgi|inc|ini|php[0-9]?|phar|pl|py|sh|sql\.gz|tpl|xml)($|\?|\/|\.) [NC]
+  RewriteRule ^.* - [L,R=404]
 </IfModule>
 
 ErrorDocument 400 /error.php?code=400

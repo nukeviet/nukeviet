@@ -128,6 +128,22 @@ class Sconfig
     }
 
     /**
+     * Lấy danh sách luật chặn truy cập.
+     *
+     * @return array
+     */
+    private function getDenyAccess()
+    {
+        $deny_access = $this->server_configs['deny_access'] ?? [];
+        if ($this->admin_rewrite and !empty($deny_access['include_dirs']) and in_array('{NV_ADMINDIR}', $deny_access['include_dirs'], true)) {
+            $deny_access['include_dirs'] = array_values(array_diff($deny_access['include_dirs'], ['{NV_ADMINDIR}']));
+            $deny_access['admin_exec_files'] = ['{NV_ADMINDIR}'];
+        }
+
+        return $deny_access;
+    }
+
+    /**
      * Tạo nội dung khuyến cáo của file cấu hình máy chủ NGINX
      *
      * @return string
@@ -285,6 +301,43 @@ class Sconfig
             $config_contents .= "\n";
         }
 
+        /*
+         * Luật chặn đặt ở cấp server để chạy trước khi chọn location
+         */
+        $deny_access = $this->getDenyAccess();
+        if (!empty($deny_access)) {
+            $config_contents .= $t . "#Block access to certain folders and files\n";
+            foreach ($deny_access as $key => $vals) {
+                if (!empty($vals)) {
+                    $end = '';
+                    if ($key == 'dir') {
+                        $end = '/.*';
+                    } elseif ($key == 'include_dirs') {
+                        $end = '/.*/.*';
+                    } elseif ($key == 'file') {
+                        $end = '.*';
+                    } elseif ($key == 'include_exec_files') {
+                        $exec_files = self::contentsImplode($this->server_configs['exec_files']);
+                        $end = "/.*\.(" . $exec_files . ').*';
+                    } elseif ($key == 'admin_exec_files') {
+                        $exec_files = self::contentsImplode($this->server_configs['exec_files']);
+                        $end = "/.+/.*\.(" . $exec_files . ').*';
+                    }
+                    if (!empty($end)) {
+                        $vals = self::contentsImplode($vals);
+                        $config_contents .= $t . 'if ($uri ~ "^/(' . $vals . ')' . $end . "\$\") {\n";
+                        $config_contents .= $t . $t . 'return ' . $sconfigs['deny_access_code'];
+                        if ($sconfigs['deny_access_code'] == '301') {
+                            $config_contents .= ' ' . NV_BASE_SITEURL;
+                        }
+                        $config_contents .= ";\n";
+                        $config_contents .= $t . "}\n";
+                    }
+                }
+            }
+            $config_contents .= "\n";
+        }
+
         $config_contents .= $t . "#Only allow access to api.php via POST method\n";
         $config_contents .= $t . "location /api.php {\n";
         $config_contents .= $t . $t . "if (\$request_method !~ \"^POST\") {\n";
@@ -297,43 +350,6 @@ class Sconfig
         $config_contents .= $t . "location / {\n";
         $config_contents .= $t . $t . "#........................................\n";
         $config_contents .= "\n";
-
-        if (!empty($sconfigs['deny_access'])) {
-            $config_contents .= $t . $t . "#Block access to certain folders and files\n";
-            foreach ($sconfigs['deny_access'] as $key => $vals) {
-                if (!empty($vals)) {
-                    $end = '';
-                    if ($key == 'dir') {
-                        $end = '/.*';
-                    } elseif ($key == 'include_dirs') {
-                        $end = '/.*/.*';
-                    } elseif ($key == 'file') {
-                        $end = '.*';
-                    } elseif ($key == 'include_exec_files') {
-                        $exec_files = self::contentsImplode($this->server_configs['exec_files']);
-                        $end = "/.*\.(" . $exec_files . ').*';
-                    }
-                    if (!empty($end)) {
-                        if ($key == 'include_dirs' and $this->admin_rewrite) {
-                            // Khi có bật rewrite trong quản trị, loại bỏ luật chặn
-                            $vals = array_diff($vals, ['{NV_ADMINDIR}']);
-                        }
-                        if (empty($vals)) {
-                            continue;
-                        }
-                        $vals = self::contentsImplode($vals);
-                        $config_contents .= $t . $t . 'if ($request_uri ~ "^/(' . $vals . ')' . $end . "\$\") {\n";
-                        $config_contents .= $t . $t . $t . 'return ' . $sconfigs['deny_access_code'];
-                        if ($sconfigs['deny_access_code'] == '301') {
-                            $config_contents .= ' ' . NV_BASE_SITEURL;
-                        }
-                        $config_contents .= ";\n";
-                        $config_contents .= $t . $t . "}\n";
-                    }
-                }
-            }
-            $config_contents .= "\n";
-        }
 
         $config_contents .= $t . $t . "#Creating Rewrite Rules\n";
         $config_contents .= $t . $t . "rewrite ^/robots\.txt\$ /robots.php last;\n";
@@ -578,15 +594,8 @@ class Sconfig
         $rewrite_rule = '';
 
         if ($full) {
-            foreach ($this->server_configs['deny_access'] as $key => $vals) {
+            foreach ($this->getDenyAccess() as $key => $vals) {
                 if (!empty($vals)) {
-                    if ($key == 'include_dirs' and $this->admin_rewrite) {
-                        // Khi có bật rewrite trong quản trị, loại bỏ luật chặn
-                        $vals = array_diff($vals, ['{NV_ADMINDIR}']);
-                    }
-                    if (empty($vals)) {
-                        continue;
-                    }
                     $vals = self::contentsImplode($vals);
 
                     if ($this->server_configs['deny_access_code'] == 301) {
@@ -607,6 +616,11 @@ class Sconfig
                         if (!empty($this->server_configs['exec_files'])) {
                             $exec_files = self::contentsImplode($this->server_configs['exec_files']);
                             $rewrite_rule .= '<rule name="blockAccessToSubExecFiles" stopProcessing="true"><match url="^((' . $vals . ')/.*\.(' . $exec_files . '))" /><conditions><add input="{DOCUMENT_ROOT}\{R:1}" matchType="IsFile" /></conditions>' . $action . '</rule>';
+                        }
+                    } elseif ($key == 'admin_exec_files') {
+                        if (!empty($this->server_configs['exec_files'])) {
+                            $exec_files = self::contentsImplode($this->server_configs['exec_files']);
+                            $rewrite_rule .= '<rule name="blockAccessToAdminSubExecFiles" stopProcessing="true"><match url="^((' . $vals . ')/.+/.*\.(' . $exec_files . '))" /><conditions><add input="{DOCUMENT_ROOT}\{R:1}" matchType="IsFile" /></conditions>' . $action . '</rule>';
                         }
                     }
                 }
@@ -933,9 +947,10 @@ class Sconfig
         }
         $config_contents .= "\n";
 
-        if (!empty($this->server_configs['deny_access'])) {
+        $deny_access = $this->getDenyAccess();
+        if (!empty($deny_access)) {
             $deny_access_contents = '';
-            foreach ($this->server_configs['deny_access'] as $key => $vals) {
+            foreach ($deny_access as $key => $vals) {
                 if (!empty($vals)) {
                     $start = '';
                     $end = '';
@@ -952,15 +967,12 @@ class Sconfig
                         $start = 'RewriteCond %{REQUEST_URI} ^/';
                         $exec_files = self::contentsImplode($this->server_configs['exec_files']);
                         $end = "/.*\.(" . $exec_files . ')($|\?|\/|\.)';
+                    } elseif ($key == 'admin_exec_files') {
+                        $start = 'RewriteCond %{REQUEST_URI} ^/';
+                        $exec_files = self::contentsImplode($this->server_configs['exec_files']);
+                        $end = "/.+/.*\.(" . $exec_files . ')($|\?|\/|\.)';
                     }
                     if (!empty($start)) {
-                        if ($key == 'include_dirs' and $this->admin_rewrite) {
-                            // Khi có bật rewrite trong quản trị, loại bỏ luật chặn
-                            $vals = array_diff($vals, ['{NV_ADMINDIR}']);
-                        }
-                        if (empty($vals)) {
-                            continue;
-                        }
                         $vals = self::contentsImplode($vals);
                         $redirect = $this->server_configs['deny_access_code'] == '301' ? NV_BASE_SITEURL : '-';
                         $deny_access_contents .= '  ' . $start . '(' . $vals . ')' . $end . " [NC]\n";
