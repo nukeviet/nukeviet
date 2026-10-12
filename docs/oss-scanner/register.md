@@ -71,10 +71,12 @@ gh api "repos/nukeviet/nukeviet/contents/.oss-scanner?ref=nukeviet5.0" --jq '.[]
 
 ### Bước 3: Fork và clone repo đăng ký
 
-Fork https://github.com/anthropics/oss-scanner trên GitHub, rồi:
+1. Mở https://github.com/anthropics/oss-scanner, bấm **Fork**.
+2. Mục **Owner** chọn `nukeviet`, giữ tên repo `oss-scanner`, tích **Copy the `main` branch only**, bấm **Create fork**.
+3. Clone và chuẩn bị file:
 
 ```bash
-git clone https://github.com/<tài-khoản-github>/oss-scanner.git
+git clone https://github.com/nukeviet/oss-scanner.git
 cd oss-scanner
 git checkout -b enroll-nukeviet
 mkdir -p projects/nukeviet
@@ -104,7 +106,7 @@ git commit -m "Enroll nukeviet in OSS Scanner"
 git push -u origin enroll-nukeviet
 ```
 
-Mở PR vào nhánh `main` của `anthropics/oss-scanner`, dán nội dung `docs/oss-scanner/pr-description.md` vào mô tả, đánh dấu các mục trong checklist. Trên trang PR chỉ có file trong `projects/nukeviet/` thay đổi.
+Mở PR từ `nukeviet/oss-scanner:enroll-nukeviet` vào nhánh `main` của `anthropics/oss-scanner` bằng tài khoản cá nhân của người đăng ký, dán nội dung `docs/oss-scanner/pr-description.md` vào mô tả, đánh dấu các mục trong checklist. Trên trang PR chỉ có file trong `projects/nukeviet/` thay đổi.
 
 ### Bước 6: Sau khi merge
 
