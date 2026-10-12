@@ -42,6 +42,11 @@ class TriggerErrorTest extends \Codeception\Test\Unit
 
             $lines = file(NV_ROOTDIR . '/' . $file);
             foreach ($lines as $i => $line) {
+                // Bỏ qua dòng chú thích (PHPDoc, //, #) để không báo nhầm khi tài liệu nhắc tới cú pháp cũ
+                if (preg_match('/^\s*(\*|\/\*|\/\/|#)/', $line)) {
+                    continue;
+                }
+
                 // Kiểm tra trigger_error với 256 hoặc E_USER_ERROR (đã deprecated)
                 if (preg_match('/\btrigger_error\s*\(.*,\s*(256|E_USER_ERROR)\s*\)/', $line)) {
                     $this->assertTrue(
