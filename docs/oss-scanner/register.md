@@ -134,11 +134,11 @@ Cập nhật: 2026-10-12. Đánh dấu `[x]` khi xong.
 ### 5.3 Dockerfile và threat model
 
 - [x] Tạo `.oss-scanner/`.
-- [x] Build thử image: cài site tự động thành công, chạy được khi không có mạng, trang chủ và admin trả 200, test Unit 125/127 đạt.
+- [x] Build thử image: cài site tự động thành công, chạy được khi không có mạng, trang chủ và admin trả 200, test Unit 127/127 đạt.
 - [x] Sửa test lỗi `TriggerErrorTest`: regex khớp nhầm dòng chú thích ở `src/includes/vendor/vinades/nukeviet/Http/HttpException.php:16`.
-- [ ] Sửa notice `Undefined array key "show_home"` ở template block menu `global.bootstrap.tpl` khi mở trang chủ lần đầu sau cài đặt (làm `ErrorLogsTest` lỗi).
-- [ ] Rà và chốt thang mức độ nghiêm trọng trong `.oss-scanner/threat_model.md`.
-- [ ] Merge `.oss-scanner/` vào `nukeviet5.0` (bước 2).
+- [x] Sửa notice `Undefined array key "show_home"` ở template block menu `global.bootstrap.tpl` khi mở trang chủ lần đầu sau cài đặt (làm `ErrorLogsTest` lỗi).
+- [x] Rà và chốt thang mức độ nghiêm trọng trong `.oss-scanner/threat_model.md`.
+- [x] Merge `.oss-scanner/` vào `nukeviet5.0` (bước 2).
 
 ### 5.4 Gửi đăng ký
 

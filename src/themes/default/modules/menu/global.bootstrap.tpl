@@ -29,7 +29,7 @@
 {/function}
 <div class="main-nav" data-toggle="main-nav">
     <ul>
-        {if $CONFIG.show_home}
+        {if not empty($CONFIG.show_home)}
         <li class="main-nav-home{if not empty($HOME)} active{/if}" data-toggle="item-lev-1">
             <div class="menu-item">
                 <a class="item-link" href="{$smarty.const.NV_BASE_SITEURL}index.php?{$smarty.const.NV_LANG_VARIABLE}={$smarty.const.NV_LANG_DATA}" aria-label="{$LANG->getGlobal('Home')}">
