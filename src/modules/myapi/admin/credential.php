@@ -113,7 +113,7 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
         'none' => $nv_Lang->getModule('auth_method_none')
     ];
     foreach ($methods as $key => $name) {
-        $method = $api_user[$key] ?? [];
+        $method = $api_user[$key] ?? ['ident' => '', 'ips' => ''];
         $method['key'] = $key;
         $method['name'] = $name;
         $methods[$key] = $method;
