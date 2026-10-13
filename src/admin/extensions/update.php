@@ -242,6 +242,8 @@ if (csrf_check($nv_Request->get_string('checkss', 'get', ''), $csrf_key . '_down
         $error = nv_http_get_lang(NukeViet\Http\Http::$error);
     } elseif (empty($apidata['filename']) or !file_exists($apidata['filename']) or filesize($apidata['filename']) == 0) {
         $error = $nv_Lang->getModule('extUpdErrorDownload');
+    } else {
+        $error = nv_store_verify_checksum($apidata['filename'], ['type' => 'getupdfile', 'eid' => $eid, 'fid' => $fid]);
     }
     if (!empty($error)) {
         nv_htmlOutput(nv_theme_alert($nv_Lang->getGlobal('danger_level'), $error, 'danger'));

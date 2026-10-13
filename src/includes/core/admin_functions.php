@@ -1013,3 +1013,38 @@ function nv_update_robots($robots_config, bool $save = false, array $config = []
 
     return [$robots_data, $robots_other];
 }
+
+/**
+ * Đối chiếu mã SHA-256 của file vừa tải từ NukeViet Store với mã do API mode=checksum trả về.
+ * Không khớp hoặc không lấy được mã thì xóa file.
+ *
+ * @param string $file Đường dẫn tuyệt đối của file vừa tải
+ * @param array $body Tham số gửi API: type (download|getupdfile|getsysupd) và các tham số của mode tải tương ứng
+ * @return string Thông báo lỗi, rỗng nếu file hợp lệ
+ */
+function nv_store_verify_checksum(string $file, array $body): string
+{
+    global $global_config, $nv_Lang;
+
+    $body['lang'] = NV_LANG_INTERFACE;
+    $body['basever'] = $global_config['version'];
+    $body['mode'] = 'checksum';
+
+    $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
+    $array = $NV_Http->post(NUKEVIET_STORE_APIURL, [
+        'headers' => [
+            'Referer' => NUKEVIET_STORE_APIURL
+        ],
+        'body' => $body
+    ]);
+    $array = (is_array($array) and !empty($array['body'])) ? unserialize($array['body'], NV_UNSERIALIZE_SAFE) : [];
+    $sha256 = $array['data']['sha256'] ?? '';
+
+    if (!is_string($sha256) or !preg_match('/^[a-f0-9]{64}$/', $sha256) or !hash_equals($sha256, (string) hash_file('sha256', $file))) {
+        nv_deletefile($file);
+
+        return $nv_Lang->getGlobal('error_checksum');
+    }
+
+    return '';
+}

@@ -404,6 +404,7 @@ $lang_global['error_code_9'] = 'Hàm xử lý fopen() thất bại đối với 
 $lang_global['error_code_10'] = 'Truy vấn HTTP bằng Curl thất bại.';
 $lang_global['error_code_11'] = 'Có một lỗi không xác định đã xảy ra.';
 $lang_global['error_valid_response'] = 'Dữ liệu trả về không hợp chuẩn.';
+$lang_global['error_checksum'] = 'Mã SHA-256 của file tải về không khớp với NukeViet Store, file đã bị xóa. Vui lòng thử tải lại.';
 $lang_global['passkey_error_challenge'] = 'Thử thách không hợp lệ hoặc đã hết hạn, vui lòng tải lại trang và thử lại';
 $lang_global['passkey_error_challenge1'] = 'Thử thách không hợp lệ, vui lòng tải lại trang và thử lại';
 $lang_global['passkey_error_credential'] = 'Chứng thực không hợp lệ, vui lòng tải lại trang và thử lại';

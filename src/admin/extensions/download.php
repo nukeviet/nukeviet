@@ -58,6 +58,8 @@ if (empty($request['id']) or empty($request['fid']) or !isset($array['tid'])) {
         $contents = 'ERR|' . nv_http_get_lang(NukeViet\Http\Http::$error);
     } elseif (empty($array['filename']) or !file_exists($array['filename']) or filesize($array['filename']) <= 0) {
         $contents = 'ERR|' . $nv_Lang->getModule('download_error_save');
+    } elseif (($error = nv_store_verify_checksum($array['filename'], ['type' => 'download', 'id' => $request['id'], 'fid' => $request['fid']])) !== '') {
+        $contents = 'ERR|' . $error;
     } else {
         $contents = 'OK|' . $filename;
     }

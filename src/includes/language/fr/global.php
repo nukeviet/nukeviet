@@ -404,6 +404,7 @@ $lang_global['error_code_9'] = 'Fonction fopen() est échoué en applicant sur c
 $lang_global['error_code_10'] = 'Demande HTTP par Curl échoué';
 $lang_global['error_code_11'] = 'Un erreur non-déterminé a eu lieu';
 $lang_global['error_valid_response'] = 'Les données retournées n\'est pas en bonne forme';
+$lang_global['error_checksum'] = 'La somme de contrôle SHA-256 du fichier téléchargé ne correspond pas à NukeViet Store, le fichier a été supprimé. Veuillez réessayer le téléchargement.';
 $lang_global['passkey_error_challenge'] = 'Défi invalide ou expiré, veuillez recharger la page et réessayer';
 $lang_global['passkey_error_challenge1'] = 'Défi invalide, veuillez recharger la page et réessayer';
 $lang_global['passkey_error_credential'] = 'Authentification invalide, veuillez recharger la page et réessayer';

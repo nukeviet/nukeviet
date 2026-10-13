@@ -239,6 +239,8 @@ if (csrf_check($nv_Request->get_string('checkss', 'get', ''), $admin_info['admin
         $error = nv_http_get_lang(NukeViet\Http\Http::$error);
     } elseif (empty($apidata['filename']) or !file_exists($apidata['filename'])) {
         $error = $nv_Lang->getModule('get_update_error_file_download');
+    } else {
+        $error = nv_store_verify_checksum($apidata['filename'], ['type' => 'getsysupd', 'version' => $version, 'package' => $package]);
     }
 
     if (!empty($error)) {

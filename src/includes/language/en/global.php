@@ -404,6 +404,7 @@ $lang_global['error_code_9'] = 'Processing functions fopen() failed for file.';
 $lang_global['error_code_10'] = 'HTTP request failed with Curl.';
 $lang_global['error_code_11'] = 'There was an unknown error occurred.';
 $lang_global['error_valid_response'] = 'Data returns nonstandard.';
+$lang_global['error_checksum'] = 'The SHA-256 checksum of the downloaded file does not match NukeViet Store, the file has been deleted. Please try downloading again.';
 $lang_global['passkey_error_challenge'] = 'Invalid or expired challenge, please reload the page and try again';
 $lang_global['passkey_error_challenge1'] = 'Invalid challenge, please reload the page and try again';
 $lang_global['passkey_error_credential'] = 'Invalid credential, please reload the page and try again';
