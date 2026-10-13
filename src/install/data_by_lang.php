@@ -518,266 +518,499 @@ $copyright = serialize($copyright);
 /**
  * Blocks Groups
  */
-$blockGroups = [
-    'default' => [ // Theme Default
-        'START_TOPBAR' => [
-            [
-                'module' => 'contact',
-                'file_name' => 'global.contact_default.php',
-                'title' => 'Contact Default',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => 'a:5:{s:12:"departmentid";i:1;s:5:"shows";a:4:{i:0;s:5:"phone";i:1;s:3:"fax";i:2;s:5:"email";i:3;s:5:"other";}s:11:"order_shows";a:4:{s:5:"phone";i:1;s:3:"fax";i:4;s:5:"email";i:2;s:5:"other";i:3;}s:11:"limit_shows";a:4:{s:5:"phone";i:1;s:3:"fax";i:0;s:5:"email";i:1;s:5:"other";i:0;}s:10:"show_clock";i:1;}'
-            ]
-        ],
-        'END_TOPBAR' => [
-            [
-                'module' => 'theme',
-                'file_name' => 'global.change_theme_mode.php',
-                'title' => 'Theme mode',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
-            ]
-        ],
-        'USER_BUTTON' => [
-            [
-                'module' => 'inform',
-                'file_name' => 'global.inform.php',
-                'title' => $install_lang['blocks_groups']['inform']['global.inform'],
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
+if ($lang_data == 'vi') {
+    $blockGroups = [
+        'default' => [ // Theme Default
+            'START_TOPBAR' => [
+                [
+                    'module' => 'contact',
+                    'file_name' => 'global.contact_default.php',
+                    'title' => $install_lang['blocks_groups']['contact']['global.contact_default'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:5:{s:12:"departmentid";i:1;s:5:"shows";a:4:{i:0;s:5:"phone";i:1;s:3:"fax";i:2;s:5:"email";i:3;s:5:"other";}s:11:"order_shows";a:4:{s:5:"phone";i:1;s:3:"fax";i:4;s:5:"email";i:2;s:5:"other";i:3;}s:11:"limit_shows";a:4:{s:5:"phone";i:1;s:3:"fax";i:0;s:5:"email";i:1;s:5:"other";i:0;}s:10:"show_clock";i:1;}'
+                ]
             ],
-            [
-                'module' => 'users',
-                'file_name' => 'global.user_button.php',
-                'title' => $install_lang['blocks_groups']['users']['global.user_button'],
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
-            ]
-        ],
-        'MAIN_NAV' => [
-            [
-                'module' => 'menu',
-                'file_name' => 'global.bootstrap.php',
-                'title' => 'Menu Site',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:0;}'
-            ]
-        ],
-        'HEADER' => [
-            [
-                'module' => 'news',
-                'file_name' => 'module.block_newscenter.php',
-                'title' => $install_lang['blocks_groups']['news']['module.block_newscenter'],
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'config' => 'a:10:{s:6:"numrow";i:6;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:12:"length_title";i:0;s:15:"length_hometext";i:0;s:17:"length_othertitle";i:60;s:5:"width";i:500;s:6:"height";i:0;s:7:"nocatid";a:0:{}}',
-                'funcs' => [
-                    'news' => [
-                        'main'
+            'END_TOPBAR' => [
+                [
+                    'module' => 'theme',
+                    'file_name' => 'global.social_btns.php',
+                    'title' => $install_lang['blocks_groups']['theme']['global.social_btns_top'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:4:{s:4:"name";s:18:"facebook,youtube,x";s:3:"url";s:94:"https://www.facebook.com/nukeviet,https://www.youtube.com/user/nukeviet,https://x.com/nukeviet";s:4:"icon";s:65:"fa-brands fa-facebook,fa-brands fa-youtube,fa-brands fa-x-twitter";s:5:"color";s:20:"1877F2,FF0000,000000";}'
+                ]
+            ],
+            'USER_BUTTON' => [
+                [
+                    'module' => 'inform',
+                    'file_name' => 'global.inform.php',
+                    'title' => $install_lang['blocks_groups']['inform']['global.inform'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1
+                ],
+                [
+                    'module' => 'users',
+                    'file_name' => 'global.user_button.php',
+                    'title' => $install_lang['blocks_groups']['users']['global.user_button'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1
+                ]
+            ],
+            'HEADER_BANNER' => [
+                [
+                    'module' => 'banners',
+                    'file_name' => 'global.banners.php',
+                    'title' => $install_lang['blocks_groups']['banners']['global.banners_header'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:1:{s:12:"idplanbanner";i:1;}'
+                ]
+            ],
+            'MAIN_NAV' => [
+                [
+                    'module' => 'menu',
+                    'file_name' => 'global.bootstrap.php',
+                    'title' => $install_lang['blocks_groups']['menu']['global.bootstrap'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:4:{s:6:"menuid";i:1;s:12:"title_length";i:0;s:9:"show_home";i:1;s:9:"show_icon";i:1;}'
+                ]
+            ],
+            'HEADER' => [
+                [
+                    'module' => 'news',
+                    'file_name' => 'module.block_headline.php',
+                    'title' => $install_lang['blocks_groups']['news']['module.block_headline'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'config' => 'a:1:{s:8:"group_id";i:1;}',
+                    'funcs' => [
+                        'news' => [
+                            'main'
+                        ]
                     ]
                 ]
             ],
-            [
-                'module' => 'banners',
-                'file_name' => 'global.banners.php',
-                'title' => $install_lang['blocks_groups']['banners']['global.banners1'],
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'config' => 'a:1:{s:12:"idplanbanner";i:1;}',
-                'funcs' => [
-                    'news' => [
-                        'main'
+            'END_SIDEBAR' => [
+                [
+                    'module' => 'news',
+                    'file_name' => 'global.block_category.php',
+                    'title' => $install_lang['blocks_groups']['news']['global.block_category'],
+                    'template' => '',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'config' => 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:0;}',
+                    'funcs' => [
+                        'news' => [
+                            'main'
+                        ]
                     ]
+                ],
+                [
+                    'module' => 'news',
+                    'file_name' => 'global.tags.php',
+                    'title' => $install_lang['blocks_groups']['news']['global.tags'],
+                    'template' => '',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:2:{s:9:"show_type";i:0;s:6:"numrow";i:20;}'
+                ],
+                [
+                    'module' => 'news',
+                    'file_name' => 'global.block_groups.php',
+                    'title' => $install_lang['blocks_groups']['news']['global.block_groups'],
+                    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&amp;nv=news&amp;op=groups/Tin-moi-nhat',
+                    'template' => '',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:6:{s:7:"blockid";i:2;s:6:"numrow";i:6;s:12:"title_length";i:0;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";i:0;}'
+                ],
+                [
+                    'module' => 'news',
+                    'file_name' => 'global.block_tophits.php',
+                    'title' => $install_lang['blocks_groups']['news']['global.block_tophits'],
+                    'template' => '',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:6:{s:10:"number_day";i:9000;s:6:"numrow";i:6;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";i:0;s:7:"nocatid";a:0:{}}'
+                ],
+                [
+                    'module' => 'contact',
+                    'file_name' => 'global.contact_form.php',
+                    'title' => $install_lang['blocks_groups']['contact']['global.contact_form'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1
                 ]
-            ]
-        ],
-        'START_SIDEBAR' => [
-            [
-                'module' => 'news',
-                'file_name' => 'global.block_category.php',
-                'title' => $install_lang['blocks_groups']['news']['global.block_category'],
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'config' => 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:0;}',
-                'funcs' => [
-                    'news' => [
-                        'main',
-                        'viewcat',
-                        'topic',
-                        'content',
-                        'detail',
-                        'tag',
-                        'rss',
-                        'search',
-                        'groups'
-                    ]
+            ],
+            'START_FOOTER' => [
+                [
+                    'module' => 'theme',
+                    'file_name' => 'global.company_info.php',
+                    'title' => $install_lang['blocks_groups']['theme']['global.company_info'],
+                    'template' => 'simple',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => $company
                 ]
             ],
-            [
-                'module' => 'banners',
-                'file_name' => 'global.banners.php',
-                'title' => $install_lang['blocks_groups']['banners']['global.banners2'],
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => 'a:1:{s:12:"idplanbanner";i:2;}'
+            'CENTER_FOOTER' => [
+                [
+                    'module' => 'theme',
+                    'file_name' => 'global.menu_footer.php',
+                    'title' => $install_lang['blocks_groups']['theme']['global.menu_footer'],
+                    'template' => 'simple',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:1:{s:14:"module_in_menu";a:6:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:7:"contact";i:3;s:10:"statistics";i:4;s:4:"seek";i:5;s:5:"feeds";}}'
+                ]
             ],
-            [
-                'module' => 'statistics',
-                'file_name' => 'global.counter.php',
-                'title' => $install_lang['blocks_groups']['statistics']['global.counter'],
-                'template' => 'default',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
-            ]
-        ],
-        'END_SIDEBAR' => [
-            [
-                'module' => 'about',
-                'file_name' => 'global.about.php',
-                'title' => $install_lang['blocks_groups']['about']['global.about'],
-                'template' => 'default',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
+            'END_FOOTER' => [
+                [
+                    'module' => 'theme',
+                    'file_name' => 'global.social_btns.php',
+                    'title' => $install_lang['blocks_groups']['theme']['global.social_btns'],
+                    'template' => 'simple',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:4:{s:4:"name";s:18:"facebook,youtube,x";s:3:"url";s:94:"https://www.facebook.com/nukeviet,https://www.youtube.com/user/nukeviet,https://x.com/nukeviet";s:4:"icon";s:65:"fa-brands fa-facebook,fa-brands fa-youtube,fa-brands fa-x-twitter";s:5:"color";s:20:"1877F2,FF0000,000000";}'
+                ]
             ],
-            [
-                'module' => 'banners',
-                'file_name' => 'global.banners.php',
-                'title' => $install_lang['blocks_groups']['banners']['global.banners3'],
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => 'a:1:{s:12:"idplanbanner";i:3;}'
+            'QR_CODE' => [
+                [
+                    'module' => 'theme',
+                    'file_name' => 'global.QR_code.php',
+                    'title' => $install_lang['blocks_groups']['theme']['global.QR_code'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1
+                ],
+                [
+                    'module' => 'theme',
+                    'file_name' => 'global.change_theme_mode.php',
+                    'title' => $install_lang['blocks_groups']['theme']['global.change_theme_mode'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1
+                ]
             ],
-            [
-                'module' => 'voting',
-                'file_name' => 'global.voting.php',
-                'title' => $install_lang['blocks_groups']['voting']['global.voting_random'],
-                'template' => 'default',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => 'a:2:{s:3:"vid";i:0;s:9:"show_type";s:6:"random";}'
-            ],
-            [
-                'module' => 'news',
-                'file_name' => 'global.block_tophits.php',
-                'title' => $install_lang['blocks_groups']['news']['global.block_tophits'],
-                'template' => 'default',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => 'a:6:{s:10:"number_day";i:3650;s:6:"numrow";i:10;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:7:"nocatid";a:2:{i:0;i:10;i:1;i:11;}}'
-            ]
-        ],
-        'START_FOOTER' => [
-            [
-                'module' => 'theme',
-                'file_name' => 'global.company_info.php',
-                'title' => $install_lang['blocks_groups']['theme']['global.company_info'],
-                'template' => 'simple',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => $company
-            ]
-        ],
-        'CENTER_FOOTER' => [
-            [
-                'module' => 'theme',
-                'file_name' => 'global.menu_footer.php',
-                'title' => $install_lang['blocks_groups']['theme']['global.menu_footer'],
-                'template' => 'simple',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => 'a:1:{s:14:"module_in_menu";a:8:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";}}'
-            ]
-        ],
-        'END_FOOTER' => [
-            [
-                'module' => 'contact',
-                'file_name' => 'global.contact_form.php',
-                'title' => 'Feedback',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
-            ]
-        ],
-        'QR_CODE' => [
-            [
-                'module' => 'theme',
-                'file_name' => 'global.QR_code.php',
-                'title' => 'QR code',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
-            ],
-            [
-                'module' => 'statistics',
-                'file_name' => 'global.counter_button.php',
-                'title' => 'Online button',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1
-            ]
-        ],
-        'FOOTER_COPYRIGHT' => [
-            [
-                'module' => 'theme',
-                'file_name' => 'global.copyright.php',
-                'title' => 'Copyright',
-                'template' => 'no_title',
-                'active' => '1',
-                'bot_visible' => '1',
-                'groups_view' => '6',
-                'all_func' => 1,
-                'config' => $copyright
+            'FOOTER_COPYRIGHT' => [
+                [
+                    'module' => 'theme',
+                    'file_name' => 'global.copyright.php',
+                    'title' => $install_lang['blocks_groups']['theme']['global.copyright'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => $copyright
+                ]
             ]
         ]
-    ]
-];
+    ];
+} else {
+    $blockGroups = [
+        'default' => [ // Theme Default
+            'START_TOPBAR' => [
+                [
+                    'module' => 'contact',
+                    'file_name' => 'global.contact_default.php',
+                    'title' => 'Contact Default',
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:5:{s:12:"departmentid";i:1;s:5:"shows";a:4:{i:0;s:5:"phone";i:1;s:3:"fax";i:2;s:5:"email";i:3;s:5:"other";}s:11:"order_shows";a:4:{s:5:"phone";i:1;s:3:"fax";i:4;s:5:"email";i:2;s:5:"other";i:3;}s:11:"limit_shows";a:4:{s:5:"phone";i:1;s:3:"fax";i:0;s:5:"email";i:1;s:5:"other";i:0;}s:10:"show_clock";i:1;}'
+                ]
+            ],
+            'END_TOPBAR' => [
+                [
+                    'module' => 'theme',
+                    'file_name' => 'global.change_theme_mode.php',
+                    'title' => 'Theme mode',
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1
+                ]
+            ],
+            'USER_BUTTON' => [
+                [
+                    'module' => 'inform',
+                    'file_name' => 'global.inform.php',
+                    'title' => $install_lang['blocks_groups']['inform']['global.inform'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1
+                ],
+                [
+                    'module' => 'users',
+                    'file_name' => 'global.user_button.php',
+                    'title' => $install_lang['blocks_groups']['users']['global.user_button'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1
+                ]
+            ],
+            'MAIN_NAV' => [
+                [
+                    'module' => 'menu',
+                    'file_name' => 'global.bootstrap.php',
+                    'title' => 'Menu Site',
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:0;}'
+                ]
+            ],
+            'HEADER' => [
+                [
+                    'module' => 'news',
+                    'file_name' => 'module.block_newscenter.php',
+                    'title' => $install_lang['blocks_groups']['news']['module.block_newscenter'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'config' => 'a:10:{s:6:"numrow";i:6;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:12:"length_title";i:0;s:15:"length_hometext";i:0;s:17:"length_othertitle";i:60;s:5:"width";i:500;s:6:"height";i:0;s:7:"nocatid";a:0:{}}',
+                    'funcs' => [
+                        'news' => [
+                            'main'
+                        ]
+                    ]
+                ],
+                [
+                    'module' => 'banners',
+                    'file_name' => 'global.banners.php',
+                    'title' => $install_lang['blocks_groups']['banners']['global.banners1'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'config' => 'a:1:{s:12:"idplanbanner";i:1;}',
+                    'funcs' => [
+                        'news' => [
+                            'main'
+                        ]
+                    ]
+                ]
+            ],
+            'START_SIDEBAR' => [
+                [
+                    'module' => 'news',
+                    'file_name' => 'global.block_category.php',
+                    'title' => $install_lang['blocks_groups']['news']['global.block_category'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'config' => 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:0;}',
+                    'funcs' => [
+                        'news' => [
+                            'main',
+                            'viewcat',
+                            'topic',
+                            'content',
+                            'detail',
+                            'tag',
+                            'rss',
+                            'search',
+                            'groups'
+                        ]
+                    ]
+                ],
+                [
+                    'module' => 'banners',
+                    'file_name' => 'global.banners.php',
+                    'title' => $install_lang['blocks_groups']['banners']['global.banners2'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:1:{s:12:"idplanbanner";i:2;}'
+                ],
+                [
+                    'module' => 'statistics',
+                    'file_name' => 'global.counter.php',
+                    'title' => $install_lang['blocks_groups']['statistics']['global.counter'],
+                    'template' => 'default',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1
+                ]
+            ],
+            'END_SIDEBAR' => [
+                [
+                    'module' => 'about',
+                    'file_name' => 'global.about.php',
+                    'title' => $install_lang['blocks_groups']['about']['global.about'],
+                    'template' => 'default',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1
+                ],
+                [
+                    'module' => 'banners',
+                    'file_name' => 'global.banners.php',
+                    'title' => $install_lang['blocks_groups']['banners']['global.banners3'],
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:1:{s:12:"idplanbanner";i:3;}'
+                ],
+                [
+                    'module' => 'voting',
+                    'file_name' => 'global.voting.php',
+                    'title' => $install_lang['blocks_groups']['voting']['global.voting_random'],
+                    'template' => 'default',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:2:{s:3:"vid";i:0;s:9:"show_type";s:6:"random";}'
+                ],
+                [
+                    'module' => 'news',
+                    'file_name' => 'global.block_tophits.php',
+                    'title' => $install_lang['blocks_groups']['news']['global.block_tophits'],
+                    'template' => 'default',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:6:{s:10:"number_day";i:3650;s:6:"numrow";i:10;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:7:"nocatid";a:2:{i:0;i:10;i:1;i:11;}}'
+                ]
+            ],
+            'START_FOOTER' => [
+                [
+                    'module' => 'theme',
+                    'file_name' => 'global.company_info.php',
+                    'title' => $install_lang['blocks_groups']['theme']['global.company_info'],
+                    'template' => 'simple',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => $company
+                ]
+            ],
+            'CENTER_FOOTER' => [
+                [
+                    'module' => 'theme',
+                    'file_name' => 'global.menu_footer.php',
+                    'title' => $install_lang['blocks_groups']['theme']['global.menu_footer'],
+                    'template' => 'simple',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => 'a:1:{s:14:"module_in_menu";a:8:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";}}'
+                ]
+            ],
+            'END_FOOTER' => [
+                [
+                    'module' => 'contact',
+                    'file_name' => 'global.contact_form.php',
+                    'title' => 'Feedback',
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1
+                ]
+            ],
+            'QR_CODE' => [
+                [
+                    'module' => 'theme',
+                    'file_name' => 'global.QR_code.php',
+                    'title' => 'QR code',
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1
+                ],
+                [
+                    'module' => 'statistics',
+                    'file_name' => 'global.counter_button.php',
+                    'title' => 'Online button',
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1
+                ]
+            ],
+            'FOOTER_COPYRIGHT' => [
+                [
+                    'module' => 'theme',
+                    'file_name' => 'global.copyright.php',
+                    'title' => 'Copyright',
+                    'template' => 'no_title',
+                    'active' => '1',
+                    'bot_visible' => '1',
+                    'groups_view' => '6',
+                    'all_func' => 1,
+                    'config' => $copyright
+                ]
+            ]
+        ]
+    ];
+}
 
 /*###########################*/
 /*
@@ -824,6 +1057,9 @@ foreach ($installMods as $mod_name => $vals) {
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs');
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_id, func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
 
+// Tiếng Việt: mọi function hiển thị của giao diện default dùng chung một layout
+$layout_default = ($lang_data == 'vi') ? 'content-esbar' : '';
+
 $func_id = 0;
 $array_funcid = [];
 $array_funcid_mod = [];
@@ -836,7 +1072,9 @@ foreach ($installMods as $mod_name => $vals) {
             $array_funcid[] = $func_id;
             !isset($array_funcid_mod[$mod_name]) && $array_funcid_mod[$mod_name] = [];
             $array_funcid_mod[$mod_name][$func_name] = $func_id;
-            if (!empty($func_vals['theme_default'])) {
+            if ($layout_default !== '' and !empty($func_vals['show_func'])) {
+                $theme_default[$func_id] = $layout_default;
+            } elseif (!empty($func_vals['theme_default'])) {
                 $theme_default[$func_id] = $func_vals['theme_default'];
             }
 
@@ -866,7 +1104,7 @@ foreach ($installMods as $mod_name => $vals) {
  */
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes');
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)');
-$sth->execute([0, 'ssbar-content-esbar', 'default']);
+$sth->execute([0, $layout_default !== '' ? $layout_default : 'ssbar-content-esbar', 'default']);
 
 if (!empty($theme_default)) {
     foreach ($theme_default as $funcid => $_key) {
