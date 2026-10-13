@@ -9,8 +9,6 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-use Codeception\Lib\Di;
-
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }

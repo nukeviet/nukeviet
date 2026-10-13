@@ -628,3 +628,7 @@ $lang_module['reject_reason_error'] = 'Xin mời nhập nguyên nhân từ chố
 $lang_module['reject_reason_view'] = 'Nhấp để xem nguyên nhân từ chối của bài viết này';
 $lang_module['introduce_author'] = 'Giới thiệu tác giả %s';
 $lang_module['list_articles_by_author'] = 'Danh sách bài viết của tác giả %s';
+$lang_module['show_tags'] = 'Sắp xếp tags';
+$lang_module['show_random'] = 'Ngẫu nhiên';
+$lang_module['show_featured'] = 'Phổ biến';
+$lang_module['show_tags_num'] = 'Số tags hiển thị';

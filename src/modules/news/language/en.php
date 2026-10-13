@@ -628,3 +628,7 @@ $lang_module['reject_reason_error'] = 'Please enter the reason for rejection';
 $lang_module['reject_reason_view'] = 'Click to view the reason for rejection of this article';
 $lang_module['introduce_author'] = 'Introduction to author %s';
 $lang_module['list_articles_by_author'] = 'List of articles by author %s';
+$lang_module['show_tags'] = 'Sort tags';
+$lang_module['show_random'] = 'Random';
+$lang_module['show_featured'] = 'Popular';
+$lang_module['show_tags_num'] = 'Number of tags displayed';
