@@ -1124,6 +1124,45 @@ $(function() {
 
         window.open(shareUrl, '_blank', 'scrollbars=0,resizable=1,menubar=0,left=100,top=100,width=550,height=440,toolbar=0,status=0');
     });
+
+    // Tăng giảm cỡ chữ vùng đọc bài, ghi nhớ lựa chọn cho các bài sau
+    const readArea = $('[data-area="nv-read-area"]');
+    const fontBtns = $('[data-toggle="nv-font-size"]');
+    if (readArea.length && fontBtns.length) {
+        const fontScales = [0.875, 1, 1.125, 1.25, 1.375];
+        const fontDefault = 1;
+        let fontLevel = fontDefault;
+        try {
+            const saved = fontScales.indexOf(parseFloat(localStorage.getItem('nvFontScale')));
+            if (saved >= 0) {
+                fontLevel = saved;
+            }
+        } catch (e) {}
+
+        const fontApply = () => {
+            readArea.each(function() {
+                this.style.setProperty('--nv-font-scale', fontScales[fontLevel]);
+            });
+            fontBtns.each(function() {
+                const step = parseInt($(this).data('step'));
+                const disabled = (step < 0 && fontLevel === 0) || (step > 0 && fontLevel === fontScales.length - 1) || (step === 0 && fontLevel === fontDefault);
+                $(this).attr('aria-disabled', disabled ? 'true' : 'false');
+            });
+        };
+        fontApply();
+
+        fontBtns.on('click', function() {
+            if ($(this).attr('aria-disabled') === 'true') {
+                return;
+            }
+            const step = parseInt($(this).data('step'));
+            fontLevel = step === 0 ? fontDefault : Math.min(Math.max(fontLevel + step, 0), fontScales.length - 1);
+            fontApply();
+            try {
+                localStorage.setItem('nvFontScale', fontScales[fontLevel]);
+            } catch (e) {}
+        });
+    }
 });
 
 $(window).on('load', function() {

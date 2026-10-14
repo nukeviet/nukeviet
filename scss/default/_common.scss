@@ -187,6 +187,26 @@
   }
 }
 
+// Vùng đọc bài, cỡ chữ theo tỉ lệ người đọc chọn (data-toggle="nv-font-size")
+[data-area="nv-read-area"] {
+  font-size: calc(var(--#{$prefix}body-font-size) * var(--nv-font-scale, 1));
+}
+
+// Nút tăng giảm cỡ chữ
+.nv-font-size-btn {
+  padding: 0 .125rem;
+  font-weight: $font-weight-semibold;
+  line-height: 1;
+  background: none;
+  border: 0;
+  appearance: none;
+
+  &[aria-disabled="true"] {
+    cursor: default;
+    opacity: .4;
+  }
+}
+
 // Đánh dấu từ khóa trong kết quả tìm kiếm
 span.keyword {
   color: var(--#{$prefix}highlight-color);

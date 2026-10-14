@@ -1,4 +1,7 @@
-<h1 class="mb-3">
+{assign var="hasSocial" value=($SOCIALS.facebook or $SOCIALS.twitter)}
+{assign var="hasReadArea" value=(not empty($DATA.bodytext) or not empty($DATA.description))}
+{* Chỉ có nút cỡ chữ thì hàng công cụ thấp, kéo sát lên tiêu đề *}
+<h1 class="{if $hasReadArea and not $hasSocial}mb-1{else}mb-3{/if}">
     {$DATA.title}
     {if $smarty.const.NV_IS_MODADMIN}
     <span class="dropdown fs-6">
@@ -12,14 +15,24 @@
     </span>
     {/if}
 </h1>
-{if $SOCIALS.facebook or $SOCIALS.twitter}
+{if $hasSocial or $hasReadArea}
 <div class="mb-3 d-flex flex-wrap align-items-center gap-2">
+    {if $hasSocial}
     <span class="small text-body-secondary"><i class="fa-solid fa-share-nodes"></i> {$LANG->getGlobal('share')}:</span>
     {if $SOCIALS.facebook}
     <button type="button" class="btn btn-share-facebook rounded-circle" data-toggle="nv-social-share" data-platform="facebook" data-url="{$DATA.link}" data-title="{$DATA.title}" title="{$LANG->getGlobal('share_on', 'Facebook')}" aria-label="{$LANG->getGlobal('share_on', 'Facebook')}"><i class="fa-brands fa-facebook-f"></i></button>
     {/if}
     {if $SOCIALS.twitter}
     <button type="button" class="btn btn-share-x rounded-circle" data-toggle="nv-social-share" data-platform="x" data-url="{$DATA.link}" data-title="{$DATA.title}" title="{$LANG->getGlobal('share_on', 'X')}" aria-label="{$LANG->getGlobal('share_on', 'X')}"><i class="fa-brands fa-x-twitter"></i></button>
+    {/if}
+    {/if}
+    {if $hasReadArea}
+    {* Tăng giảm cỡ chữ khi đọc bài *}
+    <div class="ms-auto">
+        <button type="button" class="nv-font-size-btn link-secondary" data-toggle="nv-font-size" data-step="-1" aria-label="{$LANG->getGlobal('font_decrease')}" data-bs-toggle="tooltip" data-bs-trigger="hover" title="{$LANG->getGlobal('font_decrease')}">A<sup>-</sup></button>
+        <button type="button" class="nv-font-size-btn link-secondary" data-toggle="nv-font-size" data-step="0" aria-label="{$LANG->getGlobal('font_reset')}" data-bs-toggle="tooltip" data-bs-trigger="hover" title="{$LANG->getGlobal('font_reset')}">A</button>
+        <button type="button" class="nv-font-size-btn link-secondary" data-toggle="nv-font-size" data-step="1" aria-label="{$LANG->getGlobal('font_increase')}" data-bs-toggle="tooltip" data-bs-trigger="hover" title="{$LANG->getGlobal('font_increase')}">A<sup>+</sup></button>
+    </div>
     {/if}
 </div>
 {/if}
@@ -50,7 +63,7 @@
 </div>
 {/if}
 {* Giới thiệu ngắn gọn của bài đăng *}
-<div class="article-intro mb-3 fw-medium">
+<div class="article-intro mb-3 fw-medium" data-area="nv-read-area">
     {$DATA.description}
 </div>
 {/if}
@@ -65,7 +78,7 @@
 {/if}
 {* Nội dung chi tiết của bài đăng *}
 <div class="clearfix"></div>
-<div class="article-body">
+<div class="article-body" data-area="nv-read-area">
     {$DATA.bodytext}
 </div>
 {if not empty($COMMENT)}

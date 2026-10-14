@@ -57,9 +57,15 @@
         <div class="col-md-6 text-body-secondary">
             <i class="fa-regular fa-clock"></i> {$DETAIL.publtime}
         </div>
-        {if $DETAIL.allowed_send == 1 or $DETAIL.allowed_print == 1 or $DETAIL.allowed_save == 1 or not empty($linkEdit) or not empty($linkDelete)}
         <div class="col-md-6">
             <ul class="list-inline mb-0 text-md-end">
+                {if not empty($DETAIL.bodyhtml) or ($DETAIL.showhometext and not empty($DETAIL.hometext))}
+                <li class="list-inline-item">
+                    <button type="button" class="nv-font-size-btn link-secondary" data-toggle="nv-font-size" data-step="-1" aria-label="{$LANG->getGlobal('font_decrease')}" data-bs-toggle="tooltip" data-bs-trigger="hover" title="{$LANG->getGlobal('font_decrease')}">A<sup>-</sup></button>
+                    <button type="button" class="nv-font-size-btn link-secondary" data-toggle="nv-font-size" data-step="0" aria-label="{$LANG->getGlobal('font_reset')}" data-bs-toggle="tooltip" data-bs-trigger="hover" title="{$LANG->getGlobal('font_reset')}">A</button>
+                    <button type="button" class="nv-font-size-btn link-secondary" data-toggle="nv-font-size" data-step="1" aria-label="{$LANG->getGlobal('font_increase')}" data-bs-toggle="tooltip" data-bs-trigger="hover" title="{$LANG->getGlobal('font_increase')}">A<sup>+</sup></button>
+                </li>
+                {/if}
                 {if $DETAIL.allowed_send == 1}
                 <li class="list-inline-item">
                     <a class="link-secondary" href="#" data-toggle="newsSendMailModal" data-obj="#newsSendMailModal" data-url="{$DETAIL.url_sendmail}" data-ss="{$DETAIL.newscheckss}" aria-label="{$LANG->getModule('sendmail')}" data-bs-toggle="tooltip" title="{$LANG->getModule('sendmail')}"><i class="fa-solid fa-envelope"></i></a>
@@ -94,7 +100,6 @@
                 {/if}
             </ul>
         </div>
-        {/if}
     </div>
     {if $DETAIL.allowed_send == 1}
     <!-- START FORFOOTER -->
@@ -150,7 +155,7 @@
         </div>
         {/if}
         {if not empty($DETAIL.hometext)}
-        <div class="fw-bold" data-toggle="error-report">{$DETAIL.hometext}</div>
+        <div class="fw-bold" data-toggle="error-report" data-area="nv-read-area">{$DETAIL.hometext}</div>
         {/if}
     </div>
     {if not empty($DETAIL.image.src) and $DETAIL.image.position == 2}
@@ -192,7 +197,7 @@
     {/if}
     {* Nội dung chi tiết *}
     {if not empty($DETAIL.bodyhtml)}
-    <div class="richtext-container news-bodyhtml clearfix" data-toggle="error-report">
+    <div class="richtext-container news-bodyhtml clearfix" data-toggle="error-report" data-area="nv-read-area">
         {$DETAIL.bodyhtml}
     </div>
     {/if}

@@ -28474,6 +28474,25 @@ body {
   height: auto !important;
 }
 
+[data-area=nv-read-area] {
+  font-size: calc(var(--bs-body-font-size) * var(--nv-font-scale, 1));
+}
+
+.nv-font-size-btn {
+  padding: 0 0.125rem;
+  font-weight: 600;
+  line-height: 1;
+  background: none;
+  border: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.nv-font-size-btn[aria-disabled=true] {
+  cursor: default;
+  opacity: 0.4;
+}
+
 span.keyword {
   color: var(--bs-highlight-color);
   background-color: var(--bs-highlight-bg);

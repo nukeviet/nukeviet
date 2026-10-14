@@ -74,6 +74,7 @@ npm run core-css   # Build CSS Core
 - Core Namespace: Composer PSR-4 tại `src/includes/vendor/vinades/nukeviet/` (`NukeViet\Core\Request`, v.v.)
 - Strict Types: dùng `declare(strict_types=1)` cho các class thư viện mới
 - Frontend Assets: SCSS qua NPM - không chỉnh sửa file `.css` đã compile trực tiếp
+- `src/assets/js/site.js` dùng chung mọi theme ngoài site: không gọi thư viện của giao diện (`bootstrap.*`, Font Awesome...), kể cả có kiểm tra `typeof`. Theme có thể dùng Bootstrap 3, 4, 5. Cần thư viện thì đặt code ở JS riêng của theme
 - Testing: Codeception - `php vendor/bin/codecept run Unit`
 
 ### Database Pattern
