@@ -391,7 +391,7 @@ if (!empty($contact_allowed['view'])) {
         if (defined('NV_IS_SPADMIN')) {
             $read_admins = [];
             foreach ($row['read_admins'] as $aid => $time) {
-                $read_admins[] = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $aid . '">' . $admins[$aid] . '</a> (' . date('H:i d/m/Y', $time) . ')';
+                $read_admins[] = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $aid . '">' . $admins[$aid] . '</a> (' . nv_datetime_format($time, 1) . ')';
             }
             $row['read_admins'] = implode(', ', $read_admins);
         } else {

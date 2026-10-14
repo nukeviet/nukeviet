@@ -1306,6 +1306,50 @@ function nv_datetime_format(?int $timestamp = null, int $reverse = 0, int $short
 }
 
 /**
+ * Hiển thị ngày tháng (không có năm), định dạng suy ra từ date_short của vùng
+ *
+ * @param int $timestamp
+ * @param string $lang
+ * @return string
+ */
+function nv_daymonth_format(?int $timestamp = null, string $lang = '')
+{
+    if (!is_null($timestamp) and empty($timestamp)) {
+        return '';
+    }
+    if (is_null($timestamp)) {
+        $timestamp = NV_CURRENTTIME;
+    }
+
+    // Bỏ phần năm và dấu phân cách liền kề: d/m/Y => d/m, Y-m-d => m-d
+    $format = preg_replace('/^[Yy][^a-zA-Z]*|[^a-zA-Z]*[Yy]/', '', (string) nv_region_config('date_short', $lang));
+
+    return nv_date($format, $timestamp);
+}
+
+/**
+ * Hiển thị tháng năm (không có ngày), định dạng suy ra từ date_short của vùng
+ *
+ * @param int $timestamp
+ * @param string $lang
+ * @return string
+ */
+function nv_monthyear_format(?int $timestamp = null, string $lang = '')
+{
+    if (!is_null($timestamp) and empty($timestamp)) {
+        return '';
+    }
+    if (is_null($timestamp)) {
+        $timestamp = NV_CURRENTTIME;
+    }
+
+    // Bỏ phần ngày và dấu phân cách liền kề: d/m/Y => m/Y, Y-m-d => Y-m
+    $format = preg_replace('/^[dj][^a-zA-Z]*|[^a-zA-Z]*[dj]/', '', (string) nv_region_config('date_short', $lang));
+
+    return nv_date($format, $timestamp);
+}
+
+/**
  * nv_monthname()
  *
  * @param int $i

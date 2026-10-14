@@ -124,7 +124,7 @@ while ($row = $stmt->fetch()) {
 $stmt->closeCursor();
 
 $ctsh = [];
-$ctsh['caption'] = $nv_Lang->getModule('statbyhour') . ' (' . date('d/m/Y', NV_CURRENTTIME) . ')';
+$ctsh['caption'] = $nv_Lang->getModule('statbyhour') . ' (' . nv_date_format(1, NV_CURRENTTIME) . ')';
 $ctsh['total'] = nv_number_format($total);
 $ctsh['labels'] = array_keys($hour_list);
 $ctsh['values'] = array_values($hour_list);

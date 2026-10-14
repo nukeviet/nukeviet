@@ -88,7 +88,7 @@
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         <li class="px-2">
-                            <i class="fa fa-caret-right fa-fw"></i> {$LANG->getGlobal('hello_admin2', date('H:i d/m/Y', $ADMIN_INFO.current_login), $ADMIN_INFO.current_ip)}
+                            <i class="fa fa-caret-right fa-fw"></i> {$LANG->getGlobal('hello_admin2', datetime_format($ADMIN_INFO.current_login, 1), $ADMIN_INFO.current_ip)}
                         </li>
                         {if not empty($GCONFIG.admin_login_duration)}
                         <li><hr class="dropdown-divider"></li>
@@ -99,7 +99,7 @@
                         {if not empty($ADMIN_INFO.last_login)}
                         <li><hr class="dropdown-divider"></li>
                         <li class="px-2">
-                            <i class="fa fa-caret-right fa-fw"></i> {$LANG->getGlobal('hello_admin1', date('H:i d/m/Y', $ADMIN_INFO.last_login), $ADMIN_INFO.last_ip)}
+                            <i class="fa fa-caret-right fa-fw"></i> {$LANG->getGlobal('hello_admin1', datetime_format($ADMIN_INFO.last_login, 1), $ADMIN_INFO.last_ip)}
                         </li>
                         {/if}
                         <li><hr class="dropdown-divider"></li>

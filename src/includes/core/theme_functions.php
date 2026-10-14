@@ -376,10 +376,10 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = '', $noin
 
             if (!empty($items[$key]['content'])) {
                 if (!empty($items[$key]['content']['pubdate'])) {
-                    $items[$key]['content']['published_display'] = nv_date('H:i: d/m/Y', $items[$key]['content']['pubdate']);
+                    $items[$key]['content']['published_display'] = nv_datetime_format($items[$key]['content']['pubdate'], 1);
                 }
                 if (!empty($items[$key]['content']['modifydate'])) {
-                    $items[$key]['content']['modified_display'] = nv_date('H:i: d/m/Y', $items[$key]['content']['modifydate']);
+                    $items[$key]['content']['modified_display'] = nv_datetime_format($items[$key]['content']['modifydate'], 1);
                 }
             }
         }

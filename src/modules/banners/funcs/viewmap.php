@@ -56,7 +56,7 @@ foreach ($types_map as $chart_type => $db_field) {
 
     while ($row = $stmt->fetch()) {
         if ($chart_type == 'date') {
-            $data[] = date('d/m', $row[$db_field]);
+            $data[] = nv_daymonth_format($row[$db_field]);
         } else {
             $data[] = $row[$db_field];
         }

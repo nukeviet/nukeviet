@@ -657,11 +657,11 @@ if ($rowcontent['mode'] == 'edit') {
                     $stmt_up->execute();
                     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
                 }
-                $message = $nv_Lang->getModule('dulicate_edit_admin', $rowcontent['title'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
+                $message = $nv_Lang->getModule('dulicate_edit_admin', $rowcontent['title'], $_username, nv_datetime_format($row_tmp['time_edit'], 1));
                 $link_takeover = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'] . '&takeover=' . $takeover;
             } else {
                 // Thông báo không có quyền sửa.
-                $message = $nv_Lang->getModule('dulicate_edit', $rowcontent['title'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
+                $message = $nv_Lang->getModule('dulicate_edit', $rowcontent['title'], $_username, nv_datetime_format($row_tmp['time_edit'], 1));
             }
 
             $tpl->assign('MESSAGE', $message);
