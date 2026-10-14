@@ -62,20 +62,11 @@ if ($nv_Request->isset_request('save', 'post')) {
     $answervotenews = $nv_Request->get_typed_array('answervotenews', 'post', 'title', []);
     $urlvotenews = $nv_Request->get_typed_array('urlvotenews', 'post', 'title', []);
 
-    if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m)) {
-        $phour = $nv_Request->get_int('phour', 'post', 0);
-        $pmin = $nv_Request->get_int('pmin', 'post', 0);
-        $begindate = mktime($phour, $pmin, 0, $m[2], $m[1], $m[3]);
-    } else {
+    $begindate = nv_d2u_post($publ_date, $nv_Request->get_int('phour', 'post', 0), $nv_Request->get_int('pmin', 'post', 0), 0);
+    if (empty($begindate)) {
         $begindate = NV_CURRENTTIME;
     }
-    if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m)) {
-        $ehour = $nv_Request->get_int('ehour', 'post', 0);
-        $emin = $nv_Request->get_int('emin', 'post', 0);
-        $enddate = mktime($ehour, $emin, 0, $m[2], $m[1], $m[3]);
-    } else {
-        $enddate = 0;
-    }
+    $enddate = nv_d2u_post($exp_date, $nv_Request->get_int('ehour', 'post', 0), $nv_Request->get_int('emin', 'post', 0), 0);
 
     $number_answer = 0;
     if (!empty($array_answervote)) {
@@ -265,12 +256,12 @@ if ($vid > 0) {
 $rowvote['link'] = nv_htmlspecialchars($rowvote['link'] ?? '');
 $rowvote['question_maxlength'] = ($db_config['charset'] == 'utf8') ? 333 : 250;
 
-$publ_date = date('d/m/Y', $rowvote['publ_time']);
+$publ_date = nv_u2d_post($rowvote['publ_time']);
 $phour = (int) date('H', $rowvote['publ_time']);
 $pmin = (int) date('i', $rowvote['publ_time']);
 
 if (!empty($rowvote['exp_time'])) {
-    $exp_date = date('d/m/Y', $rowvote['exp_time']);
+    $exp_date = nv_u2d_post($rowvote['exp_time']);
     $ehour = (int) date('H', $rowvote['exp_time']);
     $emin = (int) date('i', $rowvote['exp_time']);
 } else {

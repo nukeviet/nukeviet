@@ -344,17 +344,12 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
             ]);
         }
 
-        if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string('begintime', 'post'), $m)) {
-            $post['begintime'] = mktime($nv_Request->get_int('beginhour', 'post'), $nv_Request->get_int('beginmin', 'post'), 0, $m[2], $m[1], $m[3]);
-        } else {
+        $post['begintime'] = nv_d2u_post($nv_Request->get_string('begintime', 'post'), $nv_Request->get_int('beginhour', 'post'), $nv_Request->get_int('beginmin', 'post'), 0);
+        if (empty($post['begintime'])) {
             $post['begintime'] = NV_CURRENTTIME;
         }
 
-        if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string('endtime', 'post'), $m)) {
-            $post['endtime'] = mktime($nv_Request->get_int('endhour', 'post'), $nv_Request->get_int('endmin', 'post'), 0, $m[2], $m[1], $m[3]);
-        } else {
-            $post['endtime'] = 0;
-        }
+        $post['endtime'] = nv_d2u_post($nv_Request->get_string('endtime', 'post'), $nv_Request->get_int('endhour', 'post'), $nv_Request->get_int('endmin', 'post'), 0);
 
         if (!empty($post['endtime']) and $post['endtime'] < $post['begintime']) {
             nv_jsonOutput([
@@ -419,13 +414,15 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
     }
 
     if (!empty($ipdetails['begintime'])) {
-        [$ipdetails['begintime'], $beginhour, $beginmin] = explode('|', date('d/m/Y|H|i', $ipdetails['begintime']));
+        [$beginhour, $beginmin] = explode('|', date('H|i', $ipdetails['begintime']));
+        $ipdetails['begintime'] = nv_u2d_post($ipdetails['begintime']);
     } else {
         $ipdetails['begintime'] = '';
         $beginhour = $beginmin = 0;
     }
     if (!empty($ipdetails['endtime'])) {
-        [$ipdetails['endtime'], $endhour, $endmin] = explode('|', date('d/m/Y|H|i', $ipdetails['endtime']));
+        [$endhour, $endmin] = explode('|', date('H|i', $ipdetails['endtime']));
+        $ipdetails['endtime'] = nv_u2d_post($ipdetails['endtime']);
     } else {
         $ipdetails['endtime'] = '';
         $endhour = 23;

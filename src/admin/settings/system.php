@@ -42,13 +42,7 @@ if (defined('NV_IS_GODADMIN')) {
         }
 
         $reopening_date = !empty($array_config_global['closed_site']) ? $nv_Request->get_title('reopening_date', 'post', '') : '';
-        if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $reopening_date, $m)) {
-            $reopening_hour = $nv_Request->get_int('reopening_hour', 'post', 0);
-            $reopening_min = $nv_Request->get_int('reopening_min', 'post', 0);
-            $array_config_global['site_reopening_time'] = mktime($reopening_hour, $reopening_min, 0, $m[2], $m[1], $m[3]);
-        } else {
-            $array_config_global['site_reopening_time'] = 0;
-        }
+        $array_config_global['site_reopening_time'] = nv_d2u_post($reopening_date, $nv_Request->get_int('reopening_hour', 'post', 0), $nv_Request->get_int('reopening_min', 'post', 0), 0);
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'closed_site', $array_config_global['closed_site'], $admin_info['userid']);
 
@@ -335,8 +329,7 @@ $global_config['reopening_date'] = '';
 $global_config['reopening_hour'] = 0;
 $global_config['reopening_min'] = 0;
 if (!empty($global_config['site_reopening_time'])) {
-    $tdate = date('d/m/Y|H|i', $global_config['site_reopening_time']);
-    [$global_config['reopening_date'], $global_config['reopening_hour'], $global_config['reopening_min']] = explode('|', $tdate);
+    [$global_config['reopening_hour'], $global_config['reopening_min']] = explode('|', date('H|i', $global_config['site_reopening_time']));
     $global_config['reopening_date'] = nv_u2d_post($global_config['site_reopening_time']);
 }
 

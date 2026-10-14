@@ -179,20 +179,25 @@ if ($nv_Request->isset_request('manager', 'get')) {
                 ]);
             }
 
-            $add_time_array = [];
-            if (!preg_match('/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $postdata['add_time'], $add_time_array)) {
+            $add_time = nv_d2u_post($postdata['add_time'], $postdata['add_hour'], $postdata['add_min'], 0);
+            if (empty($add_time)) {
                 nv_jsonOutput([
                     'status' => 'error',
                     'mess' => $nv_Lang->getModule('please_enter_valid_add_time')
                 ]);
             }
 
-            $exp_time_array = [];
-            if (!empty($postdata['exp_time']) and !preg_match('/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $postdata['exp_time'], $exp_time_array)) {
-                nv_jsonOutput([
-                    'status' => 'error',
-                    'mess' => $nv_Lang->getModule('please_enter_valid_exp_time')
-                ]);
+            $exp_time = 0;
+            if (!empty($postdata['exp_time'])) {
+                $postdata['exp_hour'] == -1 && $postdata['exp_hour'] = 23;
+                $postdata['exp_min'] == -1 && $postdata['exp_min'] = 59;
+                $exp_time = nv_d2u_post($postdata['exp_time'], $postdata['exp_hour'], $postdata['exp_min'], 0);
+                if (empty($exp_time)) {
+                    nv_jsonOutput([
+                        'status' => 'error',
+                        'mess' => $nv_Lang->getModule('please_enter_valid_exp_time')
+                    ]);
+                }
             }
 
             if (!empty($postdata['receiver_ids'])) {
@@ -218,14 +223,8 @@ if ($nv_Request->isset_request('manager', 'get')) {
                 'contents' => $postdata['link']
             ], NV_JSON_ENCODE);
 
-            $postdata['add_time'] = mktime($postdata['add_hour'], $postdata['add_min'], 0, $add_time_array[2], $add_time_array[1], $add_time_array[3]);
-            if (!empty($exp_time_array)) {
-                $postdata['exp_hour'] == -1 && $postdata['exp_hour'] = 23;
-                $postdata['exp_min'] == -1 && $postdata['exp_min'] = 59;
-                $postdata['exp_time'] = mktime($postdata['exp_hour'], $postdata['exp_min'], 0, $exp_time_array[2], $exp_time_array[1], $exp_time_array[3]);
-            } else {
-                $postdata['exp_time'] = 0;
-            }
+            $postdata['add_time'] = $add_time;
+            $postdata['exp_time'] = $exp_time;
 
             if (!empty($id)) {
                 $sth = $db->prepare('UPDATE ' . NV_INFORM_GLOBALTABLE . ' SET
@@ -288,9 +287,11 @@ if ($nv_Request->isset_request('manager', 'get')) {
             }
         }
 
-        [$data['add_time'], $data['add_hour'], $data['add_min']] = explode('|', date('d/m/Y|H|i', $data['add_time']));
+        [$data['add_hour'], $data['add_min']] = explode('|', date('H|i', $data['add_time']));
+        $data['add_time'] = nv_u2d_post($data['add_time']);
         if (!empty($data['exp_time'])) {
-            [$data['exp_time'], $data['exp_hour'], $data['exp_min']] = explode('|', date('d/m/Y|H|i', $data['exp_time']));
+            [$data['exp_hour'], $data['exp_min']] = explode('|', date('H|i', $data['exp_time']));
+            $data['exp_time'] = nv_u2d_post($data['exp_time']);
         } else {
             $data['exp_time'] = '';
             $data['exp_hour'] = $data['exp_min'] = -1;

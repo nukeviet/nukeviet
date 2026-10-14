@@ -58,6 +58,14 @@ function get_dtime_details($dtime_type, $dtime_details)
     if ($dtime_type == 'specific') {
         if (isset($dtime_details[0]['start_date'])) {
             $keys = count($dtime_details);
+
+            // CSDL cố định dạng d/m/Y, chuyển sang hiển thị theo bản địa hóa
+            foreach ($dtime_details as $i => $detail) {
+                foreach (['start_date', 'end_date'] as $field) {
+                    $date = array_map('intval', explode('/', $detail[$field] ?? ''));
+                    $dtime_details[$i][$field] = count($date) == 3 ? nv_u2d_post(mktime(0, 0, 0, $date[1], $date[0], $date[2])) : '';
+                }
+            }
         } else {
             $keys = 1;
             $dtime_details = [];

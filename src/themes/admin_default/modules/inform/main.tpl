@@ -200,7 +200,7 @@ $(function() {
 
                 // Initialize internal components
                 $('.datepicker', body).datepicker({
-                    dateFormat: nv_jsdate_get.replace('yyyy', 'yy'),
+                    dateFormat: nv_jsdate_post.replace('yyyy', 'yy'),
                     changeMonth: true,
                     changeYear: true,
                     showOtherMonths: true,

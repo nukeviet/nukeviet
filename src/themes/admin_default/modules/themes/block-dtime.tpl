@@ -7,7 +7,7 @@
             <div class="col-12 dtime_details">
                 <div class="row g-1 flex-sm-nowrap align-items-center">
                     <div class="col-auto flex-shrink-1">
-                        <input type="text" name="start_date[]" class="form-control date" value="{if isset($DETAILS[$key])}{$DETAILS[$key].start_date}{/if}" maxlength="4">
+                        <input type="text" name="start_date[]" class="form-control date" value="{if isset($DETAILS[$key])}{$DETAILS[$key].start_date}{/if}" maxlength="10">
                     </div>
                     <div class="col-auto">
                         <select name="start_h[]" class="form-select fw-hm">
@@ -25,7 +25,7 @@
                     </div>
                     <div class="col-auto">-</div>
                     <div class="col-auto flex-shrink-1">
-                        <input type="text" name="end_date[]" class="form-control date" value="{if isset($DETAILS[$key])}{$DETAILS[$key].end_date}{/if}" maxlength="4">
+                        <input type="text" name="end_date[]" class="form-control date" value="{if isset($DETAILS[$key])}{$DETAILS[$key].end_date}{/if}" maxlength="10">
                     </div>
                     <div class="col-auto">
                         <select name="end_h[]" class="form-select fw-hm">

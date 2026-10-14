@@ -110,12 +110,6 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     $remove_banner = $is_edit ? (int) ($nv_Request->get_bool('remove_banner', 'post', false)) : 0;
     $remove_imageforswf = $is_edit ? (int) ($nv_Request->get_bool('remove_imageforswf', 'post', false)) : 0;
 
-    if (!empty($publ_date) and !preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date)) {
-        $publ_date = '';
-    }
-    if (!empty($exp_date) and !preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date)) {
-        $exp_date = '';
-    }
     if ($publ_date_h < 0 or $publ_date_h > 23) {
         $publ_date_h = 0;
     }
@@ -242,15 +236,14 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     }
 
     // Tính thời gian phát hành
-    if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m)) {
-        $publtime = mktime($publ_date_h, $publ_date_m, 0, $m[2], $m[1], $m[3]);
-    } else {
+    $publtime = nv_d2u_post($publ_date, $publ_date_h, $publ_date_m, 0);
+    if (empty($publtime)) {
         $publtime = $is_edit ? $row['add_time'] : NV_CURRENTTIME;
     }
 
     // Tính thời gian hết hạn
-    if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m)) {
-        $exptime = mktime($exp_date_h, $exp_date_m, 59, $m[2], $m[1], $m[3]);
+    $exptime = nv_d2u_post($exp_date, $exp_date_h, $exp_date_m, 59);
+    if (!empty($exptime)) {
         if ($exptime <= $publtime) {
             $exptime = $publtime;
         }
@@ -387,7 +380,7 @@ if ($is_edit) {
     $remove_imageforswf = 0;
 
     if (!empty($row['publ_time'])) {
-        $publ_date = date('d/m/Y', $row['publ_time']);
+        $publ_date = nv_u2d_post($row['publ_time']);
         $publ_date_h = (int) date('G', $row['publ_time']);
         $publ_date_m = (int) date('i', $row['publ_time']);
     } else {
@@ -397,7 +390,7 @@ if ($is_edit) {
     }
 
     if (!empty($row['exp_time'])) {
-        $exp_date = date('d/m/Y', $row['exp_time']);
+        $exp_date = nv_u2d_post($row['exp_time']);
         $exp_date_h = (int) date('G', $row['exp_time']);
         $exp_date_m = (int) date('i', $row['exp_time']);
     } else {

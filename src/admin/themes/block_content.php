@@ -216,19 +216,20 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         ];
 
         foreach (array_keys($dtime_details['start_date']) as $key) {
-            empty($dtime_details['start_date'][$key]) && $dtime_details['start_date'][$key] = date('d/m/Y');
-            unset($array_start_date, $array_end_date);
-            preg_match('/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/', $dtime_details['start_date'][$key], $array_start_date);
-            preg_match('/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/', $dtime_details['end_date'][$key], $array_end_date);
-            if (!empty($array_start_date) and !empty($array_end_date)) {
-                $start_time = mktime($dtime_details['start_h'][$key], $dtime_details['start_i'][$key], 0, (int) $array_start_date[1], (int) $array_start_date[0], (int) $array_start_date[2]);
-                $end_time = mktime($dtime_details['end_h'][$key], $dtime_details['end_i'][$key], 0, (int) $array_end_date[1], (int) $array_end_date[0], (int) $array_end_date[2]);
+            if (empty($dtime_details['start_date'][$key])) {
+                $start_time = mktime($dtime_details['start_h'][$key], $dtime_details['start_i'][$key], 0);
+            } else {
+                $start_time = nv_d2u_post($dtime_details['start_date'][$key], $dtime_details['start_h'][$key], $dtime_details['start_i'][$key], 0);
+            }
+            $end_time = nv_d2u_post($dtime_details['end_date'][$key] ?? '', $dtime_details['end_h'][$key], $dtime_details['end_i'][$key], 0);
+            if (!empty($start_time) and !empty($end_time)) {
                 if ($start_time < $end_time) {
+                    // Lưu ngày dạng d/m/Y cố định trong CSDL, khâu hiển thị tự áp theo cấu hình bản địa hóa sau
                     $row['dtime_details'][$start_time . '-' . $end_time] = [
-                        'start_date' => $dtime_details['start_date'][$key],
+                        'start_date' => date('d/m/Y', $start_time),
                         'start_h' => $dtime_details['start_h'][$key],
                         'start_i' => $dtime_details['start_i'][$key],
-                        'end_date' => $dtime_details['end_date'][$key],
+                        'end_date' => date('d/m/Y', $end_time),
                         'end_h' => $dtime_details['end_h'][$key],
                         'end_i' => $dtime_details['end_i'][$key]
                     ];

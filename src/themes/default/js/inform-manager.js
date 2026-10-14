@@ -66,8 +66,10 @@ function initNotificationAction() {
         }
     });
 
+    const dateFormat = nv_jsdate_post.replace('yyyy', 'yy');
+
     $('[name=add_time], [name=exp_time]', $form).datepicker({
-        dateFormat: 'dd/mm/yy',
+        dateFormat: dateFormat,
         changeMonth: true,
         changeYear: true,
         showOtherMonths: true
@@ -76,12 +78,15 @@ function initNotificationAction() {
     $('.sample_exp_time', $form).on('change', function() {
         const val = parseInt($(this).val());
         const origTime = $('[name=add_time]', $form).val();
-        if (val && origTime !== '') {
-            const parts = origTime.split('/');
-            const date = new Date(parts[2], parts[1] - 1, parts[0], 0, 0, 0);
+        let date = null;
+        try {
+            date = $.datepicker.parseDate(dateFormat, origTime);
+        } catch (e) {
+            date = null;
+        }
+        if (val && date) {
             date.setDate(date.getDate() + val);
-            const expTime = date.getDate().toString().padStart(2, '0') + '/' + (date.getMonth() + 1).toString().padStart(2, '0') + '/' + date.getFullYear();
-            $('[name=exp_time]', $form).val(expTime);
+            $('[name=exp_time]', $form).val($.datepicker.formatDate(dateFormat, date));
             $('[name=exp_hour]', $form).val($('[name=add_hour]', $form).val());
             $('[name=exp_min]', $form).val($('[name=add_min]', $form).val());
         }
