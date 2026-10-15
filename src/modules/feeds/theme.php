@@ -25,6 +25,7 @@ function nv_build_rss_subtree($rss_contents, $id = 0)
             $catid = $value['catid'] ?? 0;
             $nodes[] = [
                 'title' => $value['title'],
+                'url' => $value['url'] ?? '',
                 'rss_url' => $value['link'],
                 'atom_url' => $value['link'] . '&amp;type=atom',
                 'children' => $catid > 0 ? nv_build_rss_subtree($rss_contents, $catid) : []
@@ -72,6 +73,7 @@ function nv_rss_main_theme($rsscontents)
 
         $rss_tree[] = [
             'title' => $mod_info['custom_title'],
+            'url' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod_name,
             'rss_url' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod_name . '&amp;' . NV_OP_VARIABLE . '=' . $mod_info['alias']['rss'],
             'atom_url' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod_name . '&amp;' . NV_OP_VARIABLE . '=' . $mod_info['alias']['rss'] . '&amp;type=atom',
             'children' => $children

@@ -210,7 +210,7 @@ function nv_create_table_sys($lang, $init = [])
          ('seek', 'seek', 'seek', 'seek', 'seek', 'Search', '', 1626512400, 1, 0, '', '', '', '', '0', 10, 1, '', 0, 1, 'fa-solid fa-magnifying-glass'),
          ('menu', 'menu', 'menu', 'menu', 'menu', 'Menu Site', '', 1626512400, 0, 1, '', '', '', '', '0', 11, 1, '', 0, 1, 'fa-solid fa-network-wired'),
          ('feeds', 'feeds', 'feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1626512400, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 1, 'fa-solid fa-rss'),
-         ('page', 'page', 'page', 'page', 'page', 'Page', '', 1626512400, 1, 1, '', '', '', '', '0', 13, 1, '', 1, 0, 'fa-solid fa-file-pen'),
+         ('page', 'page', 'page', 'page', 'page', 'Page', '', 1626512400, 1, 1, '', '', '', '', '0', 13, 1, '', 0, 0, 'fa-solid fa-file-pen'),
          ('comment', 'comment', 'comment', 'comment', 'comment', 'Comment', '', 1626512400, 1, 1, '', '', '', '', '0', 14, 1, '', 0, 1, 'fa-solid fa-comments'),
          ('siteterms', 'page', 'siteterms', 'siteterms', 'page', 'Siteterms', '', 1626512400, 1, 1, '', '', '', '', '0', 15, 1, '', 1, 1, 'fa-solid fa-gavel'),
          ('two-step-verification', 'two-step-verification', 'two_step_verification', 'two-step-verification', 'two_step_verification', 'Two-Step Verification', '', 1626512400, 1, 0, '', '', '', '', '0', 17, 1, '', 0, 1, 'fa-solid fa-shield-halved')";

@@ -2,19 +2,21 @@
 <div class="mb-4 richtext-container">{$INTRO}</div>
 {/if}
 
-{function name=render_rss_tree nodes=[]}
+{function name=render_rss_tree nodes=[] level=0}
 <ul>
     {foreach from=$nodes item=node}
     <li>
         <div class="item bg-body-tertiary border rounded-2">
-            <span>{$node.title}</span>
+            {if $level eq 0}<h2 class="fs-6 fw-semibold mb-0">{/if}
+            {if not empty($node.url)}<a href="{$node.url}">{$node.title}</a>{else}<span>{$node.title}</span>{/if}
+            {if $level eq 0}</h2>{/if}
             <span class="btn-group ms-2">
                 <a class="btn btn-sm btn-outline-warning" rel="nofollow" title="RSS" href="{$node.rss_url}"><i class="fa-solid fa-rss"></i><span class="d-none d-sm-inline"> RSS</span></a>
                 <a class="btn btn-sm btn-outline-info" rel="nofollow" title="ATOM" href="{$node.atom_url}"><i class="fa-solid fa-atom"></i><span class="d-none d-sm-inline"> ATOM</span></a>
             </span>
         </div>
         {if not empty($node.children)}
-        {call name=render_rss_tree nodes=$node.children}
+        {call name=render_rss_tree nodes=$node.children level=$level+1}
         {/if}
     </li>
     {/foreach}
