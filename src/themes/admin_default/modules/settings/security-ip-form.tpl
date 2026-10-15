@@ -31,7 +31,7 @@
     </div>
     {if $FORM_TYPE eq 0}
     <div class="row mb-3">
-        <label for="element_area" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('banip_area')}</label>
+        <label for="element_area" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('banip_area')} <span class="text-danger">(*)</span></label>
         <div class="col-sm-8 col-lg-6 col-xxl-5">
             <select type="text" class="form-select w-auto mw-100" id="element_area" name="area">
                 {foreach from=$AREA_LIST key=key item=value}
