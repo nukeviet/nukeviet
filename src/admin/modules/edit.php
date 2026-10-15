@@ -25,38 +25,10 @@ if ($nv_Request->get_title('ajax_icon', 'post', '') === '1') {
             'mess' => $nv_Lang->getGlobal('error_checkss')
         ]);
     }
-    $respon = [
-        'results' => [],
-        'pagination' => [
-            'more' => false
-        ]
-    ];
-
-    $q = str_replace('-', '', strtolower(change_alias($nv_Request->get_title('q', 'post', ''))));
-    $page = $nv_Request->get_absint('page', 'post', 1);
-
-    $icons = [];
-    if (strlen($q) >= 1) {
-        foreach ($fontawesome_icons as $icon) {
-            if (strpos($icon['search'], $q) === false) {
-                continue;
-            }
-            $icons[] = $icon;
-        }
-    }
-    $per_page = 10;
-    $offset = ($page - 1) * $per_page;
-    $more = false;
-    if (isset($icons[$offset])) {
-        $respon['results'] = array_slice($icons, $offset, $per_page);
-        $next_offset = $offset + $per_page;
-        if (isset($icons[$next_offset])) {
-            $more = true;
-        }
-    }
-
-    $respon['pagination']['more'] = $more;
-    nv_jsonOutput($respon);
+    nv_jsonOutput(nv_fontawesome_search(
+        $nv_Request->get_title('q', 'post', ''),
+        $nv_Request->get_page('page', 'post', 1)
+    ));
 }
 
 $data = [];
@@ -218,9 +190,9 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key . '_' . $mo
         $stmt = $db->prepare('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module = :in_module AND show_func=1 ORDER BY subweight ASC');
         $stmt->bindValue(':in_module', $mod, PDO::PARAM_STR);
         $stmt->execute();
-        
+
         $stmt2 = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (:func_id, :layout, :theme)');
-        
+
         while ($_row_func = $stmt->fetch()) {
             $func_id = (int) $_row_func['func_id'];
             if (!in_array($func_id, $array_func_id, true)) {

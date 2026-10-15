@@ -135,6 +135,38 @@ $(function() {
         });
     }
 
+    // Xóa tùy chỉnh chia nhóm menu dọc
+    $('[data-toggle="resetMenuGroups"]').on('click', function(e) {
+        e.preventDefault();
+        let btn = $(this);
+        nvConfirm(btn.data('confirm'), () => {
+            btn.prop('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: btn.data('url') + '&nocache=' + new Date().getTime(),
+                data: {
+                    checkss: btn.data('checkss'),
+                    reset: 1
+                },
+                dataType: 'json',
+                cache: false,
+                success: function(data) {
+                    if (data.status != 'OK') {
+                        btn.prop('disabled', false);
+                        nvToast(data.mess, 'error');
+                        return;
+                    }
+                    location.reload();
+                },
+                error: function(xhr, text, err) {
+                    btn.prop('disabled', false);
+                    nvToast(text, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
+        });
+    });
+
     // Đóng mở thanh breadcrumb
     $('[data-toggle="breadcrumb"]').on('click', function(e) {
         e.preventDefault();
@@ -358,7 +390,9 @@ $(function() {
         var subMenu = menu.next();
         if ((isCollapsibleLeftSidebar() && menu.parent().parent().is('.sidebar-elements') && li.is('.parent')) || menu.attr('href') == '#') {
             e.preventDefault();
-            if (subMenu.length && subMenu.hasClass('visible')) {
+            // Dạng đầy đủ: bấm lại vào menu đang mở thì đóng
+            let isFull = $.isSm() || !isCollapsibleLeftSidebar();
+            if (subMenu.length && (subMenu.hasClass('visible') || (isFull && li.hasClass('open')))) {
                 closeLeftSidebarSub(subMenu, menu);
             } else {
                 openLeftSidebarSub(menu);

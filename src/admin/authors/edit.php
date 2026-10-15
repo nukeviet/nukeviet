@@ -120,6 +120,12 @@ $adminThemes = array_merge($adminThemes, nv_scandir(NV_ROOTDIR . '/themes', $glo
 unset($adminThemes[0]);
 $_csrf_key = $csrf_key . '_' . $admin_id;
 
+// Các ngôn ngữ mà admin này có cấu hình chia nhóm menu dọc riêng, điều hành chung trở lên được xóa giúp admin khác
+$menu_groups_langs = [];
+if (defined('NV_IS_SPADMIN') and $row['admin_id'] != $admin_info['admin_id']) {
+    $menu_groups_langs = $db->query('SELECT DISTINCT lang FROM ' . NV_AUTHORS_GLOBALTABLE . '_vars WHERE admin_id=' . $admin_id . " AND config_name='menu_groups'")->fetchAll(PDO::FETCH_COLUMN);
+}
+
 $editors = [];
 $dirs = nv_scandir(NV_ROOTDIR . '/' . NV_EDITORSDIR, '/^[a-zA-Z0-9_\-]+$/');
 if (!empty($dirs)) {
@@ -435,6 +441,18 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         ];
     }
 
+    // Xóa cấu hình chia nhóm menu dọc riêng ở các ngôn ngữ được chọn để admin dùng lại mặc định chung
+    $del_langs = array_values(array_intersect($menu_groups_langs, $nv_Request->get_typed_array('del_menu_groups', 'post', 'title', [])));
+    if (!empty($del_langs)) {
+        $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_vars WHERE admin_id=' . $admin_id . " AND config_name='menu_groups' AND lang IN (" . implode(', ', array_map([$db, 'quote'], $del_langs)) . ')');
+        $lang_names = fn($langs) => implode(', ', array_map(fn($lang) => $language_array[$lang]['name'] ?? $lang, $langs));
+        $result['change']['menu_groups'] = [
+            $nv_Lang->getModule('menu_groups_personal_delete'),
+            $nv_Lang->getModule('menu_groups_personal_has', $lang_names($menu_groups_langs)),
+            $nv_Lang->getModule('menu_groups_personal_deleted', $lang_names($del_langs))
+        ];
+    }
+
     $log_note = [];
     $log_note[] = 'Username: ' . $row_user['username'];
     foreach ($result['change'] as $change) {
@@ -527,6 +545,7 @@ $tpl->assign('DOWNGRADE_TO_MODADMIN', $downgrade_to_modadmin);
 $tpl->assign('MODULES', $modules);
 $tpl->assign('AFTER_MODULES', $after_modules);
 $tpl->assign('LEV_EXPIRED', $lev_expired);
+$tpl->assign('MENU_GROUPS_LANGS', $menu_groups_langs);
 
 $tpl->assign('ADMINTHEMES', $adminThemes);
 $tpl->assign('EDITORS', $editors);

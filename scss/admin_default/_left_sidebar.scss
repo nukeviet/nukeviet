@@ -149,6 +149,11 @@
       position: relative;
     }
 
+    // Canh trái thẻ menu cấp 4 (module trong nhóm)
+    >li ul li>ul>li>ul>li>a {
+      padding-left: 3.375rem;
+    }
+
     li.open>ul {
       display: block;
     }
@@ -280,6 +285,10 @@
 
                     >ul>li>a {
                       padding-left: 2.8125rem;
+                    }
+
+                    >ul>li>ul>li>a {
+                      padding-left: 4.0625rem;
                     }
                   }
                 }

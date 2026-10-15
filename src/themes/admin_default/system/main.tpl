@@ -126,6 +126,23 @@
         </div>
     </div>
 </header>
+{* Submenu của một module khác trong menu dọc *}
+{function name=leftMenuModSubs row=[]}
+{foreach from=$row['subs'] item=smenutitle key=smenukey}
+{if is_array($smenutitle)}
+<li class="parent">
+    <a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$row.name}&amp;{$NV_OP_VARIABLE}={$smenukey}" title="{$smenutitle.title}"><span>{$smenutitle.title}</span><span class="toggle"><i class="fas"></i></span></a>
+    <ul class="sub-menu">
+        {foreach from=$smenutitle.submenu item=sublv2 key=keysublv2}
+        <li><a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$row.name}&amp;{$NV_OP_VARIABLE}={$keysublv2}" title="{$sublv2}"><span>{$sublv2}</span></a></li>
+        {/foreach}
+    </ul>
+</li>
+{else}
+<li><a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$row.name}&amp;{$NV_OP_VARIABLE}={$smenukey}" title="{$smenutitle}">{$smenutitle}</a></li>
+{/if}
+{/foreach}
+{/function}
 <nav class="left-sidebar border-end" id="left-sidebar">
     <div class="left-sidebar-wrapper">
         <div class="left-sidebar-in-sm border-bottom">
@@ -200,8 +217,36 @@
                             {/if}
                         </li>
                         {/if}
-                        {if !empty($MOD_MENU)}
+                        {if !empty($MENU_GROUPS) or !empty($MOD_MENU)}
                         <li class="divider">{$LANG->get('interface_other_menu')}</li>
+                        {/if}
+                        {foreach from=$MENU_GROUPS item=mgroup}
+                        <li class="parent">
+                            <a href="#" title="{$mgroup.title}"><i class="{$mgroup.icon} icon" title="{$mgroup.title}" data-bs-trigger="hover" data-bs-placement="right"></i><span>{$mgroup.title}</span><span class="toggle"><i class="fas"></i></span></a>
+                            <ul class="sub-menu">
+                                <li class="title">{$mgroup.title}</li>
+                                <li class="nav-items">
+                                    <div class="nv-left-sidebar-scroller">
+                                        <div class="content">
+                                            <ul>
+                                                {foreach from=$mgroup.mods item=rowmenu}
+                                                <li{if !empty($rowmenu['subs'])} class="parent"{/if}>
+                                                    <a href="{$rowmenu.link}" title="{$rowmenu.title}"><span>{$rowmenu.title}</span>{if !empty($rowmenu['subs'])}<span class="toggle"><i class="fas"></i></span>{/if}</a>
+                                                    {if !empty($rowmenu['subs'])}
+                                                    <ul class="sub-menu">
+                                                        {call name=leftMenuModSubs row=$rowmenu}
+                                                    </ul>
+                                                    {/if}
+                                                </li>
+                                                {/foreach}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        {/foreach}
+                        {if !empty($MOD_MENU)}
                         {foreach from=$MOD_MENU item=rowmenu}
                         <li{if !empty($rowmenu['subs'])} class="parent"{/if}>
                             <a href="{$rowmenu.link}" title="{$rowmenu.title}"><i class="{$rowmenu.icon} icon" title="{$rowmenu.title}" data-bs-trigger="hover" data-bs-placement="right"></i><span>{$rowmenu.title}</span>{if !empty($rowmenu['subs'])}<span class="toggle"><i class="fas"></i></span>{/if}</a>
@@ -213,20 +258,7 @@
                                         <div class="content">
                                             <ul>
                                                 <li class="f-link"><a href="{$rowmenu.link}">{$LANG->get('Home')}</a></li>
-                                                {foreach from=$rowmenu['subs'] item=smenutitle key=smenukey}
-                                                {if is_array($smenutitle)}
-                                                <li class="parent">
-                                                    <a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$rowmenu.name}&amp;{$NV_OP_VARIABLE}={$smenukey}" title="{$smenutitle.title}"><span>{$smenutitle.title}</span><span class="toggle"><i class="fas"></i></span></a>
-                                                    <ul class="sub-menu">
-                                                        {foreach from=$smenutitle.submenu item=sublv2 key=keysublv2}
-                                                        <li><a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$rowmenu.name}&amp;{$NV_OP_VARIABLE}={$keysublv2}" title="{$sublv2}"><span>{$sublv2}</span></a></li>
-                                                        {/foreach}
-                                                    </ul>
-                                                </li>
-                                                {else}
-                                                <li><a href="{$NV_BASE_ADMINURL}index.php?{$NV_LANG_VARIABLE}={$NV_LANG_DATA}&amp;{$NV_NAME_VARIABLE}={$rowmenu.name}&amp;{$NV_OP_VARIABLE}={$smenukey}" title="{$smenutitle}">{$smenutitle}</a></li>
-                                                {/if}
-                                                {/foreach}
+                                                {call name=leftMenuModSubs row=$rowmenu}
                                             </ul>
                                         </div>
                                     </div>
@@ -333,6 +365,17 @@
                     </div>
                 </div>
             </div>
+            {if not empty($MENU_GROUPS_URL)}
+            <div class="mb-4">
+                <div class="fw-medium border-bottom pb-2 mb-3">{$LANG->getGlobal('menu_groups')}</div>
+                <div class="d-grid gap-2">
+                    <a href="{$MENU_GROUPS_URL}" class="btn btn-secondary"><i class="fa-solid fa-layer-group"></i> {$LANG->getGlobal('menu_groups_customize')}</a>
+                    {if $MENU_GROUPS_PERSONAL}
+                    <button type="button" class="btn btn-outline-danger" data-toggle="resetMenuGroups" data-url="{$MENU_GROUPS_URL}" data-checkss="{$MENU_GROUPS_CHECKSS}" data-confirm="{$LANG->getGlobal('menu_groups_reset_confirm')}"><i class="fa-solid fa-rotate-left"></i> {$LANG->getGlobal('menu_groups_reset')}</button>
+                    {/if}
+                </div>
+            </div>
+            {/if}
         </div>
     </div>
 </aside>

@@ -49,6 +49,20 @@
                     </select>
                 </div>
             </div>
+            {if not empty($MENU_GROUPS_LANGS)}
+            <div class="row mb-3">
+                <div class="col-12 col-sm-3 col-form-label text-sm-end pt-0">{$LANG->getModule('menu_groups_personal_delete')}</div>
+                <div class="col-12 col-sm-8 col-lg-6 col-xxl-5">
+                    {foreach from=$MENU_GROUPS_LANGS item=mglang}
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="del_menu_groups[]" value="{$mglang}" id="element_del_menu_groups_{$mglang}">
+                        <label class="form-check-label" for="element_del_menu_groups_{$mglang}">{$LANGUAGE_ARRAY[$mglang].name ?? $mglang}</label>
+                    </div>
+                    {/foreach}
+                    <div class="form-text">{$LANG->getModule('menu_groups_personal_delete_note')}</div>
+                </div>
+            </div>
+            {/if}
             {if $smarty.const.NV_IS_SPADMIN and not empty($GCONFIG.file_allowed_ext)}
             <div class="row mb-3">
                 <div class="col-12 col-sm-3 col-form-label text-sm-end">{$LANG->getModule('allow_files_type')}</div>

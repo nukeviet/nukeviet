@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN')) {
     exit('Stop!!!');
 }
 
-$allow_func = ['main', 'edit', '2step'];
+$allow_func = ['main', 'edit', '2step', 'menu-groups'];
 
 if (empty($global_config['spadmin_add_admin']) and $global_config['idsite'] > 0) {
     // Fix add admin for subsite
@@ -26,6 +26,8 @@ if (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['s
     $allow_func[] = 'del';
     $submenu['add'] = $nv_Lang->getModule('menuadd');
 }
+
+$submenu['menu-groups'] = $nv_Lang->getModule('menu_groups');
 
 if (defined('NV_IS_GODADMIN')) {
     $submenu['module'] = $nv_Lang->getModule('module_admin');

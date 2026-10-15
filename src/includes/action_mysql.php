@@ -241,6 +241,7 @@ function nv_create_table_sys($lang, $init = [])
          ('" . $lang . "', 'global', 'name_show', '" . ($lang != 'vi' ? 1 : 0) . "'),
          ('" . $lang . "', 'global', 'disable_site_content', 'For technical reasons Web site temporary not available. we are very sorry for any inconvenience!'),
          ('" . $lang . "', 'global', 'opensearch_link', ''),
+         ('" . $lang . "', 'global', 'admin_menu_groups', ''),
          ('" . $lang . "', 'global', 'data_warning', '0'),
          ('" . $lang . "', 'global', 'antispam_warning', '0'),
          ('" . $lang . "', 'global', 'data_warning_content', ''),

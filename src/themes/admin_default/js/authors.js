@@ -286,4 +286,106 @@ $(function() {
             });
         });
     });
+
+    // Tùy chỉnh chia nhóm menu dọc
+    const mgForm = $('#form-menu-groups');
+    if (mgForm.length) {
+        const mgList = $('#menu-groups-list');
+
+        // Hiển thị icon trong ô chọn icon
+        const mgIconTemplate = state => {
+            if (!state.id) {
+                return state.text;
+            }
+            const ele = $('<div class="d-flex align-items-center"><i class="fa-fw"></i><div class="ms-2"></div></div>');
+            $('i', ele).addClass(state.id);
+            $('div', ele).text(state.text);
+            return ele;
+        };
+
+        // Đồng bộ module đã chọn vào input ẩn, đánh lại chỉ số dòng để server báo lỗi đúng nhóm
+        const mgSync = () => {
+            $('.menu-group-item', mgList).each(function(index) {
+                $(this).attr('data-group-index', index);
+                $('[name="group_mods[]"]', this).val(($('[data-toggle="groupMods"]', this).val() || []).join(','));
+            });
+            $('#menu-groups-empty').prop('hidden', $('.menu-group-item', mgList).length > 0);
+        };
+
+        const mgInit = item => {
+            $('[data-toggle="groupIcon"]', item).select2({
+                width: '100%',
+                allowClear: true,
+                minimumInputLength: 1,
+                ajax: {
+                    delay: 250,
+                    cache: false,
+                    type: 'POST',
+                    url: mgForm.attr('action').replace(/&amp;/g, '&') + '&nocache=' + new Date().getTime(),
+                    dataType: 'json',
+                    data: params => {
+                        return {
+                            q: params.term,
+                            ajax_icon: 1,
+                            checkss: mgForm.data('checkss'),
+                            page: params.page || 1
+                        };
+                    }
+                },
+                templateResult: mgIconTemplate,
+                templateSelection: mgIconTemplate
+            });
+
+            $('[data-toggle="groupMods"]', item).select2({
+                width: '100%'
+            }).on('select2:select', function(e) {
+                // Mỗi module chỉ thuộc một nhóm: chọn ở nhóm này thì bỏ khỏi nhóm khác
+                const mod = e.params.data.id;
+                $('[data-toggle="groupMods"]', mgList).not(this).each(function() {
+                    const vals = $(this).val() || [];
+                    if (vals.includes(mod)) {
+                        $(this).val(vals.filter(val => val !== mod)).trigger('change');
+                    }
+                });
+                mgSync();
+            }).on('select2:unselect', mgSync);
+        };
+
+        $('.menu-group-item', mgList).each(function() {
+            mgInit($(this));
+        });
+        mgSync();
+
+        // Thêm nhóm, chỉ số tăng dần để id của các ô nhập không trùng nhau
+        let mgIndex = $('.menu-group-item', mgList).length;
+        $('[data-toggle="addMenuGroup"]').on('click', function(e) {
+            e.preventDefault();
+            const item = $($('#menu-group-tpl').html().replace(/__IDX__/g, mgIndex++));
+            mgList.append(item);
+            mgInit(item);
+            mgSync();
+            $('[name="group_title[]"]', item).trigger('focus');
+        });
+
+        // Xóa nhóm
+        mgList.on('click', '[data-toggle="delMenuGroup"]', function(e) {
+            e.preventDefault();
+            const item = $(this).closest('.menu-group-item');
+            $('select', item).select2('destroy');
+            item.remove();
+            mgSync();
+        });
+
+        // Đổi thứ tự nhóm
+        mgList.on('click', '[data-toggle="moveMenuGroup"]', function(e) {
+            e.preventDefault();
+            const item = $(this).closest('.menu-group-item');
+            if ($(this).data('dir') == 'up') {
+                item.prev('.menu-group-item').before(item);
+            } else {
+                item.next('.menu-group-item').after(item);
+            }
+            mgSync();
+        });
+    }
 });

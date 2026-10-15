@@ -1048,3 +1048,91 @@ function nv_store_verify_checksum(string $file, array $body): string
 
     return '';
 }
+
+/**
+ * Tìm icon Font Awesome theo từ khóa, trả về array cho json chuẩn select2
+ *
+ * @param string $q Từ khóa tìm kiếm
+ * @param int $page Trang kết quả, bắt đầu từ 1
+ * @return array
+ */
+function nv_fontawesome_search(string $q, int $page = 1): array
+{
+    require NV_ROOTDIR . '/includes/fontawesome.php';
+
+    $respon = [
+        'results' => [],
+        'pagination' => [
+            'more' => false
+        ]
+    ];
+
+    $q = str_replace('-', '', strtolower(change_alias($q)));
+    $page = max(1, $page);
+
+    $icons = [];
+    if (strlen($q) >= 1) {
+        foreach ($fontawesome_icons as $icon) {
+            if (strpos($icon['search'], $q) === false) {
+                continue;
+            }
+            $icons[] = $icon;
+        }
+    }
+    $per_page = 10;
+    $offset = ($page - 1) * $per_page;
+    if (isset($icons[$offset])) {
+        $respon['results'] = array_slice($icons, $offset, $per_page);
+        $respon['pagination']['more'] = isset($icons[$offset + $per_page]);
+    }
+
+    return $respon;
+}
+
+/**
+ * Chuẩn hóa cấu hình chia nhóm menu dọc khu vực quản trị
+ *
+ * Module không có trong $allowMods bị bỏ qua, mỗi module chỉ thuộc nhóm đầu tiên chứa nó,
+ * module trong nhóm sắp xếp theo thứ tự của $allowMods
+ *
+ * @param string|array $groups Mảng hoặc chuỗi JSON đã lưu, dạng [{"title": "", "icon": "", "mods": ["news"]}]
+ * @param array $allowMods Danh sách tên module được phép
+ * @param bool $keepEmpty Giữ lại nhóm không có module nào
+ * @return array
+ */
+function nv_admin_menu_groups(string|array $groups, array $allowMods, bool $keepEmpty = false): array
+{
+    if (is_string($groups)) {
+        $groups = $groups === '' ? [] : json_decode($groups, true);
+    }
+    if (!is_array($groups)) {
+        return [];
+    }
+
+    $weights = array_flip(array_values($allowMods));
+    $used = $result = [];
+    foreach ($groups as $group) {
+        if (!is_array($group) or !isset($group['title']) or !is_string($group['title']) or $group['title'] === '') {
+            continue;
+        }
+        $mods = [];
+        foreach ((array) ($group['mods'] ?? []) as $mod) {
+            if (is_string($mod) and isset($weights[$mod]) and !isset($used[$mod])) {
+                $used[$mod] = true;
+                $mods[$mod] = $weights[$mod];
+            }
+        }
+        if (empty($mods) and !$keepEmpty) {
+            continue;
+        }
+        asort($mods);
+        $icon = $group['icon'] ?? '';
+        $result[] = [
+            'title' => $group['title'],
+            'icon' => (is_string($icon) and preg_match('/^[a-z0-9\- ]+$/', $icon)) ? $icon : '',
+            'mods' => array_keys($mods)
+        ];
+    }
+
+    return $result;
+}

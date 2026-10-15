@@ -26481,6 +26481,23 @@ textarea.form-control-lg {
   left: 3px;
 }
 
+.select2-container .select2-selection--multiple .select2-selection__clear, .select2-container .select2-selection--single .select2-selection__clear {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  padding: 0 0.25rem;
+  font-size: 1.25em;
+  line-height: 1;
+  color: var(--bs-secondary-color);
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.select2-container .select2-selection--multiple .select2-selection__clear:hover, .select2-container .select2-selection--single .select2-selection__clear:hover {
+  color: var(--bs-body-color);
+}
+
 .select2-container {
   display: block;
   position: relative;
@@ -26490,6 +26507,7 @@ textarea.form-control-lg {
 }
 .select2-container .select2-selection--single {
   display: block;
+  position: relative;
 }
 .select2-container .select2-selection--single .select2-selection__rendered {
   --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23384650' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
@@ -26518,7 +26536,10 @@ textarea.form-control-lg {
   }
 }
 .select2-container .select2-selection--single .select2-selection__clear {
-  position: relative;
+  left: 2rem;
+}
+.select2-container .select2-selection--single.select2-selection--clearable .select2-selection__rendered {
+  padding-left: 3.5rem;
 }
 .select2-container .select2-selection--single .select2-selection__placeholder {
   color: var(--bs-secondary-color);
@@ -26542,11 +26563,18 @@ textarea.form-control-lg {
   box-shadow: 0 0;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   display: block;
+  position: relative;
 }
 @media (prefers-reduced-motion: reduce) {
   .select2-container .select2-selection--multiple {
     transition: none;
   }
+}
+.select2-container .select2-selection--multiple .select2-selection__clear {
+  left: 0.5rem;
+}
+.select2-container .select2-selection--multiple.select2-selection--clearable {
+  padding-left: 2rem;
 }
 .select2-container .select2-selection--multiple .select2-selection__rendered {
   list-style: none;

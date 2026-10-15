@@ -28,3 +28,7 @@ $lang_global['text_direction'] = 'Hướng giao diện';
 $lang_global['text_direction_ltr'] = 'LTR';
 $lang_global['text_direction_rtl'] = 'RTL';
 $lang_global['toggle_left_sidebar'] = 'Mở rộng, thu gọn thanh menu dọc';
+$lang_global['menu_groups'] = 'Menu dọc';
+$lang_global['menu_groups_customize'] = 'Tùy chỉnh nhóm module';
+$lang_global['menu_groups_reset'] = 'Xóa tùy chỉnh cá nhân';
+$lang_global['menu_groups_reset_confirm'] = 'Xóa nhóm module bạn đã tùy chỉnh để dùng lại mặc định chung?';

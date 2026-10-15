@@ -107,7 +107,7 @@ function nv_admin_theme(?string $contents, $head_site = 1)
     foreach ($admin_menu_mods as $m => $v) {
         if ($m != $module_name) {
             // Các module khác
-            $array_mod_menu[] = [
+            $array_mod_menu[$m] = [
                 'name' => $m,
                 'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m,
                 'title' => $v,
@@ -153,8 +153,35 @@ function nv_admin_theme(?string $contents, $head_site = 1)
             }
         }
     }
+
+    // Gom các module khác vào nhóm: ưu tiên cấu hình riêng của admin, sau đó tới mặc định chung
+    $array_menu_groups = [];
+    $menu_groups = nv_admin_menu_groups($theme_config['menu_groups'] ?? ($global_config['admin_menu_groups'] ?? ''), array_keys($array_mod_menu));
+    foreach ($menu_groups as $group) {
+        $array_group = [
+            'title' => $group['title'],
+            'icon' => $group['icon'] ?: 'fa-solid fa-folder',
+            'mods' => []
+        ];
+        foreach ($group['mods'] as $m) {
+            $array_group['mods'][] = $array_mod_menu[$m];
+            unset($array_mod_menu[$m]);
+        }
+        $array_menu_groups[] = $array_group;
+    }
+    $tpl->assign('MENU_GROUPS', $array_menu_groups);
     $tpl->assign('MOD_MENU', $array_mod_menu);
     $tpl->assign('MOD_CURRENT', $array_mod_current);
+
+    // Nút tùy chỉnh nhóm module ở right-sidebar
+    $menu_groups_url = '';
+    if (isset($admin_mods['authors'])) {
+        $menu_groups_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;' . NV_OP_VARIABLE . '=menu-groups';
+        // Khóa CSRF giống $csrf_key của authors/menu-groups
+        $tpl->assign('MENU_GROUPS_CHECKSS', csrf_create($admin_info['admin_id'] . '_authors_menu-groups'));
+        $tpl->assign('MENU_GROUPS_PERSONAL', isset($theme_config['menu_groups']));
+    }
+    $tpl->assign('MENU_GROUPS_URL', $menu_groups_url);
 
     // Icon site
     $site_favicon = NV_BASE_SITEURL . 'favicon.ico';

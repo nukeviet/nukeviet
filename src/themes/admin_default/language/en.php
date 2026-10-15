@@ -28,3 +28,7 @@ $lang_global['text_direction'] = 'Direction';
 $lang_global['text_direction_ltr'] = 'LTR';
 $lang_global['text_direction_rtl'] = 'RTL';
 $lang_global['toggle_left_sidebar'] = 'Toggle left sidebar';
+$lang_global['menu_groups'] = 'Vertical menu';
+$lang_global['menu_groups_customize'] = 'Customize module groups';
+$lang_global['menu_groups_reset'] = 'Remove personal customization';
+$lang_global['menu_groups_reset_confirm'] = 'Remove your customized module groups and use the common default again?';

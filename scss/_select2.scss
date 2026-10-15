@@ -1,3 +1,22 @@
+// Nút xóa lựa chọn khi bật allowClear, select2 chèn vào đầu .select2-selection
+%select2-selection-clear {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  padding: 0 .25rem;
+  font-size: 1.25em;
+  line-height: 1;
+  color: var(--#{$prefix}secondary-color);
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--#{$prefix}body-color);
+  }
+}
+
 .select2-container {
   display: block;
   position: relative;
@@ -8,6 +27,7 @@
 
   .select2-selection--single {
     display: block;
+    position: relative;
 
     .select2-selection__rendered {
       --#{$prefix}form-select-bg-img: #{escape-svg($form-select-indicator)};
@@ -34,8 +54,14 @@
       overflow: hidden;
     }
 
+    // Đặt bên trái mũi tên chọn
     .select2-selection__clear {
-      position: relative;
+      @extend %select2-selection-clear;
+      right: $form-select-indicator-padding - .25rem;
+    }
+
+    &.select2-selection--clearable .select2-selection__rendered {
+      padding-right: $form-select-indicator-padding + 1.25rem;
     }
 
     .select2-selection__placeholder {
@@ -63,6 +89,16 @@
     @include transition($form-select-transition);
 
     display: block;
+    position: relative;
+
+    .select2-selection__clear {
+      @extend %select2-selection-clear;
+      right: .5rem;
+    }
+
+    &.select2-selection--clearable {
+      padding-right: 2rem;
+    }
 
     .select2-selection__rendered {
       list-style: none;
