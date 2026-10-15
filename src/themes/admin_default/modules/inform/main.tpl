@@ -114,7 +114,7 @@
                     {foreachelse}
                     <tr>
                         <td colspan="8" class="text-center text-muted py-5">
-                            <i class="fa-solid fa-bell-slash fa-2x d-block mb-2"></i>
+                            <i class="fa-solid fa-bell-slash fa-2x d-block mx-auto mb-2"></i>
                             {$LANG->getModule('no_notifications')}
                         </td>
                     </tr>
@@ -133,7 +133,7 @@
 </div>
 
 {* Modal thêm/sửa thông báo *}
-<div class="modal fade" id="inform-action-modal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="inform-action-modal" tabindex="-1" aria-hidden="true" data-bs-focus="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -205,7 +205,12 @@ $(function() {
                     changeYear: true,
                     showOtherMonths: true,
                     showButtonPanel: true,
-                    isRTL: $('html').attr('dir') === 'rtl'
+                    isRTL: $('html').attr('dir') === 'rtl',
+                    beforeShow: function(input, inst) {
+                        setTimeout(function() {
+                            inst.dpDiv[0].style.setProperty('z-index', '1056', 'important');
+                        }, 0);
+                    }
                 });
 
                 $('[data-toggle="focusDate"]', body).on('click', function() {
