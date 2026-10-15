@@ -34,6 +34,9 @@ define('NV_BASE_MOD_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '
 $global_config['current_theme_type'] = 'r';
 
 if ($op != 'cleardata') {
+    // Các trang thống kê dùng chung template ngoài site nên lấy tpl từ giao diện mặc định
+    $global_config['module_theme'] = NV_DEFAULT_SITE_THEME;
+
     // Xử lý đoạn này để ép load js, css ngoài site
     $_module_name = $module_name;
     $module_name = 'admin_statistics';
