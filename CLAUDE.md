@@ -73,6 +73,7 @@ npm run core-css   # Build CSS Core
   - Chỉ dùng dấu gạch ngang ngắn `-`, không dùng gạch ngang dài `—` hay gạch nối trung `–`
 - Core Namespace: Composer PSR-4 tại `src/includes/vendor/vinades/nukeviet/` (`NukeViet\Core\Request`, v.v.)
 - Strict Types: dùng `declare(strict_types=1)` cho các class thư viện mới
+- Template Smarty: hằng số (`NV_IS_ADMIN_MODULE`, `NV_IS_SPADMIN`, `NV_BASE_ADMINURL`...) dùng thẳng `{$smarty.const.TEN_HANG}` trong tpl, không `$tpl->assign()` lại từ PHP
 - Frontend Assets: SCSS qua NPM - không chỉnh sửa file `.css` đã compile trực tiếp
 - `src/assets/js/site.js` dùng chung mọi theme ngoài site: không gọi thư viện của giao diện (`bootstrap.*`, Font Awesome...), kể cả có kiểm tra `typeof`. Theme có thể dùng Bootstrap 3, 4, 5. Cần thư viện thì đặt code ở JS riêng của theme
 - Testing: Codeception - `php vendor/bin/codecept run Unit`

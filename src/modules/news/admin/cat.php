@@ -97,6 +97,10 @@ if (!empty($savecat)) {
     $viewdescription = $nv_Request->get_int('viewdescription', 'post', 0);
     $featured = $nv_Request->get_int('featured', 'post', 0);
 
+    // Chuyển đến trang phân quyền chuyên mục sau khi lưu
+    $goto_admins = (defined('NV_IS_ADMIN_MODULE') and $nv_Request->get_int('goto_admins', 'post', 0) == 1);
+    $cat_admins_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat-admins&catid=';
+
     // Xử lý liên kết tĩnh
     $_alias = $nv_Request->get_title('alias', 'post', '');
     $_alias = ($_alias == '') ? get_mod_alias($title, 'cat', $catid) : get_mod_alias($_alias, 'cat', $catid);
@@ -206,7 +210,7 @@ if (!empty($savecat)) {
             nv_fix_cat_order();
 
             if (!defined('NV_IS_ADMIN_MODULE')) {
-                $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content) VALUES (:userid, :catid, 1, 1, 1, 1, 1)');
+                $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, app_content) VALUES (:userid, :catid, 1, 1, 1, 1, 1, 1)');
                 $stmt->bindValue(':userid', $admin_id, PDO::PARAM_INT);
                 $stmt->bindValue(':catid', $newcatid, PDO::PARAM_INT);
                 $stmt->execute();
@@ -219,9 +223,10 @@ if (!empty($savecat)) {
 
             $nv_Cache->delMod($module_name);
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('add_cat'), $title, $admin_info['userid']);
+
             nv_jsonOutput([
                 'status' => 'OK',
-                'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid
+                'redirect' => $goto_admins ? $cat_admins_url . $newcatid : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid
             ]);
         }
         nv_jsonOutput([
@@ -284,7 +289,7 @@ if (!empty($savecat)) {
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('edit_cat'), $title, $admin_info['userid']);
             nv_jsonOutput([
                 'status' => 'OK',
-                'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid
+                'redirect' => $goto_admins ? $cat_admins_url . $catid : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid
             ]);
         }
         nv_jsonOutput([
@@ -504,6 +509,9 @@ while ($_row_cat = $stmt_cat->fetch()) {
     if (defined('NV_IS_ADMIN_MODULE') || ($_row_cat['parentid'] > 0 && isset($array_cat_admin[$admin_id][$_row_cat['parentid']]) && $array_cat_admin[$admin_id][$_row_cat['parentid']]['admin'] == 1)) {
         $weight_disabled = false;
         $admin_funcs['delete'] = 1;
+    }
+    if (defined('NV_IS_ADMIN_MODULE')) {
+        $admin_funcs['admins'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat-admins&amp;catid=' . $_row_cat['catid'];
     }
 
     if ($_row_cat['status'] > $global_code_defined['cat_locked_status']) {

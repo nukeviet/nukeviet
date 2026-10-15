@@ -1610,7 +1610,7 @@ $(function () {
         });
     });
 
-    if (nv_func_name === 'admins') {
+    if (nv_func_name === 'admins' || nv_func_name === 'cat-admins') {
         // Cuộn xuống form khi đang sửa quyền hạn của người dùng.
         const adminPermissionForm = $('#admin-permission-form');
         if (adminPermissionForm.length && adminPermissionForm.data('is-edit')) {

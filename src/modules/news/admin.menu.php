@@ -50,6 +50,14 @@ if ($is_refresh) {
     $array_cat_admin = nv_news_array_cat_admin($module_data);
 }
 
+// Quản trị viên module chỉ được phân quyền theo chuyên mục (không có quyền Quản lý module, Toàn quyền module)
+$array_cat_admin_userids = [];
+foreach (array_filter(array_map('intval', explode(',', (string) ($module_info['admins'] ?? '')))) as $userid_i) {
+    if (!(isset($array_cat_admin[$userid_i][0]) and $array_cat_admin[$userid_i][0]['admin'] >= 1)) {
+        $array_cat_admin_userids[] = $userid_i;
+    }
+}
+
 $admin_id = $admin_info['admin_id'];
 $NV_IS_ADMIN_MODULE = false;
 $NV_IS_ADMIN_FULL_MODULE = false;
@@ -99,6 +107,7 @@ if ($NV_IS_ADMIN_MODULE) {
     $allow_func[] = 'cat';
     $allow_func[] = 'cat-change';
     $allow_func[] = 'cat-del';
+    $allow_func[] = 'cat-admins';
 
     $submenu['tags'] = $nv_Lang->getModule('tags_manage');
     $allow_func[] = 'tags';

@@ -134,6 +134,9 @@
                                 {if isset($row.adminfuncs.edit)}
                                 <a href="{$row.adminfuncs.edit}" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" title="{$LANG->getGlobal('edit')}" aria-label="{$LANG->getGlobal('edit')}"><i class="fa-solid fa-pencil"></i></a>
                                 {/if}
+                                {if isset($row.adminfuncs.admins)}
+                                <a href="{$row.adminfuncs.admins}" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="{$LANG->getModule('cat_admins')}" aria-label="{$LANG->getModule('cat_admins')}"><i class="fa-solid fa-user-shield"></i></a>
+                                {/if}
                                 {if isset($row.adminfuncs.delete)}
                                 <button type="button" class="btn btn-sm btn-danger" data-toggle="delete-cat" data-id="{$row.catid}" data-checkss="{$row.checkss}" data-bs-toggle="tooltip" title="{$LANG->getGlobal('delete')}" aria-label="{$LANG->getGlobal('delete')}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i></button>
                                 {/if}
@@ -357,6 +360,14 @@
             <input type="hidden" name="checkss" value="{$CHECKSS}">
             <input type="hidden" name="catid" value="{$CATID}">
             <input type="hidden" name="parentid_old" value="{$PARENTID}">
+            {if $smarty.const.NV_IS_ADMIN_MODULE}
+            <div class="mb-3">
+                <div class="form-check d-inline-block">
+                    <input class="form-check-input" type="checkbox" name="goto_admins" value="1" id="goto_admins">
+                    <label class="form-check-label" for="goto_admins">{$LANG->getModule('cat_admins_goto')}</label>
+                </div>
+            </div>
+            {/if}
             <button type="submit" class="btn btn-primary">
                 <i class="fa-solid fa-floppy-disk"></i> {$LANG->getGlobal('save')}
             </button>
