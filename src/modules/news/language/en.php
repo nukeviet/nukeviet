@@ -445,6 +445,7 @@ $lang_module['permissions_pub_content'] = 'Posted article';
 $lang_module['permissions_app_content'] = 'Approved article';
 $lang_module['permissions_edit_content'] = 'Edit article';
 $lang_module['permissions_del_content'] = 'Delete article';
+$lang_module['permissions_toggle_column'] = 'Click to select or deselect the whole column';
 $lang_module['permissions_pub_error'] = 'Error: You can not post messages in category: %1$s';
 $lang_module['permissions_sendspadmin_error'] = 'Error: You are not allowed to post to the editors at Category: %1$s';
 $lang_module['permissions_pub_show_error'] = 'Error: You do not have to display the articles in Category: %1$s';

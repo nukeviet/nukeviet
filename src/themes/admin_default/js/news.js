@@ -1627,8 +1627,8 @@ $(function () {
             }
         });
 
-        // Double click tiêu đề cột để chọn hoặc bỏ chọn toàn bộ quyền trong cột đó.
-        $('[data-toggle="toggle-admin-column"]').on('dblclick', function (e) {
+        // Bấm tiêu đề cột để chọn hoặc bỏ chọn toàn bộ quyền trong cột đó.
+        $('[data-toggle="toggle-admin-column"]').on('click', function (e) {
             e.preventDefault();
             const inputs = $('[name="' + $(this).data('target') + '[]"]');
             if (!inputs.length) {

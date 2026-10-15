@@ -444,6 +444,7 @@ $lang_module['permissions_pub_content'] = 'Đăng bài viết';
 $lang_module['permissions_app_content'] = 'Duyệt bài viết';
 $lang_module['permissions_edit_content'] = 'Sửa bài viết';
 $lang_module['permissions_del_content'] = 'Xóa bài viêt';
+$lang_module['permissions_toggle_column'] = 'Bấm để chọn hoặc bỏ chọn cả cột';
 $lang_module['permissions_pub_error'] = 'Lỗi: Bạn không được đăng bài viết tại Chuyên mục: %1$s';
 $lang_module['permissions_sendspadmin_error'] = 'Lỗi: Bạn không được phép chuyển bài viết cho tổng biên tập tại Chuyên mục: %1$s';
 $lang_module['permissions_pub_show_error'] = 'Lỗi: Bạn không được cho hiển thị bài viết tại Chuyên mục: %1$s';

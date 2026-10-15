@@ -444,6 +444,7 @@ $lang_module['permissions_pub_content'] = 'Mise en ligne l\'article';
 $lang_module['permissions_app_content'] = 'Examiner les articles';
 $lang_module['permissions_edit_content'] = 'Éditer les articles';
 $lang_module['permissions_del_content'] = 'Supprimer l\'article';
+$lang_module['permissions_toggle_column'] = 'Cliquez pour cocher ou décocher toute la colonne';
 $lang_module['permissions_pub_error'] = 'Erreur: Vous ne pouvez pas poster les articles dans la catégorie: %1$s';
 $lang_module['permissions_sendspadmin_error'] = 'Erreur: Vous n\'avez pas de droit d\'envoyer l\'article au rédacteur en chef dans le rubrique: %1$s';
 $lang_module['permissions_pub_show_error'] = 'Erreur: Vous ne pouvez pas afficher les articles dans le Rubrique : %1$s';

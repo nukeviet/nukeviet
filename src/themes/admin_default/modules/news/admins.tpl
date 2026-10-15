@@ -89,27 +89,27 @@
                                 <tr>
                                     <th class="text-nowrap" style="width:34%">{$LANG->getModule('content_cat')}</th>
                                     <th class="text-center text-nowrap" style="width:11%">
-                                        <button type="button" class="btn btn-link p-0 text-reset text-decoration-none fw-semibold"
+                                        <button type="button" class="btn btn-link p-0 text-decoration-none fw-semibold" title="{$LANG->getModule('permissions_toggle_column')}"
                                                 data-toggle="toggle-admin-column" data-target="add_content">{$LANG->getModule('permissions_add_content')}</button>
                                     </th>
                                     <th class="text-center text-nowrap" style="width:11%">
-                                        <button type="button" class="btn btn-link p-0 text-reset text-decoration-none fw-semibold"
+                                        <button type="button" class="btn btn-link p-0 text-decoration-none fw-semibold" title="{$LANG->getModule('permissions_toggle_column')}"
                                                 data-toggle="toggle-admin-column" data-target="app_content">{$LANG->getModule('permissions_app_content')}</button>
                                     </th>
                                     <th class="text-center text-nowrap" style="width:11%">
-                                        <button type="button" class="btn btn-link p-0 text-reset text-decoration-none fw-semibold"
+                                        <button type="button" class="btn btn-link p-0 text-decoration-none fw-semibold" title="{$LANG->getModule('permissions_toggle_column')}"
                                                 data-toggle="toggle-admin-column" data-target="pub_content">{$LANG->getModule('permissions_pub_content')}</button>
                                     </th>
                                     <th class="text-center text-nowrap" style="width:11%">
-                                        <button type="button" class="btn btn-link p-0 text-reset text-decoration-none fw-semibold"
+                                        <button type="button" class="btn btn-link p-0 text-decoration-none fw-semibold" title="{$LANG->getModule('permissions_toggle_column')}"
                                                 data-toggle="toggle-admin-column" data-target="edit_content">{$LANG->getModule('permissions_edit_content')}</button>
                                     </th>
                                     <th class="text-center text-nowrap" style="width:11%">
-                                        <button type="button" class="btn btn-link p-0 text-reset text-decoration-none fw-semibold"
+                                        <button type="button" class="btn btn-link p-0 text-decoration-none fw-semibold" title="{$LANG->getModule('permissions_toggle_column')}"
                                                 data-toggle="toggle-admin-column" data-target="del_content">{$LANG->getModule('permissions_del_content')}</button>
                                     </th>
                                     <th class="text-center text-nowrap" style="width:11%">
-                                        <button type="button" class="btn btn-link p-0 text-reset text-decoration-none fw-semibold"
+                                        <button type="button" class="btn btn-link p-0 text-decoration-none fw-semibold" title="{$LANG->getModule('permissions_toggle_column')}"
                                                 data-toggle="toggle-admin-column" data-target="admin_content">{$LANG->getModule('permissions_admin')}</button>
                                     </th>
                                 </tr>
