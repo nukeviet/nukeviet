@@ -2465,4 +2465,108 @@ class SampleDataTest extends \Codeception\Test\Unit
 
         $this->assertGreaterThan(0, $inserted, 'Không có dòng nào được insert vào bảng ' . $rowsTable . '.');
     }
+
+    /**
+     * Dữ liệu mẫu IP bị cấm (Cấu hình > Thiết lập an ninh > tab IP bị cấm)
+     *
+     * Mỗi khu vực (1 ngoài site, 2 quản trị, 3 cả hai) được thêm 50 IPv4 và 50 IPv6.
+     * IP lấy trong các dải dành cho tài liệu (192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24,
+     * 2001:db8::/32) để không chặn nhầm truy cập thật. Mask 1 (255.xxx.xxx.xxx) chỉ gán cho
+     * dải 203.* để không trùng 192.168.* của mạng LAN. Hàm chỉ ghi CSDL, file data/banip.php
+     * được tạo lại khi thêm hoặc xóa một IP trong admin.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForSettingsBannedIps()
+    {
+        global $db, $db_config;
+
+        $ipsTable = $db_config['prefix'] . '_ips';
+        $perGroup = 50;
+        $areas = [1, 2, 3];
+
+        $notices = [
+            'Spam bình luận liên tục',
+            'Dò mật khẩu đăng nhập quản trị',
+            'Quét lỗ hổng bảo mật',
+            'Gửi request bất thường với tần suất cao',
+            'Đăng ký tài khoản ảo hàng loạt',
+            'Thu thập dữ liệu trái phép (crawler)',
+            'Tấn công SQL injection',
+            'Tải lên tệp tin độc hại',
+            'Gửi biểu mẫu liên hệ rác',
+            'Nghi vấn botnet',
+            '',
+        ];
+
+        // Kho IPv4 trong các dải tài liệu, trộn rồi lấy không trùng
+        $ipv4Pool = [];
+        foreach (['192.0.2', '198.51.100', '203.0.113'] as $prefix) {
+            for ($i = 1; $i <= 254; $i++) {
+                $ipv4Pool[] = $prefix . '.' . $i;
+            }
+        }
+        shuffle($ipv4Pool);
+
+        $esc = function (string $s): string {
+            return str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+        };
+
+        $now = time();
+        $day = 86400;
+        $usedIpv6 = [];
+        $values = [];
+
+        foreach ($areas as $area) {
+            foreach ([4, 6] as $version) {
+                for ($i = 0; $i < $perGroup; $i++) {
+                    if ($version == 4) {
+                        $ip = array_pop($ipv4Pool);
+                        $maskSet = str_starts_with($ip, '203.') ? [0, 3, 2, 1] : [0, 3, 2];
+                        $mask = $maskSet[array_rand($maskSet)];
+                    } else {
+                        do {
+                            $ip = sprintf('2001:db8:%x:%x::%x', rand(1, 0xffff), rand(1, 0xffff), rand(1, 0xffff));
+                        } while (isset($usedIpv6[$ip]));
+                        $usedIpv6[$ip] = true;
+                        $mask = [32, 48, 56, 64, 96, 112, 128][rand(0, 6)];
+                    }
+
+                    // Trạng thái: đang chạy không giới hạn, đang chạy có hạn, đang chờ, đã hết hạn
+                    $r = rand(1, 100);
+                    if ($r <= 55) {
+                        $beginTime = $now - rand(1, 365) * $day - rand(0, 86399);
+                        $endTime = 0;
+                    } elseif ($r <= 75) {
+                        $beginTime = $now - rand(1, 90) * $day - rand(0, 86399);
+                        $endTime = $now + rand(1, 180) * $day;
+                    } elseif ($r <= 90) {
+                        $beginTime = $now + rand(1, 30) * $day + rand(0, 86399);
+                        $endTime = rand(0, 1) ? $beginTime + rand(7, 90) * $day : 0;
+                    } else {
+                        $beginTime = $now - rand(60, 365) * $day - rand(0, 86399);
+                        $endTime = $now - rand(1, 30) * $day;
+                    }
+
+                    $values[] = sprintf(
+                        "(0,'%s',%d,%d,%d,%d,'%s')",
+                        $esc($ip),
+                        $mask,
+                        $area,
+                        $beginTime,
+                        $endTime,
+                        $esc($notices[array_rand($notices)])
+                    );
+                }
+            }
+        }
+
+        $inserted = $db->exec(
+            'INSERT IGNORE INTO ' . $ipsTable
+            . ' (type, ip, mask, area, begintime, endtime, notice) VALUES '
+            . implode(',', $values)
+        );
+
+        $this->assertGreaterThan(0, $inserted, 'Không có dòng nào được insert vào bảng ' . $ipsTable . '.');
+    }
 }
