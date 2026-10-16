@@ -1271,9 +1271,13 @@ $(function() {
         $('#settingTabs [aria-controls=' + $(this).data('tab') + ']')[0].click();
     });
 
-    // Lấy danh sách IP cấm hoặc IP bỏ qua flood
+    // Lấy danh sách IP bỏ qua flood, danh sách IP cấm thì tải lại trang để giữ bộ lọc và phân trang
     function ip_list_load(url, type) {
-        let ele = type ? $('#noflips') : $('#banips');
+        if (!type) {
+            location.reload();
+            return;
+        }
+        let ele = $('#noflips');
         let html = trim(ele.html());
         if (html == '') {
             ele.html('<li class="list-group-item"><i class="fa-solid fa-spinner fa-spin-pulse"></i></li>');
@@ -1302,7 +1306,7 @@ $(function() {
     // Tự động load danh sách IPs nếu ở tab thiết lập an ninh tương ứng
     if ($('[name=gselectedtab]').length) {
         var gselectedtab = $('[name=gselectedtab]').val();
-        if (gselectedtab == '1' || gselectedtab == '3') {
+        if (gselectedtab == '1') {
             if ($('[aria-offsets=' + gselectedtab + ']').attr('data-loaded') == 'false') {
                 $('[aria-offsets=' + gselectedtab + ']').attr('data-loaded', 'true');
                 setTimeout(() => {
@@ -1524,6 +1528,50 @@ $(function() {
                     console.log(xhr, text, err);
                 }
             })
+        });
+    });
+
+    // Xóa nhiều IP cấm đã chọn
+    $('[data-toggle=del_ips]').on('click', function() {
+        let btn = $(this),
+            list = btn.closest('.list'),
+            icon = $('i', btn),
+            listid = [];
+        if (icon.is('.fa-spinner')) {
+            return;
+        }
+        $('[data-toggle=checkSingle]:checked', list).each(function() {
+            listid.push($(this).val());
+        });
+        if (listid.length < 1) {
+            nvAlert(nv_please_check);
+            return;
+        }
+        nvConfirm(btn.data('confirm'), () => {
+            icon.removeClass(icon.data('icon')).addClass('fa-spinner fa-spin-pulse');
+            $.ajax({
+                type: 'POST',
+                cache: !1,
+                url: list.data('del-url'),
+                data: {
+                    listid: listid.join(','),
+                    checkss: list.data('checkss')
+                },
+                dataType: 'json',
+                success: function(a) {
+                    if (a.status == 'error') {
+                        icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                        nvAlert(a.mess);
+                        return;
+                    }
+                    location.reload();
+                },
+                error: function(xhr, text, err) {
+                    icon.removeClass('fa-spinner fa-spin-pulse').addClass(icon.data('icon'));
+                    nvToast(err, 'error');
+                    console.log(xhr, text, err);
+                }
+            });
         });
     });
 

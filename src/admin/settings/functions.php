@@ -132,13 +132,15 @@ function get_max_pulgin($hook, $receive)
 }
 
 /**
- * get_list_ips()
  * Lấy danh sách IPs bị cấm hoặc bỏ flood
  *
  * @param int $type
- * @return array|void
+ * @param array $search Điều kiện lọc: q (từ khóa), area, from (unixtime bắt đầu), to (unixtime kết thúc)
+ * @param int $page Trang hiện tại, 0 là lấy hết
+ * @param int $perPage Số dòng mỗi trang
+ * @return array [danh sách, tổng số dòng]
  */
-function get_list_ips($type)
+function get_list_ips($type, $search = [], $page = 0, $perPage = 0)
 {
     global $db, $db_config, $nv_Lang, $ips;
 
@@ -150,25 +152,63 @@ function get_list_ips($type)
     ];
     $arealist = [$nv_Lang->getModule('area_select'), $nv_Lang->getModule('area_front'), $nv_Lang->getModule('area_admin'), $nv_Lang->getModule('area_both')];
 
-    $stmt = $db->prepare('SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type = :type ORDER BY id DESC');
-    $stmt->bindValue(':type', $type, PDO::PARAM_INT);
+    $where = ['type = ' . (int) $type];
+    if (!empty($search['q'])) {
+        $where[] = '(ip LIKE :q_ip OR notice LIKE :q_notice)';
+    }
+    if (!empty($search['area'])) {
+        $where[] = 'area = ' . (int) $search['area'];
+    }
+    if (!empty($search['from'])) {
+        $where[] = 'begintime >= ' . (int) $search['from'];
+    }
+    if (!empty($search['to'])) {
+        $where[] = 'endtime > 0 AND endtime <= ' . (int) $search['to'];
+    }
+    $where = ' WHERE ' . implode(' AND ', $where);
+
+    $bindKeyword = function ($stmt) use ($search, $db) {
+        if (!empty($search['q'])) {
+            $keyword = '%' . $db->dblikeescape($search['q'], true) . '%';
+            $stmt->bindValue(':q_ip', $keyword, PDO::PARAM_STR);
+            $stmt->bindValue(':q_notice', $keyword, PDO::PARAM_STR);
+        }
+    };
+
+    $sql = 'SELECT id, ip, mask, area, begintime, endtime, notice FROM ' . $db_config['prefix'] . '_ips' . $where . ' ORDER BY id DESC';
+    if ($page > 0 and $perPage > 0) {
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_ips' . $where);
+        $bindKeyword($stmt);
+        $stmt->execute();
+        $total = (int) $stmt->fetchColumn();
+
+        $sql .= ' LIMIT ' . $perPage . ' OFFSET ' . (($page - 1) * $perPage);
+    }
+
+    $stmt = $db->prepare($sql);
+    $bindKeyword($stmt);
     $stmt->execute();
 
     $list = [];
     while ($row = $stmt->fetch()) {
         $status = $row['begintime'] > NV_CURRENTTIME ? 2 : ((!empty($row['endtime']) and $row['endtime'] < NV_CURRENTTIME) ? 0 : 1);
-        $note = [];
-        $note[] = $nv_Lang->getModule('ip_mask') . ': ' . ($ips->isIp4($row['ip']) ? $masklist[$row['mask']] : '/' . $row['mask']);
-        !$type && $note[] = $nv_Lang->getModule('banip_area') . ': ' . $arealist[$row['area']];
-        !empty($row['begintime']) && $note[] = $nv_Lang->getModule('start_time') . ': ' . nv_datetime_format($row['begintime'], 1);
-        $note[] = $nv_Lang->getModule('end_time') . ': ' . (!empty($row['endtime']) ? nv_datetime_format($row['endtime'], 1) : $nv_Lang->getModule('unlimited'));
-
         $row['status'] = $status;
-        $row['note'] = implode(', ', $note);
         $row['status_text'] = $status === 2 ? $nv_Lang->getModule('waiting') : ($status === 0 ? $nv_Lang->getModule('ended') : $nv_Lang->getModule('running'));
+        $row['mask_text'] = $ips->isIp4($row['ip']) ? $masklist[$row['mask']] : '/' . $row['mask'];
+        $row['area_text'] = $arealist[$row['area']] ?? '';
+        $row['begintime_text'] = !empty($row['begintime']) ? nv_datetime_format($row['begintime'], 1) : '';
+        $row['endtime_text'] = !empty($row['endtime']) ? nv_datetime_format($row['endtime'], 1) : $nv_Lang->getModule('unlimited');
+
+        $note = [];
+        $note[] = $nv_Lang->getModule('ip_mask') . ': ' . $row['mask_text'];
+        !$type && $note[] = $nv_Lang->getModule('banip_area') . ': ' . $row['area_text'];
+        !empty($row['begintime']) && $note[] = $nv_Lang->getModule('start_time') . ': ' . $row['begintime_text'];
+        $note[] = $nv_Lang->getModule('end_time') . ': ' . $row['endtime_text'];
+        $row['note'] = implode(', ', $note);
+
         $list[$row['id']] = $row;
     }
     $stmt->closeCursor();
 
-    return $list;
+    return [$list, $total ?? count($list)];
 }

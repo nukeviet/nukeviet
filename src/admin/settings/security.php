@@ -409,7 +409,7 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
         nv_jsonOutput([
             'status' => 'OK',
             'type' => $type,
-            'url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&action=' . ($type ? 'fiplist' : 'biplist')
+            'url' => $type ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&action=fiplist' : ''
         ]);
     }
 
@@ -451,13 +451,13 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
 
 // Xóa IP
 if (defined('NV_IS_GODADMIN') and ($action == 'delfip' or $action == 'delbip') and csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key)) {
-    $id = $nv_Request->get_int('id', 'post', 0);
     $type = $action == 'delfip' ? 1 : 0;
-    if (!empty($id)) {
-        $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type = :type AND id = :id');
-        $stmt->bindValue(':type', $type, PDO::PARAM_INT);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
+
+    // Xóa một IP (id) hoặc nhiều IP (listid dạng 1,2,3)
+    $listid = $nv_Request->get_int('id', 'post', 0);
+    $listid = $listid > 0 ? [$listid] : array_filter(array_map('intval', explode(',', $nv_Request->get_title('listid', 'post', ''))));
+    if (!empty($listid)) {
+        $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type = ' . $type . ' AND id IN (' . implode(',', $listid) . ')');
     }
 
     $save = nv_save_file_ips($type);
@@ -473,14 +473,13 @@ if (defined('NV_IS_GODADMIN') and ($action == 'delfip' or $action == 'delbip') a
     nv_jsonOutput([
         'status' => 'OK',
         'type' => $type,
-        'url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&action=' . ($type ? 'fiplist' : 'biplist')
+        'url' => $type ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&action=fiplist' : ''
     ]);
 }
 
-// Lấy danh sách IP
-if (defined('NV_IS_GODADMIN') and ($action == 'fiplist' or $action == 'biplist')) {
-    $type = $action == 'fiplist' ? 1 : 0;
-    $iplist = get_list_ips($type);
+// Lấy danh sách IP bỏ qua flood
+if (defined('NV_IS_GODADMIN') and $action == 'fiplist') {
+    [$iplist] = get_list_ips(1);
 
     $tpl->assign('IPS', $iplist);
 
@@ -991,6 +990,57 @@ foreach ($_directives as $_dvs) {
 unset($_directives);
 
 empty($global_config_list['end_url_variables']) && $global_config_list['end_url_variables'][] = [];
+
+// Danh sách IP cấm, chỉ lấy khi đang ở tab Quản lý IP cấm
+if (defined('NV_IS_GODADMIN') and $selectedtab == 3) {
+    $page = $nv_Request->get_page('page', 'get', 1);
+    $per_page = 10;
+    $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;selectedtab=3';
+
+    $array_search = [
+        'q' => $nv_Request->get_title('q', 'get', ''),
+        'area' => $nv_Request->get_absint('area', 'get', 0),
+        'from' => $nv_Request->get_title('from', 'get', ''),
+        'to' => $nv_Request->get_title('to', 'get', '')
+    ];
+    $where = [];
+
+    if (!empty($array_search['q'])) {
+        $where['q'] = $array_search['q'];
+        $base_url .= '&amp;q=' . urlencode($array_search['q']);
+    }
+    if (isset($banip_area_list[$array_search['area']]) and $array_search['area'] > 0) {
+        $where['area'] = $array_search['area'];
+        $base_url .= '&amp;area=' . $array_search['area'];
+    } else {
+        $array_search['area'] = 0;
+    }
+    $where['from'] = nv_d2u_post($array_search['from']);
+    if (!empty($where['from'])) {
+        $base_url .= '&amp;from=' . urlencode($array_search['from']);
+    } else {
+        $array_search['from'] = '';
+    }
+    $where['to'] = nv_d2u_post($array_search['to'], 23, 59, 59);
+    if (!empty($where['to'])) {
+        $base_url .= '&amp;to=' . urlencode($array_search['to']);
+    } else {
+        $array_search['to'] = '';
+    }
+
+    [$banips, $num_items] = get_list_ips(0, $where, $page, $per_page);
+
+    // Trang vượt quá số trang (ví dụ vừa xóa dòng cuối của trang cuối) thì chuyển về trang cuối, dùng 302 để trình duyệt không cache
+    $total_pages = (int) ceil($num_items / $per_page);
+    if ($page > 1 and $page > $total_pages) {
+        nv_redirect_location($base_url . ($total_pages > 1 ? '&amp;page=' . $total_pages : ''), 302);
+    }
+
+    $tpl->assign('BANIPS', $banips);
+    $tpl->assign('BANIP_SEARCH', $array_search);
+    $tpl->assign('BANIP_AREA_LIST', $banip_area_list);
+    $tpl->assign('BANIP_PAGINATION', nv_generate_page($base_url, $num_items, $per_page, $page));
+}
 
 $tpl->assign('SELECTEDTAB', $selectedtab);
 $tpl->assign('CHECKSS', csrf_create($csrf_key));

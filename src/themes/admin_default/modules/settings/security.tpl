@@ -36,7 +36,11 @@
             <li class="nav-item w-100 mw-100"><a class="nav-link{if 0 eq $SELECTEDTAB} active{/if}" href="#settingBasic" aria-controls="settingBasic" aria-offsets="0" role="tab" data-bs-toggle="pill" data-location="{$FORM_ACTION}&amp;selectedtab=0"><i class="fa-solid fa-caret-right"></i> {$LANG->getModule('general_settings')}</a></li>
             <li class="nav-item w-100 mw-100"><a class="nav-link{if 1 eq $SELECTEDTAB} active{/if}" href="#settingFlood" aria-controls="settingFlood" aria-offsets="1" role="tab" data-bs-toggle="pill" data-location="{$FORM_ACTION}&amp;selectedtab=1" data-loaded="false" data-type="1" data-load-url="{$FORM_ACTION}&amp;action=fiplist"><i class="fa-solid fa-caret-right"></i> {$LANG->getModule('flood_blocker')}</a></li>
             <li class="nav-item w-100 mw-100"><a class="nav-link{if 2 eq $SELECTEDTAB} active{/if}" href="#settingCaptcha" aria-controls="settingCaptcha" aria-offsets="2" role="tab" data-bs-toggle="pill" data-location="{$FORM_ACTION}&amp;selectedtab=2"><i class="fa-solid fa-caret-right"></i> {$LANG->getModule('captcha')}</a></li>
-            <li class="nav-item w-100 mw-100"><a class="nav-link{if 3 eq $SELECTEDTAB} active{/if}" href="#settingIp" aria-controls="settingIp" aria-offsets="3" role="tab" data-bs-toggle="pill" data-location="{$FORM_ACTION}&amp;selectedtab=3" data-loaded="false" data-type="0" data-load-url="{$FORM_ACTION}&amp;action=biplist"><i class="fa-solid fa-caret-right"></i> {$LANG->getModule('banip')}</a></li>
+            {if 3 eq $SELECTEDTAB}
+            <li class="nav-item w-100 mw-100"><a class="nav-link active" href="#settingIp" aria-controls="settingIp" aria-offsets="3" role="tab" data-bs-toggle="pill" data-location="{$FORM_ACTION}&amp;selectedtab=3"><i class="fa-solid fa-caret-right"></i> {$LANG->getModule('banip')}</a></li>
+            {else}
+            <li class="nav-item w-100 mw-100"><a class="nav-link" href="{$FORM_ACTION}&amp;selectedtab=3" aria-controls="settingIp"><i class="fa-solid fa-caret-right"></i> {$LANG->getModule('banip')}</a></li>
+            {/if}
             <li class="nav-item w-100 mw-100"><a class="nav-link{if 4 eq $SELECTEDTAB} active{/if}" href="#settingCORS" aria-controls="settingCORS" aria-offsets="4" role="tab" data-bs-toggle="pill" data-location="{$FORM_ACTION}&amp;selectedtab=4"><i class="fa-solid fa-caret-right"></i> {$LANG->getModule('cors')}</a></li>
             {/if}
             <li class="nav-item w-100 mw-100"><a class="nav-link{if 5 eq $SELECTEDTAB} active{/if}" href="#settingCSP" aria-controls="settingCSP" aria-offsets="5" role="tab" data-bs-toggle="pill" data-location="{$FORM_ACTION}&amp;selectedtab=5"><i class="fa-solid fa-caret-right"></i> {$LANG->getModule('csp')}</a></li>
@@ -634,14 +638,107 @@
                 </div>
             </div>
             {* Quản lý IP cấm *}
-            <div role="tabpanel" class="tab-pane{if 3 eq $SELECTEDTAB} active{/if}" id="settingIp">
-                <ul class="list-group">
-                    <li class="list-group-item active">
+            {if 3 eq $SELECTEDTAB}
+            <div role="tabpanel" class="tab-pane active" id="settingIp">
+                <div class="card list" data-url="{$FORM_ACTION}&amp;action=bip" data-del-url="{$FORM_ACTION}&amp;action=delbip" data-confirm="{$LANG->getModule('ip_delete_confirm')}" data-checkss="{$CHECKSS}">
+                    <div class="card-header text-bg-primary">
                         <strong>{$LANG->getModule('banip')}</strong>
-                    </li>
-                    <ul class="list-group list-group-flush list" id="banips" data-url="{$FORM_ACTION}&amp;action=bip" data-del-url="{$FORM_ACTION}&amp;action=delbip" data-confirm="{$LANG->getModule('ip_delete_confirm')}" data-checkss="{$CHECKSS}"></ul>
-                </ul>
+                    </div>
+                    <div class="card-body">
+                        <form method="get" action="{$smarty.const.NV_BASE_ADMINURL}index.php">
+                            <input type="hidden" name="{$smarty.const.NV_LANG_VARIABLE}" value="{$smarty.const.NV_LANG_DATA}">
+                            <input type="hidden" name="{$smarty.const.NV_NAME_VARIABLE}" value="{$MODULE_NAME}">
+                            <input type="hidden" name="{$smarty.const.NV_OP_VARIABLE}" value="{$OP}">
+                            <input type="hidden" name="selectedtab" value="3">
+                            <div class="row g-2">
+                                <div class="col-md-6 col-xxl-3">
+                                    <input type="text" class="form-control" name="q" value="{$BANIP_SEARCH.q}" placeholder="{$LANG->getGlobal('keyword')}" aria-label="{$LANG->getGlobal('keyword')}">
+                                </div>
+                                <div class="col-md-6 col-xxl-3">
+                                    <select class="form-select" name="area" aria-label="{$LANG->getModule('banip_area')}">
+                                        <option value="0">{$LANG->getModule('banip_area')}</option>
+                                        {foreach from=$BANIP_AREA_LIST key=key item=area}
+                                        {if $key gt 0}
+                                        <option value="{$key}"{if $key eq $BANIP_SEARCH.area} selected{/if}>{$area}</option>
+                                        {/if}
+                                        {/foreach}
+                                    </select>
+                                </div>
+                                <div class="col-sm-6 col-md-5 col-xxl-2">
+                                    <input type="text" name="from" value="{$BANIP_SEARCH.from}" class="form-control datepicker" placeholder="{$LANG->getModule('start_time')}" aria-label="{$LANG->getModule('start_time')}" autocomplete="off">
+                                </div>
+                                <div class="col-sm-6 col-md-5 col-xxl-2">
+                                    <input type="text" name="to" value="{$BANIP_SEARCH.to}" class="form-control datepicker" placeholder="{$LANG->getModule('end_time')}" aria-label="{$LANG->getModule('end_time')}" autocomplete="off">
+                                </div>
+                                <div class="col-md-2 d-grid">
+                                    <button type="submit" class="btn btn-primary text-nowrap"><i class="fa-solid fa-magnifying-glass"></i> {$LANG->getGlobal('search')}</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive table-card">
+                            <table class="table table-striped align-middle table-sticky mb-0">
+                                <thead class="text-muted">
+                                    <tr>
+                                        <th class="text-nowrap" style="width: 1%;">
+                                            <input type="checkbox" data-toggle="checkAll" class="form-check-input m-0 align-middle" aria-label="{$LANG->getGlobal('toggle_checkall')}">
+                                        </th>
+                                        <th class="text-nowrap">{$LANG->getModule('ip_address')}</th>
+                                        <th class="text-nowrap">{$LANG->getModule('banip_area')}</th>
+                                        <th class="text-nowrap">{$LANG->getGlobal('time')}</th>
+                                        <th class="text-nowrap">{$LANG->getGlobal('status')}</th>
+                                        <th class="text-nowrap text-center" style="width: 1%;">{$LANG->getGlobal('actions')}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {foreach from=$BANIPS item=ip}
+                                    <tr{if $ip.status eq 0} class="text-muted"{/if}>
+                                        <td>
+                                            <input type="checkbox" data-toggle="checkSingle" value="{$ip.id}" class="form-check-input m-0 align-middle" aria-label="{$LANG->getGlobal('toggle_checksingle')}">
+                                        </td>
+                                        <td>
+                                            <strong class="text-break">{$ip.ip}</strong>
+                                            <span class="d-block small text-muted">{$LANG->getModule('ip_mask')}: {$ip.mask_text}</span>
+                                            {if not empty($ip.notice)}<span class="d-block small text-muted text-break">{$ip.notice}</span>{/if}
+                                        </td>
+                                        <td>{$ip.area_text}</td>
+                                        <td class="text-nowrap small">
+                                            <span class="d-block"><i class="fa-solid fa-hourglass-start fa-fw text-muted" title="{$LANG->getModule('start_time')}"></i> {$ip.begintime_text|default:'-'}</span>
+                                            <span class="d-block"><i class="fa-solid fa-hourglass-end fa-fw text-muted" title="{$LANG->getModule('end_time')}"></i> {$ip.endtime_text}</span>
+                                        </td>
+                                        <td class="text-nowrap"><i class="fa-solid fa-{$ip.status eq 2 ? 'pause' : ($ip.status eq 1 ? 'play' : 'stop')}"></i> {$ip.status_text}</td>
+                                        <td class="text-nowrap text-center">
+                                            <button class="btn btn-secondary btn-sm" title="{$LANG->getModule('ip_edit')}" aria-label="{$LANG->getModule('ip_edit')}" data-toggle="edit_ip" data-id="{$ip.id}"><i class="fa-solid fa-pencil" data-icon="fa-pencil"></i></button>
+                                            <button class="btn btn-secondary btn-sm" title="{$LANG->getModule('ip_delete')}" aria-label="{$LANG->getModule('ip_delete')}" data-toggle="del_ip" data-id="{$ip.id}"><i class="fa-solid fa-trash text-danger" data-icon="fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    {foreachelse}
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">{$LANG->getModule('banip_empty')}</td>
+                                    </tr>
+                                    {/foreach}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer border-top">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                {if not empty($BANIPS)}
+                                <input type="checkbox" data-toggle="checkAll" class="form-check-input m-0 align-middle" aria-label="{$LANG->getGlobal('toggle_checkall')}">
+                                <button type="button" class="btn btn-danger" data-toggle="del_ips" data-confirm="{$LANG->getModule('ip_delete_multi_confirm')}"><i class="fa-solid fa-trash" data-icon="fa-trash"></i> {$LANG->getGlobal('delete')}</button>
+                                {/if}
+                                <button type="button" class="btn btn-primary" data-toggle="add_ip" title="{$LANG->getModule('ip_add')}"><i class="fa-solid fa-plus"></i> {$LANG->getModule('ip_add')}</button>
+                            </div>
+                            <div class="pagination-wrap">
+                                {$BANIP_PAGINATION}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            {/if}
             {* Thiết lập Cross-Site *}
             <div role="tabpanel" class="tab-pane{if 4 eq $SELECTEDTAB} active{/if}" id="settingCORS">
                 <form action="{$FORM_ACTION}" method="post" class="ajax-submit" id="cors-settings">
