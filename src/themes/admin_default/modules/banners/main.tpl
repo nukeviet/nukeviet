@@ -56,10 +56,13 @@
 {* Bảng danh sách *}
 <div class="card">
     <div class="card-body">
-        <div class="table-responsive-lg table-card pb-1">
+        <div class="table-responsive-lg table-card pb-1" id="list-banners">
             <table class="table table-striped align-middle table-sticky mb-0">
                 <thead>
                     <tr>
+                        <th class="text-nowrap" style="width:1%;">
+                            <input type="checkbox" data-toggle="checkAll" class="form-check-input m-0 align-middle" aria-label="{$LANG->getGlobal('toggle_checkall')}">
+                        </th>
                         <th class="text-nowrap" style="width:25%;">{$LANG->getModule('title')}</th>
                         <th class="text-nowrap" style="width:18%;">{$LANG->getModule('in_plan')}</th>
                         <th class="text-nowrap" style="width:12%;">{$LANG->getModule('of_user')}</th>
@@ -72,6 +75,9 @@
                 <tbody>
                     {foreach from=$ARRAY item=row}
                     <tr>
+                        <td>
+                            <input type="checkbox" data-toggle="checkSingle" value="{$row.id}" class="form-check-input m-0 align-middle" aria-label="{$row.title}">
+                        </td>
                         <td>
                             <a href="{$row.view_url}">{$row.title}</a>
                             <div class="mt-1 small text-{$row.act_color}">{$row.act_label}</div>
@@ -123,16 +129,33 @@
                     </tr>
                     {foreachelse}
                     <tr>
-                        <td colspan="7" class="text-center text-muted py-4">{$LANG->getModule('banners_list_empty')}</td>
+                        <td colspan="8" class="text-center text-muted py-4">{$LANG->getModule('banners_list_empty')}</td>
                     </tr>
                     {/foreach}
                 </tbody>
             </table>
         </div>
     </div>
-    {if $PAGINATION}
+    {if not empty($ARRAY) or $PAGINATION}
     <div class="card-footer border-top">
-        <div class="pagination-wrap">{$PAGINATION}</div>
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+            <div class="d-flex flex-wrap flex-sm-nowrap align-items-center">
+                {if not empty($ARRAY)}
+                <div class="me-2">
+                    <input type="checkbox" data-toggle="checkAll" class="form-check-input m-0 align-middle" aria-label="{$LANG->getGlobal('toggle_checkall')}">
+                </div>
+                <div class="input-group me-1 my-1">
+                    <select id="element_action" class="form-select fw-150" aria-label="{$LANG->getGlobal('select_actions')}" aria-describedby="element_action_btn">
+                        {foreach from=$ACTIONS key=value item=title}
+                        <option value="{$value}">{$title}</option>
+                        {/foreach}
+                    </select>
+                    <button type="button" class="btn btn-primary" id="element_action_btn" data-toggle="action-banners" data-ctn="#list-banners" data-checkss="{$CHECKSS}" data-msg-delete="{$LANG->getModule('file_del_confirm')}" data-msg-act1="{$LANG->getModule('banner_bulk_confirm_act1')}" data-msg-act3="{$LANG->getModule('banner_bulk_confirm_act3')}">{$LANG->getModule('action')}</button>
+                </div>
+                {/if}
+            </div>
+            <div class="pagination-wrap">{$PAGINATION}</div>
+        </div>
     </div>
     {/if}
 </div>

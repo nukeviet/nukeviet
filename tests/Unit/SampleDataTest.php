@@ -2304,4 +2304,165 @@ class SampleDataTest extends \Codeception\Test\Unit
         );
         $this->assertGreaterThanOrEqual(0, $totalInserted);
     }
+
+    /**
+     * Dữ liệu mẫu banner dạng HTML (không ảnh) cho mỗi khối quảng cáo đang hoạt động
+     *
+     * Mỗi khối được thêm 20 banner với trạng thái: 14 hoạt động, 2 hẹn giờ, 2 hết hạn,
+     * 1 đình chỉ, 1 chờ duyệt. Nội dung HTML có kích thước theo khối, weight theo đúng
+     * quy tắc của nv_fix_banner_weight(). Sau khi chạy cần lưu một banner trong admin
+     * để tạo lại file XML của khối thì ngoài site mới hiển thị.
+     *
+     * @group sample-data
+     */
+    public function testInsertSampleDataForBannersHtmlRows()
+    {
+        global $db, $db_config;
+
+        $plansTable = $db_config['prefix'] . '_banners_plans';
+        $rowsTable = $db_config['prefix'] . '_banners_rows';
+
+        $plans = $db->query(
+            'SELECT id, form, width, height FROM ' . $plansTable . ' WHERE act = 1 ORDER BY id ASC'
+        )->fetchAll();
+
+        if (empty($plans)) {
+            $this->markTestSkipped('Không có khối quảng cáo nào đang hoạt động trong bảng ' . $plansTable . '.');
+        }
+
+        // Khách hàng được gán cho banner
+        $clientIds = $db->query(
+            'SELECT userid FROM ' . $db_config['prefix'] . '_users WHERE active = 1 ORDER BY userid ASC LIMIT 50'
+        )->fetchAll(\PDO::FETCH_COLUMN);
+        if (empty($clientIds)) {
+            $clientIds = [1];
+        }
+
+        // Danh sách quảng cáo: tiêu đề, mô tả, link, nút, màu nền
+        $ads = [
+            ['Nội thất Mộc Lan - Giảm 30% sofa gỗ sồi', 'Sofa, bàn ăn gỗ sồi Mỹ nhập khẩu, bảo hành 5 năm, giao lắp miễn phí nội thành.', 'https://noithatmoclan.vn/khuyen-mai', 'Xem bộ sưu tập', '#7c4a1e'],
+            ['Anh ngữ Sao Mai - Khai giảng lớp IELTS tháng 11', 'Cam kết đầu ra 6.5+, lớp tối đa 12 học viên, học thử miễn phí 2 buổi.', 'https://anhngusaomai.edu.vn/ielts', 'Đăng ký học thử', '#1d4ed8'],
+            ['Du lịch Hải Âu - Tour Phú Quốc 3N2Đ chỉ từ 3.990.000đ', 'Trọn gói vé máy bay, khách sạn 4 sao, cáp treo Hòn Thơm và lặn ngắm san hô.', 'https://dulichhaiau.vn/tour-phu-quoc', 'Đặt tour ngay', '#0e7490'],
+            ['Nha khoa Nụ Cười Việt - Niềng răng trả góp 0%', 'Thăm khám, chụp phim miễn phí. Bác sĩ chuyên khoa trên 10 năm kinh nghiệm.', 'https://nhakhoanucuoiviet.vn/nieng-rang', 'Đặt lịch khám', '#0f766e'],
+            ['Căn hộ Riverside Garden - Nhận nhà ở ngay', 'Căn 2PN view sông, thanh toán 30% nhận nhà, ngân hàng hỗ trợ vay 70%.', 'https://riversidegarden.vn/bang-gia', 'Nhận bảng giá', '#065f46'],
+            ['Laptop Minh Phát - Back to school ưu đãi đến 4 triệu', 'Tặng balo, chuột không dây và gói bảo hành vàng 24 tháng cho học sinh, sinh viên.', 'https://laptopminhphat.vn/back-to-school', 'Mua ngay', '#b91c1c'],
+            ['Bảo hiểm An Tâm - Gói sức khỏe gia đình', 'Chi trả nội trú đến 200 triệu/năm, bảo lãnh viện phí tại hơn 300 bệnh viện.', 'https://baohiemantam.vn/suc-khoe', 'Tư vấn miễn phí', '#4338ca'],
+            ['Bếp Nhà Mạ - Cơm văn phòng giao tận nơi', 'Thực đơn đổi mỗi ngày, giao trước 11h30, miễn phí giao cho đơn từ 5 suất.', 'https://bepnhama.vn/thuc-don', 'Xem thực đơn', '#c2410c'],
+            ['Phòng gym FitZone - Tập thử 7 ngày miễn phí', 'Hơn 200 máy tập hiện đại, lớp yoga, boxing, bể bơi bốn mùa, mở cửa 5h - 22h.', 'https://fitzone.vn/tap-thu', 'Nhận thẻ tập thử', '#111827'],
+            ['Xe điện Thành Công - Lái thử cuối tuần', 'Ưu đãi 15 triệu khi đặt cọc trong tháng, hỗ trợ lắp sạc tại nhà miễn phí.', 'https://xedienthanhcong.vn/lai-thu', 'Đăng ký lái thử', '#15803d'],
+            ['Phần mềm kế toán Sổ Xanh - Dùng thử 30 ngày', 'Xuất hóa đơn điện tử, báo cáo thuế tự động, phù hợp hộ kinh doanh và SME.', 'https://soxanh.vn/dung-thu', 'Dùng thử ngay', '#047857'],
+            ['Hoa tươi Thiên Lý - Giao hoa 2 giờ nội thành', 'Hoa sinh nhật, khai trương, chia buồn. Tặng thiệp viết tay cho mọi đơn hàng.', 'https://hoatuoithienly.vn', 'Chọn mẫu hoa', '#be185d'],
+            ['Trung tâm tin học Bình Minh - Khóa lập trình web', 'Học PHP, JavaScript, MySQL qua dự án thực tế, hỗ trợ giới thiệu việc làm.', 'https://tinhocbinhminh.edu.vn/lap-trinh-web', 'Xem lộ trình', '#1e40af'],
+            ['Điện máy Hồng Hà - Tuần lễ điều hòa giá tốt', 'Điều hòa inverter giảm đến 25%, miễn phí lắp đặt và vật tư đến 3 mét ống đồng.', 'https://dienmayhongha.vn/dieu-hoa', 'Xem giá', '#0369a1'],
+            ['Resort Đồi Thông Đà Lạt - Combo 2 đêm cho cặp đôi', 'Villa riêng, ăn sáng buffet, xe đưa đón sân bay Liên Khương, giảm 20% cuối tuần.', 'https://doithongresort.vn/combo', 'Đặt phòng', '#166534'],
+            ['Thời trang Lụa Hà - Bộ sưu tập thu đông', 'Áo dài lụa tơ tằm, đầm công sở thiết kế riêng, miễn phí sửa đồ trọn đời.', 'https://luaha.vn/thu-dong', 'Khám phá', '#9d174d'],
+            ['Internet cáp quang Tốc Độ Xanh - 300Mbps', 'Lắp đặt trong 24h, tặng modem wifi 6, chỉ từ 185.000đ/tháng khi trả trước 6 tháng.', 'https://tocdoxanh.vn/cap-quang', 'Đăng ký lắp đặt', '#0284c7'],
+            ['Sữa hạt Mầm Việt - Mua 2 tặng 1', 'Sữa hạt óc chó, hạnh nhân nguyên chất, không đường, giao lạnh trong ngày.', 'https://sua-hat-mamviet.vn', 'Đặt hàng', '#a16207'],
+            ['Công ty luật Minh Chính - Tư vấn thành lập doanh nghiệp', 'Trọn gói giấy phép, con dấu, tài khoản ngân hàng trong 5 ngày làm việc.', 'https://luatminhchinh.vn/thanh-lap-doanh-nghiep', 'Gọi tư vấn', '#374151'],
+            ['Vé xe Hoàng Long Express - Hà Nội đi Sapa', 'Xe giường nằm cabin đôi, khởi hành mỗi giờ, đặt vé online giảm 10%.', 'https://hoanglongexpress.vn/sapa', 'Đặt vé', '#7e22ce'],
+            ['Spa Hương Sen - Liệu trình chăm sóc da mùa lạnh', 'Giảm 40% liệu trình 10 buổi, tặng 1 buổi massage đá nóng thư giãn.', 'https://spahuongsen.vn/uu-dai', 'Nhận ưu đãi', '#db2777'],
+            ['Sách Tri Thức - Hội sách online giảm đến 50%', 'Hơn 20.000 đầu sách kinh tế, kỹ năng, thiếu nhi. Miễn phí vận chuyển toàn quốc.', 'https://sachtrithuc.vn/hoi-sach', 'Mua sách', '#92400e'],
+            ['Thú y Pet Care - Tiêm phòng trọn gói cho thú cưng', 'Khám tổng quát miễn phí, spa cắt tỉa lông, khách sạn chó mèo ngày lễ.', 'https://petcare-thuy.vn', 'Đặt lịch', '#0d9488'],
+            ['Cà phê Rang Mộc - Cà phê nguyên chất Cầu Đất', 'Rang mộc theo đơn, xay sẵn theo dụng cụ pha, giao trong 48 giờ.', 'https://caphe-rangmoc.vn', 'Mua cà phê', '#78350f'],
+        ];
+
+        // Trạng thái trong mỗi khối: 1 hoạt động, 0 hẹn giờ, 2 hết hạn, 3 đình chỉ, 4 chờ duyệt
+        $statusSet = array_merge(array_fill(0, 14, 1), [0, 0, 2, 2, 3, 4]);
+
+        $esc = function (string $s): string {
+            return str_replace(["\\", "'"], ["\\\\", "\\'"], $s);
+        };
+
+        $now = time();
+        $day = 86400;
+        $values = [];
+
+        foreach ($plans as $plan) {
+            $pid = (int) $plan['id'];
+            $width = (int) $plan['width'];
+            $height = (int) $plan['height'];
+            $isSequential = ($plan['form'] == 'sequential');
+            $isHorizontal = ($width > $height * 2);
+
+            // Weight tiếp nối các banner đang có trong khối
+            $weight = 0;
+            if ($isSequential) {
+                $weight = (int) $db->query(
+                    'SELECT MAX(weight) FROM ' . $rowsTable . ' WHERE pid = ' . $pid . ' AND act IN(0,1,3)'
+                )->fetchColumn();
+            }
+
+            $planAds = $ads;
+            shuffle($planAds);
+            $statuses = $statusSet;
+            shuffle($statuses);
+
+            foreach ($statuses as $i => $act) {
+                [$title, $desc, $url, $cta, $bg] = $planAds[$i];
+
+                if ($isHorizontal) {
+                    $html = '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;box-sizing:border-box;width:100%;max-width:' . $width . 'px;height:' . $height . 'px;padding:8px 16px;background:' . $bg . ';color:#fff;font-family:Arial,sans-serif;border-radius:4px;overflow:hidden">'
+                        . '<div><div style="font-size:15px;font-weight:bold;line-height:1.3">' . $title . '</div>'
+                        . '<div style="font-size:12px;line-height:1.3;opacity:.9">' . $desc . '</div></div>'
+                        . '<a href="' . $url . '" target="_blank" style="flex-shrink:0;padding:6px 14px;background:#fff;color:' . $bg . ';font-size:13px;font-weight:bold;text-decoration:none;border-radius:3px">' . $cta . '</a>'
+                        . '</div>';
+                } else {
+                    $html = '<div style="display:flex;flex-direction:column;justify-content:center;gap:16px;box-sizing:border-box;width:100%;max-width:' . $width . 'px;height:' . $height . 'px;padding:24px 16px;background:' . $bg . ';color:#fff;font-family:Arial,sans-serif;text-align:center;border-radius:4px;overflow:hidden">'
+                        . '<div style="font-size:20px;font-weight:bold;line-height:1.35">' . $title . '</div>'
+                        . '<div style="font-size:14px;line-height:1.5;opacity:.9">' . $desc . '</div>'
+                        . '<a href="' . $url . '" target="_blank" style="align-self:center;padding:8px 18px;background:#fff;color:' . $bg . ';font-size:14px;font-weight:bold;text-decoration:none;border-radius:3px">' . $cta . '</a>'
+                        . '</div>';
+                }
+
+                // Thời gian theo trạng thái
+                if ($act == 0) {
+                    $addTime = $now - rand(1, 10) * $day;
+                    $publTime = $now + rand(2, 30) * $day;
+                    $expTime = rand(0, 1) ? $publTime + 90 * $day : 0;
+                } elseif ($act == 2) {
+                    $addTime = $now - rand(120, 180) * $day;
+                    $publTime = $addTime;
+                    $expTime = $now - rand(1, 30) * $day;
+                } elseif ($act == 4) {
+                    $addTime = $now - rand(1, 7) * $day - rand(0, 86399);
+                    $publTime = $addTime;
+                    $expTime = 0;
+                } else {
+                    $addTime = $now - rand(10, 180) * $day - rand(0, 86399);
+                    $publTime = $addTime;
+                    $expTime = rand(0, 2) ? 0 : $now + rand(30, 180) * $day;
+                }
+
+                $rowWeight = 0;
+                if ($isSequential and in_array($act, [0, 1, 3], true)) {
+                    $rowWeight = ++$weight;
+                }
+
+                $values[] = sprintf(
+                    "('%s',%d,%d,'no_image','no_image','no_image',%d,%d,'','','%s','_blank','%s',%d,%d,%d,0,%d,%d)",
+                    $esc($title),
+                    $pid,
+                    (int) $clientIds[array_rand($clientIds)],
+                    $width,
+                    $height,
+                    $esc($url),
+                    $esc($html),
+                    $addTime,
+                    $publTime,
+                    $expTime,
+                    $act,
+                    $rowWeight
+                );
+            }
+        }
+
+        $inserted = $db->exec(
+            'INSERT INTO ' . $rowsTable
+            . ' (title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf,'
+            . ' click_url, target, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight)'
+            . ' VALUES ' . implode(',', $values)
+        );
+
+        $this->assertGreaterThan(0, $inserted, 'Không có dòng nào được insert vào bảng ' . $rowsTable . '.');
+    }
 }

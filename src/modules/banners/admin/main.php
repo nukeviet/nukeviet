@@ -232,6 +232,11 @@ $tpl->assign('ARRAY_PLANS', $array_plans);
 $tpl->assign('STATUS_CARDS', $status_cards);
 $tpl->assign('ARRAY', $array);
 $tpl->assign('PAGINATION', $pagination);
+$tpl->assign('ACTIONS', [
+    1 => $nv_Lang->getGlobal('activate'),
+    3 => $nv_Lang->getModule('banner_act_3'),
+    'delete' => $nv_Lang->getGlobal('delete'),
+]);
 
 $content = $tpl->fetch('main.tpl');
 

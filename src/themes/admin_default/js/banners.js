@@ -173,6 +173,52 @@ $(function() {
                 doRequest();
             }
         });
+
+        // Thao tác hàng loạt: kích hoạt, đình chỉ, xóa
+        $('[data-toggle="action-banners"]').on('click', function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            if (btn.is(':disabled')) return;
+            const listid = [];
+            $('[data-toggle="checkSingle"]:checked', $(btn.data('ctn'))).each(function() {
+                listid.push($(this).val());
+            });
+            if (listid.length < 1) {
+                nvAlert(nv_please_check);
+                return;
+            }
+            const select = $('#element_action');
+            const action = select.val();
+            const isDelete = (action === 'delete');
+            const data = { listid: listid, checkss: btn.data('checkss') };
+            if (!isDelete) {
+                data.act = action;
+            }
+            nvConfirm(btn.data(isDelete ? 'msg-delete' : 'msg-act' + action), () => {
+                btn.prop('disabled', true);
+                select.prop('disabled', true);
+                $.ajax({
+                    type: 'POST',
+                    url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + (isDelete ? 'del_banner' : 'change_act_banner') + '&nocache=' + new Date().getTime(),
+                    data: data,
+                    dataType: 'json',
+                    success: (res) => {
+                        if (res.status === 'OK' || res.status === 'ok') {
+                            location.reload();
+                            return;
+                        }
+                        btn.prop('disabled', false);
+                        select.prop('disabled', false);
+                        nvToast(res.mess, 'error');
+                    },
+                    error: (xhr, text) => {
+                        btn.prop('disabled', false);
+                        select.prop('disabled', false);
+                        nvToast(text, 'error');
+                    }
+                });
+            });
+        });
     }
 
     // Xóa khối banner (dùng chung cho plans-list và info-plan)
