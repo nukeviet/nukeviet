@@ -186,6 +186,13 @@ if ($nv_Request->isset_request('go_del', 'post')) {
         $stmt_del = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = :userid');
         $stmt_del->bindValue(':userid', $admin_id, PDO::PARAM_INT);
         $stmt_del->execute();
+
+        /**
+         * @hook user_delete Sau khi xóa một tài khoản thành viên
+         * Gọi khi xóa thành viên trong module users và khi xóa quản trị kèm xóa tài khoản
+         * @param int $userid ID tài khoản đã xóa
+         * @param array $row Dữ liệu tài khoản trước khi xóa
+         */
         nv_apply_hook('users', 'user_delete', [$admin_id, $row_user]);
     }
 

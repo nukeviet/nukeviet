@@ -196,6 +196,11 @@ function nv_check_email_reg(&$email)
         return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error[0]));
     }
 
+    /**
+     * @hook check_email_already_exists Kiểm tra thêm email khi đăng ký hoặc đổi email
+     * @param string $email Email đã chuẩn hóa
+     * @return string Thông báo lỗi để từ chối email, rỗng nếu chấp nhận
+     */
     $custom_check = nv_apply_hook($module_name, 'check_email_already_exists', [$email]);
     if (!empty($custom_check)) {
         return $custom_check;
@@ -398,6 +403,12 @@ function nv_del_user($userid)
     ]];
     nv_sendmail_template_async([$module_name, Emails::USER_DELETE], $send_data, $lang);
 
+    /**
+     * @hook user_delete Sau khi xóa một tài khoản thành viên
+     * Gọi khi xóa thành viên trong module users và khi xóa quản trị kèm xóa tài khoản
+     * @param int $userid ID tài khoản đã xóa
+     * @param array $row Dữ liệu tài khoản trước khi xóa
+     */
     nv_apply_hook($module_name, 'user_delete', [$userid, $row]);
 
     return $userid;

@@ -172,6 +172,13 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     }
 
     $nv_Request->unset_request('cant_do_2step', 'session');
+    /**
+     * @hook user_remove_2step Khi thành viên đã xác minh mã để tắt xác thực hai bước, dùng để thay cách xử lý mặc định
+     * @param array $row Dữ liệu tài khoản
+     * @param array $global_users_config Cấu hình module users
+     * @param string $greeting Lời chào dùng trong email
+     * @return string Thông báo hiển thị cho thành viên. Khác null thì bỏ qua xử lý mặc định
+     */
     $info = nv_apply_hook($module_name, 'user_remove_2step', [$row, $global_users_config, $greeting]);
 
     if (is_null($info)) {

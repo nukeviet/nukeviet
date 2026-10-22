@@ -54,7 +54,9 @@ function nv_site_theme($contents, $full = true)
     // Đọc ngôn ngữ của giao diện
     $nv_Lang->loadFile(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/language/' . NV_LANG_INTERFACE . '.php');
 
-    // Hook sector 4
+    /**
+     * @hook sector4 Ngoài site, khi bắt đầu dựng giao diện chung của theme, sau khi đọc ngôn ngữ giao diện
+     */
     nv_apply_hook('', 'sector4');
 
     $tpl = new \NukeViet\Template\NVSmarty();

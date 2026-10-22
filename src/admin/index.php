@@ -116,7 +116,14 @@ if (preg_match($global_config['check_module'], $module_name)) {
 
         // Ket noi voi giao dien chung cua admin
         $admin_info['admin_theme'] = (!empty($admin_info['admin_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/theme.php')) ? $admin_info['admin_theme'] : $global_config['admin_theme'];
-        // Hook để tùy chỉnh giao diện chung của admin
+        /**
+         * @hook get_global_admin_theme Chọn giao diện chung của khu vực quản trị
+         * @param string $admin_theme Giao diện quản trị đang dùng
+         * @param string $module_name Module đang truy cập
+         * @param array $module_info Thông tin module đang truy cập
+         * @param string $op Chức năng đang truy cập
+         * @return string Tên giao diện, phải có file themes/<tên giao diện>/theme.php
+         */
         $admin_info['admin_theme'] = nv_apply_hook('', 'get_global_admin_theme', [$admin_info['admin_theme'], $module_name, $module_info, $op], $admin_info['admin_theme']);
         require NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/theme.php';
 
@@ -127,7 +134,14 @@ if (preg_match($global_config['check_module'], $module_name)) {
         } elseif (is_dir(NV_ROOTDIR . '/themes/admin_default/modules/' . $module_file)) {
             $global_config['module_theme'] = 'admin_default';
         }
-        // Hook để tùy chỉnh giao diện theo module trong admin
+        /**
+         * @hook get_module_admin_theme Chọn giao diện cho phần quản trị của module đang truy cập
+         * @param string $module_theme Giao diện đã chọn, rỗng nếu không có giao diện nào chứa module
+         * @param string $module_name Module đang truy cập
+         * @param array $module_info Thông tin module đang truy cập
+         * @param string $op Chức năng đang truy cập
+         * @return string Tên giao diện chứa thư mục modules/<module_file>
+         */
         $global_config['module_theme'] = nv_apply_hook('', 'get_module_admin_theme', [$global_config['module_theme'], $module_name, $module_info, $op], $global_config['module_theme']);
 
         $allow_func = [];

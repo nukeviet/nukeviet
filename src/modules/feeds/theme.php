@@ -48,6 +48,11 @@ function nv_rss_main_theme($rsscontents)
     // Không xóa biến global này vì dùng ở rssdata.php
     global $db, $nv_Cache, $module_data, $global_config;
 
+    /**
+     * @hook before_generate_rss Trước khi lấy danh sách các module có RSS để hiển thị ở trang chính module feeds
+     * @param string $rsscontents Nội dung giới thiệu trang RSS
+     * @return array Danh sách module có RSS, key là tên module, value là thông tin module. Rỗng thì dùng danh sách mặc định
+     */
     $rss_array = nv_apply_hook($module_name, 'before_generate_rss', [$rsscontents], []);
     if (empty($rss_array)) {
         foreach ($site_mods as $mod_name => $mod_info) {

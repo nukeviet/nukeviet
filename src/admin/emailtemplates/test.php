@@ -32,7 +32,12 @@ $array['lang_content'] = $array[NV_LANG_DATA . '_content'];
 $array['pids'] = array_values(array_filter(array_unique(array_merge_recursive(explode(',', $array['sys_pids']), explode(',', $array['pids'])))));
 $array['test_tomail'] = [$admin_info['email']];
 
-// Hook xử lý biến $array khi lấy từ CSDL ra
+/**
+ * @hook emailtemplates_content_from_db Xử lý dữ liệu mẫu email sau khi đọc từ CSDL
+ * Gọi khi mở form sửa mẫu email và khi gửi thử mẫu email
+ * @param array $array Dữ liệu mẫu email
+ * @return array Dữ liệu mẫu email sau khi xử lý
+ */
 $array = nv_apply_hook('', 'emailtemplates_content_from_db', [$array], $array);
 
 $error = $merge_fields = $field_data = [];
@@ -81,6 +86,15 @@ if (count($array['pids']) == 1 and $array['pids'][0] == Emf::P_ALL and !empty($e
         'mode' => 'PRE',
         'setpids' => $array['pids']
     ];
+
+    /**
+     * @hook get_email_merge_fields Lấy các trường dữ liệu (merge field) dùng trong mẫu email
+     * Mỗi trình xử lý trả về các trường của mình, kết quả được gộp lại.
+     * Khi gửi email, mảng đầu vào có thêm dữ liệu truyền vào nv_sendmail_from_template
+     * @param string $mode PRE khi chỉ lấy danh sách trường, FULL khi lấy kèm dữ liệu để gửi email
+     * @param array $setpids ID các trình xử lý được chọn cho mẫu email
+     * @return array Các trường dữ liệu, key là tên trường, value gồm name và data
+     */
     $merge_fields = nv_apply_hook('', 'get_email_merge_fields', $args, [], 1);
 }
 
@@ -123,7 +137,14 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
         // Ghi nhận ký
         nv_insert_logs(NV_LANG_DATA, $module_name, 'Send test email', 'ID: ' . $emailid . '. To mail: ' . implode(', ', $array['test_tomail']), $admin_info['userid']);
 
-        // Hook xử lý biến $email_data trước khi build ra HTML
+        /**
+         * @hook get_email_data_before_fetch_test Xử lý dữ liệu email trước khi dựng nội dung bằng Smarty, khi gửi thử mẫu email
+         * @param int $emailid ID mẫu email
+         * @param array $email_data Dữ liệu mẫu email
+         * @param array $merge_fields Các trường dữ liệu của mẫu email
+         * @param array $field_data Dữ liệu thử của các trường
+         * @return array Dữ liệu email sau khi xử lý
+         */
         $email_data = nv_apply_hook('', 'get_email_data_before_fetch_test', [$emailid, $email_data, $merge_fields, $field_data], $email_data);
 
         try {
@@ -141,7 +162,13 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
                 $email_content = preg_replace('/(["|\'])[\s]*' . nv_preg_quote(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/') . '/isu', '\\1' . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/', $email_content);
             }
 
-            // Gọi 1 hook trước khi gửi email test
+            /**
+             * @hook event_before_sending_test_mail Trước khi gửi thử mẫu email, sau khi đã dựng nội dung
+             * @param int $emailid ID mẫu email
+             * @param array $email_data Dữ liệu mẫu email
+             * @param array $merge_fields Các trường dữ liệu của mẫu email
+             * @param array $field_data Dữ liệu thử của các trường
+             */
             nv_apply_hook('', 'event_before_sending_test_mail', [$emailid, $email_data, $merge_fields, $field_data]);
 
             $check_send = nv_sendmail($email_data['from'], $array['test_tomail'], $email_subject, $email_content, implode(',', $email_data['attachments']), false, true, $email_data['cc'], $email_data['bcc'], !$email_data['is_selftemplate'], [], NV_LANG_INTERFACE, $email_data['mailtpl']);

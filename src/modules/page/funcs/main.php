@@ -173,6 +173,14 @@ if ($page_config['viewtype'] == 2) {
         $stmt->execute();
     }
     extend_row_data($rowdetail);
+
+    /**
+     * @hook before_detail_theme Trước khi dựng giao diện trang chi tiết
+     * @param array $rowdetail Dữ liệu trang
+     * @param array $other_links Các trang khác, key là ID
+     * @param string $content_comment HTML khu vực bình luận
+     * @return array [$rowdetail, $other_links, $content_comment]
+     */
     [$rowdetail, $other_links, $content_comment] = nv_apply_hook($module_name, 'before_detail_theme', [$rowdetail, $other_links, $content_comment], [$rowdetail, $other_links, $content_comment]);
     $nv_schemas[] = $schema;
 

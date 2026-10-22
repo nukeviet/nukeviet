@@ -250,6 +250,11 @@ if ($nv_Request->isset_request('credential', 'post')) {
     if (!$is_edit) {
         // Case đăng nhập bằng Oauth Google Identity
         $server = 'google-identity';
+        /**
+         * @hook find_oauth_google_identity Tìm tài khoản đã liên kết với Google Identity, dùng để thay cách tìm mặc định
+         * @param array $credential Phần tử 1 là thông tin tài khoản Google đã giải mã
+         * @return array [$user_id, $op_email, $user_active, $safemode]. Null thì dùng cách tìm mặc định
+         */
         $custom_method = nv_apply_hook($module_name, 'find_oauth_google_identity', [$credential]);
 
         if (is_null($custom_method)) {
@@ -327,6 +332,12 @@ if ($nv_Request->isset_request('credential', 'post')) {
         || (!empty($credential[1]['email_verified']) && !empty($credential[1]['hd']))
     );
 
+
+    /**
+     * @hook prehandling_oauth_google_identity Trước khi lưu thông tin tài khoản Google Identity vào session
+     * @param bool $is_edit true khi liên kết từ trang sửa thông tin, false khi đăng nhập
+     * @param array $attribs Thông tin tài khoản Google
+     */
     nv_apply_hook($module_name, 'prehandling_oauth_google_identity', [$is_edit, $attribs]);
     $nv_Request->set_Session('openid_attribs', json_encode($attribs, NV_JSON_ENCODE));
     if ($is_edit) {

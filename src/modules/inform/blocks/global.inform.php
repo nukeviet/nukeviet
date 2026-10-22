@@ -45,6 +45,10 @@ if (!empty($global_config['inform_active']) and defined('NV_IS_USER') and !defin
     $u_groups = !empty($u_groups) ? implode(',', $u_groups) : '';
 
     $module_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=inform';
+    /**
+     * @hook get_all_inform_link Lấy link xem tất cả thông báo trong block thông báo
+     * @return string URL trang danh sách thông báo
+     */
     $viewall_url = nv_apply_hook('inform', 'get_all_inform_link', [], $module_url);
     $csrf = md5($user_info['userid'] . $u_groups . NV_CHECK_SESSION);
 

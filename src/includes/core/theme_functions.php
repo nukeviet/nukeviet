@@ -388,6 +388,15 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = '', $noin
     $channel['updated'] = !empty($channel['pubDate']) ? $channel['pubDate'] : NV_CURRENTTIME;
     $channel['updated'] = max($channel['updated'], $channel['modified']);
 
+    /**
+     * @hook before_rss_output_xml Trước khi xuất dữ liệu RSS hoặc Atom
+     * @param array $channel Thông tin kênh
+     * @param array $items Các mục tin
+     * @param string $xsl URL file XSL
+     * @param string $type rss hoặc atom
+     * @param string $timemode GMT hoặc ISO8601
+     * @return array [$channel, $items, $xsl, $type, $timemode]
+     */
     [$channel, $items, $xsl, $type, $timemode] = nv_apply_hook('', 'before_rss_output_xml', [$channel, $items, $xsl, $type, $timemode], [$channel, $items, $xsl, $type, $timemode]);
 
     if ($type == 'rss') {
@@ -517,6 +526,13 @@ function nv_xmlSitemapIndex_generate()
                 $modfile = $_scratch['module_file'];
                 unset($_scratch);
                 $sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $modfile . '/funcs', '/^sitemap(.*?)\.php$/');
+
+                /**
+                 * @hook generating_sitemap_module Khi tạo sitemap index, gọi với từng module có sitemap
+                 * @param string $modname Tên module
+                 * @param array $sitemaps Các file funcs/sitemap*.php của module
+                 * @return array [$modname, $sitemaps]
+                 */
                 [$modname, $sitemaps] = nv_apply_hook('', 'generating_sitemap_module', [$modname, $sitemaps], [$modname, $sitemaps]);
                 if (!empty($sitemaps)) {
                     foreach ($sitemaps as $filename) {
@@ -540,6 +556,13 @@ function nv_xmlSitemapIndex_generate()
         foreach ($site_mods as $modname => $values) {
             if (isset($values['funcs']) and isset($values['funcs']['sitemap']) and !empty($values['sitemap'])) {
                 $sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $values['module_file'] . '/funcs', '/^sitemap(.*?)\.php$/');
+
+                /**
+                 * @hook generating_sitemap_module Khi tạo sitemap index, gọi với từng module có sitemap
+                 * @param string $modname Tên module
+                 * @param array $sitemaps Các file funcs/sitemap*.php của module
+                 * @return array [$modname, $sitemaps]
+                 */
                 [$modname, $sitemaps] = nv_apply_hook('', 'generating_sitemap_module', [$modname, $sitemaps], [$modname, $sitemaps]);
                 if (!empty($sitemaps)) {
                     foreach ($sitemaps as $filename) {

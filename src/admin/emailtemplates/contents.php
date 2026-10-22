@@ -55,6 +55,15 @@ if ($nv_Request->isset_request('getMergeFields', 'post')) {
         'mode' => 'PRE',
         'setpids' => $pids
     ];
+
+    /**
+     * @hook get_email_merge_fields Lấy các trường dữ liệu (merge field) dùng trong mẫu email
+     * Mỗi trình xử lý trả về các trường của mình, kết quả được gộp lại.
+     * Khi gửi email, mảng đầu vào có thêm dữ liệu truyền vào nv_sendmail_from_template
+     * @param string $mode PRE khi chỉ lấy danh sách trường, FULL khi lấy kèm dữ liệu để gửi email
+     * @param array $setpids ID các trình xử lý được chọn cho mẫu email
+     * @return array Các trường dữ liệu, key là tên trường, value gồm name và data
+     */
     $merge_fields = nv_apply_hook('', 'get_email_merge_fields', $args, [], 1);
 
     // Các field của hệ thống luôn khả dụng với mọi trình xử lý
@@ -108,7 +117,12 @@ if ($emailid or $copyid) {
     $array['pids'] = $array['pids'] ? explode(',', $array['pids']) : [];
     $array['sys_pids'] = $array['sys_pids'] ? explode(',', $array['sys_pids']) : [];
 
-    // Hook xử lý biến $array khi lấy từ CSDL ra
+    /**
+     * @hook emailtemplates_content_from_db Xử lý dữ liệu mẫu email sau khi đọc từ CSDL
+     * Gọi khi mở form sửa mẫu email và khi gửi thử mẫu email
+     * @param array $array Dữ liệu mẫu email
+     * @return array Dữ liệu mẫu email sau khi xử lý
+     */
     $array = nv_apply_hook('', 'emailtemplates_content_from_db', [$array], $array);
 }
 
@@ -373,7 +387,11 @@ if ($nv_Request->isset_request('saveform', 'post') and csrf_check($nv_Request->g
     }
 
     if (empty($error)) {
-        // Hook xử lý biến $array trước khi lưu vào CSDL
+        /**
+         * @hook emailtemplates_content_correct_before_save Xử lý dữ liệu mẫu email trước khi lưu vào CSDL, sau khi đã kiểm tra hợp lệ
+         * @param array $array Dữ liệu mẫu email
+         * @return array Dữ liệu mẫu email sau khi xử lý
+         */
         $array = nv_apply_hook('', 'emailtemplates_content_correct_before_save', [$array], $array);
 
         if (!$array['emailid']) {
@@ -539,6 +557,10 @@ if ($nv_Request->isset_request('saveform', 'post') and csrf_check($nv_Request->g
                     $stmt_select->closeCursor();
                 }
 
+                /**
+                 * @hook emailtemplates_content_after_save Sau khi thêm mới hoặc cập nhật mẫu email thành công
+                 * @param array $array Dữ liệu mẫu email đã lưu
+                 */
                 nv_apply_hook('', 'emailtemplates_content_after_save', [$array]);
 
                 $nv_Cache->delMod($module_name);
@@ -549,6 +571,12 @@ if ($nv_Request->isset_request('saveform', 'post') and csrf_check($nv_Request->g
         } catch (Throwable $e) {
             // Hook khi bị lỗi lưu vào CSDL
             trigger_error($e);
+
+            /**
+             * @hook emailtemplates_on_emailtemplate_save_error Khi lưu mẫu email vào CSDL bị lỗi
+             * @param array $array Dữ liệu mẫu email
+             * @param Throwable $e Lỗi phát sinh
+             */
             nv_apply_hook('', 'emailtemplates_on_emailtemplate_save_error', [$array, $e]);
             $error[] = $nv_Lang->getModule('errorsave');
         }

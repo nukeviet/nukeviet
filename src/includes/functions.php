@@ -1918,6 +1918,11 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             }
         }
 
+        /**
+         * @hook sendmail_others_actions Trước khi gửi email bằng nv_sendmail, dùng để thiết lập thêm cho đối tượng gửi mail
+         * @param array $gconfigs Cấu hình gửi mail
+         * @param NukeViet\Core\Sendmail $mail Đối tượng gửi mail
+         */
         nv_apply_hook('', 'sendmail_others_actions', [$gconfigs, $mail]);
 
         // Gửi mail
@@ -2792,6 +2797,17 @@ function nv_url_rewrite_callback($matches)
             unset($query_array[NV_OP_VARIABLE]);
         }
 
+        /**
+         * @hook get_rewrite_domain Lấy tên miền đặt trước URL khi rewrite URL và khi tạo URL gọi API
+         * Khi rewrite URL hook nhận 6 dữ liệu đầu vào, khi tạo URL gọi API hook không nhận dữ liệu đầu vào
+         * @param int $op_rewrite_count Số phần op đã rewrite
+         * @param array $op_rewrite Các phần op đã rewrite
+         * @param string $rewrite_end Phần đuôi URL
+         * @param array $query_array Các tham số còn lại trên URL
+         * @param bool $is_amp Dùng `&amp;` để nối tham số
+         * @param bool $is_acp URL khu vực quản trị
+         * @return string Tên miền kèm giao thức, VD https://example.com. Rỗng thì dùng đường dẫn tương đối
+         */
         $rewrite_string = nv_apply_hook('', 'get_rewrite_domain', [$op_rewrite_count, $op_rewrite, $rewrite_end, $query_array, $is_amp, $is_acp], '') . ($is_acp ? NV_BASE_ADMINURL : NV_BASE_SITEURL) . ($global_config['check_rewrite_file'] ? '' : 'index.php/') . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
 
         if (!empty($query_array)) {
@@ -2861,6 +2877,11 @@ function api_url_create($action, $language = '', $module = '', $domain = '')
     }
 
     if ($global_config['rewrite_enable']) {
+        /**
+         * @hook get_rewrite_domain Lấy tên miền đặt trước URL khi rewrite URL và khi tạo URL gọi API
+         * Khi rewrite URL hook nhận 6 dữ liệu đầu vào, khi tạo URL gọi API hook không nhận dữ liệu đầu vào
+         * @return string Tên miền kèm giao thức, VD https://example.com. Rỗng thì dùng đường dẫn tương đối
+         */
         $url = nv_apply_hook('', 'get_rewrite_domain', [], '') . NV_BASE_SITEURL . 'api';
         !empty($language) && $url .= '/' . $language;
         !empty($module) && $url .= '/' . $module;
@@ -2880,6 +2901,11 @@ function api_url_create($action, $language = '', $module = '', $domain = '')
         return $domain . $url;
     }
 
+    /**
+     * @hook get_rewrite_domain Lấy tên miền đặt trước URL khi rewrite URL và khi tạo URL gọi API
+     * Khi rewrite URL hook nhận 6 dữ liệu đầu vào, khi tạo URL gọi API hook không nhận dữ liệu đầu vào
+     * @return string Tên miền kèm giao thức, VD https://example.com. Rỗng thì dùng đường dẫn tương đối
+     */
     $url = nv_apply_hook('', 'get_rewrite_domain', [], '') . NV_BASE_SITEURL . 'api.php';
     if (!empty($domain)) {
         if (!str_starts_with($url, $domain)) {
@@ -3590,6 +3616,13 @@ function nv_redirect_location($url, $error_code = 301, $noreferrer = false)
     if ($noreferrer) {
         header('Referrer-Policy: no-referrer');
     }
+    /**
+     * @hook nv_redirect_location Trước khi chuyển hướng bằng nv_redirect_location
+     * @param string $url URL chuyển đến
+     * @param int $error_code Mã trạng thái HTTP
+     * @param bool $noreferrer Có gửi header Referrer-Policy: no-referrer
+     * @return string URL chuyển đến sau khi xử lý
+     */
     $url = nv_apply_hook('', 'nv_redirect_location', [$url, $error_code, $noreferrer], $url);
     header('Location: ' . str_replace('&amp;', '&', nv_url_rewrite($url, true)));
     exit(0);
@@ -4489,6 +4522,15 @@ function nv_sendmail_from_template($emailid, $data = [], $lang = '', $attachment
                 $simple_value = true;
             } else {
                 $_args = array_merge($args, $row['data']);
+
+                /**
+                 * @hook get_email_merge_fields Lấy các trường dữ liệu (merge field) dùng trong mẫu email
+                 * Mỗi trình xử lý trả về các trường của mình, kết quả được gộp lại.
+                 * Khi gửi email, mảng đầu vào có thêm dữ liệu truyền vào nv_sendmail_from_template
+                 * @param string $mode PRE khi chỉ lấy danh sách trường, FULL khi lấy kèm dữ liệu để gửi email
+                 * @param array $setpids ID các trình xử lý được chọn cho mẫu email
+                 * @return array Các trường dữ liệu, key là tên trường, value gồm name và data
+                 */
                 $merge_fields = nv_apply_hook('', 'get_email_merge_fields', $_args, [], 1);
 
                 // Dùng data làm trường dữ liệu nếu không chọn hoặc trình xử lý dữ liệu trả rỗng
@@ -4518,7 +4560,14 @@ function nv_sendmail_from_template($emailid, $data = [], $lang = '', $attachment
                 $tpl->assign($field_key, $simple_value ? $field_value : $field_value['data']);
             }
 
-            // Dùng để xử lý cả biến $email_data trước khi gọi Smarty thực hiện
+            /**
+             * @hook get_email_data_before_fetch Xử lý dữ liệu email trước khi dựng nội dung bằng Smarty, khi gửi email theo mẫu
+             * @param int $emailid ID mẫu email
+             * @param array $email_data Dữ liệu mẫu email
+             * @param array $merge_fields Các trường dữ liệu của mẫu email
+             * @param array $row Dữ liệu gửi cho một lượt nhận, một phần tử của $data truyền vào nv_sendmail_from_template
+             * @return array Dữ liệu email sau khi xử lý
+             */
             $_email_data = nv_apply_hook('', 'get_email_data_before_fetch', [$emailid, $email_data, $merge_fields, $row], $email_data);
 
             $email_content = $tpl->fetch('string:' . $_email_data['content']);
@@ -4529,7 +4578,14 @@ function nv_sendmail_from_template($emailid, $data = [], $lang = '', $attachment
                 $email_content = preg_replace('/(["|\'])[\s]*' . nv_preg_quote(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/') . '/isu', '\\1' . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/', $email_content);
             }
 
-            // Dùng để xử lý nội dung email trước khi gửi
+            /**
+             * @hook get_email_content_before_send Xử lý nội dung email theo mẫu trước khi gửi
+             * @param string $email_content Nội dung email đã dựng
+             * @param array $email_data Dữ liệu mẫu email
+             * @param array $row Dữ liệu gửi cho một lượt nhận
+             * @param int $emailid ID mẫu email
+             * @return string|array Nội dung email, hoặc mảng [nội dung, ngôn ngữ] để đổi ngôn ngữ email
+             */
             $email_content = nv_apply_hook('', 'get_email_content_before_send', [$email_content, $_email_data, $row, $emailid], $email_content);
             $email_lang = $lang;
             if (is_array($email_content)) {

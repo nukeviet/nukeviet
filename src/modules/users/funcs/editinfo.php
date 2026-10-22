@@ -89,6 +89,11 @@ function nv_check_email_change(&$email, $edit_userid)
         return $nv_Lang->getModule('email_deny_name', $email);
     }
 
+    /**
+     * @hook check_email_already_exists Kiểm tra thêm email khi đăng ký hoặc đổi email
+     * @param string $email Email đã chuẩn hóa
+     * @return string Thông báo lỗi để từ chối email, rỗng nếu chấp nhận
+     */
     $custom_check = nv_apply_hook($module_name, 'check_email_already_exists', [$email]);
     if (!empty($custom_check)) {
         return $custom_check;
@@ -1069,6 +1074,12 @@ if ($checkss_valid and $array_data['type'] == 'basic') {
     $stmt->execute();
 
     oldPassSave($edit_userid, $row['password'], $row['pass_creation_time']);
+
+    /**
+     * @hook user_change_password Sau khi thành viên đổi mật khẩu
+     * @param array $row Dữ liệu tài khoản trước khi đổi
+     * @param string $new_password Mật khẩu mới chưa mã hóa
+     */
     nv_apply_hook($module_name, 'user_change_password', [$row, $new_password]);
 
     $send_data = [[

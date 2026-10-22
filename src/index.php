@@ -26,7 +26,10 @@ if ($global_config['statistic'] and isset($sys_mods['statistics']) and $nv_Reque
     include_once NV_ROOTDIR . '/includes/core/statimg.php';
 }
 
-// Xuất ảnh QR-CODE
+/**
+ * @hook get_qr_code Ngoài site, xuất ảnh QR code khi có yêu cầu
+ * @param NukeViet\Core\Request $nv_Request Đối tượng request
+ */
 nv_apply_hook('', 'get_qr_code', [$nv_Request]);
 
 // Google Sitemap
@@ -58,7 +61,9 @@ if (defined('NV_IS_USER')) {
     }
 }
 
-// Hook sector 5
+/**
+ * @hook sector5 Ngoài site, sau khi kiểm tra thành viên đăng nhập, trước khi cập nhật trạng thái online và thống kê
+ */
 nv_apply_hook('', 'sector5');
 
 // Cap nhat trang thai online

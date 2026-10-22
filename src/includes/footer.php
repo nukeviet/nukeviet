@@ -30,8 +30,17 @@ if (!defined('NV_IS_AJAX')) {
     }
 }
 
+/**
+ * @hook change_site_buffer Trước khi xuất nội dung trang, sau khi đã tối ưu HTML
+ * @param array $global_config Cấu hình hệ thống
+ * @param array $buffer Mảng gồm nội dung HTML và các header HTTP
+ * @return array [$contents, $headers]
+ */
 [$contents, $headers] = nv_apply_hook('', 'change_site_buffer', [$global_config, [$contents, $headers]], [$contents, $headers]);
-// Hook sector 3
+
+/**
+ * @hook sector3 Cuối mỗi lượt truy cập, trước khi đóng kết nối CSDL và gửi header
+ */
 nv_apply_hook('', 'sector3');
 
 //Close the connection by setting the PDO object

@@ -478,6 +478,12 @@ if ($nv_Request->isset_request('setStatus', 'post')) {
     }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (!empty($status) and $id) {
+        /**
+         * @hook set_status_inform Trước khi thành viên đổi trạng thái của một thông báo
+         * @param int $id ID thông báo
+         * @param string $status Trạng thái mới: viewed, unviewed, favorite, unfavorite, hidden, unhidden
+         * @param array $user_info Thành viên đang đăng nhập
+         */
         nv_apply_hook($module_name, 'set_status_inform', [$id, $status, $user_info]);
 
         switch ($status) {
@@ -560,6 +566,14 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
     }
     $per_page = defined('NV_IS_AJAX') ? $global_config['inform_numrows'] : 20;
 
+    /**
+     * @hook get_list_inform Lấy danh sách thông báo của thành viên, dùng để thay cách lấy mặc định
+     * @param array $user_info Thành viên đang đăng nhập
+     * @param string $filter Bộ lọc: rỗng, unviewed, favorite, hidden
+     * @param int $page Trang hiện tại
+     * @param int $per_page Số thông báo mỗi trang
+     * @return array [$num_items, $items, $count] gồm tổng số thông báo, các thông báo, số thông báo mới hiển thị. Phần tử đầu là null thì dùng cách lấy mặc định
+     */
     [$num_items, $items, $count] = nv_apply_hook($module_name, 'get_list_inform', [
         $user_info,
         $filter,
@@ -686,6 +700,15 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
             $items[$row['id']] = $row;
         }
         $sth->closeCursor();
+
+        /**
+         * @hook inform_get_list_after Sau khi lấy danh sách thông báo từ CSDL, trước khi đánh dấu đã hiển thị
+         * @param array $items Các thông báo, key là ID
+         * @param string $filter Bộ lọc: rỗng, unviewed, favorite, hidden
+         * @param int $page Trang hiện tại
+         * @param int $per_page Số thông báo mỗi trang
+         * @return array Các thông báo sau khi xử lý
+         */
         $items = nv_apply_hook($module_name, 'inform_get_list_after', [$items, $filter, $page, $per_page], $items);
 
         if (!empty($notshown)) {

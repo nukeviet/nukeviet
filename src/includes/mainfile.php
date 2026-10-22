@@ -234,6 +234,9 @@ if (!empty($nv_plugins[NV_LANG_DATA])) {
     unset($_parea, $_plugin, $pdata, $priority, $module_name, $_phook, $pdatahook, $pid);
 }
 
+/**
+ * @hook check_server Sau khi nạp các plugin, trước khi thiết lập CDN. Dùng để kiểm tra yêu cầu truy cập ở mức máy chủ, VD chuyển hướng tên miền
+ */
 nv_apply_hook('', 'check_server');
 
 if (defined('NV_ADMIN')) {
@@ -318,7 +321,9 @@ if (
     require NV_ROOTDIR . '/includes/core/flood_blocker.php';
 }
 
-// Hook sector 1
+/**
+ * @hook sector1 Sau khi kiểm tra chống flood, trước khi kết nối CSDL
+ */
 nv_apply_hook('', 'sector1');
 
 // Bat dau phien lam viec cua Database
@@ -525,10 +530,15 @@ if ($nv_check_update and !defined('NV_IS_UPDATE')) {
 }
 unset($nv_check_update);
 
+/**
+ * @hook modify_global_config Sau khi xác định ngôn ngữ, trước khi đọc danh sách module. Dùng để thay đổi $global_config
+ */
 nv_apply_hook('', 'modify_global_config');
 
 $sys_mods = nv_sys_mods();
 
 define('PCLZIP_TEMPORARY_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR . '/');
-// Hook sector 2
+/**
+ * @hook sector2 Cuối mainfile.php, sau khi đọc danh sách module $sys_mods
+ */
 nv_apply_hook('', 'sector2');

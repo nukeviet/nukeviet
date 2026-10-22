@@ -280,6 +280,11 @@ if (!empty($code)) {
 
     $data['link_home'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
 
+    /**
+     * @hook prepare_user_data_deletion_show Trước khi hiển thị trang trạng thái yêu cầu xóa dữ liệu cá nhân, truy cập bằng mã xác nhận
+     * @param array $data Dữ liệu yêu cầu xóa
+     * @return array Dữ liệu sau khi xử lý
+     */
     $data = nv_apply_hook($module_name, 'prepare_user_data_deletion_show', [$data], $data);
     $contents = user_data_deletion($data);
 
@@ -311,6 +316,11 @@ $array['email'] = $user_info['email'];
 $array['first_name'] = $user_info['first_name'];
 $array['last_name'] = $user_info['last_name'];
 $array['gender'] = $user_info['gender'];
+/**
+ * @hook prepare_user_data_deletion Chuẩn bị dữ liệu trang yêu cầu xóa tài khoản của thành viên đang đăng nhập
+ * @param array $array Dữ liệu trang
+ * @return array Dữ liệu sau khi xử lý
+ */
 $array = nv_apply_hook($module_name, 'prepare_user_data_deletion', [$array], $array);
 
 // Trường hợp tài khoản đang chờ xóa

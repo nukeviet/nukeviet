@@ -498,6 +498,14 @@ if ($nv_Request->isset_request('userid', 'get')) {
             $maillang = NV_LANG_DATA;
         }
 
+        /**
+         * @hook admin_active_account Khi quản trị kích hoạt tài khoản đang chờ, trước khi gửi email thông báo
+         * @param int $user_id ID tài khoản vừa kích hoạt
+         * @param array $post Dữ liệu tài khoản
+         * @param array $userdata Dữ liệu đăng ký trong bảng chờ kích hoạt
+         * @param string $maillang Ngôn ngữ email
+         * @return bool true thì không gửi email thông báo mặc định
+         */
         if (!nv_apply_hook($module_name, 'admin_active_account', [$user_id, $post, $userdata, $maillang], false)) {
             $send_data = [[
                 'to' => $post['email'],

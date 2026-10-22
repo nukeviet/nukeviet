@@ -36,6 +36,10 @@ if ($nv_Request->isset_request('deltpl', 'post')) {
 
     if ($stmt->execute() and $stmt->rowCount()) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete tpl', 'ID: ' . $emailid, $admin_info['userid']);
+        /**
+         * @hook emailtemplates_after_delete Sau khi xóa một mẫu email
+         * @param int $emailid ID mẫu email đã xóa
+         */
         nv_apply_hook('', 'emailtemplates_after_delete', [$emailid]);
         $nv_Cache->delMod($module_name);
     } else {

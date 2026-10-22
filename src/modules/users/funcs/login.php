@@ -92,6 +92,11 @@ if (defined('NV_IS_USER_FORUM') and defined('SSO_SERVER')) {
     // SSO login
     $redirect = nv_redirect_decrypt($nv_redirect) ?: (NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     $url = NukeViet\Client\Sso::getLoginUrl($redirect, $sso_rcount);
+    /**
+     * @hook modify_sso_login_url Thay đổi URL đăng nhập SSO
+     * @param string $url URL đăng nhập SSO
+     * @return string URL sau khi xử lý
+     */
     $url = nv_apply_hook('', 'modify_sso_login_url', [$url], $url);
     if ($nv_Request->get_int('nv_ajax', 'post', 0) == 1) {
         nv_jsonOutput([
@@ -474,6 +479,12 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     if (!is_array($attribs)) {
         $attribs = [];
     }
+    /**
+     * @hook custom_login_openid_attribs Xử lý thông tin tài khoản nhận từ nhà cung cấp OAuth/OpenID trước khi đăng nhập
+     * @param string $server Nhà cung cấp
+     * @param array $attribs Thông tin tài khoản từ nhà cung cấp
+     * @return array Thông tin tài khoản sau khi xử lý
+     */
     $attribs = nv_apply_hook($module_name, 'custom_login_openid_attribs', [$server, $attribs], $attribs);
 
     if (empty($attribs) or $attribs['server'] != $server) {

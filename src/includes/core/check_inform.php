@@ -21,6 +21,11 @@ $groups = $nv_Request->get_title('__groups', 'post', '');
 $csrf = $nv_Request->get_title('_csrf', 'post', '');
 $checkss = md5($userid . $groups . NV_CHECK_SESSION);
 if ($userid and hash_equals($checkss, $csrf)) {
+    /**
+     * @hook check_inform Khi trình duyệt kiểm tra định kỳ số thông báo mới của thành viên, trước khi đọc số thông báo
+     * @param int $userid ID thành viên
+     * @param string $groups Các nhóm của thành viên, ngăn cách bởi dấu phẩy
+     */
     nv_apply_hook('', 'check_inform', [$userid, $groups]);
     $stmt = $db->prepare('SELECT inform FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid = :userid');
     $stmt->bindValue(':userid', $userid, PDO::PARAM_INT);

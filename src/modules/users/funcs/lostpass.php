@@ -358,6 +358,12 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $stmt->execute();
 
     oldPassSave($row['userid'], $row['password'], $row['pass_creation_time']);
+
+    /**
+     * @hook user_lostpass_success Sau khi thành viên đặt lại mật khẩu thành công qua chức năng quên mật khẩu
+     * @param array $row Dữ liệu tài khoản trước khi đổi
+     * @param string $new_password Mật khẩu mới chưa mã hóa
+     */
     nv_apply_hook($module_name, 'user_lostpass_success', [$row, $new_password]);
 
     $send_data = [[

@@ -1,0 +1,17 @@
+{
+  "name": "nukeviet-manual",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "gen": "php tools/functions.php && php tools/hooks.php",
+    "predev": "npm run gen",
+    "dev": "vitepress dev",
+    "prebuild": "npm run gen",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "check-translations": "node scripts/check-translations.mjs"
+  },
+  "devDependencies": {
+    "vitepress": "1.6.4"
+  }
+}

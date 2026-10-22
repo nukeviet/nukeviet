@@ -24,6 +24,10 @@ function cron_user_datadeletion_handling()
 {
     global $db, $nv_Lang;
 
+    /**
+     * @hook cron_user_datadeletion_handling Đầu tiến trình tự động xóa dữ liệu thành viên đã lên lịch xóa
+     * @return mixed Khác null thì bỏ qua xử lý mặc định của hệ thống
+     */
     $skiped = nv_apply_hook('', 'cron_user_datadeletion_handling');
     if (!is_null($skiped)) {
         return true;
@@ -195,6 +199,12 @@ function cron_user_datadeletion_handling()
             ]
         ]];
         nv_sendmail_template_async(['users', Emails::DELETE_ACCOUNT_COMPLETED], $send_data, $lang);
+
+        /**
+         * @hook cron_user_datadeletion_handling_row Sau khi tiến trình tự động xóa xong dữ liệu của một thành viên
+         * @param array $row Yêu cầu xóa dữ liệu, bảng users_deleted
+         * @param array $user_info Thông tin thành viên đã xóa
+         */
         nv_apply_hook('', 'cron_user_datadeletion_handling_row', [$row, $user_info]);
     }
 

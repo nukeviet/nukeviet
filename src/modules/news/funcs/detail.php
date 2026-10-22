@@ -126,6 +126,10 @@ if (empty($time_set)) {
 
 // Mở bài viết sang nguồn tin chính thức
 if ($news_contents['external_link']) {
+    /**
+     * @hook before_redirect_external_link Trước khi chuyển hướng sang nguồn tin gốc của bài viết có liên kết ngoài
+     * @param array $news_contents Dữ liệu bài viết
+     */
     nv_apply_hook($module_name, 'before_redirect_external_link', [$news_contents]);
     nv_redirect_location($news_contents['sourcetext'], 0, true);
 }
@@ -634,6 +638,16 @@ if ($news_contents['related_pos'] != 0 and !empty($news_contents['related_ids'])
     $result->closeCursor();
 }
 
+/**
+ * @hook before_detail_theme Trước khi dựng giao diện trang chi tiết bài viết
+ * @param array $news_contents Dữ liệu bài viết
+ * @param array $array_keyword Các từ khóa của bài viết
+ * @param array $related_new_array Bài viết mới hơn cùng chuyên mục
+ * @param array $related_array Bài viết cũ hơn cùng chuyên mục
+ * @param array $topic_array Bài viết cùng dòng sự kiện
+ * @param string $content_comment HTML khu vực bình luận
+ * @return array Các dữ liệu đầu vào sau khi xử lý, đúng thứ tự
+ */
 [$news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment] = nv_apply_hook($module_name, 'before_detail_theme', [$news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment], [$news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment]);
 $contents = detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment);
 

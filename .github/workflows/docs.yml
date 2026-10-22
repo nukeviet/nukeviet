@@ -1,0 +1,164 @@
+# Build và deploy tài liệu docs/manual lên GitHub Pages
+#
+# - Pull request: build thử, kiểm link hỏng, cảnh báo bản dịch và hook chưa có mô tả
+# - Push lên nhánh nukeviet5.x: build rồi ghi vào thư mục <phiên bản>/ trên nhánh gh-pages,
+#   các phiên bản khác trên gh-pages giữ nguyên
+#
+# Biến repo DOCS_DOMAIN (Settings > Secrets and variables > Actions > Variables):
+# tên miền riêng, VD docs.nukeviet.vn. Để trống thì site chạy tại <owner>.github.io/<repo>/
+
+name: Docs
+
+on:
+  pull_request:
+    paths:
+      - 'docs/manual/**'
+      - 'src/**'
+      - '.github/workflows/docs.yml'
+  push:
+    branches:
+      - 'nukeviet5.*'
+    paths:
+      - 'docs/manual/**'
+      - 'src/**'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: docs-build-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOCS_DOMAIN: ${{ vars.DOCS_DOMAIN }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: docs/manual
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Cần toàn bộ lịch sử để so thời điểm commit bản gốc và bản dịch
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: docs/manual/package-lock.json
+
+      - name: Xác định phiên bản
+        id: meta
+        run: |
+          branch="${GITHUB_BASE_REF:-$GITHUB_REF_NAME}"
+          version="${branch#nukeviet}"
+          if ! [[ "$version" =~ ^[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Không xác định được phiên bản từ nhánh $branch"
+            exit 1
+          fi
+          if [ -n "$DOCS_DOMAIN" ]; then
+            base="/$version/"
+          else
+            base="/${GITHUB_REPOSITORY#*/}/$version/"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+
+      - name: Cài đặt
+        run: npm ci
+
+      - name: Kiểm tra bản dịch
+        run: npm run check-translations
+
+      # prebuild chạy tools/functions.php và tools/hooks.php trước khi build
+      - name: Build site
+        env:
+          DOCS_BASE: ${{ steps.meta.outputs.base }}
+          DOCS_BRANCH: ${{ steps.meta.outputs.branch }}
+        run: npm run build
+
+      - uses: actions/upload-artifact@v7
+        if: github.event_name != 'pull_request'
+        with:
+          name: docs-site
+          path: docs/manual/.vitepress/dist
+          retention-days: 1
+
+  deploy:
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    # Các nhánh cùng ghi vào gh-pages nên chạy lần lượt, không hủy giữa chừng
+    concurrency:
+      group: docs-deploy
+      cancel-in-progress: false
+    env:
+      VERSION: ${{ needs.build.outputs.version }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: docs-site
+          path: site
+
+      - name: Lấy nhánh gh-pages
+        run: |
+          git init -q pages
+          cd pages
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git fetch -q --depth 1 origin gh-pages; then
+            git checkout -q -b gh-pages FETCH_HEAD
+          else
+            git checkout -q --orphan gh-pages
+          fi
+
+      - name: Ghi phiên bản vào gh-pages
+        working-directory: pages
+        run: |
+          rm -rf "./$VERSION"
+          cp -r ../site "./$VERSION"
+          touch .nojekyll
+
+          if [ -n "$DOCS_DOMAIN" ]; then
+            echo "$DOCS_DOMAIN" > CNAME
+          else
+            rm -f CNAME
+          fi
+
+          # Trang gốc chuyển tới phiên bản mới nhất, 404 dùng chung của phiên bản mới nhất
+          latest=$(find . -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | grep -E '^[0-9]+\.[0-9]+$' | sort -V | tail -1)
+          cat > index.html <<EOF
+          <!doctype html>
+          <html lang="vi">
+          <head>
+          <meta charset="utf-8">
+          <meta http-equiv="refresh" content="0; url=./$latest/">
+          <link rel="canonical" href="./$latest/">
+          <title>NukeViet Docs</title>
+          </head>
+          <body><a href="./$latest/">NukeViet $latest</a></body>
+          </html>
+          EOF
+          cp "./$latest/404.html" 404.html
+
+      - name: Đẩy lên gh-pages
+        working-directory: pages
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Không có thay đổi"
+            exit 0
+          fi
+          git commit -q -m "Deploy docs $VERSION from ${GITHUB_SHA::7}"
+          git push -q origin gh-pages
