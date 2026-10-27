@@ -360,6 +360,13 @@ if ($nv_Request->isset_request('gid,uid', 'post')) {
         exit($lang_module['no_premission']);
     }
 
+    // Không cho trưởng nhóm thêm tài khoản quản trị vào nhóm
+    $is_admin = $db->query('SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = ' . $uid)->fetchColumn();
+    $is_admin = $is_admin ?: $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id IN (1,2,3) AND userid = ' . $uid)->fetchColumn();
+    if ($is_admin) {
+        exit($lang_module['no_premission']);
+    }
+
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
         $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
         if (!empty($row)) {
@@ -771,7 +778,11 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
                         $result_admin = $db->query('SELECT admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = ' . $_userid);
 
                         if (!$row_admin = $result_admin->fetch()) {
-                            if ($groupsList[$group_id]['config']['access_editus']) {
+                            // Không hiển thị nút sửa nếu thành viên còn thuộc nhóm quản trị hoặc nhóm tùy chỉnh khác
+                            $count_other = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users
+                            WHERE userid = ' . $_userid . ' AND (group_id IN (1,2,3) OR (group_id >= 10 AND group_id != ' . $group_id . '))')->fetchColumn();
+
+                            if ($groupsList[$group_id]['config']['access_editus'] and !$count_other) {
                                 $xtpl->assign('LINK_EDIT', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=editinfo/' . $group_id . '/' . $row['userid'], true));
                                 $xtpl->parse('listUsers.' . $_type . '.loop.tools.edituser');
                             }
