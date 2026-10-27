@@ -81,12 +81,12 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
     unset($matches);
     if ($module == 'theme') {
-        preg_match($global_config['check_block_theme'], $row['file_name'], $matches);
+        $is_valid_file_name = preg_match($global_config['check_block_theme'], $row['file_name'], $matches);
     } else {
-        preg_match($global_config['check_block_module'], $row['file_name'], $matches);
+        $is_valid_file_name = preg_match($global_config['check_block_module'], $row['file_name'], $matches);
     }
 
-    if (isset($array_file_name[1])) {
+    if (isset($array_file_name[1]) and !empty($is_valid_file_name)) {
         if ($module == 'theme' and file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name) and file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini')) {
             $path_file_php = NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name;
             $path_file_ini = NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
