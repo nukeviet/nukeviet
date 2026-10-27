@@ -494,6 +494,16 @@ if ($nv_Request->isset_request('gid,uid', 'post')) {
         ]);
     }
 
+    // Không cho trưởng nhóm thêm tài khoản quản trị vào nhóm
+    $is_admin = $db->query('SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = ' . $uid)->fetchColumn();
+    $is_admin = $is_admin ?: $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id IN (1,2,3) AND userid = ' . $uid)->fetchColumn();
+    if ($is_admin) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('no_premission')
+        ]);
+    }
+
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
         $stmt = $db->prepare('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid = :userid');
         $stmt->bindValue(':userid', $uid, PDO::PARAM_INT);
@@ -947,6 +957,7 @@ if (count($array_op) == 2 and $array_op[0] == 'groups' and $array_op[1]) {
     $group_users = [];
     $array_users = [];
     $array_admins = [];
+    $array_edit_protected = [];
 
     // Danh sách xin gia nhập nhóm
     if (empty($array_search['type']) or $array_search['type'] == 'pending') {
@@ -1059,6 +1070,12 @@ if (count($array_op) == 2 and $array_op[0] == 'groups' and $array_op[1]) {
         $array_admins = $db->query($sql)->fetchAll(PDO::FETCH_COLUMN, 0);
         !empty($array_admins) && $array_admins = array_map('intval', $array_admins);
 
+        // Lấy danh sách thành viên còn thuộc nhóm quản trị hoặc nhóm tùy chỉnh khác, trưởng nhóm không được sửa
+        $sql = "SELECT DISTINCT userid FROM " . NV_MOD_TABLE . "_groups_users
+        WHERE userid IN (" . implode(',', $array_userid) . ") AND (group_id IN (1,2,3) OR (group_id >= 10 AND group_id != " . $group_id . "))";
+        $array_edit_protected = $db->query($sql)->fetchAll(PDO::FETCH_COLUMN, 0);
+        !empty($array_edit_protected) && $array_edit_protected = array_map('intval', $array_edit_protected);
+
         // Lấy số nhóm mà các thành viên này đang tham gia
         $sql = "SELECT userid, COUNT(*) AS group_count FROM " . NV_MOD_TABLE . "_groups_users
         WHERE userid IN (" . implode(',', $array_userid) . ") GROUP BY userid";
@@ -1103,6 +1120,7 @@ if (count($array_op) == 2 and $array_op[0] == 'groups' and $array_op[1]) {
             $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
             $row['tools_allowed'] = ($group_id > 3 and ($group_data['in_idsite'] == 0 or $group_data['in_idsite'] == $row['idsite']) and $_type != 'leaders') && $user_info['userid'] != $_userid;
             $row['is_admin'] = in_array($_userid, $array_admins, true);
+            $row['allow_edit'] = !$row['is_admin'] && !in_array($_userid, $array_edit_protected, true);
             $row['link_edit'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/' . $group_id . '/' . $row['userid'];
             $row['link_view'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=memberlist/' . $row['user'];
 

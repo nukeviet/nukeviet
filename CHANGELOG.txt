@@ -1,6 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 5.0.00
+- Fix group leader account takeover of admins and other groups' members via editinfo password reset. Thanks Ngo Xuan Ha from GitHub @h4nx0x
+- Fix authenticated LFI in theme block management via unvalidated block file_name. Thanks Ngo Xuan Ha from GitHub @h4nx0x
 - Fix stored XSS via HTML entity decoding of banner content in banners block. Thanks Thế from GitHub @Pbat6
 - Fix reflected XSS via double URL decoding of search keyword in news module. Thanks Thế from GitHub @Pbat6
 - Fix stored XSS via internal marker injection in iframe srcdoc. Thanks Thế from GitHub @Pbat6

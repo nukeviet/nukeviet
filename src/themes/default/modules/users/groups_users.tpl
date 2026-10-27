@@ -144,7 +144,7 @@
                                     <i class="fa-solid fa-circle-minus" data-icon="fa-circle-minus"></i>
                                 </button>
                                 {else}
-                                {if not $user.is_admin and $DATA.config.access_editus}
+                                {if $user.allow_edit and $DATA.config.access_editus}
                                 <a href="{$user.link_edit}" class="btn btn-secondary btn-sm"
                                     title="{$LANG->getGlobal('edit')}" aria-label="{$LANG->getGlobal('edit')}"
                                     data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{$LANG->getGlobal('edit')}"
