@@ -135,9 +135,15 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     unset($matches);
     if ($module == 'theme') {
-        preg_match($global_config['check_block_theme'], $row['file_name'], $matches);
+        $is_valid_file_name = preg_match($global_config['check_block_theme'], $row['file_name'], $matches);
     } else {
-        preg_match($global_config['check_block_module'], $row['file_name'], $matches);
+        $is_valid_file_name = preg_match($global_config['check_block_module'], $row['file_name'], $matches);
+    }
+    if (empty($is_valid_file_name)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('block_error_nsblock')
+        ]);
     }
 
     $path_file_php = $path_file_ini = $path_file_json = $block_type = $block_dir = '';

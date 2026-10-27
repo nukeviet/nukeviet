@@ -266,12 +266,12 @@ function nv_blocks_content($sitecontent)
                 $blockID = 'nv' . $_key;
 
                 if ($_row['module'] == 'theme') {
-                    if (theme_file_exists($global_config['module_theme'] . '/blocks/' . $_row['file_name'])) {
+                    if (preg_match($global_config['check_block_theme'], $_row['file_name']) and theme_file_exists($global_config['module_theme'] . '/blocks/' . $_row['file_name'])) {
                         $block_config['real_theme'] = $global_config['module_theme'];
                         $block_config['real_path'] = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks';
                         include $block_config['real_path'] . '/' . $_row['file_name'];
                     }
-                } elseif (isset($sys_mods[$_row['module']]['module_file']) and !empty($sys_mods[$_row['module']]['module_file'])) {
+                } elseif (isset($sys_mods[$_row['module']]['module_file']) and !empty($sys_mods[$_row['module']]['module_file']) and preg_match($global_config['check_block_module'], $_row['file_name'])) {
                     if (theme_file_exists($global_config['module_theme'] . '/modules/' . $sys_mods[$_row['module']]['module_file'] . '/' . $_row['file_name'])) {
                         $block_config['real_theme'] = $global_config['module_theme'];
                         $block_config['real_path'] = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $sys_mods[$_row['module']]['module_file'];
