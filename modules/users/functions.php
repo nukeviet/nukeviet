@@ -316,6 +316,20 @@ if (defined('NV_IS_USER') and isset($array_op[1]) and ($array_op[0] == 'register
                 $result = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users
                 WHERE group_id = ' . $group_id . ' AND userid = ' . intval($array_op[2]) . ' AND is_leader = 0');
                 $row = $result->fetch();
+
+                /*
+                 * Không cho trưởng nhóm sửa tài khoản quản trị
+                 * và tài khoản còn thuộc nhóm tùy chỉnh khác (nhóm của trưởng nhóm khác)
+                 */
+                if (!empty($row)) {
+                    $is_protected = $db->query('SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = ' . intval($array_op[2]))->fetchColumn();
+                    $is_protected = $is_protected ?: $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users
+                    WHERE userid = ' . intval($array_op[2]) . ' AND (group_id IN (1,2,3) OR (group_id >= 10 AND group_id != ' . $group_id . '))')->fetchColumn();
+                    if ($is_protected) {
+                        $row = [];
+                    }
+                }
+
                 if (!empty($row)) {
                     // Nếu tài khoản nằm trong nhóm đó thì được quyền sửa
                     $userid = intval($array_op[2]);
