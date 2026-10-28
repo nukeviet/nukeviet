@@ -171,7 +171,7 @@ if (!module_file_exists($include_file)) {
         $nv_Cache->delMod('modules');
     }
 
-    exit();
+    nv_error404();
 }
 
 // Global variable for module
