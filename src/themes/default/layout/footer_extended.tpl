@@ -14,6 +14,9 @@
 <footer class="site-footer">
     <div class="footer-top">
         <div class="container gx-4 pt-4">
+            <div class="vstack vstack-blocks">
+                [TOP_FOOTER]
+            </div>
             <div class="row gx-4">
                 <div class="footer-start mb-4">
                     <div class="vstack vstack-blocks">
@@ -33,6 +36,9 @@
                         [QR_CODE]
                     </div>
                 </div>
+            </div>
+            <div class="vstack vstack-blocks">
+                [BOTTOM_FOOTER]
             </div>
         </div>
     </div>
