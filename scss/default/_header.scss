@@ -100,9 +100,8 @@
 
   .logo {
     img {
-      min-height: 60px;
       width: auto;
-      height: auto;
+      height: 60px;
       max-width: 100%;
       object-fit: contain;
     }
@@ -124,10 +123,11 @@
   }
 
   .logo {
+    max-width: 100%;
+
     img {
-      min-height: 80px;
       width: auto;
-      height: auto;
+      height: 80px;
       max-width: 100%;
       object-fit: contain;
     }

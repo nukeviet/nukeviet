@@ -28604,17 +28604,18 @@ span.keyword {
   display: none;
 }
 .site-header-mobile .logo img {
-  min-height: 60px;
   width: auto;
-  height: auto;
+  height: 60px;
   max-width: 100%;
   -o-object-fit: contain;
   object-fit: contain;
 }
+.logo-banner .logo {
+  max-width: 100%;
+}
 .logo-banner .logo img {
-  min-height: 80px;
   width: auto;
-  height: auto;
+  height: 80px;
   max-width: 100%;
   -o-object-fit: contain;
   object-fit: contain;
