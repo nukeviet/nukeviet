@@ -58,10 +58,11 @@ ErrorDocument 504 /error.php?code=504
   AddType text/css .css
   AddType text/html .htm .html
   AddType text/javascript .js .mjs
-  AddType text/plain .txt
+  AddType text/plain .srt .txt
+  AddType text/vtt .vtt
   AddType text/xsl .xsl
 
-  AddCharset UTF-8 .css .htm .html .js .json .mjs .rss .svg .webmanifest .xml .xsl
+  AddCharset UTF-8 .css .htm .html .js .json .mjs .rss .svg .vtt .webmanifest .xml .xsl
 </IfModule>
 
 <IfModule mod_autoindex.c>
@@ -83,7 +84,7 @@ ErrorDocument 504 /error.php?code=504
   ExpiresActive on
 </IfModule>
 
-<FilesMatch "\.(css|htm|html|js|json|mjs|otf|rss|svg|ttf|txt|webmanifest|xml|xsl)($|\?)">
+<FilesMatch "\.(css|htm|html|js|json|mjs|otf|rss|srt|svg|ttf|txt|vtt|webmanifest|xml|xsl)($|\?)">
   <IfModule mod_brotli.c>
     SetOutputFilter BROTLI_COMPRESS;DEFLATE
   </IfModule>
