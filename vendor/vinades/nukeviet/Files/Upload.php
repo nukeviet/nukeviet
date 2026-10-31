@@ -1142,6 +1142,9 @@ class Upload
         unset($f);
         preg_match('/^(.*)\.[a-zA-Z0-9]+$/', $userfile['name'], $f);
         $fn = $this->string_to_filename($f[1]);
+        if ($fn === '') {
+            $fn = (string) time();
+        }
         $filename = $fn . '.' . $this->file_extension;
         if (!preg_match('/\/$/', $savepath)) {
             $savepath = $savepath . '/';
@@ -1863,6 +1866,9 @@ class Upload
         unset($f);
         if (isset($this->url_info['file']) and preg_match("/^(.*)\.[a-zA-Z0-9]+$/", $this->url_info['file'], $f)) {
             $fn = $this->string_to_filename($f[1]);
+            if ($fn === '') {
+                $fn = (string) time();
+            }
             $filename = $fn . '.' . $this->file_extension;
         } else {
             $filename = time() . '.' . $this->file_extension;

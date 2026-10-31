@@ -41,8 +41,13 @@ ErrorDocument 504 /error.php?code=504&nvDisableRewriteCheck=1
   </FilesMatch>
 </IfModule>
 
+<IfModule mod_mime.c>
+  AddType text/vtt .vtt
+  AddType text/plain .srt
+</IfModule>
+
 <IfModule mod_headers.c>
-  <FilesMatch "\.(js|css|xml|ttf|pdf|svg)$">
+  <FilesMatch "\.(js|css|xml|ttf|pdf|svg|vtt|srt)$">
     Header append Vary Accept-Encoding
     Header set Access-Control-Allow-Origin "*"
     Header set X-Frame-Options "SAMEORIGIN"
