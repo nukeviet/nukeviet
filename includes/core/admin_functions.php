@@ -563,8 +563,12 @@ function nv_server_config_change($array_config)
         $config_contents .= "    SetOutputFilter DEFLATE\n";
         $config_contents .= "  </FilesMatch>\n";
         $config_contents .= "</IfModule>\n\n";
+        $config_contents .= "<IfModule mod_mime.c>\n";
+        $config_contents .= "  AddType text/vtt .vtt\n";
+        $config_contents .= "  AddType text/plain .srt\n";
+        $config_contents .= "</IfModule>\n\n";
         $config_contents .= "<IfModule mod_headers.c>\n";
-        $config_contents .= "  <FilesMatch \"\.(js|css|xml|ttf|pdf|svg)$\">\n";
+        $config_contents .= "  <FilesMatch \"\.(js|css|xml|ttf|pdf|svg|vtt|srt)$\">\n";
         $config_contents .= "    Header append Vary Accept-Encoding\n";
         $config_contents .= "    Header set Access-Control-Allow-Origin \"*\"\n";
         if (!empty($array_config['nv_anti_iframe'])) {
