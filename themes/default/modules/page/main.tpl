@@ -4,22 +4,9 @@
 <div class="alert alert-danger">{LANG.warning}</div>
 <!-- END: warning -->
 
-<div class="page panel panel-default" itemtype="http://schema.org/Article" itemscope>
+<div class="page panel panel-default">
     <div class="panel-body">
-        <h1 class="title margin-bottom-lg" itemprop="headline">{CONTENT.title}</h1>
-        <div class="hidden hide d-none" itemprop="author" itemtype="http://schema.org/Organization" itemscope>
-            <span itemprop="name">{SCHEMA_ORGNAME}</span>
-        </div>
-        <span class="hidden hide d-none" itemprop="datePublished">{SCHEMA_DATEPUBLISHED}</span>
-        <span class="hidden hide d-none" itemprop="dateModified">{SCHEMA_DATEPUBLISHED}</span>
-        <span class="hidden hide d-none" itemprop="mainEntityOfPage">{SCHEMA_URL}</span>
-        <span class="hidden hide d-none" itemprop="image">{SCHEMA_IMAGE}</span>
-        <div class="hidden hide d-none" itemprop="publisher" itemtype="http://schema.org/Organization" itemscope>
-            <span itemprop="name">{SCHEMA_ORGNAME}</span>
-            <span itemprop="logo" itemtype="http://schema.org/ImageObject" itemscope>
-                <span itemprop="url">{SCHEMA_ORGLOGO}</span>
-            </span>
-        </div>
+        <h1 class="title margin-bottom-lg">{CONTENT.title}</h1>
         <!-- BEGIN: socialbutton -->
         <div class="margin-bottom-lg">
             <div class="social-share-container">
@@ -45,7 +32,7 @@
         <!-- END: imageleft -->
 
         <!-- BEGIN: description -->
-        <div class="hometext margin-bottom-lg" itemprop="description">{CONTENT.description}</div>
+        <div class="hometext margin-bottom-lg">{CONTENT.description}</div>
         <!-- END: description -->
 
         <!-- BEGIN: imagecenter -->

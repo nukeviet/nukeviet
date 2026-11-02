@@ -516,6 +516,61 @@ $contents = detail_theme($news_contents, $array_keyword, $related_new_array, $re
 $key_words = ($module_config[$module_name]['keywords_tag'] and empty($news_contents['keywords'])) ? implode(',', $key_words) : $news_contents['keywords'];
 $description = empty($news_contents['description']) ? $news_contents['hometext'] : $news_contents['description'];
 
+// Dữ liệu có cấu trúc cho bài viết
+$schema_text = function ($text) {
+    return trim(preg_replace('/[\s\x{00A0}]+/u', ' ', html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+};
+$news_contents['number_edittime'] = (empty($news_contents['edittime']) or $news_contents['edittime'] < $news_contents['number_publtime']) ? $news_contents['number_publtime'] : $news_contents['edittime'];
+
+$schema_publisher = [
+    '@type' => 'Organization',
+    'name' => $schema_text($global_config['site_name'])
+];
+if (!empty($global_config['site_logo'])) {
+    $schema_publisher['logo'] = [
+        '@type' => 'ImageObject',
+        'url' => NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']
+    ];
+}
+
+$schema = [
+    '@context' => 'https://schema.org',
+    '@type' => 'NewsArticle',
+    'headline' => $schema_text($news_contents['title']),
+    'datePublished' => date('c', $news_contents['number_publtime']),
+    'dateModified' => date('c', $news_contents['number_edittime']),
+    'publisher' => $schema_publisher,
+    'url' => $news_contents['link'],
+    'mainEntityOfPage' => $news_contents['link']
+];
+
+$schema_description = $schema_text($news_contents['hometext']);
+if ($schema_description !== '') {
+    $schema['description'] = $schema_description;
+}
+if (!empty($meta_property['og:image'])) {
+    $schema['image'] = [
+        '@type' => 'ImageObject',
+        'url' => $meta_property['og:image']
+    ];
+}
+
+// Không có tác giả thì lấy đơn vị xuất bản
+$schema['author'] = [];
+foreach (array_unique(array_filter(array_map($schema_text, $schema_author))) as $schema_name) {
+    $schema['author'][] = [
+        '@type' => 'Person',
+        'name' => $schema_name
+    ];
+}
+if (empty($schema['author'])) {
+    $schema['author'] = $schema_publisher;
+} elseif (count($schema['author']) == 1) {
+    $schema['author'] = $schema['author'][0];
+}
+
+$my_footer .= '<script type="application/ld+json" data-show="inline">' . strtr(json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG), ['\\' => '\\\\', '$' => '\\\\u0024']) . "</script>\n";
+
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';

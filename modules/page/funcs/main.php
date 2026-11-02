@@ -131,6 +131,48 @@ if ($page_config['viewtype'] == 2) {
         $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET hitstotal=hitstotal+1 WHERE id=' . $id;
         $db->query($query);
     }
+
+    // Dữ liệu có cấu trúc cho bài viết
+    $schema_text = function ($text) {
+        return trim(preg_replace('/[\s\x{00A0}]+/u', ' ', html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+    };
+
+    $schema_org = [
+        '@type' => 'Organization',
+        'name' => $schema_text($global_config['site_name'])
+    ];
+    if (!empty($global_config['site_logo'])) {
+        $schema_org['logo'] = [
+            '@type' => 'ImageObject',
+            'url' => NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']
+        ];
+    }
+
+    $schema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Article',
+        'headline' => $schema_text($rowdetail['title']),
+        'datePublished' => date('c', $rowdetail['number_add_time']),
+        'dateModified' => date('c', $rowdetail['number_edit_time']),
+        'author' => $schema_org,
+        'publisher' => $schema_org,
+        'url' => $rowdetail['link'],
+        'mainEntityOfPage' => $rowdetail['link']
+    ];
+
+    $schema_description = $schema_text($rowdetail['description']);
+    if ($schema_description !== '') {
+        $schema['description'] = $schema_description;
+    }
+    if (!empty($rowdetail['image'])) {
+        $schema['image'] = [
+            '@type' => 'ImageObject',
+            'url' => nv_is_url($rowdetail['image']) ? $rowdetail['image'] : $meta_property['og:image']
+        ];
+    }
+
+    $my_footer .= '<script type="application/ld+json" data-show="inline">' . strtr(json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG), ['\\' => '\\\\', '$' => '\\\\u0024']) . "</script>\n";
+
     $contents = nv_page_main($rowdetail, $other_links, $content_comment);
 } else {
     // Xem theo danh sách

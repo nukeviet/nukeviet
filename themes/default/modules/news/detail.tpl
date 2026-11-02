@@ -3,22 +3,9 @@
 <script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/star-rating/jquery.MetaData.js" type="text/javascript"></script>
 <link href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/star-rating/jquery.rating.css" type="text/css" rel="stylesheet"/>
 <link href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/highlight/github.min.css" rel="stylesheet">
-<div class="news_column panel panel-default" itemtype="http://schema.org/NewsArticle" itemscope>
+<div class="news_column panel panel-default">
     <div class="panel-body">
-        <h1 class="title margin-bottom-lg" itemprop="headline">{DETAIL.title}</h1>
-        <div class="hidden hide d-none" itemprop="author" itemtype="http://schema.org/Person" itemscope>
-            <span itemprop="name">{SCHEMA_AUTHOR}</span>
-        </div>
-        <span class="hidden hide d-none" itemprop="datePublished">{SCHEMA_DATEPUBLISHED}</span>
-        <span class="hidden hide d-none" itemprop="dateModified">{SCHEMA_DATEPUBLISHED}</span>
-        <span class="hidden hide d-none" itemprop="mainEntityOfPage">{SCHEMA_URL}</span>
-        <span class="hidden hide d-none" itemprop="image">{SCHEMA_IMAGE}</span>
-        <div class="hidden hide d-none" itemprop="publisher" itemtype="http://schema.org/Organization" itemscope>
-            <span itemprop="name">{SCHEMA_ORGNAME}</span>
-            <span itemprop="logo" itemtype="http://schema.org/ImageObject" itemscope>
-                <span itemprop="url">{SCHEMA_ORGLOGO}</span>
-            </span>
-        </div>
+        <h1 class="title margin-bottom-lg">{DETAIL.title}</h1>
         <div class="row margin-bottom-lg">
             <div class="col-md-12">
                 <span class="h5">{DETAIL.publtime}</span>
@@ -111,7 +98,7 @@
             <!-- END: empty -->
             <!-- END: imgthumb -->
 
-            <div class="hometext m-bottom" itemprop="description">{DETAIL.hometext}</div>
+            <div class="hometext m-bottom">{DETAIL.hometext}</div>
 
             <!-- BEGIN: imgfull -->
             <figure class="article center">
@@ -205,14 +192,10 @@
             <div class="h5 clearfix">
                 <p id="stringrating">{STRINGRATING}</p>
                 <!-- BEGIN: data_rating -->
-                <span itemscope itemtype="https://schema.org/AggregateRating">
-                    <span class="hidden d-none hide" itemprop="itemReviewed" itemscope itemtype="https://schema.org/CreativeWorkSeries">
-                        <span class="hidden d-none hide" itemprop="name">{DETAIL.title}</span>
-                    </span>
+                <span>
                     {LANG.rating_average}:
-                    <span id="numberrating" itemprop="ratingValue">{DETAIL.numberrating}</span> -
-                    <span id="click_rating" itemprop="ratingCount">{DETAIL.click_rating}</span> {LANG.rating_count}
-                    <span class="hidden d-none hide" itemprop="bestRating">5</span>
+                    <span id="numberrating">{DETAIL.numberrating}</span> -
+                    <span id="click_rating">{DETAIL.click_rating}</span> {LANG.rating_count}
                 </span>
                 <!-- END: data_rating -->
                 <div style="padding: 5px;">
