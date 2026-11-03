@@ -18,13 +18,13 @@ Các bước này lấy tệp từ giao diện cũ nên phải làm trước khi
 
 **Giao diện quản trị**
 
-1. Chép thư mục `themes/admin_default` thành `themes/admin_dauthau`
+1. Chép thư mục `themes/admin_default` thành `themes/admin_dauthau`. Lưu ý chỉ chép, không đổi tên vì bước merge code sẽ merge sai vào admin_dauthau nếu đổi tên.
 2. Chép 3 tệp sau từ giao diện default cũ sang:
     - `themes/default/css/bootstrap.min.css` sang `themes/admin_dauthau/css/bootstrap.min.css`
     - `themes/default/js/bootstrap.min.js` sang `themes/admin_dauthau/js/bootstrap.min.js`
     - `themes/default/images/users/no_avatar.png` sang `themes/admin_dauthau/images/users/no_avatar.png`
 
-Site không cần giữ giao diện quản trị cũ thì bỏ qua 2 bước trên, chỉ làm các bước sau:
+Site không cần giữ giao diện quản trị cũ thì bỏ qua 2 bước trên, chỉ làm các bước sau (chú ý site làm bước 1,2 thì đừng làm cái này):
 
 1. Đăng nhập quản trị tối cao, mở sẵn trang Quản trị > Công cụ web > Dọn dẹp hệ thống
 2. Chạy SQL sau, thay `nv5` bằng tiền tố CSDL của site:
@@ -45,7 +45,7 @@ Công cụ này chép những gì giao diện riêng đang mượn của default
 
 Site đang dùng thẳng giao diện `default` thì bắt buộc chuyển sang giao diện riêng để giữ giao diện cũ:
 
-1. Chép thư mục `themes/default` thành `themes/dauthau`
+1. Chép thư mục `themes/default` thành `themes/dauthau`. Lưu ý chỉ chép, không đổi tên vì bước merge code sẽ merge sai vào dauthau nếu đổi tên.
 2. Chạy SQL sau, lặp lại cho từng ngôn ngữ đã cài (thay `vi`), và thay `nv5` bằng tiền tố CSDL của site:
     ```sql
     UPDATE nv5_vi_blocks_groups SET theme='dauthau' WHERE theme='default';
