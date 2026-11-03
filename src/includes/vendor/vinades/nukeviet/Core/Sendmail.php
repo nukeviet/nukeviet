@@ -263,7 +263,7 @@ class Sendmail extends PHPMailer
     {
         $Body = nv_url_rewrite($Body);
         $optimizer = new Optimizer($Body, NV_BASE_SITEURL);
-        $Body = $optimizer->process(false);
+        $Body = $optimizer->process(false, [], false);
 
         return nv_unhtmlspecialchars($Body);
     }
@@ -425,8 +425,10 @@ class Sendmail extends PHPMailer
         $this->Subject = nv_unhtmlspecialchars($this->Subject);
         $this->Body = self::_formatBody($this->Body);
 
-        if ($this->logo) {
-            $this->AddEmbeddedImage(NV_ROOTDIR . '/' . $this->configs['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $this->configs['site_logo']));
+        // Chỉ nhúng logo khi nội dung có dùng, mẫu thư của giao diện dùng cố định cid:sitelogo thì vẫn nhúng site_logo để không vỡ ảnh
+        if ($this->logo and str_contains($this->Body, 'cid:sitelogo')) {
+            $mail_logo = nv_get_mail_logo($this->configs) ?: $this->configs['site_logo'];
+            $this->AddEmbeddedImage(NV_ROOTDIR . '/' . $mail_logo, 'sitelogo', basename($mail_logo));
         }
 
         $this->_addSMIME();

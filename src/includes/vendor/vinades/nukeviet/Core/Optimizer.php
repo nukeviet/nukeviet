@@ -78,9 +78,10 @@ class Optimizer
      *
      * @param bool  $jquery
      * @param array $custom_preloads
+     * @param bool  $core_css Thêm CSS core vào trang, nội dung email cần đặt false
      * @return string
      */
-    public function process($jquery = true, $custom_preloads = [])
+    public function process($jquery = true, $custom_preloads = [], $core_css = true)
     {
         $_jsSrc = [];
         $_linkHref = [];
@@ -115,7 +116,7 @@ class Optimizer
         $this->trackLogRegex('jquery');
 
         // Core JS nếu giao diện không tự xử lý
-        if ($_isFullBuffer and Config::isLoadCoreCss()) {
+        if ($_isFullBuffer and $core_css and Config::isLoadCoreCss()) {
             $this->_cssLinks[] = '<link rel="stylesheet" href="' . ASSETS_STATIC_URL . '/css/core.' . ($this->theme_type == 'd' ? 'd' : 'r') . (Config::isRtl() ? '.rtl' : '') . '.min.css">';
         }
 

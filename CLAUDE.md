@@ -83,6 +83,12 @@ npm run core-css   # Build CSS Core
 - `$db` → READ + WRITE ($db_slave đã bỏ)
 - `$nv_Cache->db()` → cached READ (ưu tiên dùng khi không cần real-time)
 
+### Thêm cấu hình hoặc dữ liệu mới vào CSDL (nguyên tắc bất di bất dịch)
+
+- Code lưu cấu hình vẫn dùng `UPDATE`. Không dùng `INSERT ... ON DUPLICATE KEY UPDATE`, không tự tạo dòng khi chạy để thay cho bước nâng cấp
+- Thêm giá trị mặc định vào phần cài đặt (ví dụ `src/includes/action_mysql.php`) cho site cài mới
+- Đưa câu lệnh SQL cho Dev để chạy trên các site nâng cấp, không tự chạy trên CSDL
+
 ## Quy tắc Bảo mật (không được vi phạm)
 
 1. **Input:** Phải qua `$nv_Request`. không dùng `$_GET`/`$_POST`/`$_REQUEST` trực tiếp

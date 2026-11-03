@@ -36,7 +36,7 @@ class Http extends Server
      * All site config
      */
     private static $site_config = [
-        'version' => '4.x',
+        'version' => '5.x',
         'sitekey' => 'default',
         'site_charset' => 'utf-8',
     ];

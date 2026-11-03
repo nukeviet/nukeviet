@@ -515,6 +515,7 @@ if ($nv_Request->isset_request('submitsave', 'post') and csrf_check($nv_Request-
     $array_config['force_reply'] = (int) ($nv_Request->get_bool('force_reply', 'post', false));
     $array_config['notify_email_error'] = (int) ($nv_Request->get_bool('notify_email_error', 'post', false));
     $array_config['mail_tpl'] = $nv_Request->get_title('mail_tpl', 'post', '');
+    $array_config['mail_logo'] = $nv_Request->get_title('mail_logo', 'post', '');
     $array_config['dkim_included'] = $nv_Request->get_typed_array('dkim_included', 'post', 'title');
     $array_config['smime_included'] = $nv_Request->get_typed_array('smime_included', 'post', 'title');
 
@@ -544,6 +545,18 @@ if ($nv_Request->isset_request('submitsave', 'post') and csrf_check($nv_Request-
         }
 
         $array_config['reply_email'] = $check_valid_email[1];
+    }
+
+    if (!empty($array_config['mail_logo'])) {
+        if (!preg_match('/\.(png|jpe?g|gif)$/i', $array_config['mail_logo']) or nv_is_file($array_config['mail_logo']) !== true) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'input' => 'mail_logo',
+                'mess' => $nv_Lang->getModule('mail_logo_error')
+            ]);
+        }
+
+        $array_config['mail_logo'] = substr($array_config['mail_logo'], strlen(NV_BASE_SITEURL));
     }
 
     $array_config['smtp_ssl'] = $nv_Request->get_int('smtp_ssl', 'post', 0);
@@ -634,6 +647,7 @@ $array_config['verify_peer_ssl'] = $global_config['verify_peer_ssl'];
 $array_config['verify_peer_name_ssl'] = $global_config['verify_peer_name_ssl'];
 $array_config['notify_email_error'] = $global_config['notify_email_error'];
 $array_config['mail_tpl'] = !empty($global_config['mail_tpl']) ? $global_config['mail_tpl'] : '';
+$array_config['mail_logo'] = !empty($global_config['mail_logo']) ? NV_BASE_SITEURL . $global_config['mail_logo'] : '';
 $array_config['dkim_included'] = !empty($global_config['dkim_included']) ? explode(',', $global_config['dkim_included']) : [];
 $array_config['smime_included'] = !empty($global_config['smime_included']) ? explode(',', $global_config['smime_included']) : [];
 

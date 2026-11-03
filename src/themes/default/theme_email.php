@@ -29,6 +29,7 @@ $tpl->assign('LANG', $nv_Lang);
 $tpl->assign('TEMPLATE', $template_tpl);
 
 $tpl->assign('GCONFIG', $gconfigs);
+$tpl->assign('MAIL_LOGO', nv_get_mail_logo($gconfigs));
 $tpl->assign('MESSAGE_TITLE', $subject);
 $tpl->assign('MESSAGE_CONTENT', $body);
 

@@ -582,6 +582,9 @@ $lang_module['antispam_law_content'] = 'Contents of warning about anti-spam laws
 $lang_module['antispam_law_placeholder'] = 'Example: When submitting data, I confirm that I have been warned about Anti-Spam Law';
 $lang_module['antispam_law_default'] = 'When submitting data, I confirm that I have been warned about Anti-Spam Law';
 $lang_module['mail_tpl'] = 'Mail template file';
+$lang_module['mail_logo'] = 'Email logo';
+$lang_module['mail_logo_note'] = 'Choose a PNG, JPG or GIF file. If left blank, the site logo is used; if the site logo is SVG, the email will have no logo';
+$lang_module['mail_logo_error'] = 'The email logo must be an existing PNG, JPG or GIF file';
 
 $lang_module['pp'] = 'PP setting';
 $lang_module['pp_desc'] = 'Permissions Policy provides mechanisms for web developers to explicitly declare what functionality can and cannot be used on a website. You define a set of "policies" that restrict what APIs the site\'s code can access or modify the browser\'s default behavior for certain features. This allows you to enforce best practices, even as the codebase evolves — as well as more safely compose third-party content';

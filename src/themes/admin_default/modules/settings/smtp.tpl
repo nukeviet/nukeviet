@@ -66,6 +66,16 @@
                         </div>
                     </div>
                     <div class="row mb-3">
+                        <label for="element_mail_logo" class="col-sm-6 col-lg-4 col-xxl-3 col-form-label text-sm-end">{$LANG->getModule('mail_logo')}</label>
+                        <div class="col-sm-6 col-lg-6 col-xxl-5">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="element_mail_logo" name="mail_logo" value="{$DATA.mail_logo}" aria-describedby="element_mail_logo_btn">
+                                <button type="button" class="btn btn-secondary" id="element_mail_logo_btn" aria-label="{$LANG->getGlobal('browse_image')}" data-toggle="selectfile" data-target="element_mail_logo" data-type="image" title="{$LANG->getGlobal('browse_image')}"><i class="fa-solid fa-folder-open"></i></button>
+                            </div>
+                            <div class="form-text">{$LANG->getModule('mail_logo_note')}</div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-sm-6 col-lg-6 col-xxl-5 offset-sm-6 offset-lg-4 offset-xxl-3">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" name="notify_email_error" value="1"{if $DATA.notify_email_error} checked{/if} role="switch" id="element_notify_email_error">

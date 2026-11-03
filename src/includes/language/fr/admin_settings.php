@@ -582,6 +582,9 @@ $lang_module['antispam_law_content'] = 'Contenu de l\'avertissement concernant l
 $lang_module['antispam_law_placeholder'] = 'Exemple: lors de la soumission de données, je confirme que j\'ai été averti de la loi anti-spam';
 $lang_module['antispam_law_default'] = 'Lors de la soumission de données, je confirme que j\'ai été averti de la loi anti-spam';
 $lang_module['mail_tpl'] = 'Fichier de modèle de courrier';
+$lang_module['mail_logo'] = 'Logo de l\'e-mail';
+$lang_module['mail_logo_note'] = 'Choisissez un fichier PNG, JPG ou GIF. Si ce champ est vide, le logo du site est utilisé ; si le logo du site est au format SVG, l\'e-mail n\'aura pas de logo';
+$lang_module['mail_logo_error'] = 'Le logo de l\'e-mail doit être un fichier PNG, JPG ou GIF existant';
 
 $lang_module['pp'] = 'Paramètre PP';
 $lang_module['pp_desc'] = 'La politique d\'autorisations fournit des mécanismes permettant aux développeurs Web de déclarer explicitement quelles fonctionnalités peuvent et ne peuvent pas être utilisées sur un site Web. Vous définissez un ensemble de « politiques » qui limitent les API auxquelles le code du site peut accéder ou modifient le comportement par défaut du navigateur pour certaines fonctionnalités. Cela vous permet d\'appliquer les meilleures pratiques, même à mesure que la base de code évolue, ainsi que de composer du contenu tiers de manière plus sûre.';

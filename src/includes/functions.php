@@ -1667,6 +1667,24 @@ function nv_get_keywords($content, $keyword_limit = 20, $isArr = false)
 }
 
 /**
+ * Xác định tệp logo nhúng vào mail.
+ * Ưu tiên cấu hình mail_logo, để trống thì dùng site_logo.
+ * SVG không được các trình đọc mail hỗ trợ ổn định nên xem như không có logo.
+ *
+ * @param array $gconfigs
+ * @return string Đường dẫn tính từ NV_ROOTDIR, rỗng nếu không có ảnh phù hợp
+ */
+function nv_get_mail_logo($gconfigs)
+{
+    $logo = !empty($gconfigs['mail_logo']) ? $gconfigs['mail_logo'] : ($gconfigs['site_logo'] ?? '');
+    if (preg_match('/\.(png|jpe?g|gif)$/i', $logo) and file_exists(NV_ROOTDIR . '/' . $logo)) {
+        return $logo;
+    }
+
+    return '';
+}
+
+/**
  * Thêm khung HTML vào nội dung mail.
  *
  * @param string $subject
@@ -1994,7 +2012,7 @@ function _otherMethodSendmail($gconfigs, $sm_parameters)
     }
     $sm_parameters['message'] = nv_url_rewrite($sm_parameters['message']);
     $optimizer = new NukeViet\Core\Optimizer($sm_parameters['message'], NV_BASE_SITEURL, !empty($sys_info['is_http2']), 0, $gconfigs);
-    $sm_parameters['message'] = $optimizer->process(false);
+    $sm_parameters['message'] = $optimizer->process(false, [], false);
     $sm_parameters['message'] = nv_unhtmlspecialchars($sm_parameters['message']);
 
     return call_user_func($gconfigs['other_sendmail_method'], $sm_parameters, $gconfigs);

@@ -582,6 +582,9 @@ $lang_module['antispam_law_content'] = 'Nội dung cảnh báo về luật chố
 $lang_module['antispam_law_placeholder'] = 'Ví dụ: Khi gửi dữ liệu, tôi xác nhận đã được cảnh báo về Luật chống tin rác';
 $lang_module['antispam_law_default'] = 'Khi gửi dữ liệu, tôi xác nhận đã được cảnh báo về Luật chống tin rác';
 $lang_module['mail_tpl'] = 'Tệp mẫu thư';
+$lang_module['mail_logo'] = 'Logo trong email';
+$lang_module['mail_logo_note'] = 'Chọn tệp PNG, JPG hoặc GIF. Để trống sẽ dùng logo của site, nếu logo của site là SVG thì email không có logo';
+$lang_module['mail_logo_error'] = 'Logo trong email phải là tệp PNG, JPG hoặc GIF có trên hệ thống';
 
 $lang_module['pp'] = 'Thiết lập PP';
 $lang_module['pp_desc'] = 'Permissions-Policy (PP) là tên của tiêu đề HTTP (HTTP response header) mà các trình duyệt hiện đại sử dụng để cho phép hoặc từ chối các tính năng được sử dụng trên trang web hoặc bất kỳ thẻ iframe nào trong trang web';

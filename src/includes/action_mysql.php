@@ -217,7 +217,7 @@ function nv_create_table_sys($lang, $init = [])
 
     $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
          ('" . $lang . "', 'global', 'site_domain', ''),
-         ('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 4.x'),
+         ('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 5.x'),
          ('" . $lang . "', 'global', 'site_logo', ''),
          ('" . $lang . "', 'global', 'site_banner', ''),
          ('" . $lang . "', 'global', 'site_favicon', ''),
@@ -264,6 +264,7 @@ function nv_create_table_sys($lang, $init = [])
          ('" . $lang . "', 'global', 'dkim_included', 'sendmail,mail'),
          ('" . $lang . "', 'global', 'smime_included', 'sendmail,mail'),
          ('" . $lang . "', 'global', 'mail_tpl', ''),
+         ('" . $lang . "', 'global', 'mail_logo', '" . NV_ASSETS_DIR . "/images/logo-email.png'),
          ('" . $lang . "', 'seotools', 'prcservice', '')";
 
     $lang_weight = $db->query('SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_setup_language')->fetchColumn() + 1;

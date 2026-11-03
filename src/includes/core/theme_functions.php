@@ -316,7 +316,7 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = '', $noin
         $channel['description'] = $global_config['site_description'];
     }
 
-    $channel['generator'] = 'NukeViet v4.x';
+    $channel['generator'] = 'NukeViet v5.x';
     $channel['copyright'] = $global_config['site_name'];
     $channel['lang'] = $global_config['site_lang'];
     $channel['charset'] = $global_config['site_charset'];
