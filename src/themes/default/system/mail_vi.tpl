@@ -15,6 +15,7 @@ bạn cần phải đảm bảo ngôn ngữ viết trong tệp này là Smarty �
 <style>
 a {
     color: #3F74B8;
+    text-decoration: none;
 }
 img {
     max-width: 100%;
@@ -61,10 +62,10 @@ img {
                             <div>{$GCONFIG.site_description}</div>
                             <div style="margin-top:8px">
                                 {$LANG->getGlobal('email')}:
-                                <a href="mailto:{$GCONFIG.site_email}" style="color:#5F6B7A">{$GCONFIG.site_email}</a>
+                                <a href="mailto:{$GCONFIG.site_email}" style="color:#3F74B8;text-decoration:none">{$GCONFIG.site_email}</a>
                                 {if not empty($GCONFIG.site_phone)}<br/>
                                 {$LANG->getGlobal('phonenumber')}:
-                                <a href="tel:{$GCONFIG.site_phone}" style="color:#5F6B7A">{$GCONFIG.site_phone}</a>
+                                <a href="tel:{$GCONFIG.site_phone}" style="color:#3F74B8;text-decoration:none">{$GCONFIG.site_phone}</a>
                                 {/if}
                             </div>
                             <div style="margin-top:12px;font-size:12px;color:#5F6B7A">
