@@ -534,6 +534,9 @@ function nv_server_config_change($array_config)
         $config_contents .= "##################################################################################\n";
         $config_contents .= "#nukeviet_config_start //Please do not change the contents of the following lines\n";
         $config_contents .= "##################################################################################\n\n";
+        $config_contents .= "<IfModule mod_setenvif.c>\n";
+        $config_contents .= "  SetEnvIf Authorization \"(.+)\" HTTP_AUTHORIZATION=\$1\n";
+        $config_contents .= "</IfModule>\n\n";
         $config_contents .= "<IfModule mod_rewrite.c>\n";
         $config_contents .= "  <IfModule mod_env.c>\n";
         $config_contents .= "    SetEnv HTTP_SUPPORT_REWRITE on\n";
@@ -595,7 +598,10 @@ function nv_server_config_change($array_config)
             if (!empty($htaccess)) {
                 $partten = "/[\n\s]*[\#]+[\n\s]+\#nukeviet\_config\_start(.*)\#nukeviet\_config\_end[\n\s]+[\#]+[\n\s]*/s";
                 if (preg_match($partten, $htaccess)) {
-                    $htaccess = preg_replace($partten, "\n\n" . $config_contents . "\n", $htaccess);
+                    // Dùng callback vì $config_contents chứa $1 của SetEnvIf, không được hiểu là backreference
+                    $htaccess = preg_replace_callback($partten, function () use ($config_contents) {
+                        return "\n\n" . $config_contents . "\n";
+                    }, $htaccess);
                     $config_rule_exists = true;
                 }
                 $htaccess = trim($htaccess);
