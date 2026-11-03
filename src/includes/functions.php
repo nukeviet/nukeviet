@@ -4449,11 +4449,11 @@ function nv_get_email_template($emailid, $lang = '')
     $mailtpl = '';
     if (!empty($email_data['mailtpl']) and preg_match('/^([a-zA-Z0-9\-\_]+)\:([a-zA-Z0-9\-\_]+)\.tpl$/i', $email_data['mailtpl'], $matches)) {
         if ($matches[1] == 'assets') {
-            $mailtpl = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/' . $matches[2] . '.tpl';
+            $mailtpl = NV_ASSETS_DIR . '/tpl/' . $matches[2] . '.tpl';
         } else {
-            $mailtpl = NV_ROOTDIR . '/themes/' . $matches[1] . '/system/' . $matches[2] . '.tpl';
+            $mailtpl = 'themes/' . $matches[1] . '/system/' . $matches[2] . '.tpl';
         }
-        if (!file_exists($mailtpl)) {
+        if (!file_exists(NV_ROOTDIR . '/' . $mailtpl)) {
             $mailtpl = '';
         }
     }
