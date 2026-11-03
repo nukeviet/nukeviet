@@ -1,6 +1,9 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.6.03
+- Fix admin firewall Basic Auth always failing on Apache + FastCGI
+- Remove microdata structured data and switch to JSON-LD
+- Support video subtitle file uploads
 - Fix group leader account takeover of admins and other groups' members via editinfo password reset. Thanks Ngo Xuan Ha from GitHub @h4nx0x
 - Fix authenticated LFI in theme block management via unvalidated block file_name. Thanks Ngo Xuan Ha from GitHub @h4nx0x
 - Fix comment permission bypass via forgeable checkss token. Thanks Kevin Sanchez from GitHub @kevinsocute
