@@ -25,15 +25,10 @@ if (!empty($array['PHP Variables'])) {
     $tpl->assign('LANG', $nv_Lang);
 
     $ignore_keys = [];
-    $ignore_keys[] = '_SERVER["HTTP_COOKIE"]';
-    $ignore_keys[] = '_SERVER["PHP_AUTH_USER"]';
-    $ignore_keys[] = '_SERVER["REMOTE_USER"]';
-    $ignore_keys[] = '_SERVER["AUTH_USER"]';
-    $ignore_keys[] = '_SERVER["HTTP_AUTHORIZATION"]';
-    $ignore_keys[] = '_SERVER["Authorization"]';
-    $ignore_keys[] = '_SERVER["PHP_AUTH_PW"]';
-    $ignore_keys[] = '_SERVER["REMOTE_PASSWORD"]';
-    $ignore_keys[] = '_SERVER["AUTH_PASSWORD"]';
+    foreach (['HTTP_COOKIE', 'PHP_AUTH_USER', 'REMOTE_USER', 'AUTH_USER', 'HTTP_AUTHORIZATION', 'REDIRECT_HTTP_AUTHORIZATION', 'Authorization', 'PHP_AUTH_PW', 'REMOTE_PASSWORD', 'AUTH_PASSWORD'] as $ignore_key) {
+        $ignore_keys[] = '$_SERVER[\'' . $ignore_key . '\']';
+        $ignore_keys[] = '$_ENV[\'' . $ignore_key . '\']';
+    }
 
     $tpl->assign('IGNORE_KEYS', $ignore_keys);
     $tpl->assign('ARRAY', $array['PHP Variables']);

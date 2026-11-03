@@ -9,6 +9,10 @@ DirectoryIndex index.php index.html
 ServerSignature Off
 FileETag None
 
+<IfModule mod_setenvif.c>
+  SetEnvIf Authorization "(.+)" HTTP_AUTHORIZATION=$1
+</IfModule>
+
 <IfModule mod_rewrite.c>
   <IfModule mod_env.c>
     SetEnv HTTP_SUPPORT_REWRITE on

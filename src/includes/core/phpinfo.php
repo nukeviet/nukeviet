@@ -17,8 +17,6 @@ if (!defined('NV_MAINFILE')) {
  * phpinfo_array()
  *
  * @param int  $option
- * @param bool $return
- * @return
  * - INFO_GENERAL => 1 The configuration line, php.ini location, build date, Web Server, System and more.
  * - INFO_CREDITS => 2 PHP Credits. See also phpcredits().
  * - INFO_CONFIGURATION => 4 Current Local and Master values for PHP directives. See also ini_get().
@@ -27,6 +25,8 @@ if (!defined('NV_MAINFILE')) {
  * - INFO_VARIABLES => 32 Shows all predefined variables from EGPCS (Environment, GET, POST, Cookie, Server).
  * - INFO_LICENSE => 64 PHP License information. See also the license FAQ.
  * - INFO_ALL => -1 Shows all of the above.
+ * @param bool $return
+ * @return array|bool
  */
 function phpinfo_array($option = 1, $return = false)
 {

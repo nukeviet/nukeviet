@@ -806,7 +806,6 @@ class Sconfig
     public function apacheConfigs()
     {
         $config_contents = $this->setApacheConfigs();
-        $config_contents = str_replace('$', '\$', $config_contents);
 
         $filename = NV_ROOTDIR . '/.htaccess';
 
@@ -817,7 +816,8 @@ class Sconfig
             if (!empty($htaccess)) {
                 $partten = "/[\n\s]*[\#]+[\n\s]+\#NUKEVIET\_CONFIG\_START(.*)\#NUKEVIET\_CONFIG\_END[\n\s]+[\#]+[\n\s]*/si";
                 if (preg_match($partten, $htaccess)) {
-                    $htaccess = preg_replace($partten, "\n\n" . $config_contents . "\n", $htaccess);
+                    // Escape $ để preg_replace không hiểu là backreference
+                    $htaccess = preg_replace($partten, "\n\n" . str_replace('$', '\$', $config_contents) . "\n", $htaccess);
                     $config_exists = true;
                 }
                 $htaccess = trim($htaccess);
@@ -946,6 +946,9 @@ class Sconfig
             $config_contents .= "FileETag None\n";
         }
         $config_contents .= "\n";
+        $config_contents .= "<IfModule mod_setenvif.c>\n";
+        $config_contents .= "  SetEnvIf Authorization \"(.+)\" HTTP_AUTHORIZATION=\$1\n";
+        $config_contents .= "</IfModule>\n\n";
 
         $deny_access = $this->getDenyAccess();
         if (!empty($deny_access)) {
