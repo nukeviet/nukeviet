@@ -8,6 +8,10 @@
 #nukeviet_config_start //Please do not change the contents of the following lines
 ##################################################################################
 
+<IfModule mod_setenvif.c>
+  SetEnvIf Authorization "(.+)" HTTP_AUTHORIZATION=$1
+</IfModule>
+
 <IfModule mod_rewrite.c>
   <IfModule mod_env.c>
     SetEnv HTTP_SUPPORT_REWRITE on

@@ -2871,6 +2871,8 @@ function nv_set_authorization()
         $auth_user = nv_getenv('AUTH_USER');
     } elseif (nv_getenv('HTTP_AUTHORIZATION')) {
         $auth_user = nv_getenv('HTTP_AUTHORIZATION');
+    } elseif (nv_getenv('REDIRECT_HTTP_AUTHORIZATION')) {
+        $auth_user = nv_getenv('REDIRECT_HTTP_AUTHORIZATION');
     } elseif (nv_getenv('Authorization')) {
         $auth_user = nv_getenv('Authorization');
     }

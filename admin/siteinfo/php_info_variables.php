@@ -33,6 +33,7 @@ if (!empty($array['PHP Variables'])) {
     $array_key_no_show[] = '_SERVER["REMOTE_USER"]';
     $array_key_no_show[] = '_SERVER["AUTH_USER"]';
     $array_key_no_show[] = '_SERVER["HTTP_AUTHORIZATION"]';
+    $array_key_no_show[] = '_SERVER["REDIRECT_HTTP_AUTHORIZATION"]';
     $array_key_no_show[] = '_SERVER["Authorization"]';
     $array_key_no_show[] = '_SERVER["PHP_AUTH_PW"]';
     $array_key_no_show[] = '_SERVER["REMOTE_PASSWORD"]';
