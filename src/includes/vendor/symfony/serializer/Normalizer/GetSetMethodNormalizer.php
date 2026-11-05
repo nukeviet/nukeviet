@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Serializer\Normalizer;
 
+use Symfony\Component\PropertyAccess\Exception\UninitializedPropertyException;
 use Symfony\Component\Serializer\Annotation\Ignore as LegacyIgnore;
 use Symfony\Component\Serializer\Attribute\Ignore;
 
@@ -60,7 +61,7 @@ final class GetSetMethodNormalizer extends AbstractObjectNormalizer
      */
     private function supports(string $class, bool $readAttributes): bool
     {
-        if ($this->classDiscriminatorResolver?->getMappingForClass($class)) {
+        if ($this->classDiscriminatorResolver?->getMappingForMappedObject($class)) {
             return true;
         }
 
@@ -69,6 +70,11 @@ final class GetSetMethodNormalizer extends AbstractObjectNormalizer
         }
 
         $reflection = self::$reflectionCache[$class];
+
+        // Denormalization can also populate an object through its constructor, even when it exposes no setters (immutable value objects).
+        if (!$readAttributes && ($constructor = $reflection->getConstructor()) && $constructor->isPublic() && $constructor->getNumberOfParameters() > 0) {
+            return true;
+        }
 
         foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
             if ($readAttributes ? $this->isGetMethod($reflectionMethod) : $this->isSetMethod($reflectionMethod)) {
@@ -130,24 +136,31 @@ final class GetSetMethodNormalizer extends AbstractObjectNormalizer
 
     protected function getAttributeValue(object $object, string $attribute, ?string $format = null, array $context = []): mixed
     {
-        $getter = 'get'.$attribute;
-        if (method_exists($object, $getter) && \is_callable([$object, $getter])) {
-            return $object->$getter();
-        }
+        try {
+            $getter = 'get'.$attribute;
+            if (method_exists($object, $getter) && \is_callable([$object, $getter])) {
+                return $object->$getter();
+            }
 
-        $isser = 'is'.$attribute;
-        if (method_exists($object, $isser) && \is_callable([$object, $isser])) {
-            return $object->$isser();
-        }
+            $isser = 'is'.$attribute;
+            if (method_exists($object, $isser) && \is_callable([$object, $isser])) {
+                return $object->$isser();
+            }
 
-        $haser = 'has'.$attribute;
-        if (method_exists($object, $haser) && \is_callable([$object, $haser])) {
-            return $object->$haser();
-        }
+            $haser = 'has'.$attribute;
+            if (method_exists($object, $haser) && \is_callable([$object, $haser])) {
+                return $object->$haser();
+            }
 
-        $caner = 'can'.$attribute;
-        if (method_exists($object, $caner) && \is_callable([$object, $caner])) {
-            return $object->$caner();
+            $caner = 'can'.$attribute;
+            if (method_exists($object, $caner) && \is_callable([$object, $caner])) {
+                return $object->$caner();
+            }
+        } catch (\Error $e) {
+            if (str_starts_with($e->getMessage(), 'Typed property') && str_ends_with($e->getMessage(), 'must not be accessed before initialization')) {
+                throw new UninitializedPropertyException(\sprintf('The property "%s::$%s" is not initialized.', $object::class, $attribute), 0, $e);
+            }
+            throw $e;
         }
 
         return null;
@@ -175,7 +188,7 @@ final class GetSetMethodNormalizer extends AbstractObjectNormalizer
 
         $class = \is_object($classOrObject) ? $classOrObject::class : $classOrObject;
 
-        if ($this->classDiscriminatorResolver?->getMappingForMappedObject($classOrObject)?->getTypeProperty() === $attribute) {
+        if ($this->isDiscriminatorTypeProperty($classOrObject, $attribute)) {
             return true;
         }
 
@@ -199,6 +212,12 @@ final class GetSetMethodNormalizer extends AbstractObjectNormalizer
 
         $setter = 'set'.$attribute;
         if ($reflection->hasMethod($setter) && $this->isSetMethod($reflection->getMethod($setter))) {
+            foreach ($context[self::IGNORED_ATTRIBUTES] ?? $this->defaultContext[self::IGNORED_ATTRIBUTES] as $ignoredAttribute) {
+                if (!strcasecmp($attribute, $ignoredAttribute)) {
+                    return false;
+                }
+            }
+
             return true;
         }
 
