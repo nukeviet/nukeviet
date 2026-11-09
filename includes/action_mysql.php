@@ -194,7 +194,7 @@ function nv_create_table_sys($lang)
          ('seek', 'seek', 'seek', 'seek', 'seek', 'Search', '', 1790154000, 1, 0, '', '', '', '', '0', 8, 1, '', 0, 1),
          ('menu', 'menu', 'menu', 'menu', 'menu', 'Menu Site', '', 1790154000, 0, 1, '', '', '', '', '0', 9, 1, '', 0, 1),
          ('feeds', 'feeds', 'feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1790154000, 1, 1, '', '', '', '', '0', 10, 1, '', 0, 1),
-         ('page', 'page', 'page', 'page', 'page', 'Page', '', 1790154000, 1, 1, '', '', '', '', '0', 11, 1, '', 1, 0),
+         ('page', 'page', 'page', 'page', 'page', 'Page', '', 1790154000, 1, 1, '', '', '', '', '0', 11, 1, '', 0, 0),
          ('comment', 'comment', 'comment', 'comment', 'comment', 'Comment', '', 1790154000, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 1),
          ('siteterms', 'page', 'siteterms', 'siteterms', 'page', 'Siteterms', '', 1790154000, 1, 1, '', '', '', '', '0', 13, 1, '', 1, 1),
          ('freecontent', 'freecontent', 'freecontent', 'freecontent', 'freecontent', 'Free Content', '', 1790154000, 0, 1, '', '', '', '', '0', 14, 1, '', 0, 1),

@@ -14,6 +14,25 @@ if (!defined('NV_IS_MOD_RSS')) {
 }
 
 /**
+ * Hiển thị một mục trong cây RSS: tiêu đề liên kết đến trang nội dung và nút RSS liên kết đến feed
+ *
+ * @param string $title      Tiêu đề
+ * @param string $url        Liên kết đến trang nội dung (module/chuyên mục), rỗng thì chỉ hiển thị tiêu đề
+ * @param string $rss_url    Liên kết đến RSS feed
+ * @param bool   $is_heading Bọc tiêu đề trong thẻ h2 (dùng cho cấp module)
+ * @return string
+ */
+function nv_rss_item_html($title, $url, $rss_url, $is_heading = false)
+{
+    $title_html = !empty($url) ? '<a title="' . $title . '" href="' . $url . '">' . $title . '</a>' : '<span>' . $title . '</span>';
+    if ($is_heading) {
+        $title_html = '<h2>' . $title_html . '</h2>';
+    }
+
+    return '<div class="tree-item">' . $title_html . ' <a class="btn btn-warning btn-xs" rel="nofollow" title="RSS: ' . $title . '" href="' . $rss_url . '"><i class="fa fa-rss"></i><span class="hidden-xs"> RSS</span></a></div>';
+}
+
+/**
  * nv_get_rss_link()
  *
  * @return string
@@ -28,7 +47,10 @@ function nv_get_rss_link()
             $mod_data = $mod_info['module_data'];
             $mod_file = $mod_info['module_file'];
 
-            $contentrss .= '<li><span><i class="fa fa-rss text-warning"></i> <a rel="nofollow" title="' . $mod_info['custom_title'] . '" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod_name . '&amp;' . NV_OP_VARIABLE . '=' . $mod_info['alias']['rss'] . '"><strong> ' . $mod_info['custom_title'] . '</strong></a></span>';
+            $mod_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod_name;
+            $mod_rss_url = $mod_url . '&amp;' . NV_OP_VARIABLE . '=' . $mod_info['alias']['rss'];
+
+            $contentrss .= '<li>' . nv_rss_item_html($mod_info['custom_title'], $mod_url, $mod_rss_url, true);
             if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php')) {
                 $rssarray = [];
                 include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php';
@@ -37,7 +59,7 @@ function nv_get_rss_link()
                 foreach ($rssarray as $key => $value) {
                     $parentid = (isset($value['parentid'])) ? $value['parentid'] : 0;
                     if ($parentid == 0) {
-                        $contentrss .= '<li><span><i class="fa fa-rss text-warning"></i> <a rel="nofollow" title="' . $value['title'] . '" href="' . $value['link'] . '">' . $value['title'] . '</a></span>';
+                        $contentrss .= '<li>' . nv_rss_item_html($value['title'], $value['url'] ?? '', $value['link']);
                         $catid = (isset($value['catid'])) ? $value['catid'] : 0;
                         if ($catid > 0) {
                             $contentrss .= nv_get_sub_rss_link($rssarray, $catid);
@@ -46,8 +68,8 @@ function nv_get_rss_link()
                     }
                 }
                 $contentrss .= '</ul>';
-                $contentrss .= '</li>';
             }
+            $contentrss .= '</li>';
         }
     }
 
@@ -67,7 +89,7 @@ function nv_get_sub_rss_link($rssarray, $id)
     $content .= '<ul>';
     foreach ($rssarray as $value) {
         if (isset($value['parentid']) and $value['parentid'] == $id) {
-            $content .= '<li><span><i class="fa fa-rss text-warning"></i> <a rel="nofollow" title="' . $value['title'] . '" href="' . $value['link'] . '">' . $value['title'] . '</a></span>';
+            $content .= '<li>' . nv_rss_item_html($value['title'], $value['url'] ?? '', $value['link']);
             $catid = (isset($value['catid'])) ? $value['catid'] : 0;
             if ($catid > 0) {
                 $content .= nv_get_sub_rss_link($rssarray, $catid);

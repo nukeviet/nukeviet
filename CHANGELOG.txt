@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.6.03
+- Add a link to the RSS element in the feeds module
 - Fix admin firewall Basic Auth always failing on Apache + FastCGI
 - Remove microdata structured data and switch to JSON-LD
 - Support video subtitle file uploads
