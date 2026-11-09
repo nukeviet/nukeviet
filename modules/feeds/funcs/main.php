@@ -14,22 +14,24 @@ if (!defined('NV_IS_MOD_RSS')) {
 }
 
 /**
- * Hiển thị một mục trong cây RSS: tiêu đề liên kết đến trang nội dung và nút RSS liên kết đến feed
+ * Hiển thị một mục trong cây RSS: biểu tượng RSS liên kết đến feed và tiêu đề liên kết đến trang nội dung
  *
- * @param string $title      Tiêu đề
- * @param string $url        Liên kết đến trang nội dung (module/chuyên mục), rỗng thì chỉ hiển thị tiêu đề
- * @param string $rss_url    Liên kết đến RSS feed
- * @param bool   $is_heading Bọc tiêu đề trong thẻ h2 (dùng cho cấp module)
+ * @param string $title   Tiêu đề
+ * @param string $url     Liên kết đến trang nội dung (module/chuyên mục), rỗng thì tiêu đề liên kết đến feed
+ * @param string $rss_url Liên kết đến RSS feed
+ * @param bool   $strong  In đậm tiêu đề (dùng cho cấp module)
  * @return string
  */
-function nv_rss_item_html($title, $url, $rss_url, $is_heading = false)
+function nv_rss_item_html($title, $url, $rss_url, $strong = false)
 {
-    $title_html = !empty($url) ? '<a title="' . $title . '" href="' . $url . '">' . $title . '</a>' : '<span>' . $title . '</span>';
-    if ($is_heading) {
-        $title_html = '<h2>' . $title_html . '</h2>';
+    $title_text = $strong ? '<strong>' . $title . '</strong>' : $title;
+    if (!empty($url)) {
+        $title_html = '<a title="' . $title . '" href="' . $url . '">' . $title_text . '</a>';
+    } else {
+        $title_html = '<a rel="nofollow" title="' . $title . '" href="' . $rss_url . '">' . $title_text . '</a>';
     }
 
-    return '<div class="tree-item">' . $title_html . ' <a class="btn btn-warning btn-xs" rel="nofollow" title="RSS: ' . $title . '" href="' . $rss_url . '"><i class="fa fa-rss"></i><span class="hidden-xs"> RSS</span></a></div>';
+    return '<span><a rel="nofollow" title="RSS: ' . $title . '" href="' . $rss_url . '"><i class="fa fa-rss text-warning"></i></a> ' . $title_html . '</span>';
 }
 
 /**
