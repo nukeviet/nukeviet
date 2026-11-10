@@ -1,7 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.5.15
-- CKEditor v49.1.0, Chart.js v4.6.1
+- CKEditor v49.1.0, Chart.js v4.6.1, DOMPurify 3.4.17
 
 NUKEVIET 4.5.14
 - Fix admin firewall Basic Auth always failing on Apache + FastCGI
