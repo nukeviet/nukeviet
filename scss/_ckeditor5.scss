@@ -264,12 +264,16 @@ p+.image-style-side {
   font-size: var(--nv-font-size-xxl);
 }
 
+// Viền đỏ cho khung trình soạn thảo khi lỗi.
 .is-invalid {
   --ck-color-base-border: #{$danger};
+  --ck-color-border-container: #{$danger};
+  --ck-editor-frame-border-color: #{$danger};
+  --ck-editor-frame-border: 1px solid #{$danger};
 }
 
 // CKEditor5 Content Styles
-.ck {
+html:root {
   --ck-content-font-family: var(--#{$prefix}font-sans-serif);
   --ck-content-font-size: var(--#{$prefix}body-font-size);
   --ck-content-font-color: var(--#{$prefix}body-color);

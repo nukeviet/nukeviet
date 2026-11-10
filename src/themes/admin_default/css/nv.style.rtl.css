@@ -27981,9 +27981,12 @@ p + .image-style-side {
 
 .is-invalid {
   --ck-color-base-border: #ee3232;
+  --ck-color-border-container: #ee3232;
+  --ck-editor-frame-border-color: #ee3232;
+  --ck-editor-frame-border: 1px solid #ee3232;
 }
 
-.ck {
+html:root {
   --ck-content-font-family: var(--bs-font-sans-serif);
   --ck-content-font-size: var(--bs-body-font-size);
   --ck-content-font-color: var(--bs-body-color);
