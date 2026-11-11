@@ -36,6 +36,7 @@ $lang_module['description_error'] = 'Lỗi: Mô tả site chưa được khai b�
 $lang_module['rewrite'] = 'Bật chức năng rewrite tại khu vực người dùng';
 $lang_module['rewrite_admin'] = 'Bật chức năng rewrite tại khu vực quản trị';
 $lang_module['rewrite_optional'] = 'Loại bỏ biến ngôn ngữ khỏi URL';
+$lang_module['rewrite_optional_multi'] = 'Loại bỏ biến ngôn ngữ mặc định khỏi URL';
 $lang_module['rewrite_op_mod'] = 'Loại bỏ khỏi URL tên của module';
 $lang_module['disable_content'] = 'Nội dung thông báo site ngưng hoạt động';
 $lang_module['submit'] = 'Lưu cấu hình';

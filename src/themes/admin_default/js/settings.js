@@ -81,42 +81,40 @@ $(function() {
     });
 
     // Xử lý giao diện khi bật tắt rewrite, đa ngôn ngữ
-    $('[data-toggle="controlrw"]').on('change', function() {
+    var rwToggle = function(ctn, show) {
+        // Dừng hiệu ứng đang chạy để trạng thái d-none luôn đúng khi bấm liên tục
+        ctn.stop(true, true);
+        if (show) {
+            if (ctn.hasClass('d-none')) {
+                ctn.hide().removeClass('d-none').slideDown();
+            }
+        } else if (!ctn.hasClass('d-none')) {
+            ctn.slideUp(function() {
+                $(this).addClass('d-none');
+            });
+        }
+    };
+    $('[data-toggle="controlrw"], [data-toggle="controlrw1"]').on('change', function() {
         var lang_multi = $('[name="lang_multi"]').is(':checked');
         var rewrite_enable = $('[name="rewrite_enable"]').is(':checked');
-        if ($('#lang-geo').length) {
-            if (lang_multi) {
-                if (!$('#lang-geo').is(':visible')) {
-                    $('#lang-geo').hide().removeClass('d-none').slideDown();
-                }
-            } else {
-                $('#lang-geo').slideUp(function() {
-                    $(this).addClass('d-none');
-                });
-            }
-        }
-        if (!lang_multi && rewrite_enable) {
-            if (!$('#ctn_rewrite_optional').is(':visible')) {
-                $('#ctn_rewrite_optional').hide().removeClass('d-none').slideDown();
-            }
-        } else {
-            $('#ctn_rewrite_optional').slideUp(function() {
-                $(this).addClass('d-none');
-            });
+        if (!rewrite_enable) {
             $('[name="rewrite_optional"]').prop('checked', false);
         }
-        $('[data-toggle="controlrw1"]').change();
-    });
+        var rewrite_optional = $('[name="rewrite_optional"]').is(':checked');
 
-    // Xử lý giao diện khi bật tắt loại bỏ biến ngôn ngữ khỏi url
-    $('[data-toggle="controlrw1"]').on('change', function() {
-        var rewrite_optional = $(this).is(':checked');
-        if (rewrite_optional) {
-            $('#ctn_rewrite_op_mod').hide().removeClass('d-none').slideDown();
-        } else {
-            $('#ctn_rewrite_op_mod').slideUp(function() {
-                $(this).addClass('d-none');
-            });
+        $('#rewrite_optional_single').toggleClass('d-none', lang_multi);
+        $('#rewrite_optional_multi').toggleClass('d-none', !lang_multi);
+        rwToggle($('#ctn_rewrite_optional'), rewrite_enable);
+
+        if ($('#lang-geo').length) {
+            rwToggle($('#lang-geo'), lang_multi && !rewrite_optional);
+            if (!lang_multi || rewrite_optional) {
+                $('[name="lang_geo"]').prop('checked', false);
+            }
+        }
+
+        rwToggle($('#ctn_rewrite_op_mod'), !lang_multi && rewrite_optional);
+        if (lang_multi || !rewrite_optional) {
             $('[name="rewrite_op_mod"]').find('option').prop('selected', false);
         }
     });

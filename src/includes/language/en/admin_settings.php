@@ -36,6 +36,7 @@ $lang_module['description_error'] = 'Error: Site description has not been declar
 $lang_module['rewrite'] = 'Activate rewrite in user area';
 $lang_module['rewrite_admin'] = 'Activate rewrite in admin area';
 $lang_module['rewrite_optional'] = 'Remove language characters on URL';
+$lang_module['rewrite_optional_multi'] = 'Remove default language characters on URL';
 $lang_module['rewrite_op_mod'] = 'Remove module name in the url';
 $lang_module['disable_content'] = 'Site closing notification';
 $lang_module['submit'] = 'Submit';

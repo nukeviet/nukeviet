@@ -195,7 +195,7 @@
                             </select>
                         </div>
                     </div>
-                    <div id="lang-geo"{if empty($GDATA.lang_multi)} class="d-none"{/if}>
+                    <div id="lang-geo"{if empty($GDATA.lang_multi) or not empty($GDATA.rewrite_optional)} class="d-none"{/if}>
                         <div class="row pb-3">
                             <div class="col-sm-8 col-lg-6 col-xxl-5 offset-sm-3">
                                 <div class="form-check form-switch">
@@ -215,17 +215,17 @@
                             </div>
                         </div>
                     </div>
-                    <div id="ctn_rewrite_optional"{if not empty($GDATA.lang_multi) empty($GDATA.rewrite_enable)} class="d-none"{/if}>
+                    <div id="ctn_rewrite_optional"{if empty($GDATA.rewrite_enable)} class="d-none"{/if}>
                         <div class="row pb-3">
                             <div class="col-sm-8 col-lg-6 col-xxl-5 offset-sm-3">
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" name="rewrite_optional" value="1"{if $GDATA.rewrite_optional} checked{/if} role="switch" id="element_rewrite_optional" data-toggle="controlrw1">
-                                    <label class="form-check-label" for="element_rewrite_optional">{$LANG->getModule('rewrite_optional')}</label>
+                                    <label class="form-check-label" for="element_rewrite_optional"><span id="rewrite_optional_single"{if not empty($GDATA.lang_multi)} class="d-none"{/if}>{$LANG->getModule('rewrite_optional')}</span><span id="rewrite_optional_multi"{if empty($GDATA.lang_multi)} class="d-none"{/if}>{$LANG->getModule('rewrite_optional_multi')}</span></label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="ctn_rewrite_op_mod"{if empty($GDATA.rewrite_optional)} class="d-none"{/if}>
+                    <div id="ctn_rewrite_op_mod"{if empty($GDATA.rewrite_optional) or not empty($GDATA.lang_multi)} class="d-none"{/if}>
                         <div class="row pb-3">
                             <label for="element_rewrite_op_mod" class="col-sm-3 col-form-label text-sm-end">{$LANG->getModule('rewrite_op_mod')}</label>
                             <div class="col-sm-8 col-lg-6 col-xxl-5">

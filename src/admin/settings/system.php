@@ -171,20 +171,16 @@ if ($nv_Request->isset_request('checkss', 'post') and csrf_check($nv_Request->ge
 
         $array_config_global['rewrite_enable'] = (int) $nv_Request->get_bool('rewrite_enable', 'post', false);
         $array_config_global['admin_rewrite'] = (int) $nv_Request->get_bool('admin_rewrite', 'post', false);
+        $array_config_global['rewrite_optional'] = $array_config_global['rewrite_enable'] ? (int) $nv_Request->get_bool('rewrite_optional', 'post', false) : 0;
         if ($array_config_global['lang_multi'] == 0) {
-            if ($array_config_global['rewrite_enable']) {
-                $array_config_global['rewrite_optional'] = $nv_Request->get_int('rewrite_optional', 'post', 0);
-            } else {
-                $array_config_global['rewrite_optional'] = 0;
-            }
             $array_config_global['lang_geo'] = 0;
             $array_config_global['rewrite_op_mod'] = $nv_Request->get_title('rewrite_op_mod', 'post');
             if (!isset($site_mods[$array_config_global['rewrite_op_mod']]) or $array_config_global['rewrite_optional'] == 0) {
                 $array_config_global['rewrite_op_mod'] = '';
             }
         } else {
-            $array_config_global['rewrite_optional'] = 0;
-            $array_config_global['lang_geo'] = $nv_Request->get_int('lang_geo', 'post', 0);
+            // URL không có biến ngôn ngữ luôn là ngôn ngữ mặc định nên không nhận dạng theo quốc gia
+            $array_config_global['lang_geo'] = $array_config_global['rewrite_optional'] ? 0 : $nv_Request->get_int('lang_geo', 'post', 0);
             $array_config_global['rewrite_op_mod'] = '';
         }
 

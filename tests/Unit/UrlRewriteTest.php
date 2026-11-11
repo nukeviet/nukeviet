@@ -32,7 +32,9 @@ class UrlRewriteTest extends \Codeception\Test\Unit
         'rewrite_exturl' => '.html',
         'check_rewrite_file' => 1,
         'setup_langs' => ['vi'],
-        'allow_sitelangs' => ['vi']
+        'allow_sitelangs' => ['vi'],
+        'lang_multi' => 0,
+        'site_lang' => 'vi'
     ];
 
     /**
@@ -161,5 +163,31 @@ class UrlRewriteTest extends \Codeception\Test\Unit
         foreach ($urls as $url) {
             $this->assertSame($base . $url, nv_url_rewrite($base . $url, true), 'URL: ' . $url);
         }
+    }
+
+    /**
+     * Đa ngôn ngữ bật rewrite_optional thì chỉ bỏ biến ngôn ngữ mặc định, admin giữ nguyên
+     */
+    public function testRewriteOptionalMultiLangOnlyDropsDefaultLang(): void
+    {
+        global $global_config;
+
+        $global_config['lang_multi'] = 1;
+        $global_config['rewrite_optional'] = 1;
+        $global_config['setup_langs'] = $global_config['allow_sitelangs'] = ['vi', 'en'];
+
+        $base = NV_BASE_SITEURL;
+        $cases = [
+            'index.php?language=vi' => '',
+            'index.php?language=vi&nv=news&op=abc.html' => 'news/abc.html',
+            'index.php?language=en' => 'en/',
+            'index.php?language=en&nv=news&op=abc.html' => 'en/news/abc.html'
+        ];
+        foreach ($cases as $url => $expected) {
+            $this->assertSame($base . $expected, nv_url_rewrite($base . $url, true), 'URL: ' . $url);
+        }
+
+        $global_config['lang_multi'] = 0;
+        $this->assertSame($base . 'news/', nv_url_rewrite($base . 'index.php?language=vi&nv=news', true));
     }
 }

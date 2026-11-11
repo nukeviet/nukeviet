@@ -61,6 +61,8 @@ if (empty($global_config['lang_multi'])) {
         if ($site_lang != $cookie) {
             $nv_Request->set_Cookie(U_LANG_COOKIE_NAME, $site_lang, NV_LIVE_COOKIE_TIME);
         }
+    } elseif (!empty($global_config['rewrite_optional'])) {
+        $site_lang = $global_config['site_lang'];
     } elseif (preg_match('/^[a-z]{2}$/', $cookie) and file_exists(NV_ROOTDIR . '/includes/language/' . $cookie . '/global.php')) {
         $site_lang = $cookie;
     } else {

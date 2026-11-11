@@ -2772,7 +2772,8 @@ function nv_url_rewrite_callback($matches)
         if (!in_array($query_array[NV_LANG_VARIABLE], $allow_langkeys, true) or (isset($query_array[NV_NAME_VARIABLE]) and (!isset($query_array_keys[1]) or $query_array_keys[1] != NV_NAME_VARIABLE)) or (isset($query_array[NV_OP_VARIABLE]) and (!isset($query_array_keys[2]) or $query_array_keys[2] != NV_OP_VARIABLE))) {
             return $matches[0];
         }
-        if (!$global_config['rewrite_optional'] or $is_acp) {
+        // Đa ngôn ngữ thì chỉ bỏ biến ngôn ngữ khỏi URL của ngôn ngữ mặc định
+        if (!$global_config['rewrite_optional'] or $is_acp or (!empty($global_config['lang_multi']) and $query_array[NV_LANG_VARIABLE] != $global_config['site_lang'])) {
             $op_rewrite[] = $query_array[NV_LANG_VARIABLE];
             ++$op_rewrite_count;
         }

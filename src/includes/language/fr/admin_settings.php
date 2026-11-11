@@ -36,6 +36,7 @@ $lang_module['description_error'] = 'Erreur : La description du site n\'a pas é
 $lang_module['rewrite'] = 'Activer la fonction de réécriture dans la zone utilisateur';
 $lang_module['rewrite_admin'] = 'Activer la réécriture dans la zone d\'administration';
 $lang_module['rewrite_optional'] = 'Filtrer les accents sur url';
+$lang_module['rewrite_optional_multi'] = 'Enlever la langue par défaut sur url';
 $lang_module['rewrite_op_mod'] = 'Enlever le nom du module sur url';
 $lang_module['disable_content'] = 'Notification de fermeture du site';
 $lang_module['submit'] = 'Enregistrer cette configuration';
