@@ -12,7 +12,7 @@
 #list-news-items tr > td:first-child {
   position: relative;
 }
-#list-news-items tr > td:first-child:before {
+#list-news-items tr > td:first-child::before {
   content: "";
   display: block;
   width: var(--indicator-start-width);
@@ -57,7 +57,7 @@
 #list-news-items tr > td:first-child.indicator-waiting:before {
   background-color: var(--bs-primary-bg-subtle);
 }
-#list-news-items tr > td:first-child.indicator-publish:before {
+#list-news-items tr > td:first-child.indicator-publish::before {
   display: none;
 }
 

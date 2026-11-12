@@ -1,12 +1,17 @@
 .ui-menu {
   @include rfs($dropdown-font-size, --#{$prefix}dropdown-font-size);
+
   margin: 0;
   padding: #{$dropdown-padding-y} 0;
+
   @include font-size(var(--#{$prefix}dropdown-font-size));
+
   color: $dropdown-color;
   list-style: none;
   background-clip: padding-box;
+
   @include border-radius(#{$dropdown-border-radius});
+
   position: absolute;
   z-index: $zindex-dropdown;
 }
@@ -18,12 +23,14 @@
 %ui-state-active {
   color: #{$dropdown-link-active-color};
   text-decoration: none;
+
   @include gradient-bg(#{$dropdown-link-active-bg});
 }
 
 %ui-state-focus {
   color: #{$dropdown-link-hover-color};
   text-decoration: if($link-hover-decoration ==underline, none, null);
+
   @include gradient-bg(#{$dropdown-link-hover-bg});
 }
 

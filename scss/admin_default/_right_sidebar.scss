@@ -39,7 +39,7 @@
     transform: translateX(0);
   }
 
-  .header-right .main-icons>ul>li>a[data-toggle=right-sidebar] {
+  .header-right .main-icons>ul>li>a[data-toggle="right-sidebar"] {
     color: var(--#{$prefix}primary);
   }
 }

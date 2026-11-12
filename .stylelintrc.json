@@ -27,7 +27,13 @@
         "media-feature-range-notation": "prefix",
         "selector-not-notation": null,
         "color-function-notation": null,
-        "alpha-value-notation": null
+        "alpha-value-notation": null,
+        "declaration-block-no-redundant-longhand-properties": [
+          true,
+          {
+            "ignoreShorthands": ["inset", "overflow"]
+          }
+        ]
       }
     },
     {

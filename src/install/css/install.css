@@ -79,7 +79,7 @@
   --bs-dark-border-subtle: #adb5bd;
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 0, 0, 0;
-  --bs-font-sans-serif: Roboto, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --bs-font-sans-serif: "Roboto", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", "Noto Sans", "Liberation Sans", "Arial", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --bs-body-font-family: var(--bs-font-sans-serif);
@@ -20962,21 +20962,21 @@ textarea.form-control-lg {
 }
 
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../../themes/admin_default/webfonts/Roboto-Regular.woff2") format("woff2"), url("../../themes/admin_default/webfonts/Roboto-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../../themes/admin_default/webfonts/Roboto-Medium.woff2") format("woff2"), url("../../themes/admin_default/webfonts/Roboto-Medium.woff") format("woff");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../../themes/admin_default/webfonts/Roboto-Bold.woff2") format("woff2"), url("../../themes/admin_default/webfonts/Roboto-Bold.woff") format("woff");
   font-weight: 700;
   font-style: normal;

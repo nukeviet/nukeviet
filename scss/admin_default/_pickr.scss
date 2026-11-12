@@ -13,9 +13,7 @@
       input:focus {
         @if $enable-shadows {
           @include box-shadow($input-box-shadow, $input-focus-box-shadow);
-        }
-
-        @else {
+        } @else {
           box-shadow: $input-focus-box-shadow;
         }
       }
@@ -24,6 +22,7 @@
 }
 
 // Ngăn không chuyển left thành right để đảm bảo xác định vị trí đúng
+
 /* rtl:begin:ignore */
 .pcr-app {
   left: 0;

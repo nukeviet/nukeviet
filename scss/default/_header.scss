@@ -81,6 +81,7 @@
     &.fade {
       opacity: 0;
     }
+
     &.show {
       opacity: $offcanvas-backdrop-opacity;
     }
@@ -89,7 +90,7 @@
   .site-header-contents {
     display: flex;
     flex-direction: column;
-    padding: 0 $grid-gutter-width $grid-gutter-width $grid-gutter-width;
+    padding: 0 $grid-gutter-width $grid-gutter-width;
   }
 }
 
@@ -146,6 +147,7 @@
       order: 1;
     }
   }
+
   @include media-breakpoint-up($theme-layout-breakpoint) {
     border-bottom: var(--#{$prefix}border-width) var(--#{$prefix}border-style) var(--#{$prefix}border-color);
 
@@ -165,6 +167,7 @@
     .search-icon {
       padding-top: calc(($header-height - $font-size-base * $line-height-base) / 2);
       padding-bottom: calc(($header-height - $font-size-base * $line-height-base) / 2);
+
       @extend %header-link-color;
 
       &:hover {
@@ -217,12 +220,14 @@
 
     a {
       @extend %header-link-color;
+
       @include media-breakpoint-down($theme-layout-breakpoint) {
         color: var(--hover-color);
       }
 
       &:hover {
         color: var(--hover-color);
+
         @include media-breakpoint-down($theme-layout-breakpoint) {
           opacity: .75;
         }
@@ -264,7 +269,9 @@
 .site-user-inform {
   .inform-toggle {
     position: relative;
+
     @extend %header-link-color;
+
     padding: calc(($header-height - $font-size-base * $line-height-base) / 2) .5rem;
     display: block;
 

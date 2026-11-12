@@ -84,7 +84,7 @@
 // Màn hình nhỏ: Trang chủ chỉ hiện biểu tượng
 @include media-breakpoint-down(sm) {
   .site-breadcrumbs-home-text {
-    @include visually-hidden();
+    @include visually-hidden;
   }
 }
 

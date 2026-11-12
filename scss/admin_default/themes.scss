@@ -54,8 +54,7 @@
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    align-content: center;
+    place-content: center center;
     gap: calc(#{$spacer} * .5);
     padding: calc(#{$spacer} * .5) #{$spacer};
     background-color: rgba(var(--#{$prefix}secondary-bg-rgb), .8);

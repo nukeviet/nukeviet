@@ -4,7 +4,6 @@ $red: #ee3232;
 $cyan: #17a2b8;
 $white: #fff;
 $black: #000;
-
 $gray-100: #f9f9f9;
 $gray-200: #e5e5e5;
 $gray-300: #d5d5d5;
@@ -14,18 +13,14 @@ $gray-600: #666;
 $gray-700: #495057;
 $gray-800: #343a40;
 $gray-900: #212529;
-
 $brand-colors: (
   "facebook": #4267b2,
   "google": #ea4335,
   "zalo": #0067ff
 );
-
 $info: $cyan;
-
 $font-size-base: 0.8125rem; // 13px
 $font-family-sans-serif: "Roboto", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", "Noto Sans", "Liberation Sans", "Arial", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
-
 $h1-font-size: $font-size-base * 1.625; // 28px
 $h2-font-size: $font-size-base * 1.5; // 24px
 $h3-font-size: $font-size-base * 1.375; // 22px
@@ -60,7 +55,6 @@ $border-radius-xxl: .5rem; // 8px
 // Z-Index
 $zindex-header: 980;
 $zindex-fms-tree: 981;
-
 $zindex-sticky: 930;
 $zindex-left-sidebar: 940;
 $zindex-developer-error: 950;

@@ -17,6 +17,7 @@
     $active-border: $border-color,
     $active-color: color-contrast($border-color)
   );
+
   --#{$prefix}btn-border-color: #{$border-color};
 }
 
@@ -41,6 +42,7 @@
         $active-border: $border-color-dark,
         $active-color: color-contrast($border-color-dark)
       );
+
       --#{$prefix}btn-border-color: #{$border-color-dark};
     }
   }

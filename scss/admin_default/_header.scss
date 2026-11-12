@@ -90,7 +90,6 @@
     z-index: $zindex-header-dropdown-toggle;
 
     &.show {
-
       &::before,
       &::after {
         position: absolute;
@@ -246,6 +245,7 @@
   .site-noti {
     .dropdown-menu {
       --#{$prefix}dropdown-min-width: #{$notification-width};
+
       width: $notification-width;
     }
 

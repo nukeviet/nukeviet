@@ -12,7 +12,6 @@
 @use "../../node_modules/@fortawesome/fontawesome-free/scss/variables" with (
   $font-path: "../../themes/admin_default/webfonts"
 );
-
 @import "../functions";
 @import "../admin_default/variables";
 
@@ -25,7 +24,6 @@ $h4-font-size: $font-size-base * 1.2;
 $h5-font-size: $font-size-base * 1.1;
 $h6-font-size: $font-size-base;
 $form-text-font-size: $font-size-base * .875;
-
 $dropdown-divider-bg: $border-color;
 $body-bg: #eef0f3;
 $card-bg: $white;
@@ -44,7 +42,7 @@ $install-max-width: 1140px;
 
 @each $weight, $name in (400: "Regular", 500: "Medium", 700: "Bold") {
   @font-face {
-    font-family: "Roboto";
+    font-family: Roboto;
     src: url("../../themes/admin_default/webfonts/Roboto-#{$name}.woff2") format("woff2"),
       url("../../themes/admin_default/webfonts/Roboto-#{$name}.woff") format("woff");
     font-weight: $weight;
@@ -235,28 +233,33 @@ body {
 .update-task {
   .task-icon {
     --fa: #{'"\\f111"'};
+
     margin-right: .25rem;
     color: $gray-300;
   }
 
   &.iload .task-icon {
     --fa: #{'"\\f110"'};
+
     color: $primary;
     animation: fa-spin 1s linear infinite;
   }
 
   &.iok .task-icon {
     --fa: #{'"\\f00c"'};
+
     color: $green;
   }
 
   &.iwarn .task-icon {
     --fa: #{'"\\f071"'};
+
     color: $warning;
   }
 
   &.ierror .task-icon {
     --fa: #{'"\\f00d"'};
+
     color: $red;
   }
 }

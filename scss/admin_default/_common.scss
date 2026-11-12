@@ -123,7 +123,6 @@
   thead {
     &:last-child {
       tr:last-child {
-
         td,
         th {
           border-bottom-width: 0;
@@ -155,7 +154,6 @@
   thead {
     &:last-child {
       tr:last-child {
-
         td,
         th {
           border-bottom-width: 0;
@@ -260,6 +258,7 @@
 }
 
 $sm-breakpoint: map-get($grid-breakpoints, sm) - 0.02px;
+
 @media (max-width: #{$sm-breakpoint}) {
   .py-only-sm-0 {
     padding-top: 0;

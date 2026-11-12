@@ -66,10 +66,7 @@
 @include media-breakpoint-up(sm) {
   .fmd-dialog {
     max-width: $modal-md;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 1.75rem;
-    margin-bottom: 1.75rem;
+    margin: 1.75rem auto;
   }
 
   .fmm-dialog {
@@ -78,7 +75,6 @@
 }
 
 @include media-breakpoint-up(lg) {
-
   .fmd-lg,
   .fmd-xl {
     max-width: $modal-lg;
@@ -274,7 +270,7 @@
     transition: transform 0.15s ease-in-out;
 
     &.show {
-      transform: translateX(0px);
+      transform: translateX(0);
     }
   }
 
@@ -358,7 +354,7 @@
 
 .fms-tree-scroller {
   >ul>li {
-    @include tree-padding();
+    @include tree-padding;
   }
 }
 
@@ -509,7 +505,6 @@
         left: 50%;
         top: 50%;
         transform: translate3d(-50%, -50%, 0);
-
         max-width: 100%;
         height: auto;
       }
@@ -555,7 +550,7 @@
 
     .info {
       text-align: center;
-      padding: 0 .25rem .25rem .25rem;
+      padding: 0 .25rem .25rem;
     }
 
     .sel {
@@ -638,7 +633,6 @@
   .fms-wraper.touch-only {
     .view-grid>.fms-files-wraper {
       .file {
-
         .sel,
         .menu {
           display: block;
@@ -695,7 +689,7 @@
     >li {
       flex: 0 0 100%;
       max-width: 100%;
-      padding: .5rem .5rem 0 .5rem;
+      padding: .5rem .5rem 0;
     }
   }
 
@@ -777,7 +771,7 @@
   }
 
   .queue-tools {
-    padding: 1rem 1rem 0 1rem;
+    padding: 1rem 1rem 0;
     margin-bottom: .5rem;
 
     .tool-progress {

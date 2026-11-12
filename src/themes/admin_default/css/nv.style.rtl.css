@@ -8,84 +8,84 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../webfonts/Roboto-Italic.woff2") format("woff2"), url("../webfonts/Roboto-Italic.woff") format("woff");
   font-weight: normal;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../webfonts/Roboto-Black.woff2") format("woff2"), url("../webfonts/Roboto-Black.woff") format("woff");
   font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../webfonts/Roboto-BlackItalic.woff2") format("woff2"), url("../webfonts/Roboto-BlackItalic.woff") format("woff");
   font-weight: 900;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../webfonts/Roboto-BoldItalic.woff2") format("woff2"), url("../webfonts/Roboto-BoldItalic.woff") format("woff");
   font-weight: bold;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../webfonts/Roboto-Bold.woff2") format("woff2"), url("../webfonts/Roboto-Bold.woff") format("woff");
   font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../webfonts/Roboto-Light.woff2") format("woff2"), url("../webfonts/Roboto-Light.woff") format("woff");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../webfonts/Roboto-ThinItalic.woff2") format("woff2"), url("../webfonts/Roboto-ThinItalic.woff") format("woff");
   font-weight: 100;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../webfonts/Roboto-Regular.woff2") format("woff2"), url("../webfonts/Roboto-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../webfonts/Roboto-LightItalic.woff2") format("woff2"), url("../webfonts/Roboto-LightItalic.woff") format("woff");
   font-weight: 300;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../webfonts/Roboto-Thin.woff2") format("woff2"), url("../webfonts/Roboto-Thin.woff") format("woff");
   font-weight: 100;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../webfonts/Roboto-Medium.woff2") format("woff2"), url("../webfonts/Roboto-Medium.woff") format("woff");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Roboto";
+  font-family: Roboto;
   src: url("../webfonts/Roboto-MediumItalic.woff2") format("woff2"), url("../webfonts/Roboto-MediumItalic.woff") format("woff");
   font-weight: 500;
   font-style: italic;
@@ -27313,10 +27313,10 @@ textarea.form-control-lg {
   cursor: pointer;
   padding-right: 1.25rem;
 }
-.left-sidebar .sidebar-elements li.parent > a > .toggle .fas:before {
+.left-sidebar .sidebar-elements li.parent > a > .toggle .fas::before {
   content: "\f0d7";
 }
-.left-sidebar .sidebar-elements li.parent.open > a > .toggle .fas:before {
+.left-sidebar .sidebar-elements li.parent.open > a > .toggle .fas::before {
   content: "\f0d8";
 }
 .left-sidebar .sidebar-elements > li ul {
@@ -27454,7 +27454,7 @@ textarea.form-control-lg {
   .collapsed-left-sidebar .left-sidebar .sidebar-elements > li ul.visible .title {
     font-size: 1.1171875rem;
     display: block;
-    padding: 1.5625rem 1.5625rem 0 1.5625rem;
+    padding: 1.5625rem 1.5625rem 0;
   }
   .collapsed-left-sidebar .left-sidebar .sidebar-elements > li ul.visible .nav-items {
     display: table-row;
@@ -27754,7 +27754,7 @@ figure.table th {
 }
 
 figure.table {
-  margin: 5px auto 10px auto;
+  margin: 5px auto 10px;
   display: table;
 }
 
@@ -27790,7 +27790,7 @@ figure.table > figcaption {
 /* Media */
 figure.media {
   clear: both;
-  margin: 5px 0 10px 0;
+  margin: 5px 0 10px;
   display: block;
   min-width: 10px;
 }
@@ -27798,7 +27798,7 @@ figure.media {
 /* NV-Media */
 figure.nv-media {
   clear: both;
-  margin: 5px 0 10px 0;
+  margin: 5px 0 10px;
   display: block;
   min-width: 10px;
 }
@@ -27834,7 +27834,7 @@ figure.image {
   /* Important để không xung đột khi copy từ Google Docs */
   clear: both;
   text-align: center;
-  margin: 5px auto 10px auto;
+  margin: 5px auto 10px;
   min-width: 10px;
 }
 
@@ -27867,7 +27867,7 @@ figure.image > figcaption {
   display: table-caption;
   caption-side: bottom;
   word-break: break-word;
-  padding: 7px 7px 0 7px;
+  padding: 7px 7px 0;
   font-size: 13px;
   outline-offset: -1px;
   margin-top: 0;
@@ -28413,7 +28413,7 @@ html:root {
 [data-bs-theme=light] .ui-datepicker,
 [data-bs-theme=dark] .ui-datepicker {
   width: 14.375rem;
-  padding: 0 0.125rem 0 0.125rem;
+  padding: 0 0.125rem;
   z-index: 1049 !important;
 }
 [data-bs-theme=light] .ui-datepicker td span,
@@ -28433,7 +28433,7 @@ html:root {
 }
 [data-bs-theme=light] .ui-datepicker .ui-datepicker-header,
 [data-bs-theme=dark] .ui-datepicker .ui-datepicker-header {
-  margin: 0 calc(-1 * (0.125rem + 1px)) 0 calc(-1 * (0.125rem + 1px));
+  margin: 0 calc(-1 * (0.125rem + 1px));
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   border-color: var(--bs-primary);
@@ -28723,7 +28723,6 @@ html:root {
 }
 
 .flatpickr-calendar {
-  background: transparent;
   opacity: 0;
   display: none;
   text-align: center;
@@ -28803,8 +28802,8 @@ html:root {
   height: auto;
 }
 
-.flatpickr-calendar:before,
-.flatpickr-calendar:after {
+.flatpickr-calendar::before,
+.flatpickr-calendar::after {
   position: absolute;
   display: block;
   pointer-events: none;
@@ -28815,53 +28814,53 @@ html:root {
   right: 22px;
 }
 
-.flatpickr-calendar.rightMost:before,
-.flatpickr-calendar.arrowRight:before,
-.flatpickr-calendar.rightMost:after,
-.flatpickr-calendar.arrowRight:after {
+.flatpickr-calendar.rightMost::before,
+.flatpickr-calendar.arrowRight::before,
+.flatpickr-calendar.rightMost::after,
+.flatpickr-calendar.arrowRight::after {
   right: auto;
   left: 22px;
 }
 
-.flatpickr-calendar.arrowCenter:before,
-.flatpickr-calendar.arrowCenter:after {
+.flatpickr-calendar.arrowCenter::before,
+.flatpickr-calendar.arrowCenter::after {
   right: 50%;
   left: 50%;
 }
 
-.flatpickr-calendar:before {
+.flatpickr-calendar::before {
   border-width: 5px;
   margin: 0 -5px;
 }
 
-.flatpickr-calendar:after {
+.flatpickr-calendar::after {
   border-width: 4px;
   margin: 0 -4px;
 }
 
-.flatpickr-calendar.arrowTop:before,
-.flatpickr-calendar.arrowTop:after {
+.flatpickr-calendar.arrowTop::before,
+.flatpickr-calendar.arrowTop::after {
   bottom: 100%;
 }
 
-.flatpickr-calendar.arrowTop:before {
+.flatpickr-calendar.arrowTop::before {
   border-bottom-color: var(--bs-border-color);
 }
 
-.flatpickr-calendar.arrowTop:after {
+.flatpickr-calendar.arrowTop::after {
   border-bottom-color: var(--bs-body-bg);
 }
 
-.flatpickr-calendar.arrowBottom:before,
-.flatpickr-calendar.arrowBottom:after {
+.flatpickr-calendar.arrowBottom::before,
+.flatpickr-calendar.arrowBottom::after {
   top: 100%;
 }
 
-.flatpickr-calendar.arrowBottom:before {
+.flatpickr-calendar.arrowBottom::before {
   border-top-color: var(--bs-border-color);
 }
 
-.flatpickr-calendar.arrowBottom:after {
+.flatpickr-calendar.arrowBottom::after {
   border-top-color: #fff;
 }
 
@@ -28921,37 +28920,37 @@ html:root {
 .flatpickr-months .flatpickr-prev-month.flatpickr-prev-month,
 .flatpickr-months .flatpickr-next-month.flatpickr-prev-month {
   /*
-    /*rtl:begin:ignore*/
+    /*rtl:begin:ignore */
   /*
     */
   right: 0;
   /*
-    /*rtl:end:ignore*/
+    /*rtl:end:ignore */
   /*
     */
 }
 
 /*
-/*rtl:begin:ignore*/
+/*rtl:begin:ignore */
 /*
-/*rtl:end:ignore*/
+/*rtl:end:ignore */
 .flatpickr-months .flatpickr-prev-month.flatpickr-next-month,
 .flatpickr-months .flatpickr-next-month.flatpickr-next-month {
   /*
-    /*rtl:begin:ignore*/
+    /*rtl:begin:ignore */
   /*
     */
   left: 0;
   /*
-    /*rtl:end:ignore*/
+    /*rtl:end:ignore */
   /*
     */
 }
 
 /*
-/*rtl:begin:ignore*/
+/*rtl:begin:ignore */
 /*
-/*rtl:end:ignore*/
+/*rtl:end:ignore */
 .flatpickr-months .flatpickr-prev-month:hover,
 .flatpickr-months .flatpickr-next-month:hover {
   color: var(--bs-tertiary-color);
@@ -29001,6 +29000,7 @@ html:root {
 .numInputWrapper input::-webkit-inner-spin-button {
   margin: 0;
   -webkit-appearance: none;
+  appearance: none;
 }
 
 .numInputWrapper span {
@@ -29024,7 +29024,7 @@ html:root {
   background: var(--bs-border-color-translucent);
 }
 
-.numInputWrapper span:after {
+.numInputWrapper span::after {
   display: block;
   content: "";
   position: absolute;
@@ -29035,7 +29035,7 @@ html:root {
   border-bottom: 0;
 }
 
-.numInputWrapper span.arrowUp:after {
+.numInputWrapper span.arrowUp::after {
   border-right: 4px solid transparent;
   border-left: 4px solid transparent;
   border-bottom: 4px solid var(--bs-border-color-translucent);
@@ -29046,7 +29046,7 @@ html:root {
   top: 50%;
 }
 
-.numInputWrapper span.arrowDown:after {
+.numInputWrapper span.arrowDown::after {
   border-right: 4px solid transparent;
   border-left: 4px solid transparent;
   border-top: 4px solid var(--bs-border-color-translucent);
@@ -29072,18 +29072,17 @@ html:root {
 
 .flatpickr-current-month {
   font-size: 0.9140625rem;
-  line-height: inherit;
   font-weight: 500;
   color: inherit;
   position: absolute;
   width: 75%;
   right: 12.5%;
-  padding: 7.48px 0 0 0;
+  padding: 7.48px 0 0;
   line-height: 1;
   height: 34px;
   display: inline-block;
   text-align: center;
-  transform: translate3d(0px, 0px, 0px);
+  transform: translate3d(0, 0, 0);
 }
 
 .flatpickr-current-month span.cur-month {
@@ -29105,11 +29104,11 @@ html:root {
   display: inline-block;
 }
 
-.flatpickr-current-month .numInputWrapper span.arrowUp:after {
+.flatpickr-current-month .numInputWrapper span.arrowUp::after {
   border-bottom-color: var(--bs-secondary-color);
 }
 
-.flatpickr-current-month .numInputWrapper span.arrowDown:after {
+.flatpickr-current-month .numInputWrapper span.arrowDown::after {
   border-top-color: var(--bs-secondary-color);
 }
 
@@ -29157,7 +29156,7 @@ html:root {
   font-weight: 500;
   height: auto;
   line-height: inherit;
-  margin: -1px 0 0 0;
+  margin: -1px 0 0;
   outline: none;
   padding: 0 0.5ch 0 0;
   position: relative;
@@ -29214,7 +29213,7 @@ span.flatpickr-weekday {
 
 .dayContainer,
 .flatpickr-weeks {
-  padding: 1px 0 0 0;
+  padding: 1px 0 0;
 }
 
 .flatpickr-days {
@@ -29241,7 +29240,7 @@ span.flatpickr-weekday {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  transform: translate3d(0px, 0px, 0px);
+  transform: translate3d(0, 0, 0);
   opacity: 1;
 }
 
@@ -29424,7 +29423,6 @@ span.flatpickr-weekday {
 .flatpickr-time {
   text-align: center;
   outline: 0;
-  display: block;
   height: 0;
   line-height: 40px;
   max-height: 40px;
@@ -29433,7 +29431,7 @@ span.flatpickr-weekday {
   display: flex;
 }
 
-.flatpickr-time:after {
+.flatpickr-time::after {
   content: "";
   display: table;
   clear: both;
@@ -29446,11 +29444,11 @@ span.flatpickr-weekday {
   float: right;
 }
 
-.flatpickr-time .numInputWrapper span.arrowUp:after {
+.flatpickr-time .numInputWrapper span.arrowUp::after {
   border-bottom-color: var(--bs-body-color);
 }
 
-.flatpickr-time .numInputWrapper span.arrowDown:after {
+.flatpickr-time .numInputWrapper span.arrowDown::after {
   border-top-color: var(--bs-body-color);
 }
 
@@ -29631,10 +29629,7 @@ span.flatpickr-weekday {
 @media (min-width: 576px) {
   .fmd-dialog {
     max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 1.75rem;
-    margin-bottom: 1.75rem;
+    margin: 1.75rem auto;
   }
   .fmm-dialog {
     margin: 1rem;
@@ -29828,7 +29823,7 @@ span.flatpickr-weekday {
     transition: transform 0.15s ease-in-out;
   }
   .fms-tree.show {
-    transform: translateX(0px);
+    transform: translateX(0);
   }
 }
 .fms-tree .fms-tree-scroller {
@@ -30122,7 +30117,7 @@ span.flatpickr-weekday {
 }
 .view-grid > .fms-files-wraper .file .info {
   text-align: center;
-  padding: 0 0.25rem 0.25rem 0.25rem;
+  padding: 0 0.25rem 0.25rem;
 }
 .view-grid > .fms-files-wraper .file .sel {
   position: absolute;
@@ -30234,7 +30229,7 @@ span.flatpickr-weekday {
 .view-list > .fms-files-wraper > ul > li {
   flex: 0 0 100%;
   max-width: 100%;
-  padding: 0.5rem 0.5rem 0 0.5rem;
+  padding: 0.5rem 0.5rem 0;
 }
 .view-list > .fms-files-wraper .file {
   border-bottom: 1px solid var(--bs-border-color);
@@ -30301,7 +30296,7 @@ span.flatpickr-weekday {
   position: relative;
 }
 .fms-upqueue .queue-tools {
-  padding: 1rem 1rem 0 1rem;
+  padding: 1rem 1rem 0;
   margin-bottom: 0.5rem;
 }
 .fms-upqueue .queue-tools .tool-progress {

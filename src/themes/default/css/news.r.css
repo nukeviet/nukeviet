@@ -59,7 +59,7 @@
   display: inline-block;
   background-color: #f7651e;
   color: #fff;
-  padding: 0.1rem 0.5rem 0.15rem 0.5rem;
+  padding: 0.1rem 0.5rem 0.15rem;
   border-radius: 0.25rem;
   margin-bottom: 0.5rem;
   font-size: 0.875rem;
@@ -115,7 +115,7 @@
   display: inline-block;
   background-color: #0d6efd;
   color: #fff;
-  padding: 0.1rem 0.5rem 0.15rem 0.5rem;
+  padding: 0.1rem 0.5rem 0.15rem;
   border-radius: 0.25rem;
   margin-bottom: 0.5rem;
   font-size: 0.875rem;

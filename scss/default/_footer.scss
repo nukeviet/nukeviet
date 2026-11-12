@@ -25,6 +25,7 @@
   .nv-block {
     .block-title {
       @include font-size($h1-font-size);
+
       font-weight: $font-weight-medium;
       text-transform: uppercase;
       margin-bottom: $grid-gutter-width;

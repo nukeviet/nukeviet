@@ -1,23 +1,18 @@
 // Tùy chỉnh lại các thành phần của bootstrap mà không thể can thiệp bằng biến scss
 // Chỉ giao diện light, dark lấy của bootstrap
 html:not([data-#{$prefix}theme="dark"]) {
-
   .btn-secondary,
   .btn-default {
     --#{$prefix}btn-color: #{$body-color};
     --#{$prefix}btn-bg: #{$light};
-
     --#{$prefix}btn-border-color: #{$gray-300};
     --#{$prefix}btn-hover-color: #{$body-color};
     --#{$prefix}btn-hover-bg: #{$gray-200};
     --#{$prefix}btn-hover-border-color: #{$gray-300};
-
     --#{$prefix}btn-active-color: #{$body-color};
     --#{$prefix}btn-active-bg: #{$gray-300};
     --#{$prefix}btn-active-border-color: #{$gray-400};
-
     --#{$prefix}btn-active-shadow: inset 0 1px 3px #{rgba($black, .06)};
-
     --#{$prefix}btn-disabled-color: #{$gray-700};
     --#{$prefix}btn-disabled-bg: #{$gray-300};
     --#{$prefix}btn-disabled-border-color: #{$gray-400};

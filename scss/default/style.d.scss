@@ -29,7 +29,6 @@ $enable-rfs: false;
 
 // Non-responsive
 @import "nrfs";
-
 @import "../../node_modules/bootstrap/scss/utilities";
 
 // Layout & components
@@ -70,6 +69,7 @@ $enable-rfs: false;
 
 // Utilities
 @import "../../node_modules/bootstrap/scss/utilities/api";
+
 // scss-docs-end import-stack
 
 // NukeViet override container: Cố định chiều rộng các container
@@ -88,12 +88,12 @@ $enable-rfs: false;
       $extend-breakpoint: true;
 
       @each $name, $width in $grid-breakpoints {
-        @if ($extend-breakpoint) {
+        @if $extend-breakpoint {
           .container#{breakpoint-infix($name, $grid-breakpoints)} {
             @extend %responsive-container-#{$breakpoint};
           }
 
-          @if ($breakpoint ==$name) {
+          @if $breakpoint ==$name {
             $extend-breakpoint: false;
           }
         }

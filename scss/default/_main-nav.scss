@@ -1,6 +1,7 @@
 // Tạo padding các cấp menu con
 $indent-step: 0.75rem;
 $max-depth: 20;
+
 @mixin nested-menu($level) {
   $padding: $level * $indent-step;
 
@@ -9,6 +10,7 @@ $max-depth: 20;
       padding-left: $padding;
     }
   }
+
   @if $level < $max-depth {
     >ul>li {
       @include nested-menu($level + 1);
@@ -26,6 +28,7 @@ $max-depth: 20;
 
   .nav-expanded {
     visibility: hidden;
+
     @include media-breakpoint-down($theme-layout-breakpoint) {
       display: none;
     }
@@ -137,6 +140,7 @@ $max-depth: 20;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+
     @include media-breakpoint-down($theme-layout-breakpoint) {
       justify-content: space-between;
       border-bottom: var(--#{$prefix}border-width) var(--#{$prefix}border-style) var(--#{$prefix}border-color);
@@ -147,6 +151,7 @@ $max-depth: 20;
       align-items: center;
       gap: 0.25rem;
       min-width: 0; // Fix elipsis issue
+
       @include media-breakpoint-down($theme-layout-breakpoint) {
         flex-grow: 1;
 

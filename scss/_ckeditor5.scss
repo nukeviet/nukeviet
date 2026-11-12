@@ -37,7 +37,7 @@ figure.table th {
 }
 
 figure.table {
-  margin: 5px auto 10px auto;
+  margin: 5px auto 10px;
   display: table;
 }
 
@@ -73,7 +73,7 @@ figure.table>figcaption {
 /* Media */
 figure.media {
   clear: both;
-  margin: 5px 0 10px 0;
+  margin: 5px 0 10px;
   display: block;
   min-width: 10px;
 }
@@ -81,7 +81,7 @@ figure.media {
 /* NV-Media */
 figure.nv-media {
   clear: both;
-  margin: 5px 0 10px 0;
+  margin: 5px 0 10px;
   display: block;
   min-width: 10px;
 }
@@ -114,10 +114,11 @@ figure.image.image_resized>figcaption {
 
 figure.image {
   display: table !important;
+
   /* Important để không xung đột khi copy từ Google Docs */
   clear: both;
   text-align: center;
-  margin: 5px auto 10px auto;
+  margin: 5px auto 10px;
   min-width: 10px;
 }
 
@@ -150,7 +151,7 @@ figure.image>figcaption {
   display: table-caption;
   caption-side: bottom;
   word-break: break-word;
-  padding: 7px 7px 0 7px;
+  padding: 7px 7px 0;
   font-size: 13px;
   outline-offset: -1px;
   margin-top: 0;
@@ -278,7 +279,6 @@ html:root {
   --ck-content-font-size: var(--#{$prefix}body-font-size);
   --ck-content-font-color: var(--#{$prefix}body-color);
   --ck-content-line-height: var(--#{$prefix}body-line-height);
-
   --ck-color-base-foreground: var(--nv-body-bg); // Màu nền window ở chế độ fullscreen
   --ck-color-base-background: var(--#{$prefix}body-bg); // Nền ở chế độ thường
   --ck-color-base-border: var(--#{$prefix}border-color); // Viền cơ bản ví dụ toàn bộ khung viền của trình soạn thảo
@@ -318,7 +318,6 @@ html:root {
   // Thanh công cụ
   --ck-color-toolbar-border: var(--ck-color-base-border);
   --ck-color-toolbar-background: var(--ck-color-base-background);
-
   --ck-color-focus-outer-shadow: var(--#{$prefix}focus-ring-color);
   --ck-focus-outer-shadow-geometry: 0 0 0 3px;
   --ck-focus-outer-shadow: var(--ck-focus-outer-shadow-geometry) var(--ck-color-focus-outer-shadow);

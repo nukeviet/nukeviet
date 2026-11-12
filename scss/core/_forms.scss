@@ -63,6 +63,7 @@
     color: var(--cr-btn-active-color);
     background-color: var(--cr-btn-active-bg);
     border-color: var(--cr-btn-active-border-color);
+
     @include box-shadow(var(--cr-btn-active-shadow));
   }
 
@@ -74,6 +75,7 @@
     background-image: if($enable-gradients, none, null);
     border-color: var(--cr-btn-disabled-border-color);
     opacity: var(--cr-btn-disabled-opacity);
+
     @include box-shadow(none);
   }
 }

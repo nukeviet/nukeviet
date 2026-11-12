@@ -48,9 +48,7 @@
 .stepper .indicate {
   width: 2.5rem;
   height: 2.5rem;
-  flex-basis: 2.5rem;
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 0 2.5rem;
 }
 .stepper .indicate span::before {
   content: counter(countSteper);

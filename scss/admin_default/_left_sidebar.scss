@@ -13,7 +13,9 @@
 
   @media (max-width: #{$theme-breakpoint}) {
     position: static;
+
     --#{$prefix}border-width: 0;
+
     width: 100%;
     height: auto;
   }
@@ -77,12 +79,12 @@
         cursor: pointer;
         padding-left: 1.25rem;
 
-        .fas:before {
+        .fas::before {
           content: "\f0d7";
         }
       }
 
-      &.open>a>.toggle .fas:before {
+      &.open>a>.toggle .fas::before {
         content: "\f0d8";
       }
     }
@@ -162,6 +164,7 @@
   .left-sidebar-in-sm {
     display: none;
     background-color: var(--nv-left-sidebar-bg);
+
     --#{$prefix}border-width: #{$border-width};
 
     a {
@@ -259,7 +262,7 @@
             .title {
               font-size: $h3-font-size;
               display: block;
-              padding: 1.5625rem 1.5625rem 0 1.5625rem;
+              padding: 1.5625rem 1.5625rem 0;
             }
 
             .nav-items {

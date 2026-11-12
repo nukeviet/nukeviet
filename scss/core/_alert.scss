@@ -1,5 +1,6 @@
 .cr-alert-backdrop {
   @extend %reboot-all;
+
   position: fixed;
   top: 0;
   left: 0;
@@ -15,6 +16,7 @@
 
 .cr-alert {
   @extend %reboot-all;
+
   position: fixed;
   top: 0;
   left: 0;
@@ -29,6 +31,7 @@
 
 .cr-alert-dialog {
   @extend %reboot-all;
+
   position: relative;
   width: auto;
   pointer-events: none;
@@ -38,10 +41,7 @@
 @include media-breakpoint-up(sm) {
   .cr-alert-dialog {
     max-width: var(--cr-alert-md-width);
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 1.75rem;
-    margin-bottom: 1.75rem;
+    margin: 1.75rem auto;
   }
 }
 
@@ -60,6 +60,7 @@
 
 .cr-alert-content {
   @extend %reboot-all;
+
   position: relative;
   display: flex;
   flex-direction: column;
@@ -74,6 +75,7 @@
 
 .cr-alert-body {
   @extend %reboot-all;
+
   position: relative;
   flex: 1 1 auto;
   padding: 1rem;
@@ -86,11 +88,12 @@
   align-items: center;
   justify-content: flex-end;
   gap: var(--cr-alert-footer-gap);
-  padding: 0 1rem 1rem 1rem;
+  padding: 0 1rem 1rem;
 }
 
 .cr-alert-dialog-scrollable {
   height: calc(100% - .5rem * 2);
+
   @include media-breakpoint-up(sm) {
     height: calc(100% - 1.75rem * 2);
   }

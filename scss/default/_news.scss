@@ -34,9 +34,11 @@
         @include media-breakpoint-up($theme-layout-breakpoint) {
           padding-bottom: 75.47%;
         }
+
         @include media-breakpoint-down($theme-layout-breakpoint) {
           padding-bottom: 57.97%;
         }
+
         @include media-breakpoint-down(sm) {
           padding-bottom: 76.92%;
         }
@@ -47,7 +49,7 @@
       display: inline-block;
       background-color: $orange;
       color: $white;
-      padding: .1rem .5rem .15rem .5rem;
+      padding: .1rem .5rem .15rem;
       border-radius: .25rem;
       margin-bottom: .5rem;
       font-size: $font-size-sm;
@@ -84,13 +86,16 @@
 
     .item-inner {
       position: relative;
+
       @include media-breakpoint-up($theme-layout-breakpoint) {
         height: 100%;
       }
+
       @include media-breakpoint-down($theme-layout-breakpoint) {
         height: 0;
         padding-bottom: 40.43%;
       }
+
       @include media-breakpoint-down(sm) {
         height: 0;
         padding-bottom: 60.43%;
@@ -101,7 +106,7 @@
       display: inline-block;
       background-color: $primary;
       color: color-contrast($primary);
-      padding: .1rem .5rem .15rem .5rem;
+      padding: .1rem .5rem .15rem;
       border-radius: .25rem;
       margin-bottom: .5rem;
       font-size: $font-size-sm;
@@ -208,6 +213,7 @@
   --plyr-tooltip-color: var(--#{$prefix}body-bg);
   --plyr-tooltip-shadow: #{$box-shadow-sm};
   --plyr-tooltip-radius: #{$border-radius};
+
   display: flex;
   flex-wrap: wrap;
   align-items: center;

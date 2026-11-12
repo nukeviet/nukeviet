@@ -42,7 +42,7 @@
 
   .ui-datepicker {
     width: 14.375rem;
-    padding: 0 0.125rem 0 0.125rem;
+    padding: 0 0.125rem;
     z-index: $zindex-picker !important;
 
     td span,
@@ -60,7 +60,7 @@
     }
 
     .ui-datepicker-header {
-      margin: 0 calc(-1 * (0.125rem + 1px)) 0 calc(-1 * (0.125rem + 1px));
+      margin: 0 calc(-1 * (0.125rem + 1px));
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
       border-color: var(--#{$prefix}primary);
@@ -158,6 +158,7 @@
 
       >select {
         --#{$prefix}form-select-bg-img: #{escape-svg(url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='#fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>"))};
+
         background-image: var(--#{$prefix}form-select-bg-img),
         var(--#{$prefix}form-select-bg-icon, none);
         background-repeat: no-repeat;
@@ -198,15 +199,17 @@
       }
 
       .ui-datepicker-prev:hover {
-        /*rtl:begin:ignore*/
+        /* rtl:begin:ignore */
         right: 3px;
-        /*rtl:end:ignore*/
+
+        /* rtl:end:ignore */
       }
 
       .ui-datepicker-next:hover {
-        /*rtl:begin:ignore*/
+        /* rtl:begin:ignore */
         left: 3px;
-        /*rtl:end:ignore*/
+
+        /* rtl:end:ignore */
       }
     }
   }

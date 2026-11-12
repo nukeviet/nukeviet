@@ -110,6 +110,7 @@
 // Tạo padding các cấp menu con
 $indent-step: 0.75rem;
 $max-depth: 10;
+
 @mixin nested-menu($level) {
   $padding: $level * $indent-step;
 
@@ -118,6 +119,7 @@ $max-depth: 10;
       padding-left: $padding;
     }
   }
+
   @if $level < $max-depth {
     >ul>li {
       @include nested-menu($level + 1);

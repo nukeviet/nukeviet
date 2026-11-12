@@ -26345,7 +26345,7 @@ textarea.form-control-lg {
 [data-bs-theme=light] .ui-datepicker,
 [data-bs-theme=dark] .ui-datepicker {
   width: 14.375rem;
-  padding: 0 0.125rem 0 0.125rem;
+  padding: 0 0.125rem;
   z-index: 1049 !important;
 }
 [data-bs-theme=light] .ui-datepicker td span,
@@ -26365,7 +26365,7 @@ textarea.form-control-lg {
 }
 [data-bs-theme=light] .ui-datepicker .ui-datepicker-header,
 [data-bs-theme=dark] .ui-datepicker .ui-datepicker-header {
-  margin: 0 calc(-1 * (0.125rem + 1px)) 0 calc(-1 * (0.125rem + 1px));
+  margin: 0 calc(-1 * (0.125rem + 1px));
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
   border-color: var(--bs-primary);
@@ -26500,15 +26500,15 @@ textarea.form-control-lg {
 }
 [data-bs-theme=light] .ui-datepicker.ui-datepicker-rtl .ui-datepicker-prev:hover,
 [data-bs-theme=dark] .ui-datepicker.ui-datepicker-rtl .ui-datepicker-prev:hover {
-  /*rtl:begin:ignore*/
+  /* rtl:begin:ignore */
   right: 3px;
-  /*rtl:end:ignore*/
+  /* rtl:end:ignore */
 }
 [data-bs-theme=light] .ui-datepicker.ui-datepicker-rtl .ui-datepicker-next:hover,
 [data-bs-theme=dark] .ui-datepicker.ui-datepicker-rtl .ui-datepicker-next:hover {
-  /*rtl:begin:ignore*/
+  /* rtl:begin:ignore */
   left: 3px;
-  /*rtl:end:ignore*/
+  /* rtl:end:ignore */
 }
 
 .select2-container .select2-selection--multiple .select2-selection__clear, .select2-container .select2-selection--single .select2-selection__clear {
@@ -26703,9 +26703,9 @@ textarea.form-control-lg {
   --bs-dropdown-header-color: #626d75;
   --bs-dropdown-header-padding-x: 1rem;
   --bs-dropdown-header-padding-y: 0.5rem;
-  /*rtl:begin:ignore*/
+  /* rtl:begin:ignore */
   left: -100000px;
-  /*rtl:end:ignore*/
+  /* rtl:end:ignore */
   width: 100%;
   position: absolute;
   display: block;
@@ -26790,9 +26790,9 @@ textarea.form-control-lg {
 }
 
 .select2-container--open .select2-dropdown {
-  /*rtl:begin:ignore*/
+  /* rtl:begin:ignore */
   left: 0;
-  /*rtl:end:ignore*/
+  /* rtl:end:ignore */
 }
 
 [data-bs-theme=dark] .select2-container .select2-selection--single .select2-selection__rendered {
@@ -26897,7 +26897,7 @@ textarea.form-control-lg {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' fill='%23CF4646' viewBox='0 0 16 16'%3e%3cpath d='M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2'/%3e%3c/svg%3e");
 }
 
-.nv-info:before {
+.nv-info::before {
   display: block;
   content: "";
   position: absolute;
@@ -28102,7 +28102,7 @@ span.keyword {
   .site-header-contents {
     display: flex;
     flex-direction: column;
-    padding: 0 1rem 1rem 1rem;
+    padding: 0 1rem 1rem;
   }
 }
 @media (min-width: 992px) {
@@ -29460,7 +29460,7 @@ figure.table th {
 }
 
 figure.table {
-  margin: 5px auto 10px auto;
+  margin: 5px auto 10px;
   display: table;
 }
 
@@ -29496,7 +29496,7 @@ figure.table > figcaption {
 /* Media */
 figure.media {
   clear: both;
-  margin: 5px 0 10px 0;
+  margin: 5px 0 10px;
   display: block;
   min-width: 10px;
 }
@@ -29504,7 +29504,7 @@ figure.media {
 /* NV-Media */
 figure.nv-media {
   clear: both;
-  margin: 5px 0 10px 0;
+  margin: 5px 0 10px;
   display: block;
   min-width: 10px;
 }
@@ -29540,7 +29540,7 @@ figure.image {
   /* Important để không xung đột khi copy từ Google Docs */
   clear: both;
   text-align: center;
-  margin: 5px auto 10px auto;
+  margin: 5px auto 10px;
   min-width: 10px;
 }
 
@@ -29573,7 +29573,7 @@ figure.image > figcaption {
   display: table-caption;
   caption-side: bottom;
   word-break: break-word;
-  padding: 7px 7px 0 7px;
+  padding: 7px 7px 0;
   font-size: 13px;
   outline-offset: -1px;
   margin-top: 0;

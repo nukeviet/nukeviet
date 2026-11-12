@@ -5,7 +5,8 @@ $captcha-h: 78px;
   .login-header {
     padding-top: .75rem;
     padding-bottom: .75rem;
-    //padding-bottom: calc(.75rem - ($line-height-base - 1)/2*1rem);
+
+    // padding-bottom: calc(.75rem - ($line-height-base - 1)/2*1rem);
     border-top-left-radius: $card-border-radius;
     border-top-right-radius: $card-border-radius;
   }

@@ -35,7 +35,7 @@ $article-indicators: (
   tr>td:first-child {
     position: relative;
 
-    &:before {
+    &::before {
       content: "";
       display: block;
       width: var(--indicator-start-width);
@@ -51,7 +51,7 @@ $article-indicators: (
       }
     }
 
-    &.indicator-publish:before {
+    &.indicator-publish::before {
       display: none;
     }
   }

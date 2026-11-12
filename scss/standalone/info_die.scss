@@ -2,9 +2,11 @@ $enable-responsive: true;
 
 @import "../functions";
 @import "../default/mixins/responsive";
-//@import "fonts";
+
+// @import "fonts";
 @import "../default/variables";
-//@import "variables-dark";
+
+// @import "variables-dark";
 
 @import "../../node_modules/bootstrap/scss/functions";
 @import "../../node_modules/bootstrap/scss/variables";

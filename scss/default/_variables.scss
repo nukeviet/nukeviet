@@ -2,10 +2,9 @@
 $gray: #22313C;
 $black: #000;
 $white: #fff;
-
 $gray-100: tint($gray, 95%);
 $gray-200: tint($gray, 92%);
-$gray-300: tint($gray, 89%);//87
+$gray-300: tint($gray, 89%);// 87
 $gray-400: tint($gray, 79%);
 $gray-500: tint($gray, 67%);
 $gray-600: tint($gray, 29%);
@@ -13,30 +12,28 @@ $gray-700: tint($gray, 20%);
 $gray-800: tint($gray, 10%);
 $gray-900: $gray;
 
-//$blue:    #4a72b2;
-//$indigo:  #5c44b4;
-//$purple:  #8a3fa6;
-//$pink:    #d6336e;
-//$red:     #CF4646;
-//$orange:  #f7651e;
-//$yellow:  #e0a800;
-//$green:   #508250;
-//$teal:    #1fa78b;
-//$cyan:    #5a9ab2;
+// $blue:    #4a72b2;
+// $indigo:  #5c44b4;
+// $purple:  #8a3fa6;
+// $pink:    #d6336e;
+// $red:     #CF4646;
+// $orange:  #f7651e;
+// $yellow:  #e0a800;
+// $green:   #508250;
+// $teal:    #1fa78b;
+// $cyan:    #5a9ab2;
 
-$blue:    #1477cc;
-$indigo:  #5c44b4;
-$purple:  #8a3fa6;
-$pink:    #d6336e;
-$red:     #CF4646;
-$orange:  #f7651e;
-$yellow:  #e0a800;
-$green:   #508250;
-$teal:    #1fa78b;
-$cyan:    #5a9ab2;
-
+$blue: #1477cc;
+$indigo: #5c44b4;
+$purple: #8a3fa6;
+$pink: #d6336e;
+$red: #CF4646;
+$orange: #f7651e;
+$yellow: #e0a800;
+$green: #508250;
+$teal: #1fa78b;
+$cyan: #5a9ab2;
 $prefix: bs-;
-
 $body-bg: $white;
 
 // Links
@@ -109,7 +106,6 @@ $header-avatar-size: 2rem; // 32px
 
 $topbar-color: $body-color;
 $topbar-bg: $body-bg;
-
 $contact-icons-light: (
   phone: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill='#{$topbar-color}' d='M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z'/></svg>"),
   fax: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill='#{$topbar-color}' d='M128 64l0 96 64 0 0-96 194.7 0L416 93.3l0 66.7 64 0 0-66.7c0-17-6.7-33.3-18.7-45.3L432 18.7C420 6.7 403.7 0 386.7 0L192 0c-35.3 0-64 28.7-64 64zM0 160L0 480c0 17.7 14.3 32 32 32l32 0c17.7 0 32-14.3 32-32l0-320c0-17.7-14.3-32-32-32l-32 0c-17.7 0-32 14.3-32 32zm480 32l-352 0 0 288c0 17.7 14.3 32 32 32l320 0c17.7 0 32-14.3 32-32l0-256c0-17.7-14.3-32-32-32zM256 256a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm96 32a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm32 96a32 32 0 1 1 0 64 32 32 0 1 1 0-64zM224 416a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z'/></svg>"),
@@ -140,10 +136,10 @@ $zindex-sitenav: 1044;
 $zindex-offcanvas: 1045;
 $zindex-picker: 1049;
 $zindex-timeoutsess: 1200;
+
 // Core z-index
 $zindex-alert-backdrop: 9902;
 $zindex-alert: 9903;
-
 $zindex-levels: (
   n1: -1,
   0: 0,
@@ -219,7 +215,6 @@ $toast-levels: (
   "light": $gray-100,
   "dark": $gray-900
 );
-
 $core-btn-colors: (
   "primary": $blue,
   "secondary": $gray-600

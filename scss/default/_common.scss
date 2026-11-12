@@ -1,5 +1,5 @@
 // Giao diện desktop đưa kích thước nhỏ nhất của site về kích thước lớn nhất của container
-@include non-responsive() {
+@include non-responsive {
   html,
   body {
     min-width: map-get($container-max-widths, xxl);
@@ -13,7 +13,7 @@
   left: 1rem;
   width: 22rem;
 
-  @include responsive() {
+  @include responsive {
     max-width: calc(100vw - 2rem);
   }
 
@@ -147,6 +147,7 @@
 @each $name, $width in $grid-breakpoints {
   @if $width > 0 {
     $infix: breakpoint-infix($name, $grid-breakpoints);
+
     @include media-breakpoint-up($name, $grid-breakpoints) {
       .border#{$infix}-start {
         border-left: var(--#{$prefix}border-width) var(--#{$prefix}border-style) var(--#{$prefix}border-color) !important;
@@ -219,6 +220,7 @@ span.keyword {
   // Nút chỉ có icon, cố định kích thước để thành hình tròn đều nhau giữa các nền tảng
   --#{$prefix}btn-padding-x: 0;
   --#{$prefix}btn-padding-y: 0;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
