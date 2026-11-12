@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.6.03
+- Replace XSLT with CSS stylesheets for sitemap and RSS
 - CKEditor v49.1.0, Chart.js v4.6.1, DOMPurify 3.4.17
 - Add a link to the RSS element in the feeds module
 - Fix admin firewall Basic Auth always failing on Apache + FastCGI
