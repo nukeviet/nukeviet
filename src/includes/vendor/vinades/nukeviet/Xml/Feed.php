@@ -124,7 +124,7 @@ class Feed
      */
     private static function make_external_url($url, $domain)
     {
-        if (preg_match('/^https?/', $url)) {
+        if (preg_match('/^(https?\:)?\/\//', $url)) {
             return $url;
         }
 
@@ -224,12 +224,12 @@ class Feed
      *
      * @param mixed $channel_data
      * @param mixed $items_data
-     * @param mixed $xsl
+     * @param mixed $css
      * @param mixed $timemode
      * @return false|string
      * @throws DOMException
      */
-    public static function rss_create($channel_data, $items_data, $xsl, $timemode)
+    public static function rss_create($channel_data, $items_data, $css, $timemode)
     {
         if (empty($channel_data['title']) or empty($channel_data['link']) or empty($channel_data['description'])) {
             return false;
@@ -240,7 +240,7 @@ class Feed
         $xml = new DOMDocument('1.0', 'UTF-8');
         $xml->preserveWhiteSpace = false;
 
-        $xml->appendChild($xml->createProcessingInstruction('xml-stylesheet', 'type="text/xsl" href="' . self::make_external_url($xsl, $channel_data['domain']) . '" media="screen"'));
+        $xml->appendChild($xml->createProcessingInstruction('xml-stylesheet', 'type="text/css" href="' . self::make_external_url($css, $channel_data['domain']) . '" media="screen"'));
         $rss = $xml->createElement('rss');
         $rss_node = $xml->appendChild($rss);
         $rss_node->setAttribute('version', '2.0');
@@ -350,11 +350,11 @@ class Feed
      *
      * @param mixed $channel_data
      * @param mixed $items_data
-     * @param mixed $xsl
+     * @param mixed $css
      * @return false|string
      * @throws DOMException
      */
-    public static function atom_create($channel_data, $items_data, $xsl)
+    public static function atom_create($channel_data, $items_data, $css)
     {
         if (empty($channel_data['title']) or empty($channel_data['updated'])) {
             return false;
@@ -368,7 +368,7 @@ class Feed
         $xml = new DOMDocument('1.0', 'UTF-8');
         $xml->preserveWhiteSpace = false;
 
-        $xml->appendChild($xml->createProcessingInstruction('xml-stylesheet', 'type="text/xsl" href="' . self::make_external_url($xsl, $channel_data['domain']) . '" media="screen"'));
+        $xml->appendChild($xml->createProcessingInstruction('xml-stylesheet', 'type="text/css" href="' . self::make_external_url($css, $channel_data['domain']) . '" media="screen"'));
         $feed_node = $xml->appendChild($xml->createElement('feed'));
         $feed_node->setAttribute('xmlns', 'http://www.w3.org/2005/Atom');
 

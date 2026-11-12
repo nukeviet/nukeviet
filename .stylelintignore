@@ -1,0 +1,4 @@
+**/*.min.css
+src/assets/js/**
+src/assets/editors/**
+src/includes/vendor/**

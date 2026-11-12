@@ -38,8 +38,5 @@ if ($module_info['rss']) {
     }
 }
 
-if (theme_file_exists($module_info['template'] . '/css/rss.xsl')) {
-    $channel['xsltheme'] = $module_info['template'];
-}
 nv_rss_generate($channel, $items, $atomlink);
 exit();

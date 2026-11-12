@@ -207,14 +207,6 @@ if (!$client_info['is_myreferer'] and (defined('NV_SYS_LOAD') or defined('NV_MOD
     require NV_ROOTDIR . '/includes/core/check_access.php';
 }
 
-// Hiển thị nội dung file rssXsl/atomXsl
-if (defined('NV_SYS_LOAD')) {
-    if ($nv_Request->isset_request('xsl', 'get') and ($nv_Request->get_string('xsl', 'get') == 'rss' or $nv_Request->get_string('xsl', 'get') == 'atom')) {
-        require NV_ROOTDIR . '/includes/core/xsl.php';
-        exit(0);
-    }
-}
-
 $cdn_is_enabled = false;
 // Load các plugin
 if (!empty($nv_plugins[NV_LANG_DATA])) {

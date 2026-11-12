@@ -284,15 +284,18 @@ function nv_xmlOutput($content, $lastModified)
  */
 function nv_rss_generate($channel, $items, $atomlink = '', $timemode = '', $noindex = true)
 {
-    global $global_config, $nv_Request;
+    global $global_config, $nv_Request, $module_info;
 
     $type = $nv_Request->get_title('type', 'get', '');
     $type != 'atom' && $type = 'rss';
     $timemode != 'ISO8601' && $timemode = 'GMT';
     $noindex = (bool) $noindex;
 
-    $xsl = NV_BASE_SITEURL . 'sload.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;xsl=' . $type;
-    !empty($channel['xsltheme']) && $xsl .= '&amp;theme=' . $channel['xsltheme'];
+    !isset($channel['csstheme']) && $channel['csstheme'] = $module_info['template'] ?? '';
+    $css = NV_STATIC_URL . NV_ASSETS_DIR . '/css/' . $type . '.css';
+    if (!empty($channel['csstheme']) and theme_file_exists($channel['csstheme'] . '/css/site.' . $type . '.css')) {
+        $css = NV_STATIC_URL . 'themes/' . $channel['csstheme'] . '/css/site.' . $type . '.css';
+    }
 
     if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $channel['link'], $matches)) {
         $channel['link'] = NV_BASE_SITEURL . $matches[1];
@@ -392,17 +395,17 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = '', $noin
      * @hook before_rss_output_xml Trước khi xuất dữ liệu RSS hoặc Atom
      * @param array $channel Thông tin kênh
      * @param array $items Các mục tin
-     * @param string $xsl URL file XSL
+     * @param string $css URL file CSS
      * @param string $type rss hoặc atom
      * @param string $timemode GMT hoặc ISO8601
-     * @return array [$channel, $items, $xsl, $type, $timemode]
+     * @return array [$channel, $items, $css, $type, $timemode]
      */
-    [$channel, $items, $xsl, $type, $timemode] = nv_apply_hook('', 'before_rss_output_xml', [$channel, $items, $xsl, $type, $timemode], [$channel, $items, $xsl, $type, $timemode]);
+    [$channel, $items, $css, $type, $timemode] = nv_apply_hook('', 'before_rss_output_xml', [$channel, $items, $css, $type, $timemode], [$channel, $items, $css, $type, $timemode]);
 
     if ($type == 'rss') {
-        $output = NukeViet\Xml\Feed::rss_create($channel, $items, $xsl, $timemode);
+        $output = NukeViet\Xml\Feed::rss_create($channel, $items, $css, $timemode);
     } else {
-        $output = NukeViet\Xml\Feed::atom_create($channel, $items, $xsl);
+        $output = NukeViet\Xml\Feed::atom_create($channel, $items, $css);
     }
 
     if ($noindex) {
@@ -424,14 +427,8 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = '', $noin
  */
 function nv_xmlSitemap_generate($url, $changefreq = 'daily', $priority = '0.8')
 {
-    //Chrome chỉ cho phép các file xml kết nối với file xsl có nguồn same-origin
-    $xsl = NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemap.xsl';
-    if (!str_starts_with($xsl, NV_MY_DOMAIN)) {
-        $xsl = NV_MY_DOMAIN . $xsl;
-    }
-
     $lastModified = time() - 86400;
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . $xsl . '"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/css" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/css/sitemap.css"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
     $xml = new SimpleXMLElement($sitemapHeader);
     if (!empty($url)) {
         foreach ($url as $key => $values) {
@@ -466,13 +463,7 @@ function nv_xmlSitemapCat_generate($url)
 {
     global $global_config;
 
-    //Chrome chỉ cho phép các file xml kết nối với file xsl có nguồn same-origin
-    $xsl = NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemapindex.xsl';
-    if (!str_starts_with($xsl, NV_MY_DOMAIN)) {
-        $xsl = NV_MY_DOMAIN . $xsl;
-    }
-
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . $xsl . '"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/css" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/css/sitemap.css"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
     $xml = new SimpleXMLElement($sitemapHeader);
     $lastModified = NV_CURRENTTIME - 86400;
 
@@ -506,13 +497,7 @@ function nv_xmlSitemapIndex_generate()
 {
     global $db_config, $db, $global_config;
 
-    //Chrome chỉ cho phép các file xml kết nối với file xsl có nguồn same-origin
-    $xsl = NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemapindex.xsl';
-    if (!str_starts_with($xsl, NV_MY_DOMAIN)) {
-        $xsl = NV_MY_DOMAIN . $xsl;
-    }
-
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . $xsl . '"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/css" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/css/sitemap.css"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
     $xml = new SimpleXMLElement($sitemapHeader);
 
     $lastModified = NV_CURRENTTIME - 86400;
