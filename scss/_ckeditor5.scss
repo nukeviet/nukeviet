@@ -285,6 +285,7 @@ html:root {
   --ck-color-focus-border: #{$input-focus-border-color}; // Viền khi focus
   --ck-focus-ring: 1px solid #{$input-focus-border-color}; // Viền khi focus
   --ck-color-text: var(--#{$prefix}body-color); // Màu chữ
+  --ck-border-radius: var(--#{$prefix}border-radius); // Bo góc theo giao diện, mặc định CKEditor5 là 8px
 
   // Nút single
   --ck-color-button-default-hover-background: var(--#{$prefix}tertiary-bg);

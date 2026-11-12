@@ -29669,6 +29669,7 @@ html:root {
   --ck-color-focus-border: #8abbe6;
   --ck-focus-ring: 1px solid #8abbe6;
   --ck-color-text: var(--bs-body-color);
+  --ck-border-radius: var(--bs-border-radius);
   --ck-color-button-default-hover-background: var(--bs-tertiary-bg);
   --ck-color-button-default-active-background: var(--bs-secondary-bg);
   --ck-color-button-default-active-shadow: var(--bs-secondary-bg-subtle);
