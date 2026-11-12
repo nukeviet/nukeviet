@@ -1,7 +1,9 @@
+@use "sass:color";
+
 @function tint($color, $weight) {
-  @return mix(white, $color, $weight);
+  @return color.mix(white, $color, $weight);
 }
 
 @function shade($color, $weight) {
-  @return mix(black, $color, $weight);
+  @return color.mix(black, $color, $weight);
 }

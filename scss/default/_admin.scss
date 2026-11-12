@@ -1,4 +1,5 @@
 @use "../../node_modules/@fortawesome/fontawesome-free/scss/variables" as fav;
+@use "sass:string";
 
 // Bật kéo thả block
 .column {
@@ -38,7 +39,7 @@
     color: color-contrast($orange);
 
     .ic::before {
-      content: unquote("\"#{ fav.$var-plus }\"");
+      content: string.unquote("\"#{ fav.$var-plus }\"");
     }
   }
 
@@ -104,23 +105,23 @@
     }
 
     >.block_content:not(.add) .ic::before {
-      content: unquote("\"#{ fav.$var-wrench }\"");
+      content: string.unquote("\"#{ fav.$var-wrench }\"");
     }
 
     >.delblock .ic::before {
-      content: unquote("\"#{ fav.$var-trash }\"");
+      content: string.unquote("\"#{ fav.$var-trash }\"");
     }
 
     >.actblock .ic::before {
-      content: unquote("\"#{ fav.$var-square-check }\"");
+      content: string.unquote("\"#{ fav.$var-square-check }\"");
     }
 
     >.actblock .ic.act0::before {
-      content: unquote("\"#{ fav.$var-square }\"");
+      content: string.unquote("\"#{ fav.$var-square }\"");
     }
 
     >.outgroupblock .ic::before {
-      content: unquote("\"#{ fav.$var-arrow-up-right-from-square }\"");
+      content: string.unquote("\"#{ fav.$var-arrow-up-right-from-square }\"");
     }
   }
 

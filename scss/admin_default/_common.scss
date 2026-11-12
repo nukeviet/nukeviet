@@ -1,3 +1,5 @@
+@use "sass:map";
+
 .body {
   background-color: var(--nv-body-bg);
 }
@@ -76,7 +78,7 @@
 }
 
 // Sửa vị trí cuộn của sticky
-@each $breakpoint in map-keys($grid-breakpoints) {
+@each $breakpoint in map.keys($grid-breakpoints) {
   @include media-breakpoint-up($breakpoint) {
     $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
 
@@ -257,7 +259,7 @@
   }
 }
 
-$sm-breakpoint: map-get($grid-breakpoints, sm) - 0.02px;
+$sm-breakpoint: map.get($grid-breakpoints, sm) - 0.02px;
 
 @media (max-width: #{$sm-breakpoint}) {
   .py-only-sm-0 {

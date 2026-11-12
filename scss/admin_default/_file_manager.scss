@@ -1,3 +1,5 @@
+@use "sass:map";
+
 // Trình quản lí tệp tin
 :root {
   --fmm-zindex-backdrop: #{$zindex-fmm-backdrop};
@@ -139,10 +141,10 @@
 }
 
 .fms-ctn-page {
-  height: calc(100vh - $header-height - $breadcrumb-height - 2 * map-get($spacers, 4) - $footer-height);
+  height: calc(100vh - $header-height - $breadcrumb-height - 2 * map.get($spacers, 4) - $footer-height);
 
   @include media-breakpoint-down(md) {
-    height: calc(100vh - $header-height - 2.5rem - 2 * map-get($spacers, 4) - $footer-height);
+    height: calc(100vh - $header-height - 2.5rem - 2 * map.get($spacers, 4) - $footer-height);
   }
 }
 
@@ -462,7 +464,7 @@
         max-width: 33.3333%;
       }
 
-      @media (min-width: #{map-get($grid-breakpoints, md)}) and (max-width: 930px) {
+      @media (min-width: #{map.get($grid-breakpoints, md)}) and (max-width: 930px) {
         flex: 0 0 50%;
         max-width: 50%;
       }

@@ -1,3 +1,5 @@
+@use "sass:map";
+
 :root {
   --nv-footer-link-color: #{$footer-link-color};
   --nv-footer-link-color-hover: #{color-contrast($footer-bg)};
@@ -34,17 +36,17 @@
   @each $key, $value in $core-btn-colors {
     --cr-btn-#{$key}-color: #{color-contrast($value)};
     --cr-btn-#{$key}-bg: #{$value};
-    --cr-btn-#{$key}-border-color: #{map-get($core-btn-border-colors, $key)};
+    --cr-btn-#{$key}-border-color: #{map.get($core-btn-border-colors, $key)};
     --cr-btn-#{$key}-hover-color: #{color-contrast(shade-color($value, 15%))};
     --cr-btn-#{$key}-hover-bg: #{shade-color($value, 15%)};
-    --cr-btn-#{$key}-hover-border-color: #{shade-color(map-get($core-btn-border-colors, $key), 20%)};
+    --cr-btn-#{$key}-hover-border-color: #{shade-color(map.get($core-btn-border-colors, $key), 20%)};
     --cr-btn-#{$key}-active-color: #{color-contrast(shade-color($value, 20%))};
     --cr-btn-#{$key}-active-bg: #{shade-color($value, 20%)};
-    --cr-btn-#{$key}-active-border-color: #{shade-color(map-get($core-btn-border-colors, $key), 25%)};
+    --cr-btn-#{$key}-active-border-color: #{shade-color(map.get($core-btn-border-colors, $key), 25%)};
     --cr-btn-#{$key}-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
     --cr-btn-#{$key}-disabled-color: #{color-contrast($value)};
     --cr-btn-#{$key}-disabled-bg: #{$value};
-    --cr-btn-#{$key}-disabled-border-color: #{map-get($core-btn-border-colors, $key)};
+    --cr-btn-#{$key}-disabled-border-color: #{map.get($core-btn-border-colors, $key)};
   }
 }
 
@@ -65,17 +67,17 @@
     @each $key, $value in $core-btn-colors {
       --cr-btn-#{$key}-color: #{color-contrast($value)};
       --cr-btn-#{$key}-bg: #{$value};
-      --cr-btn-#{$key}-border-color: #{map-get($core-btn-border-colors, $key)};
+      --cr-btn-#{$key}-border-color: #{map.get($core-btn-border-colors, $key)};
       --cr-btn-#{$key}-hover-color: #{color-contrast(shade-color($value, 15%))};
       --cr-btn-#{$key}-hover-bg: #{shade-color($value, 15%)};
-      --cr-btn-#{$key}-hover-border-color: #{shade-color(map-get($core-btn-border-colors, $key), 20%)};
+      --cr-btn-#{$key}-hover-border-color: #{shade-color(map.get($core-btn-border-colors, $key), 20%)};
       --cr-btn-#{$key}-active-color: #{color-contrast(shade-color($value, 20%))};
       --cr-btn-#{$key}-active-bg: #{shade-color($value, 20%)};
-      --cr-btn-#{$key}-active-border-color: #{shade-color(map-get($core-btn-border-colors, $key), 25%)};
+      --cr-btn-#{$key}-active-border-color: #{shade-color(map.get($core-btn-border-colors, $key), 25%)};
       --cr-btn-#{$key}-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
       --cr-btn-#{$key}-disabled-color: #{color-contrast($value)};
       --cr-btn-#{$key}-disabled-bg: #{$value};
-      --cr-btn-#{$key}-disabled-border-color: #{map-get($core-btn-border-colors, $key)};
+      --cr-btn-#{$key}-disabled-border-color: #{map.get($core-btn-border-colors, $key)};
     }
   }
 }

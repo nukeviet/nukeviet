@@ -1,8 +1,10 @@
+@use "sass:map";
+
 // Giao diện desktop đưa kích thước nhỏ nhất của site về kích thước lớn nhất của container
 @include non-responsive {
   html,
   body {
-    min-width: map-get($container-max-widths, xxl);
+    min-width: map.get($container-max-widths, xxl);
   }
 }
 
@@ -229,7 +231,7 @@ span.keyword {
 }
 
 .btn-share-facebook {
-  @include button-variant(map-get($oauth-branches, facebook), map-get($oauth-branches, facebook));
+  @include button-variant(map.get($oauth-branches, facebook), map.get($oauth-branches, facebook));
 }
 
 .btn-share-x {
