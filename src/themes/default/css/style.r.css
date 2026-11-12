@@ -26814,7 +26814,6 @@ textarea.form-control-lg {
   opacity: 0;
   z-index: 99;
   background-color: var(--bs-body-bg);
-  filter: alpha(opacity=0);
 }
 
 .select2-hidden-accessible,

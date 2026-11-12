@@ -28332,7 +28332,6 @@ html:root {
   opacity: 0;
   z-index: 99;
   background-color: var(--bs-body-bg);
-  filter: alpha(opacity=0);
 }
 
 .select2-hidden-accessible,
@@ -28919,38 +28918,14 @@ html:root {
 
 .flatpickr-months .flatpickr-prev-month.flatpickr-prev-month,
 .flatpickr-months .flatpickr-next-month.flatpickr-prev-month {
-  /*
-    /*rtl:begin:ignore */
-  /*
-    */
   right: 0;
-  /*
-    /*rtl:end:ignore */
-  /*
-    */
 }
 
-/*
-/*rtl:begin:ignore */
-/*
-/*rtl:end:ignore */
 .flatpickr-months .flatpickr-prev-month.flatpickr-next-month,
 .flatpickr-months .flatpickr-next-month.flatpickr-next-month {
-  /*
-    /*rtl:begin:ignore */
-  /*
-    */
   left: 0;
-  /*
-    /*rtl:end:ignore */
-  /*
-    */
 }
 
-/*
-/*rtl:begin:ignore */
-/*
-/*rtl:end:ignore */
 .flatpickr-months .flatpickr-prev-month:hover,
 .flatpickr-months .flatpickr-next-month:hover {
   color: var(--bs-tertiary-color);
@@ -28970,6 +28945,11 @@ html:root {
 .flatpickr-months .flatpickr-next-month svg {
   width: 14px;
   height: 14px;
+}
+
+[dir=rtl] .flatpickr-months .flatpickr-prev-month svg,
+[dir=rtl] .flatpickr-months .flatpickr-next-month svg {
+  transform: scaleX(-1);
 }
 
 .flatpickr-months .flatpickr-prev-month svg path,
@@ -29100,7 +29080,6 @@ html:root {
 
 .flatpickr-current-month .numInputWrapper {
   width: 6ch;
-  width: 7ch\0 ;
   display: inline-block;
 }
 
@@ -29256,8 +29235,8 @@ span.flatpickr-weekday {
   color: var(--bs-body-color);
   cursor: pointer;
   font-weight: 400;
-  width: 14.2857143%;
-  flex-basis: 14.2857143%;
+  width: 14.2857%;
+  flex-basis: 14.2857%;
   max-width: 39px;
   height: 39px;
   line-height: 39px;
@@ -30028,14 +30007,14 @@ span.flatpickr-weekday {
 }
 @media (min-width: 576px) {
   .view-grid > .fms-files-wraper > ul > li {
-    flex: 0 0 33.333333333%;
-    max-width: 33.333333333%;
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
   }
 }
 @media (min-width: 768px) {
   .view-grid > .fms-files-wraper > ul > li {
-    flex: 0 0 33.333333333%;
-    max-width: 33.333333333%;
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
   }
 }
 @media (min-width: 768px) and (max-width: 930px) {
@@ -30157,8 +30136,8 @@ span.flatpickr-weekday {
 @media (min-width: 576px) {
   .fmm .view-grid > .fms-files-wraper > ul > li,
   .fms-ctn-fullscreen .view-grid > .fms-files-wraper > ul > li {
-    flex: 0 0 33.333333333%;
-    max-width: 33.333333333%;
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
   }
 }
 @media (min-width: 768px) {
@@ -30178,8 +30157,8 @@ span.flatpickr-weekday {
 @media (min-width: 1200px) {
   .fmm .view-grid > .fms-files-wraper > ul > li,
   .fms-ctn-fullscreen .view-grid > .fms-files-wraper > ul > li {
-    flex: 0 0 16.666666666%;
-    max-width: 16.666666666%;
+    flex: 0 0 16.6667%;
+    max-width: 16.6667%;
   }
 }
 @media (min-width: 1920px) {

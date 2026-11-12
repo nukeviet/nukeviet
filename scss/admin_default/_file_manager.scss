@@ -453,13 +453,13 @@
       padding: 0 .5rem;
 
       @include media-breakpoint-up(sm) {
-        flex: 0 0 33.333333333%;
-        max-width: 33.333333333%;
+        flex: 0 0 33.3333%;
+        max-width: 33.3333%;
       }
 
       @include media-breakpoint-up(md) {
-        flex: 0 0 33.333333333%;
-        max-width: 33.333333333%;
+        flex: 0 0 33.3333%;
+        max-width: 33.3333%;
       }
 
       @media (min-width: #{map-get($grid-breakpoints, md)}) and (max-width: 930px) {
@@ -600,8 +600,8 @@
     >ul {
       >li {
         @include media-breakpoint-up(sm) {
-          flex: 0 0 33.333333333%;
-          max-width: 33.333333333%;
+          flex: 0 0 33.3333%;
+          max-width: 33.3333%;
         }
 
         @include media-breakpoint-up(md) {
@@ -615,8 +615,8 @@
         }
 
         @include media-breakpoint-up(xl) {
-          flex: 0 0 16.666666666%;
-          max-width: 16.666666666%;
+          flex: 0 0 16.6667%;
+          max-width: 16.6667%;
         }
 
         @media (min-width: 1920px) {

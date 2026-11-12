@@ -29,7 +29,7 @@
 
 %ui-state-focus {
   color: #{$dropdown-link-hover-color};
-  text-decoration: if($link-hover-decoration ==underline, none, null);
+  text-decoration: if($link-hover-decoration == underline, none, null);
 
   @include gradient-bg(#{$dropdown-link-hover-bg});
 }
@@ -44,7 +44,7 @@
   padding: #{$dropdown-item-padding-y} #{$dropdown-item-padding-x};
   font-weight: $font-weight-normal;
   color: #{$dropdown-link-color};
-  text-decoration: if($link-decoration ==none, null, none);
+  text-decoration: if($link-decoration == none, null, none);
   cursor: pointer;
 
   &:hover,

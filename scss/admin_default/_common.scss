@@ -268,7 +268,7 @@ $sm-breakpoint: map-get($grid-breakpoints, sm) - 0.02px;
 
 .captcha-img {
   width: auto;
-  height: calc($input-line-height*$input-font-size + 2*$input-padding-y + 2*$input-border-width);
+  height: calc($input-line-height * $input-font-size + 2 * $input-padding-y + 2 * $input-border-width);
 }
 
 .grecaptcha-badge {

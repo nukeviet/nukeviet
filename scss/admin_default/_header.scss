@@ -15,8 +15,8 @@
 
 // Logo site
 .site-brand {
-  padding-top: calc(($header-height - $header-border-height - $logo-height)/2);
-  padding-bottom: calc(($header-height - $header-border-height - $logo-height)/2);
+  padding-top: calc(($header-height - $header-border-height - $logo-height) / 2);
+  padding-bottom: calc(($header-height - $header-border-height - $logo-height) / 2);
   flex-basis: calc($left-sidebar-width);
   width: calc($left-sidebar-width);
   transition: width .2s ease-in-out, flex-basis .2s ease-in-out;
@@ -97,7 +97,7 @@
         content: "";
         border-color: transparent;
         border-style: solid;
-        border-width: 0 calc($popover-arrow-width* .5) $popover-arrow-height;
+        border-width: 0 calc($popover-arrow-width * .5) $popover-arrow-height;
         transform: translateX(-50%);
         left: 50%;
       }
@@ -154,8 +154,8 @@
       width: $header-avatar-size;
       height: $header-avatar-size;
       display: block;
-      margin-top: calc(($header-height - $header-border-height - $header-avatar-size)/2);
-      margin-bottom: calc(($header-height - $header-border-height - $header-avatar-size)/2);
+      margin-top: calc(($header-height - $header-border-height - $header-avatar-size) / 2);
+      margin-bottom: calc(($header-height - $header-border-height - $header-avatar-size) / 2);
       text-align: center;
       position: relative;
       font-size: $header-avatar-size;

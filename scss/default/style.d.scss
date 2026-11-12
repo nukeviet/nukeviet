@@ -93,7 +93,7 @@ $enable-rfs: false;
             @extend %responsive-container-#{$breakpoint};
           }
 
-          @if $breakpoint ==$name {
+          @if $breakpoint == $name {
             $extend-breakpoint: false;
           }
         }

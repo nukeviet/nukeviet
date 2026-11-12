@@ -378,7 +378,6 @@
   opacity: 0;
   z-index: 99;
   background-color: var(--#{$prefix}body-bg);
-  filter: alpha(opacity=0);
 }
 
 .select2-hidden-accessible,

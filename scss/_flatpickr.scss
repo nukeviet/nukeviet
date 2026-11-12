@@ -197,46 +197,14 @@
 
 .flatpickr-months .flatpickr-prev-month.flatpickr-prev-month,
 .flatpickr-months .flatpickr-next-month.flatpickr-prev-month {
-  /*
-    /*rtl:begin:ignore */
-
-  /*
-    */
   left: 0;
-
-  /*
-    /*rtl:end:ignore */
-
-  /*
-    */
 }
 
-/*
-/*rtl:begin:ignore */
-
-/*
-/*rtl:end:ignore */
 .flatpickr-months .flatpickr-prev-month.flatpickr-next-month,
 .flatpickr-months .flatpickr-next-month.flatpickr-next-month {
-  /*
-    /*rtl:begin:ignore */
-
-  /*
-    */
   right: 0;
-
-  /*
-    /*rtl:end:ignore */
-
-  /*
-    */
 }
 
-/*
-/*rtl:begin:ignore */
-
-/*
-/*rtl:end:ignore */
 .flatpickr-months .flatpickr-prev-month:hover,
 .flatpickr-months .flatpickr-next-month:hover {
   color: var(--#{$prefix}tertiary-color);
@@ -256,6 +224,11 @@
 .flatpickr-months .flatpickr-next-month svg {
   width: 14px;
   height: 14px;
+}
+
+[dir="rtl"] .flatpickr-months .flatpickr-prev-month svg,
+[dir="rtl"] .flatpickr-months .flatpickr-next-month svg {
+  transform: scaleX(-1);
 }
 
 .flatpickr-months .flatpickr-prev-month svg path,
@@ -386,7 +359,6 @@
 
 .flatpickr-current-month .numInputWrapper {
   width: 6ch;
-  width: 7ch\0;
   display: inline-block;
 }
 
@@ -540,8 +512,8 @@ span.flatpickr-weekday {
   color: var(--#{$prefix}body-color);
   cursor: pointer;
   font-weight: 400;
-  width: 14.2857143%;
-  flex-basis: 14.2857143%;
+  width: 14.2857%;
+  flex-basis: 14.2857%;
   max-width: 39px;
   height: 39px;
   line-height: 39px;

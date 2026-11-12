@@ -23,7 +23,7 @@ $captcha-h: 78px;
 
 .login-box {
   width: $box-size;
-  max-width: calc(100vw - 2*$card-spacer-x);
+  max-width: calc(100vw - 2 * $card-spacer-x);
 }
 
 .recaptcha-holder {
