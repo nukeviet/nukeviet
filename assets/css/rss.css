@@ -51,7 +51,6 @@ rss::before {
 channel {
     display: flex;
     flex-direction: column;
-    max-width: 860px;
 }
 
 /* Ẩn các phần tử chỉ dành cho trình đọc RSS */
