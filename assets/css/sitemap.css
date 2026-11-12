@@ -1,0 +1,248 @@
+/**
+ * Giao diện hiển thị XML Sitemap / Sitemap Index trên trình duyệt
+ */
+@namespace url(http://www.sitemaps.org/schemas/sitemap/0.9);
+
+urlset,
+sitemapindex {
+    --bg: #fff;
+    --fg: #1f2328;
+    --muted: #656d76;
+    --accent: #e8590c;
+    --head-bg: #eaeef2;
+    --row-alt: #f6f8fa;
+    --row-hover: #fff4e6;
+    --border: #d0d7de;
+
+    display: block;
+    margin: 0;
+    padding: 24px;
+    background: var(--bg);
+    color: var(--fg);
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    counter-reset: total;
+}
+
+@media (prefers-color-scheme: dark) {
+    urlset,
+    sitemapindex {
+        --bg: #0d1117;
+        --fg: #e6edf3;
+        --muted: #8d96a0;
+        --accent: #ff922b;
+        --head-bg: #21262d;
+        --row-alt: #161b22;
+        --row-hover: #2d2011;
+        --border: #30363d;
+    }
+}
+
+urlset::before,
+sitemapindex::before {
+    display: block;
+    margin-bottom: 16px;
+    color: var(--accent);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+urlset::before {
+    content: "XML Sitemap";
+}
+
+sitemapindex::before {
+    content: "XML Sitemap Index";
+}
+
+urlset::after,
+sitemapindex::after {
+    display: block;
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+urlset::after {
+    content: "Number of URLs in this sitemap: " counter(total);
+}
+
+sitemapindex::after {
+    content: "Number of sitemaps in this sitemap index: " counter(total);
+}
+
+/* Mỗi url/sitemap là một hàng dạng lưới */
+url,
+sitemap {
+    display: grid;
+    border-bottom: 1px solid var(--border);
+    counter-increment: total;
+}
+
+url {
+    grid-template-columns: minmax(0, 1fr) 90px 150px 230px;
+}
+
+sitemap {
+    grid-template-columns: minmax(0, 1fr) auto;
+}
+
+url:nth-of-type(even),
+sitemap:nth-of-type(even) {
+    background: var(--row-alt);
+}
+
+url:hover,
+sitemap:hover {
+    background: var(--row-hover);
+}
+
+url > *,
+sitemap > * {
+    display: block;
+    position: relative;
+    grid-row: 1;
+    padding: 8px 12px;
+    min-width: 0;
+}
+
+loc {
+    grid-column: 1;
+    overflow-wrap: anywhere;
+}
+
+url > priority {
+    grid-column: 2;
+}
+
+url > changefreq {
+    grid-column: 3;
+}
+
+url > lastmod {
+    grid-column: 4;
+}
+
+sitemap > lastmod {
+    grid-column: 2;
+}
+
+url > priority,
+url > changefreq,
+lastmod {
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+/* Hàng tiêu đề: gắn nhãn lên trên các ô của hàng đầu tiên */
+url:first-of-type,
+sitemap:first-of-type {
+    margin-top: 36px;
+    border-top: 1px solid var(--border);
+}
+
+url:first-of-type > *::before,
+sitemap:first-of-type > *::before {
+    position: absolute;
+    top: -37px;
+    left: 0;
+    right: 0;
+    height: 36px;
+    padding: 0 12px;
+    background: var(--head-bg);
+    border-top: 1px solid var(--border);
+    color: var(--fg);
+    font-weight: 700;
+    line-height: 36px;
+    white-space: nowrap;
+}
+
+url:first-of-type > loc::before,
+sitemap:first-of-type > loc::before {
+    content: "URL";
+}
+
+url:first-of-type > priority::before {
+    content: "Priority";
+}
+
+url:first-of-type > changefreq::before {
+    content: "Change Frequency";
+}
+
+url:first-of-type > lastmod::before {
+    content: "Last Change";
+}
+
+sitemap:first-of-type > lastmod::before {
+    content: "Last Modified";
+}
+
+/* Màn hình hẹp: chuyển sang dạng thẻ, mỗi trường có nhãn riêng */
+@media (max-width: 720px) {
+    urlset,
+    sitemapindex {
+        padding: 16px;
+    }
+
+    url,
+    sitemap {
+        display: block;
+        padding: 8px 0;
+    }
+
+    url:first-of-type,
+    sitemap:first-of-type {
+        margin-top: 0;
+    }
+
+    url > *,
+    sitemap > * {
+        padding: 2px 12px;
+    }
+
+    url > loc,
+    sitemap > loc {
+        font-weight: 600;
+    }
+
+    url > *::before,
+    sitemap > *::before,
+    url:first-of-type > *::before,
+    sitemap:first-of-type > *::before {
+        position: static;
+        height: auto;
+        padding: 0;
+        background: none;
+        border: 0;
+        color: var(--muted);
+        font-weight: 400;
+        line-height: inherit;
+    }
+
+    url > loc::before,
+    sitemap > loc::before,
+    url:first-of-type > loc::before,
+    sitemap:first-of-type > loc::before {
+        content: none;
+    }
+
+    url > priority::before,
+    url:first-of-type > priority::before {
+        content: "Priority: ";
+    }
+
+    url > changefreq::before,
+    url:first-of-type > changefreq::before {
+        content: "Change Frequency: ";
+    }
+
+    url > lastmod::before,
+    url:first-of-type > lastmod::before {
+        content: "Last Change: ";
+    }
+
+    sitemap > lastmod::before,
+    sitemap:first-of-type > lastmod::before {
+        content: "Last Modified: ";
+    }
+}

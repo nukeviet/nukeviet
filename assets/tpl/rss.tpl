@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="{CSSPATH}" media="screen"?>
+<?xml-stylesheet type="text/css" href="{CSSPATH}" media="screen"?>
 <rss version="2.0"
     xmlns:content="http://purl.org/rss/1.0/modules/content/"
     xmlns:dc="http://purl.org/dc/elements/1.1/"

@@ -1,0 +1,158 @@
+/**
+ * Giao diện hiển thị RSS feed trên trình duyệt
+ */
+@namespace atom url(http://www.w3.org/2005/Atom);
+@namespace content url(http://purl.org/rss/1.0/modules/content/);
+@namespace dc url(http://purl.org/dc/elements/1.1/);
+
+rss {
+    --bg: #fff;
+    --fg: #1f2328;
+    --muted: #656d76;
+    --accent: #205fa0;
+    --badge-bg: #e8590c;
+    --card-bg: #f6f8fa;
+    --border: #d0d7de;
+
+    display: block;
+    margin: 0;
+    padding: 24px;
+    background: var(--bg);
+    color: var(--fg);
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+    rss {
+        --bg: #0d1117;
+        --fg: #e6edf3;
+        --muted: #8d96a0;
+        --accent: #58a6ff;
+        --badge-bg: #d9480f;
+        --card-bg: #161b22;
+        --border: #30363d;
+    }
+}
+
+rss::before {
+    content: "RSS Feed";
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 2px 10px;
+    border-radius: 4px;
+    background: var(--badge-bg);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+}
+
+channel {
+    display: flex;
+    flex-direction: column;
+    max-width: 860px;
+}
+
+/* Ẩn các phần tử chỉ dành cho trình đọc RSS */
+channel > *,
+item > * {
+    display: none;
+}
+
+atom|link,
+content|encoded {
+    display: none !important;
+}
+
+/* Thông tin kênh */
+channel > title {
+    display: block;
+    order: 1;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+channel > description {
+    display: block;
+    order: 2;
+    margin-top: 4px;
+    color: var(--muted);
+}
+
+channel > link {
+    display: block;
+    order: 3;
+    margin-top: 4px;
+    color: var(--accent);
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+channel > lastBuildDate {
+    display: block;
+    order: 4;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+channel > lastBuildDate::before {
+    content: "Last updated: ";
+}
+
+/* Danh sách bài */
+channel > item {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 12px;
+    order: 5;
+    margin-bottom: 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card-bg);
+}
+
+channel > item:first-of-type {
+    margin-top: 20px;
+}
+
+item > title {
+    display: block;
+    order: 1;
+    flex-basis: 100%;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+item > pubDate,
+item > dc|creator,
+item > author {
+    display: block;
+    order: 2;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+item > link {
+    display: block;
+    order: 3;
+    flex-basis: 100%;
+    margin-top: 4px;
+    color: var(--accent);
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 720px) {
+    rss {
+        padding: 16px;
+    }
+
+    channel > title {
+        font-size: 22px;
+    }
+}
