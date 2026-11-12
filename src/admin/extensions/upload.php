@@ -568,7 +568,7 @@ if (empty($error)) {
                     }
                 } elseif (!preg_match($arraySysOption['checkName'][$extConfig['extension']['type']], $extConfig['extension']['name'])) {
                     $error = $nv_Lang->getModule('autoinstall_error_cfg_name');
-                } elseif ($extConfig['extension']['name'] == NV_ADMINDIR) {
+                } elseif ($extConfig['extension']['name'] == NV_ADMINDIR or ($extConfig['extension']['type'] == 'module' and nv_is_reserved_module_name($extConfig['extension']['name']))) {
                     $error = $nv_Lang->getModule('autoinstall_error_forbidden');
                 }
 

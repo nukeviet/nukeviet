@@ -31,6 +31,9 @@ $setmodule = $nv_Request->get_title('setmodule', 'get', '');
 $autosetup = $nv_Request->get_title('autosetup', 'get', '');
 
 if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule)) {
+    if (nv_is_reserved_module_name($setmodule)) {
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+    }
     $checkss = $nv_Request->get_string('checkss', 'get', '');
     if (csrf_check($checkss, $admin_info['admin_id'] . '_' . $module_name . '_setup_' . $setmodule)) {
         $sample = $nv_Request->get_int('sample', 'get', 0);
@@ -54,7 +57,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
         $stmt->closeCursor();
 
         if (!empty($modrow)) {
-            if (!empty($array_site_cat_module) and !in_array($modrow['basename'], $array_site_cat_module, true)) {
+            if (nv_is_reserved_module_name($modrow['basename']) or (!empty($array_site_cat_module) and !in_array($modrow['basename'], $array_site_cat_module, true))) {
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
             }
 
@@ -336,7 +339,8 @@ foreach ($modules_data as $row) {
             $mod['addtime'] = nv_datetime_format($row['addtime'], 1);
             $mod['author'] = nv_htmlspecialchars($row['author']);
             $mod['note'] = $row['note'];
-            $mod['url_setup'] = array_key_exists($row['title'], $modules_for_title) ? '' : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . csrf_create($admin_info['admin_id'] . '_' . $module_name . '_setup_' . $row['title']);
+            $mod['is_reserved'] = (nv_is_reserved_module_name($row['title']) or nv_is_reserved_module_name($row['basename']));
+            $mod['url_setup'] = ($mod['is_reserved'] or array_key_exists($row['title'], $modules_for_title)) ? '' : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . csrf_create($admin_info['admin_id'] . '_' . $module_name . '_setup_' . $row['title']);
 
             if ($mod['module_file'] == $mod['title']) {
                 $array_modules[] = $mod;
@@ -350,7 +354,7 @@ foreach ($modules_data as $row) {
         }
     }
 }
-if (!empty($autosetup) and !array_key_exists($autosetup, $modules_exit) and !array_key_exists($autosetup, $news_modules_for_file)) {
+if (!empty($autosetup) and ((!array_key_exists($autosetup, $modules_exit) and !array_key_exists($autosetup, $news_modules_for_file)) or nv_is_reserved_module_name($autosetup))) {
     $autosetup = '';
 }
 

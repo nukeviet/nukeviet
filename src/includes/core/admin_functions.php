@@ -1136,3 +1136,20 @@ function nv_admin_menu_groups(string|array $groups, array $allowMods, bool $keep
 
     return $result;
 }
+
+/**
+ * Kiểm tra tên module có thuộc danh sách bị cấm hay không
+ * Bị cấm gồm các tên trong NV_RESERVED_MODULE_NAMES và tên thư mục có trong NV_ADMINDIR
+ *
+ * @param string $name
+ * @return bool
+ */
+function nv_is_reserved_module_name($name)
+{
+    $name = strtolower((string) $name);
+    if ($name === '') {
+        return false;
+    }
+
+    return in_array($name, NV_RESERVED_MODULE_NAMES, true) or $name === strtolower(NV_ADMINDIR) or is_dir(NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $name);
+}

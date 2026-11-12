@@ -204,6 +204,9 @@ define('NV_MY_REWRITE_SUPPORTER', '');
 // Option an toàn cho unserialize — chỉ cho phép array/scalar, không cho phép object
 define('NV_UNSERIALIZE_SAFE', ['allowed_classes' => false]);
 
+// Các tên không được dùng làm tên module (ngoài các tên thư mục trong NV_ADMINDIR)
+define('NV_RESERVED_MODULE_NAMES', ['core', 'admin', 'site', 'nv']);
+
 // JSON encode cho API response và lưu DB
 define('NV_JSON_ENCODE', JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 

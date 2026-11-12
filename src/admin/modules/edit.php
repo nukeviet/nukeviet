@@ -235,7 +235,7 @@ if (csrf_check($nv_Request->get_string('checkss', 'post'), $csrf_key . '_' . $mo
     $stmt->execute();
 
     $mod_name = change_alias($nv_Request->get_title('mod_name', 'post'));
-    if ($mod_name != $mod and preg_match($global_config['check_module'], $mod_name)) {
+    if ($mod_name != $mod and preg_match($global_config['check_module'], $mod_name) and !nv_is_reserved_module_name($mod_name)) {
         $module_version = [];
         $version_file = NV_ROOTDIR . '/modules/' . $row['module_file'] . '/version.php';
         if (file_exists($version_file)) {

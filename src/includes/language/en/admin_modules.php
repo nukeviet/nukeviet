@@ -85,6 +85,7 @@ $lang_module['setup_option'] = 'Choose the option';
 $lang_module['setup_option_0'] = 'Just setup module';
 $lang_module['setup_option_1'] = 'Setup module and install the sample data';
 $lang_module['setup_no_module'] = 'No modules available';
+$lang_module['module_name_reserved'] = 'This module name is reserved';
 $lang_module['module_groups_view_note'] = 'Super administration, general administration, module administrator are always allowed to view the module';
 $lang_module['error_no_hook_module'] = 'To install this module you need to install the following module or virtual module respectively: <strong>%s</strong>';
 $lang_module['select_hook_module'] = 'Choose hook module %s';

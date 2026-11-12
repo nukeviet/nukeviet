@@ -55,7 +55,14 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         ]);
     }
 
-    $modules_admin = nv_scandir(NV_ROOTDIR . '/' . NV_ADMINDIR, $global_config['check_module']);
+    // Kiểm tra tên bị cấm
+    if (preg_match($global_config['check_module'], $title) and nv_is_reserved_module_name($title)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'title',
+            'mess' => $nv_Lang->getModule('module_name_reserved'),
+        ]);
+    }
 
     // Kiểm tra tồn tại
     $stmt = $db->prepare('SELECT * FROM ' . $db_config['prefix'] . "_setup_extensions WHERE type = 'module' AND title = :title");
@@ -65,7 +72,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $is_exists = $stmt->fetch();
     $stmt->closeCursor();
 
-    if (!$is_exists and !in_array($title, $modules_site, true) and !in_array($title, $modules_admin, true) and preg_match($global_config['check_module'], $title) and preg_match($global_config['check_module'], $modfile)) {
+    if (!$is_exists and !in_array($title, $modules_site, true) and preg_match($global_config['check_module'], $title) and preg_match($global_config['check_module'], $modfile) and !nv_is_reserved_module_name($title) and !nv_is_reserved_module_name($modfile)) {
         $version = '';
         $author = '';
         $note = nv_nl2br($note, '<br />');
@@ -122,7 +129,7 @@ $result = $db->query($sql);
 $modfile = [];
 while ($_row_mod = $result->fetch()) {
     $modfile_i = $_row_mod['title'];
-    if (in_array($modfile_i, $modules_site, true)) {
+    if (in_array($modfile_i, $modules_site, true) and !nv_is_reserved_module_name($modfile_i)) {
         if (!empty($array_site_cat_module) and !in_array($modfile_i, $array_site_cat_module, true)) {
             continue;
         }
