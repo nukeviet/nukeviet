@@ -8,7 +8,9 @@
 
 /.jsbeautifyrc
 /.php-cs-fixer.php
-/.vscode
+/.vscode/*
+!/.vscode/settings.json
+!/.vscode/extensions.json
 /.agents
 /.claude/settings.local.json
 /AGENTS.md

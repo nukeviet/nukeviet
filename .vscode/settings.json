@@ -1,0 +1,6 @@
+{
+    "php.version": "8.2",
+    "stylelint.validate": ["css", "scss"],
+    "css.validate": false,
+    "scss.validate": false
+}
