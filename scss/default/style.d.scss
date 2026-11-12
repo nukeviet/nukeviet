@@ -76,6 +76,7 @@ $enable-rfs: false;
 @if $enable-container-classes {
   @each $breakpoint, $container-max-width in $container-max-widths {
     .container-#{$breakpoint} {
+      // stylelint-disable-next-line scss/at-extend-no-missing-placeholder
       @extend .container-fluid;
     }
 

@@ -24,7 +24,7 @@ $brand-colors: (
 $info: $cyan;
 
 $font-size-base: 0.8125rem; // 13px
-$font-family-sans-serif: Roboto, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+$font-family-sans-serif: "Roboto", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", "Noto Sans", "Liberation Sans", "Arial", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
 
 $h1-font-size: $font-size-base * 1.625; // 28px
 $h2-font-size: $font-size-base * 1.5; // 24px
