@@ -23,6 +23,7 @@ Các bước này lấy tệp từ giao diện cũ nên phải làm trước khi
     - `themes/default/css/bootstrap.min.css` sang `themes/admin_dauthau/css/bootstrap.min.css`
     - `themes/default/js/bootstrap.min.js` sang `themes/admin_dauthau/js/bootstrap.min.js`
     - `themes/default/images/users/no_avatar.png` sang `themes/admin_dauthau/images/users/no_avatar.png`
+3. Tìm trong thư mục admin_dauthau chuỗi `admin_default` đổi thành `admin_dauthau`
 
 Site không cần giữ giao diện quản trị cũ thì bỏ qua 2 bước trên, chỉ làm các bước sau (chú ý site làm bước 1,2 thì đừng làm cái này):
 
@@ -64,6 +65,7 @@ Muốn dùng giao diện default mới thì làm theo mục "Về sau: chuyển 
 
 1. Chuyển toàn bộ những gì còn lại trong `themes/admin_future` sang `themes/admin_default` (ví dụ `themes/admin_future/modules/blog` sang `themes/admin_default/modules/blog`), sau đó xóa thư mục `themes/admin_future`
 2. Chuyển toàn bộ những gì còn lại trong `themes/future` sang `themes/default`, trùng tệp thì ghi đè, sau đó xóa thư mục `themes/future`
+3. Tìm trong thư mục admin_default những chuỗi `admin_future` đổi nó thành `admin_default`
 
 **Cập nhật CSDL**
 
