@@ -164,10 +164,7 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
         _loadContents('ERR__' . $upload_info['error']);
     }
 
-    mt_srand(microtime(true) * 1000000);
-    $maxran = 1000000;
-    $random_num = mt_rand(0, $maxran);
-    $random_num = md5($random_num);
+    $random_num = bin2hex(random_bytes(16));
     $nv_pathinfo_filename = nv_pathinfo_filename($upload_info['name']);
     $new_name = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir . '/' . $nv_pathinfo_filename . '.' . $random_num . '.' . $upload_info['ext'];
 
@@ -184,7 +181,7 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
 }
 
 try {
-    $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (module, area, id, pid, content, attach, post_time, userid, post_name, post_email, post_ip, status) VALUES 
+    $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (module, area, id, pid, content, attach, post_time, userid, post_name, post_email, post_ip, status) VALUES
             (:module, ' . $area . ', ' . $id . ', ' . $pid . ', :content, :attach, ' . NV_CURRENTTIME . ', ' . $userid . ', :post_name, :post_email, :post_ip, ' . $status . ')';
     $data_insert = [];
     $data_insert['module'] = $module;
