@@ -1,5 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.6.04
+- Fix comment attachment download: check approval status and view permission, use secure random filenames. Thanks Vo Le Anh Tuan from GitHub @tuankhongbietcode
+
 NUKEVIET 4.6.03
 - Replace XSLT with CSS stylesheets for sitemap and RSS
 - CKEditor v49.1.0, Chart.js v4.6.1, DOMPurify 3.4.17
