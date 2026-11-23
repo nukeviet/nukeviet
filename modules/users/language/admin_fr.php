@@ -273,6 +273,7 @@ $lang_module['access_groups'] = 'Gérer le groupe';
 $lang_module['access_caption_leader'] = 'Puissances du module de configuration de l\'utilisateur du leader';
 $lang_module['access_groups_add'] = 'Ajouter des membres au groupe';
 $lang_module['access_groups_del'] = 'Retirer membre du groupe';
+$lang_module['access_leader_warning'] = 'Avertissement : un leader disposant de l\'autorisation « Ajouter des membres au groupe » peut ajouter n\'importe quel membre (sauf les administrateurs) au groupe sans son consentement ; si « Modifier l\'utilisateur », « Supprimer l\'utilisateur » ou « Changer le mot de passe » est également activé, le leader peut alors modifier, supprimer ou changer le mot de passe de ces membres. N\'accordez ces autorisations qu\'à des leaders de pleine confiance.';
 $lang_module['viewlist_error_permission'] = 'Vous n\'êtes pas autorisé à afficher la liste des comptes';
 
 $lang_module['fields'] = 'Modification des données';

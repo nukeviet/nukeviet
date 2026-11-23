@@ -145,6 +145,7 @@
                 </tr>
             </tbody>
         </table>
+        <div class="alert alert-warning"><em class="fa fa-exclamation-triangle">&nbsp;</em>{LANG.access_leader_warning}</div>
         <!-- END: config -->
         <input type="hidden" name="checkss" value="{DATA.checkss}" />
         <input type="hidden" name="save" value="1" />

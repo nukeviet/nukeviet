@@ -273,6 +273,7 @@ $lang_module['access_groups'] = 'Group manage';
 $lang_module['access_caption_leader'] = 'User configuration module powers of the leader';
 $lang_module['access_groups_add'] = 'Add members to the group';
 $lang_module['access_groups_del'] = 'Remove member from group';
+$lang_module['access_leader_warning'] = 'Warning: A leader with the "Add members to the group" permission can add any member (except administrators) to the group without their consent, so if "Edit member", "Delete member" or "Change password" is also enabled, the leader can edit, delete or change the password of those members; grant these permissions only to leaders you fully trust.';
 $lang_module['viewlist_error_permission'] = 'You do not have permission to view the account list';
 
 $lang_module['fields'] = 'Custom User Fields';

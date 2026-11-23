@@ -277,6 +277,7 @@ $lang_module['access_groups'] = 'Quản lý nhóm';
 $lang_module['access_caption_leader'] = 'Cấu hình quyền hạn sử dụng module của trưởng nhóm';
 $lang_module['access_groups_add'] = 'Thêm thành viên vào nhóm';
 $lang_module['access_groups_del'] = 'Xóa thành viên khỏi nhóm';
+$lang_module['access_leader_warning'] = 'Cảnh báo: Trưởng nhóm có quyền "Thêm thành viên vào nhóm" có thể thêm bất kỳ thành viên nào (trừ quản trị) vào nhóm mà không cần người đó đồng ý, vì vậy nếu bật thêm quyền "Sửa tài khoản", "Xóa tài khoản" hoặc "Đổi mật khẩu" thì trưởng nhóm có thể sửa, xóa hoặc đổi mật khẩu của các thành viên đó, chỉ nên cấp các quyền này cho trưởng nhóm thực sự tin cậy.';
 $lang_module['viewlist_error_permission'] = 'Bạn không có quyền xem danh sách tài khoản';
 
 $lang_module['fields'] = 'Tùy biến dữ liệu';
