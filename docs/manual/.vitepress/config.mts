@@ -44,7 +44,16 @@ function sidebarVi(): DefaultTheme.Sidebar {
                 text: 'Tài liệu kỹ thuật',
                 items: [
                     { text: 'Mục lục', link: '/dev/' },
-                    { text: 'Phần 1: Tổng quan', link: '/dev/overview/' },
+                    {
+                        text: 'Phần 1: Tổng quan',
+                        link: '/dev/overview/',
+                        collapsed: true,
+                        items: [
+                            { text: 'Các khái niệm', link: '/dev/overview/concepts' },
+                            { text: 'Cấu trúc file và thư mục', link: '/dev/overview/structure' },
+                            { text: 'Vòng đời một request', link: '/dev/overview/request-lifecycle' }
+                        ]
+                    },
                     { text: 'Phần 2: Cấu hình nâng cao', link: '/dev/config/' },
                     { text: 'Phần 3: Quy chuẩn', link: '/dev/standards/' },
                     { text: 'Phần 4: Lập trình', link: '/dev/programming/' },
@@ -86,7 +95,19 @@ function sidebarEn(): DefaultTheme.Sidebar {
         '/en/dev/': [
             {
                 text: 'Developer docs',
-                items: [{ text: 'Introduction', link: '/en/dev/' }]
+                items: [
+                    { text: 'Introduction', link: '/en/dev/' },
+                    {
+                        text: 'Part 1: Overview',
+                        link: '/en/dev/overview/',
+                        collapsed: true,
+                        items: [
+                            { text: 'Concepts', link: '/en/dev/overview/concepts' },
+                            { text: 'File and directory structure', link: '/en/dev/overview/structure' },
+                            { text: 'Request lifecycle', link: '/en/dev/overview/request-lifecycle' }
+                        ]
+                    }
+                ]
             }
         ]
     }
