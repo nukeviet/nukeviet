@@ -144,7 +144,9 @@ final class Attribute implements Countable, IteratorAggregate
             },
             $this->values
         );
-        return self::fromAttributeValues(...$values);
+        // the attribute type is carried by the attribute itself: deriving it from the first value would refuse an
+        // attribute with an empty value set, which the encoding permits and OpenSSL emits
+        return self::create($this->type, ...$values);
     }
 
     /**

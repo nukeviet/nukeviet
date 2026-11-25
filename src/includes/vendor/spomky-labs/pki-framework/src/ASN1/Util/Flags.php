@@ -68,6 +68,14 @@ final class Flags
 
     /**
      * Initialize from `BitString`.
+     *
+     * Bit zero of a named bit list is the most significant bit of the first octet, so the flags of a field of
+     * `$width` bits are the *leading* `$width` bits of the string. A string narrower than the field is padded on
+     * the right, and one wider than the field has its surplus trailing bits dropped, as RFC 5280 section 4.2.1.3
+     * requires of a bit whose meaning is not defined.
+     *
+     * Without the second branch the constructor keeps the low `$width` bits instead, which for an over-long
+     * string are the last bits of the string rather than the first, so every flag is read from the wrong offset.
      */
     public static function fromBitString(BitString $bs, int $width): self
     {
@@ -77,6 +85,8 @@ final class Flags
         $num = $num->shiftedRight($bs->unusedBits());
         if ($num_bits < $width) {
             $num = $num->shiftedLeft($width - $num_bits);
+        } elseif ($num_bits > $width) {
+            $num = $num->shiftedRight($num_bits - $width);
         }
         return self::create($num, $width);
     }

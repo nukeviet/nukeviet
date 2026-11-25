@@ -43,7 +43,7 @@ final class Boolean extends Element
 
     protected function encodedAsDER(): string
     {
-        return $this->_bool ? chr(0xff) : chr(0);
+        return $this->_bool ? chr(0xFF) : chr(0);
     }
 
     protected static function decodeFromDER(Identifier $identifier, string $data, int &$offset): ElementBase
@@ -52,7 +52,7 @@ final class Boolean extends Element
         Length::expectFromDER($data, $idx, 1);
         $byte = ord($data[$idx++]);
         if ($byte !== 0) {
-            if ($byte !== 0xff) {
+            if ($byte !== 0xFF) {
                 throw new DecodeException('DER encoded boolean true must have all bits set to 1.');
             }
         }

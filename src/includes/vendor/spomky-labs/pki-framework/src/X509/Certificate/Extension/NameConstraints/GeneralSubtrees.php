@@ -16,7 +16,7 @@ use UnexpectedValueException;
 /**
  * Implements *GeneralSubtrees* ASN.1 type used by 'Name Constraints' certificate extension.
  *
- * @see @link https://tools.ietf.org/html/rfc5280#section-4.2.1.10
+ * @see @see https://tools.ietf.org/html/rfc5280#section-4.2.1.10
  */
 final class GeneralSubtrees implements Countable, IteratorAggregate
 {

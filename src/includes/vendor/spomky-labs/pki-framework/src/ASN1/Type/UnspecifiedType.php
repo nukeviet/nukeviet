@@ -472,7 +472,7 @@ final class UnspecifiedType implements ElementBase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * Consider using any of the `as*` accessor methods instead.
      */
@@ -482,7 +482,7 @@ final class UnspecifiedType implements ElementBase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * Consider using `asTagged()` method instead and chaining
      * with `TaggedType::asExplicit()` or `TaggedType::asImplicit()`.

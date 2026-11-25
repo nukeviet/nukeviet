@@ -4,14 +4,28 @@ declare(strict_types=1);
 
 namespace SpomkyLabs\Pki\X509\GeneralName;
 
+use function array_map;
 use function array_slice;
 use function count;
+use function implode;
 use UnexpectedValueException;
+use function unpack;
 
 final class IPv4Address extends IPAddress
 {
+    /**
+     * @param string $ip Dotted quad address
+     * @param null|string $mask Optional subnet mask, as a dotted quad
+     */
     public static function create(string $ip, ?string $mask = null): self
     {
+        // refuse here rather than when the name is encoded, so that a caller cannot build a constraint whose
+        // meaning differs from what it wrote
+        self::addressToOctets($ip, 4, 'Address');
+        if ($mask !== null) {
+            self::addressToOctets($mask, 4, 'Mask');
+        }
+
         return new self($ip, $mask);
     }
 
@@ -40,10 +54,11 @@ final class IPv4Address extends IPAddress
 
     protected function octets(): string
     {
-        $bytes = array_map(intval(...), explode('.', $this->ip));
+        $octets = self::addressToOctets($this->ip, 4, 'Address');
         if (isset($this->mask)) {
-            $bytes = array_merge($bytes, array_map(intval(...), explode('.', $this->mask)));
+            $octets .= self::addressToOctets($this->mask, 4, 'Mask');
         }
-        return pack('C*', ...$bytes);
+
+        return $octets;
     }
 }

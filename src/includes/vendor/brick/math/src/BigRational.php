@@ -13,7 +13,6 @@ use Brick\Math\Internal\Safe;
 use LogicException;
 use Override;
 
-use function is_finite;
 use function max;
 use function min;
 use function strlen;
@@ -45,6 +44,7 @@ final readonly class BigRational extends BigNumber
      * @param BigInteger $numerator        The numerator.
      * @param BigInteger $denominator      The denominator.
      * @param bool       $checkDenominator Whether to check the denominator for negative and zero.
+     * @param bool       $simplify         Whether to simplify the fraction to lowest terms.
      *
      * @throws DivisionByZeroException If the denominator is zero.
      *
@@ -449,14 +449,14 @@ final readonly class BigRational extends BigNumber
     #[Override]
     public function toFloat(): float
     {
-        $numeratorFloat = $this->numerator->toFloat();
-        $denominatorFloat = $this->denominator->toFloat();
-
-        if (is_finite($numeratorFloat) && is_finite($denominatorFloat)) {
-            return $numeratorFloat / $denominatorFloat;
+        if ($this->denominator->isEqualTo(1)) {
+            return $this->numerator->toFloat();
         }
 
-        // At least one side overflows to INF; use a decimal approximation instead.
+        // Avoid $this->numerator->toFloat() / $this->denominator->toFloat(): converting both operands to float first
+        // adds an extra rounding step before the division and can change the final float. Instead, divide in decimal
+        // first and convert the resulting decimal approximation to float once.
+
         // We need ~17 significant digits for double precision (we use 20 for some margin). Since $scale controls
         // decimal places (not significant digits), we subtract the estimated order of magnitude so that large results
         // use fewer decimal places and small results use more (to look past leading zeros). Clamped to [0, 350] as
@@ -464,10 +464,17 @@ final readonly class BigRational extends BigNumber
         $magnitude = strlen($this->numerator->abs()->toString()) - strlen($this->denominator->toString());
         $scale = min(350, max(0, 20 - $magnitude));
 
-        return $this->numerator
+        $result = $this->numerator
             ->toBigDecimal()
             ->dividedBy($this->denominator, $scale, RoundingMode::HalfEven)
             ->toFloat();
+
+        // Preserve the sign when the decimal approximation underflows to zero.
+        if ($result === 0.0 && $this->numerator->isNegative()) {
+            return -0.0;
+        }
+
+        return $result;
     }
 
     #[Override]
@@ -496,6 +503,8 @@ final readonly class BigRational extends BigNumber
      * - `10/3` returns `3.(3)`
      * - `171/70` returns `2.4(428571)`
      * - `1/2` returns `0.5`
+     *
+     * @return non-empty-string
      *
      * @pure
      */
@@ -567,12 +576,10 @@ final readonly class BigRational extends BigNumber
      */
     public function __unserialize(array $data): void
     {
-        /** @phpstan-ignore isset.initializedProperty */
         if (isset($this->numerator)) {
             throw new LogicException('__unserialize() is an internal function, it must not be called directly.');
         }
 
-        /** @phpstan-ignore deadCode.unreachable */
         $this->numerator = $data['numerator'];
         $this->denominator = $data['denominator'];
     }
@@ -581,5 +588,18 @@ final readonly class BigRational extends BigNumber
     protected static function from(BigNumber $number): static
     {
         return $number->toBigRational();
+    }
+
+    #[Override]
+    protected function digitCount(): int
+    {
+        $count = $this->numerator->digitCount();
+
+        // Mirrors toString(), which does not write a denominator of 1.
+        if ($this->denominator->toString() === '1') {
+            return $count;
+        }
+
+        return $count + $this->denominator->digitCount();
     }
 }

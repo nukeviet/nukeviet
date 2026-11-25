@@ -17,6 +17,7 @@ cd "$DIR/vendor/"
 DIR_PATH=$PWD
 
 find "$DIR_PATH/" -type f \( -name '*.md' \
+  -o -name '.yamllint.yaml' \
   -o -name 'ruleset.xml' \
   -o -name 'CREDITS.txt' \
   -o -name 'composer.json' \
@@ -116,6 +117,7 @@ find "$DIR_PATH/" -type d \( -name 'docs' \
   -o -name 'docs' \
   -o -name 'example' \
   -o -name 'dist' \
+  -o -name '.agents' \
   -o -name 'other' \
   -o -name 'guides' \) | xargs /bin/rm -rf
 

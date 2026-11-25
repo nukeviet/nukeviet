@@ -133,7 +133,6 @@ abstract class AttributeCollection implements Countable, IteratorAggregate
     /**
      * Get iterator for attributes.
      *
-     * @return ArrayIterator|Attribute[]
      * @see \IteratorAggregate::getIterator()
      */
     public function getIterator(): ArrayIterator

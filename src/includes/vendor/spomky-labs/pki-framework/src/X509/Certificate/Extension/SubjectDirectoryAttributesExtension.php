@@ -93,8 +93,6 @@ final class SubjectDirectoryAttributesExtension extends Extension implements Cou
 
     /**
      * Get iterator for attributes.
-     *
-     * @return ArrayIterator|Attribute[]
      */
     public function getIterator(): ArrayIterator
     {

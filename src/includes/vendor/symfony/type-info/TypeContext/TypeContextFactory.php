@@ -21,6 +21,7 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use PHPStan\PhpDocParser\ParserConfig;
+use Symfony\Component\TypeInfo\Exception\ExceptionInterface;
 use Symfony\Component\TypeInfo\Exception\LogicException;
 use Symfony\Component\TypeInfo\Exception\RuntimeException;
 use Symfony\Component\TypeInfo\Exception\UnsupportedException;
@@ -51,6 +52,16 @@ final class TypeContextFactory
      * @var array<string,array<string,TypeContext>>
      */
     private array $typeContextCache = [];
+
+    /**
+     * @var array<class-string, true>
+     */
+    private array $collectingTypeAliases = [];
+
+    /**
+     * @var array<class-string, array<string, true>>
+     */
+    private array $unresolvableTypeAliases = [];
 
     private ?Lexer $phpstanLexer = null;
     private ?PhpDocParser $phpstanParser = null;
@@ -166,14 +177,37 @@ final class TypeContextFactory
 
         $uses = [];
         $inUseSection = false;
+        $inGroupedUse = false;
+        $groupPrefix = '';
 
         foreach ($lines as $line) {
+            $trimmed = trim($line, " \t");
+
+            if ($inGroupedUse) {
+                $this->parseGroupedUseMembers($trimmed, $groupPrefix, $uses);
+
+                if (str_contains($trimmed, '}')) {
+                    $inGroupedUse = false;
+                }
+
+                continue;
+            }
+
             if (str_starts_with($line, 'use ')) {
                 $inUseSection = true;
-                $use = explode(' as ', substr($line, 4, -1), 2);
+                $body = substr($trimmed, 4);
 
-                $alias = 1 === \count($use) ? substr($use[0], false !== ($p = strrpos($use[0], '\\')) ? 1 + $p : 0) : $use[1];
-                $uses[$alias] = $use[0];
+                if (str_contains($body, '{')) {
+                    $groupPrefix = substr($body, 0, strpos($body, '{'));
+                    $inGroupedUse = !str_contains($body, '}');
+                    $segment = trim(substr($body, strpos($body, '{')), " \t\r\n{};");
+                    $this->parseGroupedUseMembers($segment, $groupPrefix, $uses);
+                } else {
+                    $use = preg_split('/\s+as\s+/', rtrim($body, ';'), 2);
+                    $fqcn = ltrim($use[0], '\\');
+                    $alias = $use[1] ?? (false !== ($p = strrpos($fqcn, '\\')) ? substr($fqcn, 1 + $p) : $fqcn);
+                    $uses[$alias] = $fqcn;
+                }
             } elseif ($inUseSection) {
                 break;
             }
@@ -185,6 +219,23 @@ final class TypeContextFactory
         }
 
         return array_merge($uses, ...$traitUses);
+    }
+
+    /**
+     * @param array<string, string> $uses
+     */
+    private function parseGroupedUseMembers(string $segment, string $prefix, array &$uses): void
+    {
+        foreach (explode(',', $segment) as $member) {
+            if ('' === $member = trim($member, " \t\r\n};")) {
+                continue;
+            }
+
+            $parts = preg_split('/\s+as\s+/', $member, 2);
+            $fqcn = ltrim($prefix.$parts[0], '\\');
+            $alias = $parts[1] ?? (false !== ($p = strrpos($fqcn, '\\')) ? substr($fqcn, 1 + $p) : $fqcn);
+            $uses[$alias] = $fqcn;
+        }
     }
 
     /**
@@ -250,10 +301,26 @@ final class TypeContextFactory
                 throw new LogicException(\sprintf('Type alias "%s" is not imported from a valid class name.', $tag->value->importedAlias));
             }
 
-            $importedFromContext = $this->createFromClassName($importedFromType->getClassName());
+            if (isset($this->collectingTypeAliases[$importedFromType->getClassName()])) {
+                throw new LogicException(\sprintf('Cannot import "%s" type alias from "%s" as it is recursive.', $tag->value->importedAlias, $importedFromType->getClassName()));
+            }
+
+            $this->collectingTypeAliases[$typeContext->declaringClassName] = true;
+
+            try {
+                $importedFromContext = $this->createFromClassName($importedFromType->getClassName());
+            } finally {
+                unset($this->collectingTypeAliases[$typeContext->declaringClassName]);
+            }
 
             $typeAlias = $importedFromContext->typeAliases[$tag->value->importedAlias] ?? null;
             if (!$typeAlias) {
+                if (isset($this->unresolvableTypeAliases[$importedFromContext->declaringClassName][$tag->value->importedAlias])) {
+                    $this->unresolvableTypeAliases[$typeContext->declaringClassName][$tag->value->importedAs ?? $tag->value->importedAlias] = true;
+
+                    continue;
+                }
+
                 throw new LogicException(\sprintf('Cannot find any "%s" type alias in "%s".', $tag->value->importedAlias, $importedFromType->getClassName()));
             }
 
@@ -293,23 +360,24 @@ final class TypeContextFactory
         );
 
         $succeeded = false;
-        $lastFailure = null;
-        $lastFailingAlias = null;
 
         foreach ($toResolve as $alias => $type) {
             try {
                 $resolved[$alias] = $this->stringTypeResolver->resolve($type, $typeContext);
                 unset($toResolve[$alias]);
                 $succeeded = true;
-            } catch (UnsupportedException $lastFailure) {
-                $lastFailingAlias = $alias;
+            } catch (ExceptionInterface) {
             }
         }
 
         // nothing has succeeded, the result won't be different from the
-        // previous one, we can stop here.
+        // previous one, so the remaining aliases are left out.
         if (!$succeeded) {
-            throw new LogicException(\sprintf('Cannot resolve "%s" type alias.', $lastFailingAlias), 0, $lastFailure);
+            foreach (array_keys($toResolve) as $alias) {
+                $this->unresolvableTypeAliases[$typeContext->declaringClassName][$alias] = true;
+            }
+
+            return $resolved;
         }
 
         if ($toResolve) {
@@ -326,7 +394,7 @@ final class TypeContextFactory
             $this->phpstanParser ??= new PhpDocParser($config, new TypeParser($config, new ConstExprParser($config)), new ConstExprParser($config));
         } else {
             $this->phpstanLexer ??= new Lexer();
-            $this->phpstanParser ??= new PhpDocParser(new TypeParser(new ConstExprParser()), new ConstExprParser());
+            $this->phpstanParser ??= new PhpDocParser(new TypeParser($constExprParser = new ConstExprParser(true, true), true), $constExprParser);
         }
 
         return $this->phpstanParser->parse(new TokenIterator($this->phpstanLexer->tokenize($rawDocNode)));

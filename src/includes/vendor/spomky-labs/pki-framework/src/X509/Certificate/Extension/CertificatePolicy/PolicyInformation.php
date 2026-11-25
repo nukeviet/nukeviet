@@ -25,7 +25,7 @@ final class PolicyInformation implements Countable, IteratorAggregate
      *
      * @var string
      */
-    final public const OID_ANY_POLICY = '2.5.29.32.0';
+    public const OID_ANY_POLICY = '2.5.29.32.0';
 
     /**
      * Policy qualifiers.

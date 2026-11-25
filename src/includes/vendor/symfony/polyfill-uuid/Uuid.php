@@ -24,6 +24,10 @@ final class Uuid
     public const UUID_VARIANT_OTHER = 3;
     public const UUID_TYPE_DEFAULT = 0;
     public const UUID_TYPE_TIME = 1;
+    public const UUID_TYPE_SECURITY = 2;
+    public const UUID_TYPE_TIME_V6 = 6;
+    public const UUID_TYPE_TIME_V7 = 7;
+    public const UUID_TYPE_VENDOR = 8;
     public const UUID_TYPE_MD5 = 3;
     public const UUID_TYPE_DCE = 4; // Deprecated alias
     public const UUID_TYPE_NAME = 1; // Deprecated alias
@@ -42,7 +46,7 @@ final class Uuid
     public static function uuid_create($uuid_type = \UUID_TYPE_DEFAULT)
     {
         if (!is_numeric($uuid_type) && null !== $uuid_type) {
-            trigger_error(sprintf('uuid_create() expects parameter 1 to be int, %s given', \gettype($uuid_type)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_create() expects parameter 1 to be int, %s given', \gettype($uuid_type)), \E_USER_WARNING);
 
             return null;
         }
@@ -51,12 +55,20 @@ final class Uuid
             case self::UUID_TYPE_NAME:
             case self::UUID_TYPE_TIME:
                 return self::uuid_generate_time();
+            case self::UUID_TYPE_TIME_V6:
+                return self::uuid_generate_time(6);
+            case self::UUID_TYPE_TIME_V7:
+                return self::uuid_generate_time_v7();
             case self::UUID_TYPE_DCE:
             case self::UUID_TYPE_RANDOM:
             case self::UUID_TYPE_DEFAULT:
                 return self::uuid_generate_random();
             default:
-                trigger_error(sprintf("Unknown/invalid UUID type '%d' requested, using default type instead", $uuid_type), \E_USER_WARNING);
+                if (80000 <= \PHP_VERSION_ID) {
+                    throw new \ValueError(\sprintf('uuid_create(): Argument #1 ($uuid_type) Unknown/invalid UUID type \'%d\'', $uuid_type));
+                }
+
+                trigger_error(\sprintf("Unknown/invalid UUID type '%d' requested, using default type instead", $uuid_type), \E_USER_WARNING);
 
                 return self::uuid_generate_random();
         }
@@ -65,13 +77,13 @@ final class Uuid
     public static function uuid_generate_md5($uuid_ns, $name)
     {
         if (!\is_string($uuid_ns = self::toString($uuid_ns))) {
-            trigger_error(sprintf('uuid_generate_md5() expects parameter 1 to be string, %s given', \gettype($uuid_ns)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_generate_md5() expects parameter 1 to be string, %s given', \gettype($uuid_ns)), \E_USER_WARNING);
 
             return null;
         }
 
         if (!\is_string($name = self::toString($name))) {
-            trigger_error(sprintf('uuid_generate_md5() expects parameter 2 to be string, %s given', \gettype($name)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_generate_md5() expects parameter 2 to be string, %s given', \gettype($name)), \E_USER_WARNING);
 
             return null;
         }
@@ -86,7 +98,7 @@ final class Uuid
 
         $hash = md5(hex2bin(str_replace('-', '', $uuid_ns)).$name);
 
-        return sprintf('%08s-%04s-3%03s-%04x-%012s',
+        return \sprintf('%08s-%04s-3%03s-%04x-%012s',
             // 32 bits for "time_low"
             substr($hash, 0, 8),
             // 16 bits for "time_mid"
@@ -106,13 +118,13 @@ final class Uuid
     public static function uuid_generate_sha1($uuid_ns, $name)
     {
         if (!\is_string($uuid_ns = self::toString($uuid_ns))) {
-            trigger_error(sprintf('uuid_generate_sha1() expects parameter 1 to be string, %s given', \gettype($uuid_ns)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_generate_sha1() expects parameter 1 to be string, %s given', \gettype($uuid_ns)), \E_USER_WARNING);
 
             return null;
         }
 
         if (!\is_string($name = self::toString($name))) {
-            trigger_error(sprintf('uuid_generate_sha1() expects parameter 2 to be string, %s given', \gettype($name)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_generate_sha1() expects parameter 2 to be string, %s given', \gettype($name)), \E_USER_WARNING);
 
             return null;
         }
@@ -127,7 +139,7 @@ final class Uuid
 
         $hash = sha1(hex2bin(str_replace('-', '', $uuid_ns)).$name);
 
-        return sprintf('%08s-%04s-5%03s-%04x-%012s',
+        return \sprintf('%08s-%04s-5%03s-%04x-%012s',
             // 32 bits for "time_low"
             substr($hash, 0, 8),
             // 16 bits for "time_mid"
@@ -149,7 +161,7 @@ final class Uuid
     public static function uuid_is_valid($uuid)
     {
         if (!\is_string($uuid = self::toString($uuid))) {
-            trigger_error(sprintf('uuid_is_valid() expects parameter 1 to be string, %s given', \gettype($uuid)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_is_valid() expects parameter 1 to be string, %s given', \gettype($uuid)), \E_USER_WARNING);
 
             return null;
         }
@@ -160,13 +172,13 @@ final class Uuid
     public static function uuid_compare($uuid1, $uuid2)
     {
         if (!\is_string($uuid1 = self::toString($uuid1))) {
-            trigger_error(sprintf('uuid_compare() expects parameter 1 to be string, %s given', \gettype($uuid1)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_compare() expects parameter 1 to be string, %s given', \gettype($uuid1)), \E_USER_WARNING);
 
             return null;
         }
 
         if (!\is_string($uuid2 = self::toString($uuid2))) {
-            trigger_error(sprintf('uuid_compare() expects parameter 2 to be string, %s given', \gettype($uuid2)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_compare() expects parameter 2 to be string, %s given', \gettype($uuid2)), \E_USER_WARNING);
 
             return null;
         }
@@ -187,13 +199,13 @@ final class Uuid
             throw new \ValueError('uuid_compare(): Argument #2 ($uuid2) UUID expected');
         }
 
-        return strcasecmp($uuid1, $uuid2);
+        return strcasecmp($uuid1, $uuid2) <=> 0;
     }
 
     public static function uuid_is_null($uuid)
     {
         if (!\is_string($uuid = self::toString($uuid))) {
-            trigger_error(sprintf('uuid_is_null() expects parameter 1 to be string, %s given', \gettype($uuid)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_is_null() expects parameter 1 to be string, %s given', \gettype($uuid)), \E_USER_WARNING);
 
             return null;
         }
@@ -207,7 +219,7 @@ final class Uuid
     public static function uuid_type($uuid)
     {
         if (!\is_string($uuid = self::toString($uuid))) {
-            trigger_error(sprintf('uuid_type() expects parameter 1 to be string, %s given', \gettype($uuid)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_type() expects parameter 1 to be string, %s given', \gettype($uuid)), \E_USER_WARNING);
 
             return null;
         }
@@ -230,7 +242,7 @@ final class Uuid
     public static function uuid_variant($uuid)
     {
         if (!\is_string($uuid = self::toString($uuid))) {
-            trigger_error(sprintf('uuid_variant() expects parameter 1 to be string, %s given', \gettype($uuid)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_variant() expects parameter 1 to be string, %s given', \gettype($uuid)), \E_USER_WARNING);
 
             return null;
         }
@@ -263,14 +275,14 @@ final class Uuid
     public static function uuid_time($uuid)
     {
         if (!\is_string($uuid = self::toString($uuid))) {
-            trigger_error(sprintf('uuid_time() expects parameter 1 to be string, %s given', \gettype($uuid)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_time() expects parameter 1 to be string, %s given', \gettype($uuid)), \E_USER_WARNING);
 
             return null;
         }
 
         $parsed = self::parse($uuid);
 
-        if (self::UUID_TYPE_TIME !== ($parsed['version'] ?? null)) {
+        if (self::UUID_TYPE_TIME !== ($parsed['version'] ?? null) || 0x8000 !== ($parsed['clock_seq'] & 0xC000)) {
             if (80000 > \PHP_VERSION_ID) {
                 return false;
             }
@@ -292,14 +304,14 @@ final class Uuid
     public static function uuid_mac($uuid)
     {
         if (!\is_string($uuid = self::toString($uuid))) {
-            trigger_error(sprintf('uuid_mac() expects parameter 1 to be string, %s given', \gettype($uuid)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_mac() expects parameter 1 to be string, %s given', \gettype($uuid)), \E_USER_WARNING);
 
             return null;
         }
 
         $parsed = self::parse($uuid);
 
-        if (self::UUID_TYPE_TIME !== ($parsed['version'] ?? null)) {
+        if (self::UUID_TYPE_TIME !== ($parsed['version'] ?? null) || 0x8000 !== ($parsed['clock_seq'] & 0xC000)) {
             if (80000 > \PHP_VERSION_ID) {
                 return false;
             }
@@ -313,7 +325,7 @@ final class Uuid
     public static function uuid_parse($uuid)
     {
         if (!\is_string($uuid = self::toString($uuid))) {
-            trigger_error(sprintf('uuid_parse() expects parameter 1 to be string, %s given', \gettype($uuid)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_parse() expects parameter 1 to be string, %s given', \gettype($uuid)), \E_USER_WARNING);
 
             return null;
         }
@@ -332,7 +344,7 @@ final class Uuid
     public static function uuid_unparse($bytes)
     {
         if (!\is_string($bytes = self::toString($bytes))) {
-            trigger_error(sprintf('uuid_unparse() expects parameter 1 to be string, %s given', \gettype($bytes)), \E_USER_WARNING);
+            trigger_error(\sprintf('uuid_unparse() expects parameter 1 to be string, %s given', \gettype($bytes)), \E_USER_WARNING);
 
             return null;
         }
@@ -357,7 +369,7 @@ final class Uuid
     {
         $uuid = bin2hex(random_bytes(16));
 
-        return sprintf('%08s-%04s-4%03s-%04x-%012s',
+        return \sprintf('%08s-%04s-4%03s-%04x-%012s',
             // 32 bits for "time_low"
             substr($uuid, 0, 8),
             // 16 bits for "time_mid"
@@ -378,13 +390,34 @@ final class Uuid
     /**
      * @see http://tools.ietf.org/html/rfc4122#section-4.2.2
      */
-    private static function uuid_generate_time()
+    private static function uuid_generate_time($version = 1)
     {
         $time = microtime(false);
         $time = substr($time, 11).substr($time, 2, 7);
 
+        // Like libuuid with its clock file, the processes that share the node through APCu
+        // share the last timestamp too, so that they never use the same one. That needs
+        // 64-bit integers, and when APCu cannot store the timestamp, the local clock is used.
+        static $apcu;
+        if (null === $apcu) {
+            $apcu = \PHP_INT_SIZE >= 8 && \function_exists('apcu_enabled') && apcu_enabled();
+        }
+
         if (\PHP_INT_SIZE >= 8) {
-            $time = str_pad(dechex($time + self::TIME_OFFSET_INT), 16, '0', \STR_PAD_LEFT);
+            $time += self::TIME_OFFSET_INT;
+
+            for ($i = 0; $apcu && $i < 100; ++$i) {
+                if (!\is_int($last = apcu_fetch('__symfony_uuid_time'))) {
+                    if (apcu_add('__symfony_uuid_time', $time)) {
+                        break;
+                    }
+                } elseif (apcu_cas('__symfony_uuid_time', $last, $next = max($time, $last + 1))) {
+                    $time = $next;
+                    break;
+                }
+            }
+
+            $time = str_pad(dechex($time), 16, '0', \STR_PAD_LEFT);
         } else {
             $time = str_pad(self::toBinary($time), 8, "\0", \STR_PAD_LEFT);
             $time = self::binaryAdd($time, self::TIME_OFFSET_BIN);
@@ -392,30 +425,57 @@ final class Uuid
         }
 
         // https://tools.ietf.org/html/rfc4122#section-4.1.5
-        // We are using a random data for the sake of simplicity: since we are
-        // not able to get a super precise timeOfDay as a unique sequence
-        $clockSeq = random_int(0, 0x3FFF);
+        // microtime() gives microseconds where the timestamp field holds hundreds of
+        // nanoseconds, so the clock sequence is what separates UUIDs generated within
+        // the same microsecond: draw it at random when the clock moved, and count from
+        // there when it did not, instead of drawing 14 bits that collide by birthday
+        static $lastTime = null, $clockSeq = 0;
+
+        if ($time !== $lastTime) {
+            $lastTime = $time;
+            $clockSeq = random_int(0, 0x3FFF);
+        } else {
+            $clockSeq = ($clockSeq + 1) & 0x3FFF;
+        }
 
         static $node;
         if (null === $node) {
-            if (\function_exists('apcu_fetch')) {
+            if ($apcu) {
                 $node = apcu_fetch('__symfony_uuid_node');
                 if (false === $node) {
-                    $node = sprintf('%06x%06x',
+                    $node = \sprintf('%06x%06x',
                         random_int(0, 0xFFFFFF) | 0x010000,
                         random_int(0, 0xFFFFFF)
                     );
                     apcu_store('__symfony_uuid_node', $node);
                 }
             } else {
-                $node = sprintf('%06x%06x',
+                $node = \sprintf('%06x%06x',
                     random_int(0, 0xFFFFFF) | 0x010000,
                     random_int(0, 0xFFFFFF)
                 );
             }
         }
 
-        return sprintf('%08s-%04s-1%03s-%04x-%012s',
+        if (6 === $version) {
+            // https://www.rfc-editor.org/rfc/rfc9562#section-5.6
+            return \sprintf('%08s-%04s-6%03s-%04x-%012s',
+                // 32 bits for "time_high"
+                substr($time, -15, 8),
+
+                // 16 bits for "time_mid"
+                substr($time, -7, 4),
+
+                // 16 bits for "time_low_and_version",
+                // four most significant bits holds version number 6
+                substr($time, -3),
+
+                $clockSeq | 0x8000,
+                $node
+            );
+        }
+
+        return \sprintf('%08s-%04s-1%03s-%04x-%012s',
             // 32 bits for "time_low"
             substr($time, -8),
 
@@ -434,6 +494,40 @@ final class Uuid
 
             // 48 bits for "node"
             $node
+        );
+    }
+
+    /**
+     * @see https://www.rfc-editor.org/rfc/rfc9562#section-5.7
+     */
+    private static function uuid_generate_time_v7()
+    {
+        $time = microtime(false);
+        $time = substr($time, 11).substr($time, 2, 3);
+
+        if (\PHP_INT_SIZE >= 8) {
+            $time = str_pad(dechex($time), 12, '0', \STR_PAD_LEFT);
+        } else {
+            $time = bin2hex(str_pad(self::toBinary($time), 6, "\0", \STR_PAD_LEFT));
+        }
+
+        $uuid = bin2hex(random_bytes(10));
+
+        return \sprintf('%08s-%04s-7%03s-%04x-%012s',
+            // 48 bits for "unix_ts_ms"
+            substr($time, 0, 8),
+            substr($time, 8, 4),
+
+            // 16 bits for "ver" and "rand_a",
+            // four most significant bits holds version number 7
+            substr($uuid, 0, 3),
+
+            // 16 bits for "var" and "rand_b",
+            // two most significant bits holds one and zero for the RFC 9562 variant
+            hexdec(substr($uuid, 4, 4)) & 0x3FFF | 0x8000,
+
+            // 48 bits for the rest of "rand_b"
+            substr($uuid, 8, 12)
         );
     }
 

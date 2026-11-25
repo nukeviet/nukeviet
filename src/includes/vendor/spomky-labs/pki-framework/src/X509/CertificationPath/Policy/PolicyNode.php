@@ -107,8 +107,6 @@ final class PolicyNode implements IteratorAggregate, Countable
     }
 
     /**
-     * Set expected policies.
-     *
      * @param string ...$oids Policy OIDs
      */
     public function setExpectedPolicies(string ...$oids): void

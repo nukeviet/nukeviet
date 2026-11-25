@@ -57,6 +57,16 @@ final class GeneralNames implements Countable, IteratorAggregate
     }
 
     /**
+     * Get all GeneralName objects.
+     *
+     * @return GeneralName[]
+     */
+    public function all(): array
+    {
+        return $this->_names;
+    }
+
+    /**
      * Check whether GeneralNames contains a GeneralName of given type.
      *
      * @param int $tag One of `GeneralName::TAG_*` enumerations

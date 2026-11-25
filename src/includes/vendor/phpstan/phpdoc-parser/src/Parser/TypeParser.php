@@ -419,6 +419,11 @@ class TypeParser
 			return false;
 		}
 
+		// every end tag the walk below looks for contains this
+		if (!$tokens->hasEndTagCandidateAhead($htmlTagName)) {
+			return false;
+		}
+
 		$endTag = '</' . $htmlTagName . '>';
 		$endTagSearchOffset = - strlen($endTag);
 
@@ -470,6 +475,11 @@ class TypeParser
 		$type = new Ast\Type\GenericTypeNode($baseType, $genericTypes, $variances);
 		if ($startLine !== null && $startIndex !== null) {
 			$type = $this->enrichWithAttributes($tokens, $type, $startLine, $startIndex);
+		} else {
+			// The comments read between the arguments have to be given away
+			// even where the node is not placed, or they would still be waiting
+			// for a node once the whole PHPDoc has been read
+			$tokens->flushComments();
 		}
 
 		$tokens->consumeTokenType(Lexer::TOKEN_CLOSE_ANGLE_BRACKET);
