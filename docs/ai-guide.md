@@ -7,6 +7,9 @@ Dự án NukeViet đã được tích hợp sẵn bộ **skills và agents chuy�
 ## Cấu trúc AI Skills
 
 ```
+AGENTS.md                         # Project instructions dùng chung mọi AI
+CLAUDE.md                         # Import AGENTS.md cho Claude Code
+
 .claude/                          # Claude Code AI configuration
 ├── settings.json                 # Permissions & tools allowed
 └── skills/                       # Specialized skills
@@ -63,38 +66,41 @@ Về Skill: Claude Code AI đã được cấu hình sẵn với bộ **skills c
 /new-module portfolio
 ```
 
-## 2. Google Antigravity (Gemini)
+## 2. Codex, Gemini CLI, Google Antigravity
 
 ### Thiết lập
 
-Antigravity sử dụng `.agents` folder. Tạo symlink/junction từ `.claude`:
+Tạo link `.agents/skills` trỏ tới `.claude/skills` tại thư mục gốc của dự án:
 
 #### Windows
 ```cmd
 cd d:\nukeviet\
-mklink /J ".agents" ".claude"
-mklink /H "AGENTS.md" "CLAUDE.md"
+mkdir .agents
+mklink /J ".agents\skills" ".claude\skills"
 ```
 
 #### Linux/macOS
 ```bash
 cd /path/to/nukeviet
-ln -sf ".claude" ".agents"
-ln "CLAUDE.md" "AGENTS.md"
+mkdir -p .agents
+ln -s ../.claude/skills .agents/skills
 ```
+
+Đổi `d:\nukeviet\` và `/path/to/nukeviet` thành đường dẫn dự án trên máy bạn.
+
+Project instructions đọc từ `AGENTS.md`, không cần thiết lập thêm.
 
 ### Cách sử dụng
 
-Sau khi tạo symlink, Antigravity sẽ tự động nhận diện các skills từ thư mục `.agents/skills/`.
-
-**Lưu ý:** Thay đổi path theo đường dẫn thực tế của dự án trên máy bạn.
+- Codex: gõ `$` hoặc `/skills` để chọn skill.
+- Gemini CLI, Antigravity: yêu cầu bằng lời, ví dụ "dùng skill security-audit cho module news".
 
 ---
 
 
-## 3. GitHub Copilot
+## 3. GitHub Copilot, Cursor
 
-Skills và Project Instructions tương thích với Claude nên không cần làm gì thêm.
+Không cần thiết lập. Skills đọc từ `.claude/skills/`, project instructions đọc từ `AGENTS.md`.
 
 ## 4. Quy trình làm việc với AI
 
@@ -197,7 +203,7 @@ File `.claude/settings.json` kiểm soát quyền hạn của AI:
 |-----|-------------|-----------|
 | Skill không tìm thấy | Sai tên hoặc chưa tạo file | Kiểm tra `.claude/skills/{name}/SKILL.md` |
 | Agent Copilot không hoạt động | Chưa tạo `.github/agents/{name}.agent.md` | Tạo file agent tham chiếu skill |
-| Antigravity không nhận diện | Chưa tạo symlink | Tạo lại symlink từ `.claude` → `.agents` |
+| Codex, Gemini CLI, Antigravity không thấy skill | Chưa tạo link `.agents/skills` | Tạo link theo mục 2 |
 | AI từ chối thực hiện | Không có permission | Thêm vào `.claude/settings.json` |
 
 ### Debug Skills

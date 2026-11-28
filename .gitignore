@@ -13,7 +13,6 @@
 !/.vscode/extensions.json
 /.agents
 /.claude/settings.local.json
-/AGENTS.md
 /.github/copilot-instructions.md
 /src/.jsbeautifyrc
 /src/.php-cs-fixer.php
